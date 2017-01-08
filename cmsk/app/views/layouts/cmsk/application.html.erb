@@ -23,12 +23,12 @@
     
     *:not(.swal2-icon):not(.placeholder):not(.flatpickr-day) {
       font-family: 'Crimson Text', serif;
-      border-radius: 0px !important;
+      border-radius: 0px;
     }
     .glyphicon{ font-size: 1.3em; }
     .mt10 { margin-top: 10px; }
     .mb10 { margin-bottom: 10px; }
-    .navbar-brand {
+    .main-brand {
       font-size: 32px;
       float:none;
       color: #527a7a !important;
@@ -48,48 +48,23 @@
 <body>
   <%= render 'shared/navbar' %>
 
-  <div class="container mt10">
-    <% if @module.present? %>
-      <h1 class="page-header" style="margin-bottom:0px">Career Mode Stat Keeper</h1>
-      
-      <div class="col-lg-3">
-        <div class="card card-inverse card-outline-primary mt10">
-          <div class="card-header card-primary text-xs-center">Directory</div>
-          <div class="card-block text-xs-center" style="background: white">
-            <ul class="nav nav-pills nav-stacked">
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href='#' role="button">Teams</a>
-                <div class="dropdown-menu col-xs-12">
-                  <%= link_to 'All', teams_path, class: 'dropdown-item' %>
-                  <%= link_to 'New', new_team_path, class: 'dropdown-item' %>
-                </div>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href='#' role="button">Players</a>
-                <div class="dropdown-menu col-xs-12">
-                  <%= link_to 'All', players_path, class: 'dropdown-item' %>
-                  <%= link_to 'New', new_player_path, class: 'dropdown-item' %>
-                </div>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href='#' role="button">Squads</a>
-                <div class="dropdown-menu col-xs-12">
-                  <%= link_to 'All', squads_path, class: 'dropdown-item' %>
-                  <%= link_to 'New', new_squad_path, class: 'dropdown-item' %>
-                </div>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href='#' role="button">Games</a>
-                <div class="dropdown-menu col-xs-12">
-                  <%= link_to 'All', games_path, class: 'dropdown-item' %>
-                  <%= link_to 'New', new_game_path, class: 'dropdown-item' %>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+  <% if @module.present? %>
+    <nav class="navbar navbar-light navbar-toggleable-md bg-faded" id="cmsk-navbar">
+      <button class="navbar-toggler hidden-md-up float-xs-right" type="button" data-toggle="collapse" data-target="#cmsk-options"></button>
+      <%= content_tag :a, 'Career Mode Stat Keeper', class: 'navbar-brand' %>
+      <div class="collapse navbar-toggleable-sm" id="cmsk-options">
+        <ul class="nav navbar-nav">
+          <li class="nav-item"><%= link_to 'Teams', teams_path, class: 'nav-link' %></li>
+          <li class="nav-item"><%= link_to 'Players', players_path, class: 'nav-link' %></li>
+          <li class="nav-item"><%= link_to 'Squads', squads_path, class: 'nav-link' %></li>
+          <li class="nav-item"><%= link_to 'Game Archives', games_path, class: 'nav-link' %></li>
+          <li class="nav-item"><%= link_to 'Play a Game', new_game_path, class: 'nav-link' %></li>
+        </ul>
       </div>
-      <div class="col-lg-9">
+    </nav>
+      
+    <div class="container">
+      <div class="col-xs-12">
         <div class="card card-outline-primary mt10" id="cmsk-content">
           <div class="card-header card-primary text-xs-center" style="color: white;"><%= params[:controller].split('/').last.capitalize %></div>
           <div class="card-block" style="background: white">
@@ -102,9 +77,9 @@
           </div>
         </div>
       </div>
-    <% else %>
-      <%= yield %>
-    <% end %>
+  <% else %>
+    <%= yield %>
+  <% end %>
   </div>
 </body>
 </html>

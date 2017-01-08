@@ -15,10 +15,10 @@ module Cmsk
       'CM',
       'LM',
       'RM',
-      'CAM',
-      'CF',
       'LW',
       'RW',
+      'CAM',
+      'CF',
       'ST'
     ]
     
