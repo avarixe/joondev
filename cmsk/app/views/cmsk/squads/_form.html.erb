@@ -1,0 +1,36 @@
+<style>
+  .form-group { margin-bottom: 0.2rem; }
+</style>
+
+<script>
+  function checkForm(){
+    if (!$('#squad_squad_name').val())
+      return error_alert('Please enter a Name.')  
+    // else if (!$('#player_pos').val())
+    //   return error_alert('Please enter a Position.')
+    else
+      return true;
+  }
+</script>
+
+<%= form_for(@squad) do |f| %>
+  <div class="form-group row">
+    <%= f.label :squad_name, 'Name: ', class: 'col-xs-2 col-form-label' %>
+    <div class="col-xs-10">
+      <%= f.text_field :squad_name, class: 'form-control' %>
+    </div>
+  </div>
+  <% (1..11).each do |no| %>
+    <div class="form-group row">
+      <%= f.label "player_id_#{no}".to_sym, "#{Cmsk::Squad.positions[no-1]}: ", class: 'col-xs-2 col-form-label' %>
+      <div class="col-xs-10">
+        <%= f.select "player_id_#{no}", options_for_select(@team.sorted_players.map{ |p| ["#{p.pos} - #{p.name}", p.id] }, @squad.send("player_id_#{no}")), {include_blank: true}, {class: 'form-control player-field'} %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="text-xs-center">
+    <%= f.submit 'Save Squad', class: 'btn btn-warning', onclick: 'return checkForm()' %>
+    <%= link_to 'Back', squads_path, class: 'btn btn-secondary' %>
+  </div>
+<% end %>

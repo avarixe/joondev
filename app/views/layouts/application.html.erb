@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JoonDEV</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <%= favicon_link_tag 'favicon.ico' %>
+
+  <link href="https://fonts.googleapis.com/css?family=Crimson+Text" rel="stylesheet">
+  <style>
+    body {
+      background: #c2d6d6;
+      background: linear-gradient(150deg, #c2d6d6, #99b3ff);
+      margin: 0;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+    *:not(.swal2-icon):not(.placeholder) {
+      font-family: 'Crimson Text', serif;
+      border-radius: 0px !important;
+    }
+    .glyphicon{ font-size: 1.3em; }
+    .mt10 { margin-top: 10px; }
+    .navbar-brand {
+      font-size: 32px;
+      float:none;
+      color: #527a7a !important;
+      text-shadow: 1px 1px 1px black;
+    }
+    .page-header{ border-bottom: 1px solid #527a7a; }
+  </style>
+</head>
+<body>
+  <%= render 'shared/navbar' %>
+
+  <div class="container mt10">
+    <div class="card card-inverse card-outline-primary mt10">
+      <div class="card-header card-primary"></div>
+      <div class="card-block" style="background: white">
+        <div class="mt10">
+          <%= yield %>
+        </div>      
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JoonDEV - CMSK</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <%= favicon_link_tag 'favicon.ico' %>
+
+  <link href="https://fonts.googleapis.com/css?family=Crimson+Text" rel="stylesheet">
+  <style>
+    body {
+      background: #c2d6d6;
+      background: linear-gradient(150deg, #c2d6d6, #99b3ff);
+      margin: 0;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+    @media (min-width: 576px){ .container{ min-width: 540px; width: 95%; } }
+    @media (min-width: 768px){ .container{ min-width: 760px; width: 95%; } }
+    @media (min-width: 992px){ .container{ min-width: 960px; width: 95%; } }
+    
+    *:not(.swal2-icon):not(.placeholder):not(.flatpickr-day) {
+      font-family: 'Crimson Text', serif;
+      border-radius: 0px !important;
+    }
+    .glyphicon{ font-size: 1.3em; }
+    .mt10 { margin-top: 10px; }
+    .mb10 { margin-bottom: 10px; }
+    .navbar-brand {
+      font-size: 32px;
+      float:none;
+      color: #527a7a !important;
+      text-shadow: 1px 1px 1px black;
+    }
+    .page-header{ border-bottom: 1px solid #527a7a; }
+    #cmsk-content a:not(.btn-secondary) { color:white; }
+  </style>
+  
+  <script>
+    function error_alert(msg){
+      swal("Invalid <%=params[:controller].split('/').last.singularize.capitalize %>", msg, 'error')
+      return false;
+    }
+  </script>
+</head>
+<body>
+  <%= render 'shared/navbar' %>
+
+  <div class="container mt10">
+    <% if @module.present? %>
+      <h1 class="page-header" style="margin-bottom:0px">Career Mode Stat Keeper</h1>
+      
+      <div class="col-lg-3">
+        <div class="card card-inverse card-outline-primary mt10">
+          <div class="card-header card-primary text-xs-center">Directory</div>
+          <div class="card-block text-xs-center" style="background: white">
+            <ul class="nav nav-pills nav-stacked">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href='#' role="button">Teams</a>
+                <div class="dropdown-menu col-xs-12">
+                  <%= link_to 'All', teams_path, class: 'dropdown-item' %>
+                  <%= link_to 'New', new_team_path, class: 'dropdown-item' %>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href='#' role="button">Players</a>
+                <div class="dropdown-menu col-xs-12">
+                  <%= link_to 'All', players_path, class: 'dropdown-item' %>
+                  <%= link_to 'New', new_player_path, class: 'dropdown-item' %>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href='#' role="button">Squads</a>
+                <div class="dropdown-menu col-xs-12">
+                  <%= link_to 'All', squads_path, class: 'dropdown-item' %>
+                  <%= link_to 'New', new_squad_path, class: 'dropdown-item' %>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href='#' role="button">Games</a>
+                <div class="dropdown-menu col-xs-12">
+                  <%= link_to 'All', games_path, class: 'dropdown-item' %>
+                  <%= link_to 'New', new_game_path, class: 'dropdown-item' %>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div class="card card-outline-primary mt10" id="cmsk-content">
+          <div class="card-header card-primary text-xs-center" style="color: white;"><%= params[:controller].split('/').last.capitalize %></div>
+          <div class="card-block" style="background: white">
+            <div class="page-header">
+              <h4><%= @title %></h4>
+            </div>
+            <div class="mt10">
+              <%= yield %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <%= yield %>
+    <% end %>
+  </div>
+</body>
+</html>

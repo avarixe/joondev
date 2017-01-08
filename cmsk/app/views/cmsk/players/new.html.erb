@@ -1,0 +1,34 @@
+<script>
+  function checkForm(){
+    if (!$('#player_name').val())
+      return error_alert('Please enter a Name.')  
+    else if (!$('#player_pos').val())
+      return error_alert('Please enter a Position.')
+    else
+      return true;
+  }
+</script>
+
+<%= form_for(@player) do |f| %>
+  <div class="form-group row">
+    <%= f.label :name, 'Name: ', class: 'col-sm-3 col-form-label' %>
+    <div class="col-sm-9">
+      <%= f.text_field :name, class: 'form-control' %>
+    </div>
+  </div>
+  <div class="form-group row">
+    <%= f.label :pos, 'Position: ', class: 'col-sm-3 col-form-label' %>
+    <div class="col-sm-3">
+      <%= f.select :pos, options_for_select(Cmsk::Player.positions, @player.pos), {include_blank: true}, {class: 'form-control'} %>
+    </div>
+    <%= f.label :sec_pos, 'Secondary Positions: ', class: 'col-sm-3 col-form-label' %>
+    <div class="col-sm-3">
+      <%= f.text_field :sec_pos, class: 'form-control' %>
+    </div>
+  </div>
+
+  <div class="text-xs-center">
+    <%= f.submit 'Save Player', class: 'btn btn-warning', onclick: 'return checkForm()' %>
+    <%= link_to 'Back', players_path, class: 'btn btn-secondary' %>
+  </div>
+<% end %>
