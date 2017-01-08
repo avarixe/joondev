@@ -28,7 +28,7 @@ PlayerRecord Class:
 
 ## CHANGE LOG
 
-0.1.0 (1-7-17)
+#### 0.1.0 (1-7-17)
   - Reorganized previous CMSK into Rails Engine
   - Live on play.joondev.com, replacing cmsk.joondev.com
   - Created top level for organizing future projects
@@ -39,9 +39,9 @@ PlayerRecord Class:
 
 ## TODO
 
-DASHBOARD
+#### DASHBOARD
   - Add image button for CMSK
-CMSK
+#### CMSK
   - Player Performance Analysis
   - MAYBE: Competition model with jQuery Bracket display, based on competition type
   - Better side menu for Engine level
