@@ -39,11 +39,11 @@ PlayerRecord Class:
 
 ## TODO
 
-  -DASHBOARD
-    - Add image button for CMSK
-  -CMSK
-    - Player Performance Analysis
-    - MAYBE: Competition model with jQuery Bracket display, based on competition type
-    - Better side menu for Engine level
-    - MAYBE: Add More Player Details
-    - User Customizability to control Excel output 
+DASHBOARD
+  - Add image button for CMSK
+CMSK
+  - Player Performance Analysis
+  - MAYBE: Competition model with jQuery Bracket display, based on competition type
+  - Better side menu for Engine level
+  - MAYBE: Add More Player Details
+  - User Customizability to control Excel output 
