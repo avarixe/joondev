@@ -6,8 +6,11 @@ module Cmsk
 
     # GET /players
     def index
-      @players = @team.players
+      @players = @team.sorted_players
+      @inactive_players = @team.players.inactive
       @title = "#{@team.team_name} - Players"
+      
+      puts @players.map(&:name).inspect
     end
 
     # GET /players/new

@@ -13,7 +13,7 @@ module Cmsk
     end
     
     def sorted_players
-      self.players.active.sort_by{ |p| Cmsk::Player.positions.index(p) }
+      self.players.active.sort_by{ |p| Cmsk::Player.positions.index(p.pos) }
     end
   end
 end

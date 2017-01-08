@@ -2,6 +2,7 @@ module Cmsk
   class Player < Cmsk::Base
     belongs_to :team
     scope :active, -> { where(active: true) }
+    scope :inactive, -> { where(active: false) }
 
     POSITIONS = [
       'GK',

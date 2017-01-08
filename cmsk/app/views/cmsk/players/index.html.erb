@@ -98,7 +98,7 @@
     </tr>
   </thead>
   <tbody>
-    <% @players.each do |player| %>
+    <% (@players+@inactive_players).each do |player| %>
       <tr data-player-id=<%= player.id %>>
         <td><%= text_field_tag "name_#{player.id}", player.name, class: 'form-control' %></td>
         <td><%= select_tag "pos_#{player.id}", options_for_select(Cmsk::Player.positions, player.pos), class: 'form-control' %></td>
@@ -112,7 +112,7 @@
 
 <div id="copy-table" class="hidden-xs-up">
   <table>
-    <% @players.active.each do |player| %>
+    <% @players.each do |player| %>
       <tr>
         <td colspan="5"><%= player.name %></td>
         <td><%= player.pos %></td>
