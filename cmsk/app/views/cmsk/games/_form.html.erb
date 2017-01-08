@@ -122,26 +122,26 @@
   </div>
   <div class="form-group row">
     <div class="col-lg-2 offset-lg-3 col-xs-4">
-      <%= f.number_field :score_gf, class: 'click-form form-control text-xs-center', min: 0, readonly: true, value: 0 %>
+      <%= f.number_field :score_gf, class: 'click-form form-control text-xs-center', min: 0, readonly: true, value: (@game.id.nil? ? 0 : @game.score_gf) %>
     </div>
     <div class="col-form-label text-xs-center col-lg-2 col-xs-4">GF - GA</div>
     <div class="col-lg-2 col-xs-4">
-      <%= f.number_field :score_ga, class: 'click-form form-control text-xs-center', min: 0, readonly: true, value: 0 %>
+      <%= f.number_field :score_ga, class: 'click-form form-control text-xs-center', min: 0, readonly: true, value: (@game.id.nil? ? 0 : @game.score_ga) %>
     </div>
   </div>
   <div class="form-group row">
     <div class="col-lg-2 offset-lg-3 col-xs-4">
-      <%= f.number_field :penalties_gf, class: 'click-form form-control text-xs-center', min: 0, readonly: true %>
+      <%= f.number_field :penalties_gf, class: 'click-form form-control text-xs-center', min: 0, readonly: true, value: @game.penalties_gf.presence %>
     </div>
     <div class="col-form-label text-xs-center col-lg-2 col-xs-4">Penalties</div>
     <div class="col-lg-2 col-xs-4">
-      <%= f.number_field :penalties_ga, class: 'click-form form-control text-xs-center', min: 0, readonly: true %>
+      <%= f.number_field :penalties_ga, class: 'click-form form-control text-xs-center', min: 0, readonly: true, value: @game.penalties_ga.presence %>
     </div>
   </div>
   <div class="form-group row">
     <%= f.label :date_played, 'Date Played: ', class: 'col-xs-4 offset-lg-2 col-form-label' %>
     <div class="col-lg-4 col-xs-8">
-      <%= f.text_field :date_played, value: @last_played, class: 'form-control' %>
+      <%= f.text_field :date_played, value: (@game.id.nil? ? @last_played : @game.date_played), class: 'form-control' %>
     </div>
   </div>
   <% if @game.id.blank? %>
