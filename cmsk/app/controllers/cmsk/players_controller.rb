@@ -46,6 +46,47 @@ module Cmsk
       render_json_response(status, message)
     end
 
+    def import_csv
+      status, message = ['', '']
+      players = []
+
+      # Validate uploaded CSV is in proper format
+      if (rows = params[:file]).present?
+        rows.tr("\r", '').split("\n").each do |row|
+          name, pos, sec_pos = row.split(';')
+          if name.blank? || pos.blank?
+            status, message = ['error', 'Invalid CSV File.']
+            break
+          elsif Player.positions.include?(pos) == false
+            status, message = ['error', "#{name} has an Invalid Position."]
+            break
+          else
+            players.push(
+              name: name,
+              pos: pos,
+              sec_pos: sec_pos
+            )
+          end
+        end
+      else
+        status, message = ['error', 'Blank CSV File.']
+      end
+      
+      # Create Players
+      unless players.blank? || status == 'error'
+        players.each do |player|
+          @team.players.push Player.new(
+            name:    player[:name],
+            pos:     player[:pos],
+            sec_pos: player[:sec_pos]
+          )
+        end
+        status, message = ['success', 'Players have been added.']
+      end
+      
+      render_json_response(status, message)
+    end
+
     private
       # Only allow a trusted parameter "white list" through.
       def player_params

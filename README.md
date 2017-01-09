@@ -43,6 +43,7 @@ PlayerRecord Class:
   - Add image button for CMSK
   
 #### CMSK
+  - New Team, Player actions into modals and AJAX calls
   - Player Performance Analysis
   - MAYBE: Competition model with jQuery Bracket display, based on competition type
   - Better side menu for Engine level
