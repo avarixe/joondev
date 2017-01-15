@@ -22,7 +22,7 @@
 
   <tbody>
     <% current_user.teams.each do |team| %>
-      <tr data-team-id=<%= team.id %> class="<%= 'table-success' if cookies[:team].to_i == team.id %>">
+      <tr data-team-id=<%= team.id %> class="<%= 'table-success' if session[:team].to_i == team.id %>">
         <td><%= team.team_name %></td>
         <td><%= team.competitions %></td>
       </tr>
