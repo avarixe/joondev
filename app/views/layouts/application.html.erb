@@ -17,19 +17,25 @@
       background-repeat: no-repeat;
       background-attachment: fixed;
     }
-    *:not(.swal2-icon):not(.placeholder) {
+    @media (min-width: 576px){ .container{ min-width: 540px; width: 95%; } }
+    @media (min-width: 768px){ .container{ min-width: 760px; width: 95%; } }
+    @media (min-width: 992px){ .container{ min-width: 960px; width: 95%; } }
+    
+    *:not(.swal2-icon):not(.placeholder):not(.swal2-confirm):not(.flatpickr-day) {
       font-family: 'Crimson Text', serif;
-      border-radius: 0px !important;
+      border-radius: 0px;
     }
     .glyphicon{ font-size: 1.3em; }
     .mt10 { margin-top: 10px; }
-    .navbar-brand {
+    .mb10 { margin-bottom: 10px; }
+    .main-brand {
       font-size: 32px;
       float:none;
       color: #527a7a !important;
       text-shadow: 1px 1px 1px black;
     }
     .page-header{ border-bottom: 1px solid #527a7a; }
+    #cmsk-content a:not(.btn-secondary) { color:white; }
   </style>
 </head>
 <body>
