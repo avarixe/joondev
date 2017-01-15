@@ -12,7 +12,7 @@ module Cmsk
 
     # GET /teams/1
     def show
-      cookies[:team] = @team.id
+      session[:team] = @team.id
       
       @title = @team.team_name
     end

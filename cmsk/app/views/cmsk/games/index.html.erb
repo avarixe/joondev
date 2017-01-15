@@ -17,7 +17,7 @@
   </thead>
 
   <tbody>
-    <% @games.each do |game| %>
+    <% @games.reverse.each do |game| %>
       <tr data-id=<%= game.id %> class="table-<%= game.result %>">
         <td><%= game.opponent %></td>
         <td><%= game.competition %></td>

@@ -12,13 +12,13 @@ module Cmsk
     
     def set_team_cookie
       unless current_user.teams.blank?
-        cookies[:team] = current_user.teams.first.id if cookies[:team].blank?
+        session[:team] = current_user.teams.last.id if session[:team].blank?
       end
     end
     
     def set_current_team
-      return redirect_to url_for(controller: :teams, action: :index) if cookies[:team].blank?
-      @team = Team.find(cookies[:team].to_i)
+      return redirect_to url_for(controller: :teams, action: :index) if session[:team].blank?
+      @team = Team.find(session[:team].to_i)
     end
     
     def render_json_response(status, message)

@@ -48,7 +48,7 @@
       var select = $('<select class="form-control" name="game[player_records_attributes]['+(num_subs+11)+'][player_id]" ><option value></option></select>');
         
       <% @team.sorted_players.each do |p| %>
-        select.append($('<option>', { value: <%= p.id %>, text: '<%= "#{p.pos} - #{p.name}" %>'}));
+        select.append($('<option>', { value: <%= p.id %>, text: "<%= "#{p.pos} - #{p.name}".html_safe %>"}));
       <% end %>
       
       td.append(select);
