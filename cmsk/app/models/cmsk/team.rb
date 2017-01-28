@@ -10,9 +10,13 @@ module Cmsk
     
     def season_options
       start_year = self.games.first.date_played.strftime('%Y').to_i
-      latest_year = self.games.last.date_played.strftime('%Y').to_i
+      start_year -= 1 if self.games.first.date_played < Date.new(start_year, 7, 1)
       
-      (start_year-1..latest_year).each.map do |i|
+      latest_year = self.games.last.date_played.strftime('%Y').to_i
+      latest_year -= 1 if self.games.last.date_played < Date.new(latest_year, 7, 1)
+      
+      
+      (start_year..latest_year).each.map do |i|
         ["#{i} - #{i+1}", i]
       end
     end
