@@ -1,5 +1,15 @@
+<style>
+  .table-container { overflow-x: scroll; }
+  .table { min-width: 550px; }
+</style>
+
 <script>
   $(function(){
+    $('table').DataTable({
+      bSort: false,
+      bFilter: false
+    });    
+    
     $('table').on('click', 'tr', function(){
       if ($(this).data('id'))
         window.location = "/cmsk/games/"+$(this).data('id');
@@ -7,24 +17,26 @@
   });
 </script>
 
-<table class="table table-hover table-bordered table-striped">
-  <thead class="thead-inverse">
-    <tr>
-      <% ['Opponent Team', 'Competition', 'Score', 'MOTM', 'Date Played'].each do |header| %>
-        <th><%= header %></th>
-      <% end %>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @games.reverse.each do |game| %>
-      <tr data-id=<%= game.id %> class="table-<%= game.result %>">
-        <td><%= game.opponent %></td>
-        <td><%= game.competition %></td>
-        <td><%= game.score %></td>
-        <td><%= game.motm %></td>
-        <td><%= time_to_string(game.date_played, '%B %e, %Y') %></td>
+<div class="table-container">
+  <table class="table table-hover table-bordered table-striped">
+    <thead class="thead-inverse">
+      <tr>
+        <% ['Opponent Team', 'Competition', 'Score', 'MOTM', 'Date Played'].each do |header| %>
+          <th><%= header %></th>
+        <% end %>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+  
+    <tbody>
+      <% @games.reverse.each do |game| %>
+        <tr data-id=<%= game.id %> class="table-<%= game.result %>">
+          <td><%= game.opponent %></td>
+          <td><%= game.competition %></td>
+          <td><%= game.score %></td>
+          <td><%= game.motm %></td>
+          <td><%= time_to_string(game.date_played, '%B %e, %Y') %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

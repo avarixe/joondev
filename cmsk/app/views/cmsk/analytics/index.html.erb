@@ -1,0 +1,62 @@
+<style>
+  .table-container { overflow-x: scroll; }
+  .table { min-width: 550px; }
+</style>
+
+<script>
+  $(function(){
+    $('table').DataTable({
+      order: [[3, "desc"]]  
+    });
+  });
+</script>
+
+<div class="col-md-4">
+  <div class="card mt10" id="search">
+    <div class="card-header text-xs-center">Search Analytics</div>
+    <div class="card-block">
+      <%= form_tag search_analytics_path do %>
+        <div class="form-group row">
+          <%= label_tag :season, 'Season: ', class: 'col-xs-4 col-form-label' %>
+          <div class="col-xs-6">
+            <%= select_tag :season, options_for_select(@team.season_options), include_blank: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group row">
+          <%= label_tag :competition, 'Competition: ', class: 'col-xs-4 col-form-label' %>
+          <div class="col-xs-6">
+            <%= select_tag :competition, options_for_select(@team.recorded_competitions), include_blank: true, class: 'form-control' %>
+          </div>
+        </div>
+      
+        <div class="text-xs-right col-xs-12">
+          <%= submit_tag 'Search', class: 'btn btn-success' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="table-container col-md-8">
+  <table class="table table-hover table-bordered table-striped">
+    <thead class="thead-inverse">
+      <% ['Name', 'Position', 'GP', 'Rating', 'Goals', 'Assists', 'CS'].each do |header| %>
+        <th><%= header %></th>
+      <% end %>
+    </thead>
+  
+    <tbody>
+      <% @totals.each do |player, data| %>
+        <tr>
+          <td><%= player %></td>
+          <td><%= data[:pos] %></td>
+          <td><%= data[:gp] %></td>
+          <td><%= data[:rating].to_f / data[:gp].to_f %></td>
+          <td><%= data[:goals] %></td>
+          <td><%= data[:assists] %></td>
+          <td><%= data[:cs] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -7,11 +7,15 @@ Cmsk::Engine.routes.draw do
   end
   resources :teams
   resources :games
-  resources :squads, only: [:index, :new, :show, :update, :create] do
+  resources :squads, except: [:except, :destroy] do
     member do 
       get 'players_json'
     end
   end
-  
+  resources :analytics, only: [:index] do
+    collection do
+      match 'search', via: [:get, :post]
+    end
+  end
   root 'teams#index'
 end

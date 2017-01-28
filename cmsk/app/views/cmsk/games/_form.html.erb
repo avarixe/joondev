@@ -1,5 +1,7 @@
 <style>
   .form-group { margin-bottom: 0.2rem; }
+  .table-container { overflow-x: scroll; }
+  #records-table { min-width: 500px; }
 </style>
 
 <script>
@@ -154,7 +156,7 @@
   <% end %>
 
   <div class="card">
-  <div class="card-block">
+  <div class="card-block table-container">
     <table id="records-table" class="table table-sm table-hover table-bordered">
       <thead class="thead-inverse">
         <tr>
