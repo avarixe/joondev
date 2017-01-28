@@ -51,7 +51,7 @@
           <td><%= player %></td>
           <td><%= data[:pos] %></td>
           <td><%= data[:gp] %></td>
-          <td><%= data[:rating].to_f / data[:gp].to_f %></td>
+          <td><%= (data[:rating].to_f / data[:gp].to_f).round(2) %></td>
           <td><%= data[:goals] %></td>
           <td><%= data[:assists] %></td>
           <td><%= data[:cs] %></td>
