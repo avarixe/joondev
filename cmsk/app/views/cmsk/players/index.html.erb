@@ -34,7 +34,7 @@
       generateSwitch();
     });
 
-    $('.update-player-btn').click(function(){
+    $('#players-table').on('click', '.update-player-btn', function(){
       var id = $(this).closest('tr').data('player-id');
       
       var name = $('#name_'+id).val();
