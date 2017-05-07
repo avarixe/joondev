@@ -25,12 +25,17 @@ module Cmsk
       player_ids = @game.player_records.map(&:player_id)
       @team.sorted_players.each do |player|
         played = player_ids.include?(player.id)
-        record = Cmsk::PlayerRecord.where(game_id: @game.id, player_id: player.id).first
+        record = PlayerRecord.where(game_id: @game.id, player_id: player.id).first
         
         # @data[:names].push(player.names)
         @data[:ratings].push(played ? record.rating  : nil)
         @data[:goals].push  (played ? record.goals   : nil)
         @data[:assists].push(played ? record.assists : nil)
+      end
+      
+      respond_to do |format|
+        format.html
+        format.xlsx
       end
     end
 

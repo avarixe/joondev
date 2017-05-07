@@ -41,6 +41,7 @@ gem 'jquery-datatables-rails'
 gem 'flatpickr'
 gem "awesome_print", require:"ap"  
 
+gem 'axlsx_rails'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.1.0'

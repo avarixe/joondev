@@ -25,7 +25,8 @@
 
 <div class="col-sm-12 text-sm-right">
   <%= link_to 'Edit', edit_game_path(@game), class: 'btn btn-warning' %>
-  <%= content_tag :a, 'Copy to Excel', class: 'btn btn-info copy-btn' %>
+  <%#= content_tag :a, 'Copy to Excel', class: 'btn btn-info copy-btn' %>
+  <%= link_to 'Save Stats', game_path(@game, format: :xlsx), class: 'btn btn-info' %>
   <%= link_to 'Back', games_path, class: 'btn btn-secondary' %>
 </div>
 
