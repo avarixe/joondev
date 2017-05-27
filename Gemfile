@@ -38,7 +38,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'bootstrap'
 gem 'jquery-datatables-rails'
-gem 'flatpickr'
+gem 'flatpickr_rails'
 gem "awesome_print", require:"ap"  
 
 gem 'axlsx_rails'

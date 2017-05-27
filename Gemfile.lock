@@ -80,7 +80,8 @@ GEM
       warden (~> 1.2.3)
     erubis (2.7.0)
     execjs (2.7.0)
-    flatpickr (2.3.0.0)
+    flatpickr_rails (1.0.0)
+      railties (>= 3.0)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     htmlentities (4.3.4)
@@ -207,7 +208,7 @@ DEPENDENCIES
   cmsk!
   coffee-rails (~> 4.1.0)
   devise
-  flatpickr
+  flatpickr_rails
   jbuilder (~> 2.0)
   jquery-datatables-rails
   jquery-rails
