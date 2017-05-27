@@ -46,18 +46,15 @@
         swal('Invalid Update', "A Player's Name can't be Blank.", 'error');
       else{
         $.ajax({
-          type: 'POST',
-          url: '<%= cmsk.update_json_players_path %>',
+          type: 'PUT',
+          url: '/cmsk/players/'+id,
           beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token %>') },
-          data: {
-            id:      id,
-            player: {
+          data: { player: {
               name:    name,
               pos:     pos,
               sec_pos: sec_pos,
               active,  active
-            }
-          },
+          }},
           success: function(data, status){
             swal({
               title: data.header, 
@@ -72,24 +69,6 @@
         })
       }
     })
-    
-    $('.copy-btn').click(function(){
-      swal({
-        title: '<%= @team.team_name %> Players - Names',
-        input: 'textarea',
-        inputValue: $('#copy-table').html(),
-        inputAttributes: {
-          readonly: true,
-        },
-        onOpen: function(){
-          $('.swal2-textarea').mousedown(function(){
-            $(this).select();
-          });
-        }
-      }).catch(swal.noop);
-    });
-    
-
   });
 </script>
 
@@ -98,7 +77,6 @@
 <div class="col-sm-12 text-sm-right mb10">
   <%= link_to 'New Player', new_player_path, class: 'btn btn-warning' %>
   <%= content_tag :a, 'Import CSV', class: 'btn btn-primary', id: 'import-csv-btn' %>
-  <%= content_tag :a, 'Copy Names and Position to Excel', class: 'btn btn-info copy-btn' %>
 </div>
 
 <div class="table-container">
@@ -122,15 +100,4 @@
       <% end %>
     </tbody>
   </table>  
-</div>
-
-<div id="copy-table" class="hidden-xs-up">
-  <table>
-    <% @players.each do |player| %>
-      <tr>
-        <td colspan="5"><%= player.name %></td>
-        <td><%= player.pos %></td>
-      </tr>
-    <% end %>
-  </table>
 </div>

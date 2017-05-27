@@ -9,8 +9,6 @@ module Cmsk
       @players = @team.sorted_players
       @inactive_players = @team.players.inactive
       @title = "#{@team.team_name} - Players"
-      
-      puts @players.map(&:name).inspect
     end
 
     # GET /players/new
@@ -31,7 +29,7 @@ module Cmsk
     end
 
     # POST /players/update_json
-    def update_json
+    def update
       @player = Player.find(params[:id])
   
       status, message = 

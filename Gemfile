@@ -6,7 +6,7 @@ gem 'cmsk', path: 'cmsk'
 # Devise authentication
 gem 'devise'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5'
+gem 'rails'#, '4.2.5'
 # Use sqlite3 as the database for Active Record
 gem 'pg'
 # Use SCSS for stylesheets
@@ -42,6 +42,7 @@ gem 'flatpickr'
 gem "awesome_print", require:"ap"  
 
 gem 'axlsx_rails'
+gem 'tzinfo-data'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.1.0'

@@ -1,5 +1,7 @@
 module Cmsk
   class Player < Cmsk::Base
+    default_scope { order(id: :asc)}
+
     belongs_to :team
     scope :active, -> { where(active: true) }
     scope :inactive, -> { where(active: false) }

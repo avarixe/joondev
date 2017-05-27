@@ -15,15 +15,14 @@ module Cmsk
         start_date = Date.new(params[:season].to_i, 7, 1)
         end_date = Date.new(params[:season].to_i+1, 6, 30)
 
-        puts start_date
-        puts end_date
-        
-        @records = @records.select{ |rec| 
-          (start_date..end_date).cover?(rec.game.date_played)
-          
-        }
+        games = Game.where('date_played BETWEEN ? AND ?', start_date, end_date)
+        @records = @records.where(game_id: games.map(&:id))
       end
-      @records = @records.select{ |rec| rec.game.competition == params[:competition] } if params[:competition].present?
+
+      if params[:competition].present?
+        games = Game.where(competition: params[:competition])
+        @records = @records.where(game_id: games.map(&:id))
+      end
 
       set_totals
       set_index
@@ -36,17 +35,26 @@ module Cmsk
     
       def set_totals
         @totals = {}
-        @records.each do |record|
-          puts record.player.pos
-          player_name = record.player.name
-          @totals[player_name] ||= Hash.new(0)
-          @totals[player_name][:pos] = record.player.pos
-          @totals[player_name][:gp] += 1
-          @totals[player_name][:rating] += record.rating
-          @totals[player_name][:goals] += record.goals.to_i
-          @totals[player_name][:assists] += record.assists.to_i
-          @totals[player_name][:cs] += 1 if record.game.score_ga == 0
+
+        Player.active.each do |player|
+          records = @records.where(player_id: player.id)
+
+          next if records.length == 0
+
+          total_rating = sum(records.map(&:rating))
+          avg_rating = total_rating > 0 ? total_rating / records.length : 0
+
+          @totals[player.name] = {
+            pos:     player.pos,
+            gp:      records.length,
+            rating:  avg_rating,
+            goals:   sum(records.map(&:goals)),
+            assists: sum(records.map(&:assists)),
+            cs:      records.select{ |rec| rec.game.score_ga == 0 }.length
+          }
         end
+
+        puts @totals
       end
       
       def set_index

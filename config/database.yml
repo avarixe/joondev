@@ -12,6 +12,8 @@ default: &default
 
 development:
   <<: *default
+  username: devuser
+  password: 18349276
 
 production:
   <<: *default

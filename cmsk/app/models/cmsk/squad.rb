@@ -1,5 +1,7 @@
 module Cmsk
-  class Squad < Cmsk::Base
+  class Squad < Base
+    default_scope { order(id: :asc)}
+
     belongs_to :team
     
     POSITIONS = [

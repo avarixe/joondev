@@ -1,5 +1,7 @@
 module Cmsk
   class ApplicationController < ::ApplicationController
+    helper Helper
+    include Helper
     before_filter :set_module
     before_filter :set_team_cookie
 

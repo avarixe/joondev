@@ -1,5 +1,5 @@
 module Cmsk
-  class PlayerRecord < Cmsk::Base
+  class PlayerRecord < Base
     belongs_to :team
     belongs_to :game
     belongs_to :player

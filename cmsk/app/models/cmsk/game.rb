@@ -1,12 +1,14 @@
 module Cmsk
-  class Game < Cmsk::Base
+  class Game < Base
+    default_scope { order(id: :asc)}
+
     belongs_to :team
     has_many :player_records
     accepts_nested_attributes_for :player_records
     after_save :set_records
     
     def build_records
-      Cmsk::Squad.positions.each do |pos|
+      Squad.positions.each do |pos|
         self.player_records.build(
           pos: pos
         )
