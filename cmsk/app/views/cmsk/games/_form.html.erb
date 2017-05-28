@@ -135,7 +135,7 @@
     var record = $('<tr/>');
     record.append($('#record-template').html().
       replace(/game\[player\_records\_attributes\]\[\d+\]/, 'game[player_records_attributes]['+(num_subs+100)+']').
-      replace(/game\_player\_records\_attributes\_\d+\]/, 'game_player_records_attributes_'+(num_subs+100));
+      replace(/game\_player\_records\_attributes\_\d+\]/, 'game_player_records_attributes_'+(num_subs+100)));
     $('.pos', record).val('SUB '+(++num_subs));
 
     // Append new row to table
