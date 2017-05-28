@@ -12,24 +12,26 @@
 </script>
 
 <div class="col-md-4">
-  <div class="card mt10" id="search">
-    <div class="card-header text-xs-center">Search Analytics</div>
-    <div class="card-block">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title text-center">Search Analytics</div>
+    </div>
+    <div class="panel-body">
       <%= form_tag search_analytics_path do %>
         <div class="form-group row">
-          <%= label_tag :season, 'Season: ', class: 'col-xs-4 col-form-label' %>
-          <div class="col-xs-6">
+          <%= label_tag :season, 'Season: ', class: 'col-xs-4 control-label' %>
+          <div class="col-xs-8">
             <%= select_tag :season, options_for_select(@team.season_options, params[:season]), include_blank: true, class: 'form-control' %>
           </div>
         </div>
         <div class="form-group row">
-          <%= label_tag :competition, 'Competition: ', class: 'col-xs-4 col-form-label' %>
-          <div class="col-xs-6">
+          <%= label_tag :competition, 'Competition: ', class: 'col-xs-4 control-label' %>
+          <div class="col-xs-8">
             <%= select_tag :competition, options_for_select(@team.recorded_competitions, params[:competition]), include_blank: true, class: 'form-control' %>
           </div>
         </div>
       
-        <div class="text-xs-right col-xs-12">
+        <div class="text-right col-xs-12">
           <%= submit_tag 'Search', class: 'btn btn-success' %>
         </div>
       <% end %>
@@ -38,7 +40,7 @@
 </div>
 
 <div class="table-container col-md-8">
-  <table class="table table-hover table-bordered table-striped">
+  <table class="table table-hover table-striped">
     <thead class="thead-inverse">
       <% ['Name', 'Position', 'GP', 'Rating', 'Goals', 'Assists', 'CS'].each do |header| %>
         <th><%= header %></th>

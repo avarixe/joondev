@@ -29,13 +29,15 @@
     .mt10 { margin-top: 10px; }
     .mb10 { margin-bottom: 10px; }
     .main-brand {
-      font-size: 32px;
-      float:none;
+      font-size: 24px;
       color: #527a7a !important;
       text-shadow: 1px 1px 1px black;
     }
-    .page-header{ border-bottom: 1px solid #527a7a; }
-    #cmsk-content a:not(.btn-secondary) { color:white; }
+    #cmsk-navbar { margin-top: -20px; }
+    .page-header{ border-bottom: 1px solid #527a7a; margin-top: 0px;}
+    #cmsk-content a:not(.btn-default) { color:white; }
+    .thead-inverse th { background-color: #292b2c; color: white; }
+    .control-label { text-align: left; padding-top: 7px; }
   </style>
   
   <script>
@@ -49,26 +51,38 @@
   <%= render 'shared/navbar' %>
 
   <% if @module.present? %>
-    <nav class="navbar navbar-light navbar-toggleable-md bg-faded" id="cmsk-navbar">
-      <button class="navbar-toggler hidden-md-up float-xs-right" type="button" data-toggle="collapse" data-target="#cmsk-options"></button>
-      <%= content_tag :a, 'Career Mode Stat Keeper', class: 'navbar-brand' %>
-      <div class="collapse navbar-toggleable-sm" id="cmsk-options">
-        <ul class="nav navbar-nav">
-          <li class="nav-item"><%= link_to 'Teams', teams_path, class: 'nav-link' %></li>
-          <li class="nav-item"><%= link_to 'Players', players_path, class: 'nav-link' %></li>
-          <li class="nav-item"><%= link_to 'Squads', squads_path, class: 'nav-link' %></li>
-          <li class="nav-item"><%= link_to 'Analytics', analytics_path, class: 'nav-link' %></li>
-          <li class="nav-item"><%= link_to 'Game Archives', games_path, class: 'nav-link' %></li>
-          <li class="nav-item"><%= link_to 'Play a Game', new_game_path, class: 'nav-link' %></li>
-        </ul>
+    <nav class="navbar navbar-default" id="cmsk-navbar">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <%= content_tag :a, 'Career Mode Stat Keeper', class: 'navbar-brand' %>
+          <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cmsk-navbar-menu">
+            <span class="sr-only">Toggle Navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+
+        <div class="collapse navbar-collapse" id="cmsk-navbar-menu">
+          <ul class="nav navbar-nav">
+            <li><%= link_to 'Teams', teams_path %></li>
+            <li><%= link_to 'Players', players_path %></li>
+            <li><%= link_to 'Squads', squads_path %></li>
+            <li><%= link_to 'Analytics', analytics_path %></li>
+            <li><%= link_to 'Game Archives', games_path %></li>
+            <li><%= link_to 'Play a Game', new_game_path %></li>
+          </ul>
+        </div>
+
       </div>
     </nav>
+
       
     <div class="container">
       <div class="col-xs-12">
-        <div class="card card-outline-primary mt10" id="cmsk-content">
-          <div class="card-header card-primary text-xs-center" style="color: white;"><%= params[:controller].split('/').last.capitalize %></div>
-          <div class="card-block" style="background: white">
+        <div class="panel panel-primary" id="cmsk-content">
+          <div class="panel-heading"><%= params[:controller].split('/').last.capitalize %></div>
+          <div class="panel-body">
             <div class="page-header">
               <h4><%= @title %></h4>
             </div>

@@ -29,25 +29,24 @@
     .mt10 { margin-top: 10px; }
     .mb10 { margin-bottom: 10px; }
     .main-brand {
-      font-size: 32px;
-      float:none;
+      font-size: 24px;
       color: #527a7a !important;
       text-shadow: 1px 1px 1px black;
     }
-    .page-header{ border-bottom: 1px solid #527a7a; }
-    #cmsk-content a:not(.btn-secondary) { color:white; }
+    .page-header{ border-bottom: 1px solid #527a7a; margin-top: 0px; }
+    #cmsk-content a:not(.btn-default) { color:white; }
+    .control-label { text-align: left; padding-top: 7px; }
   </style>
 </head>
 <body>
   <%= render 'shared/navbar' %>
 
-  <div class="container mt10">
-    <div class="card card-inverse card-outline-primary mt10">
-      <div class="card-header card-primary"></div>
-      <div class="card-block" style="background: white">
-        <div class="mt10">
-          <%= yield %>
-        </div>      
+  <div class="container">
+    <div class="panel panel-primary">
+      <div class="panel-heading"><%= @page %></div>
+      <div class="panel-body">
+        <%= yield %>
+      </div>
     </div>
   </div>
 </body>

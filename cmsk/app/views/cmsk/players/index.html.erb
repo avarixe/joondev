@@ -1,5 +1,4 @@
 <style>
-  .form-control{ width: auto; }
   select.form-control:not([size]):not([multiple]){ height: auto; }
   #players-table_paginate a { color: black; }
   #players-table {
@@ -13,6 +12,8 @@
 </style>
 
 <script>
+  var playersTable;
+
   function generateSwitch(){
     $('input[type="checkbox"]').each(function(){
       $(this).bootstrapSwitch({
@@ -25,29 +26,47 @@
   }
 
   $(function(){
-    $('#players-table').DataTable({
+    playersTable = $('#players-table').DataTable({
       bSort: false,
-      bFilter: false
-    });
-    generateSwitch();
-    $('#players-table').on( 'draw.dt', function () {
-      generateSwitch();
+      bFilter: false,
+      ajax: {
+        url: '/cmsk/players',
+        // data: function(d){
+          // d.inactive = 1
+        // }
+      },
+      columnDefs: [
+        { targets: 0, defaultContent: '<input id="name" class="form-control">' },
+        { targets: 1, defaultContent: '<%= raw select_tag(:pos, options_for_select(Cmsk::Player.positions), class: 'pos form-control').gsub(/\n/, '<br>') %>' },
+        { targets: 2, defaultContent: '<input id="sec_pos" class="form-control">' },
+        { targets: 3, defaultContent: '<input id="active" type="checkbox">' },
+        { targets: 4, defaultContent: '<a class="btn btn-primary update-player-btn">Update</a>'}
+      ],
+      createdRow: function(row, data, dataIndex){
+        $('#name', $(row)).val(data.name);
+        $('#pos', $(row)).val(data.pos);
+        $('#sec_pos', $(row)).val(data.sec_pos);
+        $('#active', $(row)).bootstrapSwitch('state', data.active);
+        $(row).data('player-id', data.id);
+      },
+      drawCallback: function(){
+        generateSwitch();
+      }
     });
 
     $('#players-table').on('click', '.update-player-btn', function(){
-      var id = $(this).closest('tr').data('player-id');
-      
-      var name = $('#name_'+id).val();
-      var pos = $('#pos_'+id).val();
-      var sec_pos = $('#sec_pos_'+id).val();
-      var active = $('#active_'+id).prop('checked');
+      var tr = $(this).closest('tr')      
+      var name = $('#name', tr).val();
+      var pos = $('#pos', tr).val();
+      var sec_pos = $('#sec_pos', tr).val();
+      var active = $('#active', tr).prop('checked');
       
       if (!name)
         swal('Invalid Update', "A Player's Name can't be Blank.", 'error');
       else{
         $.ajax({
           type: 'PUT',
-          url: '/cmsk/players/'+id,
+          url: '/cmsk/players/'+tr.data('player-id'),
           beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token %>') },
           data: { player: {
               name:    name,
@@ -57,13 +76,12 @@
           }},
           success: function(data, status){
             swal({
-              title: data.header, 
-              text: data.message, 
+              title: data.header,
+              text: data.message,
               type: data.status,
               allowOutsideClick: false
             }).then(function(){
-              if (data.status == 'error')
-                window.location.reload(true);
+              playersTable.ajax.reload(null, false);
             }).catch(swal.noop);
           }
         })
@@ -74,30 +92,17 @@
 
 <%= render 'import_csv' %>
 
-<div class="col-sm-12 text-sm-right mb10">
+<div class="col-sm-12 text-right mb10">
   <%= link_to 'New Player', new_player_path, class: 'btn btn-warning' %>
   <%= content_tag :a, 'Import CSV', class: 'btn btn-primary', id: 'import-csv-btn' %>
 </div>
 
 <div class="table-container">
-  <table id="players-table" class="table table-sm table-striped table-hover table-bordered text-xs-center">
+  <table id="players-table" class="table table-sm table-striped table-hover text-center">
     <thead class="thead-inverse">
-      <tr>
-        <% ['Name', 'Position', '2nd Positions', 'Active?', ''].each do |header| %>
-          <th class="text-xs-center"><%= header %></th>
-        <% end %>
-      </tr>
-    </thead>
-    <tbody>
-      <% (@players+@inactive_players).each do |player| %>
-        <tr data-player-id=<%= player.id %>>
-          <td><%= text_field_tag "name_#{player.id}", player.name, class: 'form-control' %></td>
-          <td><%= select_tag "pos_#{player.id}", options_for_select(Cmsk::Player.positions, player.pos), class: 'form-control' %></td>
-          <td><%= text_field_tag "sec_pos_#{player.id}", player.sec_pos, class: 'form-control' %></td>
-          <td><%= check_box_tag "active_#{player.id}", 1, player.active %></td>
-          <td><a class='btn btn-primary update-player-btn' style="color:white">Update</a></td>
-        </tr>
+      <% ['Name', 'Position', '2nd Positions', 'Active?', ''].each do |header| %>
+        <th class="text-center"><%= header %></th>
       <% end %>
-    </tbody>
+    </thead>
   </table>  
 </div>

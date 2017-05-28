@@ -4,9 +4,13 @@ module Cmsk
 
     belongs_to :team
     has_many :player_records
-    accepts_nested_attributes_for :player_records
+    accepts_nested_attributes_for :player_records, reject_if: :invalid_record?
     after_save :set_records
     
+    def invalid_record?(attributed)
+      attributed['pos'].blank?
+    end
+
     def build_records
       Squad.positions.each do |pos|
         self.player_records.build(

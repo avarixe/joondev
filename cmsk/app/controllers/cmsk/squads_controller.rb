@@ -37,9 +37,9 @@ module Cmsk
     # PATCH/PUT /players/1
     def update
       if @squad.update(squad_params)
-        redirect_to squads_url, notice: 'Squad was successfully updated.'
+        head :ok
       else
-        render :edit
+        head 500
       end
     end
 

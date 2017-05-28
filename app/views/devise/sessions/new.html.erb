@@ -1,21 +1,21 @@
-<div class="page-header"><h2>Welcome to JoonDEV</h2></div>
+<div class="page-header" style="margin-top:0px"><h2>Welcome to JoonDEV</h2></div>
 
 <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
   <div class="form-group row">
-    <%= f.label :login, 'Username: ', class: 'col-form-label col-md-5 col-lg-2 offset-lg-3' %>
-    <div class="col-md-7 col-lg-4">
+    <%= f.label :login, 'Username: ', class: 'control-label col-sm-5 col-md-2 col-md-offset-3' %>
+    <div class="col-sm-7 col-md-4">
       <%= f.text_field :login, autofocus: true, class: 'form-control' %>
     </div>
   </div>
 
   <div class="form-group row">
-    <%= f.label :password, 'Password: ', class: 'col-form-label col-md-5 col-lg-2 offset-lg-3' %>
-    <div class="col-md-7 col-lg-4">
+    <%= f.label :password, 'Password: ', class: 'control-label col-sm-5 col-md-2 col-md-offset-3' %>
+    <div class="col-sm-7 col-md-4">
       <%= f.password_field :password, autocomplete: "off", class: 'form-control' %>
     </div>
   </div>
 
-  <div class="text-sm-center">
+  <div class="text-center">
     <% if devise_mapping.rememberable? -%>
       <div class="field">
         <%= f.check_box :remember_me %>

@@ -4,84 +4,58 @@
   #records-table { min-width: 500px; }
 </style>
 
+<%= form_for(@game) do |f| %>
+  <%= render 'game_fields', f: f %>
+
+  <div class="panel panel-default">
+  <div class="panel-body table-container">
+    <table id="records-table" class="table table-sm table-hover">
+      <thead class="thead-inverse">
+        <tr>
+          <th style="width:15%"></th>
+          <th style="width:40%">Name</th>
+          <th style="width:15%">Rating</th>
+          <th style="width:15%">Goals</th>
+          <th style="width:15%">Assists</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @game.player_records.each_with_index do |record, i| %>
+          <%= f.fields_for :player_records, record do |r| %>
+            <tr><%= render 'record_fields', f: r, i: i+3 %></tr>
+          <% end %>
+        <% end %>
+
+        <tr id="record-template" class="hidden">
+          <%= f.fields_for :player_records, Cmsk::PlayerRecord.new do |r| %>
+            <%= render 'record_fields', f: r, i: 1000 %>
+          <% end %>
+        </tr>        
+      </tbody>
+    </table>
+
+    <!--<div id="add-record" class="collapse text-xs-center">-->
+    <div class="text-center">
+      <%= content_tag 'a', '+ SUB', class: 'btn btn-primary', id: 'add-sub-btn' %>
+      <%= content_tag 'a', '- SUB', class: 'btn btn-danger', id: 'remove-sub-btn' %>
+    </div>
+  </div>
+  </div>
+
+  <div class="text-center">
+    <%= f.submit 'Save Game', class: 'btn btn-warning', onclick: 'return checkForm()' %>
+    <%= content_tag 'a', 'Update Squad', class: 'btn btn-primary', id: 'update-squad-btn', disabled: true %>
+    <%= link_to 'Back', games_path, class: 'btn btn-default' %>
+  </div>
+<% end %>
+
 <script>
-  function checkForm(){
-    if (!$('#game_opponent').val())
-      return error_alert('Please enter an Opponent Team.')  
-    else if (!$('#game_competition').val())
-      return error_alert('Please enter a Competition.')
-    else
-      return true;
-  }
-  
-  function toggleClickForm(target){
-    $(target).click(function(){
-      var value = parseInt($(target).val(), 10);
-      $(this).val(isNaN(value) ? 1 : value+1);
-    });
-    $(target).contextmenu(function(event){
-      event.preventDefault();
-      var value = parseInt($(target).val(), 10);
-      $(this).val((isNaN(value) || value == 1) ? null : value-1);
-    });
-  }
-  
+  var num_subs = <%= @game.player_records.length - 11 %>;
+
   $(function(){
-    var num_subs = <%= @game.player_records.length - 11 %>;
-
-    $('.click-form').each(function(){
-      toggleClickForm($(this));
-    });
-
-    function addRecord(){
-      var row = $('<tr/>');
-      var attr = '<input class="form-control" name="game[player_records_attributes]['+(num_subs+11)+']';
-      var click_form_attr = '<input class="click-form form-control" name="game[player_records_attributes]['+(num_subs+11)+']';
-  
-      $('#records-table').find('tbody').append(row);
-  
-      // Position table cell
-      var td = $('<td style="width:15%">');
-      td.append(attr+'[pos]" value="SUB '+(num_subs+1)+'" readonly>');
-      row.append(td);
-      
-      // Name table cell
-      td = $('<td style="width:40%" />');
-      var select = $('<select class="form-control" name="game[player_records_attributes]['+(num_subs+11)+'][player_id]" ><option value></option></select>');
-        
-      <% @team.sorted_players.each do |p| %>
-        select.append($('<option>', { value: <%= p.id %>, text: "<%= "#{p.pos} - #{p.name}".html_safe %>"}));
-      <% end %>
-      
-      td.append(select);
-      row.append(td);
-      
-      // Rating table cell
-      td = $('<td style="width:15%" />');
-      td.append($(attr+'[rating]" type="number" step="0.01" min="0" tabindex="'+(num_subs+14)+'">'));
-      row.append(td);
-      
-      // Goals table cell
-      td = $('<td style="width:15%" />');
-      td.append($(click_form_attr+'[goals]" type="number" min="0" readonly>'));
-      row.append(td);
-      
-      // Assists table cell
-      td = $('<td style="width:15%" />');
-      td.append($(click_form_attr+'[assists]" type="number" min="0" readonly>'));
-      row.append(td);
-      
-      num_subs++;
-      row.find('.click-form').each(function(){
-        toggleClickForm($(this));
-      });
-      
-      return row;
-    }
-    
-    $('#add-sub-btn').click(function(){
-      addRecord();
-    });
+    $('.click-form').each(function(){ toggleClickForm($(this), $(this).hasClass('required')); });
+    $('#game_date_played').flatpickr();
+    $('#add-sub-btn').click(function(){ addRecord(); });
     $('#remove-sub-btn').click(function(){
       if (num_subs > 0){
         $('#records-table tbody tr:last').remove();
@@ -97,101 +71,70 @@
             row.find('select[id$="player_id"]').val(player.id);
           });
         });
-        $('#add-record').collapse('show');
-      } else {
-        $('#add-record').collapse('hide');
-      }
+        $('#update-squad-btn').attr('disabled', false);
+      } else
+        $('#update-squad-btn').attr('disabled', true);
     });
-    
-    $('#game_date_played').flatpickr({
-      theme: 'dark'
+
+    $('#update-squad-btn').click(function(){
+      var squadId = $('#squad').val();
+
+      var rows = $('#records-table tbody tr');
+      var squadParams = {};
+      for(var i=0; i < 11; i++){
+        squadParams['player_id_'+(i+1)] = $('.player_id', $(rows[i])).val();
+      }
+
+      $.ajax({
+        url: '/cmsk/squads/'+squadId+'.json',
+        type: 'PUT',
+        beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token %>')},
+        data: { squad: squadParams }
+      }).error(function(){
+        swal('Error', 'Attempt to update the Squad failed.', 'error');
+      }).then(function(){
+        swal('Success', 'Squad has been updated to the current lineup.', 'success');
+      })
+
+      console.log(squadParams)
     });
   });
+
+  function checkForm(){
+    if (!$('#game_opponent').val())
+      return error_alert('Please enter an Opponent Team.')  
+    else if (!$('#game_competition').val())
+      return error_alert('Please enter a Competition.')
+    else
+      return true;
+  }
+  
+  function toggleClickForm(target, required=false){
+    $(target).click(function(){
+      var value = parseInt($(target).val(), 10);
+      $(this).val(isNaN(value) ? 1 : value+1);
+    });
+    $(target).contextmenu(function(event){
+      event.preventDefault();
+      var value = parseInt($(target).val(), 10);
+      $(this).val((isNaN(value) || value == 1 || value == 0) ? (required ? 0 : null) : value-1);
+    });
+  }
+
+  function addRecord(){
+    // Generate new Record table row
+    var record = $('<tr/>');
+    record.append($('#record-template').html().
+      replace(/game\[player\_records\_attributes\]\[\d+\]/, 'game[player_records_attributes]['+(num_subs+11)+']').
+      replace(/game\_player\_records\_attributes\_\d+\]/, 'game_player_records_attributes_'+(num_subs+11)));
+    $('.pos', record).val('SUB '+(++num_subs));
+
+    // Append new row to table
+    $('#records-table tbody').append(record);
+
+    // Activate jQuery event listeners
+    $('.click-form', $(record)).each(function(){
+      toggleClickForm($(this));
+    });
+  }  
 </script>
-
-<%= form_for(@game) do |f| %>
-  <div class="form-group row">
-    <%= f.label :opponent, 'Opponent Team: ', class: 'col-xs-4 offset-lg-2 col-form-label' %>
-    <div class="col-lg-4 col-xs-8">
-      <%= f.text_field :opponent, class: 'form-control', tabindex: 1 %>
-    </div>
-  </div>
-  <div class="form-group row">
-    <%= f.label :competition, 'Competition: ', class: 'col-xs-4 offset-lg-2 col-form-label' %>
-    <div class="col-lg-4 col-xs-8">
-      <%= f.select :competition, options_for_select(@team.competition_options, @game.competition), {include_blank: true}, {class: 'form-control', tabindex: 2} %>
-    </div>
-  </div>
-  <div class="form-group row">
-    <div class="col-lg-2 offset-lg-3 col-xs-4">
-      <%= f.number_field :score_gf, class: 'click-form form-control text-xs-center', min: 0, readonly: true, value: (@game.id.nil? ? 0 : @game.score_gf) %>
-    </div>
-    <div class="col-form-label text-xs-center col-lg-2 col-xs-4">GF - GA</div>
-    <div class="col-lg-2 col-xs-4">
-      <%= f.number_field :score_ga, class: 'click-form form-control text-xs-center', min: 0, readonly: true, value: (@game.id.nil? ? 0 : @game.score_ga) %>
-    </div>
-  </div>
-  <div class="form-group row">
-    <div class="col-lg-2 offset-lg-3 col-xs-4">
-      <%= f.number_field :penalties_gf, class: 'click-form form-control text-xs-center', min: 0, readonly: true, value: @game.penalties_gf.presence %>
-    </div>
-    <div class="col-form-label text-xs-center col-lg-2 col-xs-4">Penalties</div>
-    <div class="col-lg-2 col-xs-4">
-      <%= f.number_field :penalties_ga, class: 'click-form form-control text-xs-center', min: 0, readonly: true, value: @game.penalties_ga.presence %>
-    </div>
-  </div>
-  <div class="form-group row">
-    <%= f.label :date_played, 'Date Played: ', class: 'col-xs-4 offset-lg-2 col-form-label' %>
-    <div class="col-lg-4 col-xs-8">
-      <%= f.text_field :date_played, value: (@game.id.nil? ? @last_played : @game.date_played), class: 'form-control' %>
-    </div>
-  </div>
-  <% if @game.id.blank? %>
-    <div class="form-group row">
-      <%= label_tag :squad, 'Squad: ', class: 'col-xs-4 offset-lg-2 col-form-label' %>
-      <div class="col-lg-4 col-xs-8">
-        <%= select_tag :squad, options_for_select(@team.squads.map{ |s| [s.squad_name, s.id] }), include_blank: true, class: 'form-control' %>
-      </div>
-    </div>
-  <% end %>
-
-  <div class="card">
-  <div class="card-block table-container">
-    <table id="records-table" class="table table-sm table-hover table-bordered">
-      <thead class="thead-inverse">
-        <tr>
-          <th style="width:15%"></th>
-          <th style="width:40%">Name</th>
-          <th style="width:15%">Rating</th>
-          <th style="width:15%">Goals</th>
-          <th style="width:15%">Assists</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @game.player_records.each_with_index do |record, i| %>
-          <%= f.fields_for :player_records, record do |r| %> 
-            <tr>
-              <td><%= r.text_field :pos, class: 'form-control', readonly: true %></td>
-              <td><%= r.select :player_id, options_for_select(@team.sorted_players.map{ |p| ["#{p.pos} - #{p.name}", p.id] }, record.player_id), {include_blank: true}, {class: 'form-control'} %></td>
-              <td><%= r.number_field :rating, class: 'form-control', step: 0.01, min: 0, tabindex: i+3 %></td>
-              <td><%= r.number_field :goals, class: 'click-form form-control', min: 0, readonly: true %></td>
-              <td><%= r.number_field :assists, class: 'click-form form-control', min: 0, readonly: true %></td>
-            </tr>
-          <% end %>
-        <% end %>
-      </tbody>
-    </table>
-    
-    <!--<div id="add-record" class="collapse text-xs-center">-->
-    <div id="add-record" class="text-xs-center">
-      <%= content_tag 'a', '+ SUB', class: 'btn btn-primary', id: 'add-sub-btn', style: 'color:white' %>
-      <%= content_tag 'a', '- SUB', class: 'btn btn-danger', id: 'remove-sub-btn', style: 'color:white' %>
-    </div>
-  </div>
-  </div>
-
-  <div class="text-xs-center">
-    <%= f.submit 'Save Game', class: 'btn btn-warning', onclick: 'return checkForm()' %>
-    <%= link_to 'Back', games_path, class: 'btn btn-secondary' %>
-  </div>
-<% end %>

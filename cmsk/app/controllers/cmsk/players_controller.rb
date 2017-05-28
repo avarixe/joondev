@@ -9,6 +9,16 @@ module Cmsk
       @players = @team.sorted_players
       @inactive_players = @team.players.inactive
       @title = "#{@team.team_name} - Players"
+
+      respond_to do |format|
+        format.html
+        format.json {
+          render json: {
+            draw: 1,
+            data: @players+@inactive_players
+          }.to_json
+        }
+      end
     end
 
     # GET /players/new

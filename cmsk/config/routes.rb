@@ -1,5 +1,5 @@
 Cmsk::Engine.routes.draw do
-  resources :players, only: [:index, :new, :create] do
+  resources :players, except: [:show, :edit, :destroy] do
     collection do
       post 'update_json'
       post 'import_csv'

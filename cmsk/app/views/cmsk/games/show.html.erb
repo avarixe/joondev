@@ -3,34 +3,13 @@
   #records-table { min-width: 450px; }
 </style>
 
-<script>
-  $(function(){
-    $('.copy-btn').click(function(){
-      swal({
-        title: '<%= @game.competition %>: <%= @team.team_name %> v <%= @game.opponent %>',
-        input: 'textarea',
-        inputValue: $('#copy-table').html(),
-        inputAttributes: {
-          readonly: true,
-        },
-        onOpen: function(){
-          $('.swal2-textarea').mousedown(function(){
-            $(this).select();
-          });
-        }
-      }).catch(swal.noop);
-    });    
-  });
-</script>
-
-<div class="col-sm-12 text-sm-right">
+<div class="col-sm-12 text-right">
   <%= link_to 'Edit', edit_game_path(@game), class: 'btn btn-warning' %>
-  <%#= content_tag :a, 'Copy to Excel', class: 'btn btn-info copy-btn' %>
   <%= link_to 'Save Stats', game_path(@game, format: :xlsx), class: 'btn btn-info' %>
-  <%= link_to 'Back', games_path, class: 'btn btn-secondary' %>
+  <%= link_to 'Back', games_path, class: 'btn btn-default' %>
 </div>
 
-<div class="col-sm-12 text-xs-center" >
+<div class="col-sm-12 text-center" >
   <h1><%= @game.competition %></h1>
   <h2><%= @team.team_name %> v <%= @game.opponent %></h2>
   <h2><%= @game.score %></h2>
@@ -38,47 +17,30 @@
 </div>
 
 <div class="col-xs-12 mt10">
-  <div class="card card-outline-<%= @game.result %>">
-  <div class="card-block table-container">
-    <table id="records-table" class="table table-sm table-hover table-bordered">
-      <thead class="thead-inverse">
-        <tr>
-          <th style="width:15%"></th>
-          <th style="width:40%">Name</th>
-          <th style="width:15%">Rating</th>
-          <th style="width:15%">Goals</th>
-          <th style="width:15%">Assists</th>
-        </tr>
-      </thead>
-      <tbody>
-      <% @game.player_records.each do |record| %>
-        <tr class="<%= 'table-warning' if record.player.name == @game.motm(true) %>">
-          <td><%= record.pos %></td>
-          <td><%= record.player.name %></td>
-          <td><%= record.rating %></td>
-          <td><%= record.goals %></td>
-          <td><%= record.assists %></td>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
+  <div class="panel panel-<%= @game.result %>">
+    <div class="panel-body">
+      <table id="records-table" class="table table-sm table-hover">
+        <thead class="thead-inverse">
+          <tr>
+            <th style="width:15%"></th>
+            <th style="width:40%">Name</th>
+            <th style="width:15%">Rating</th>
+            <th style="width:15%">Goals</th>
+            <th style="width:15%">Assists</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% @game.player_records.each do |record| %>
+          <tr class="<%= 'warning' if record.player.name == @game.motm(true) %>">
+            <td><%= record.pos %></td>
+            <td><%= record.player.name %></td>
+            <td><%= record.rating %></td>
+            <td><%= record.goals %></td>
+            <td><%= record.assists %></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
-  </div>
-</div>
-
-<div id="copy-table" class="hidden-xs-up">
-  <table>
-    <tr><td><%= @game.opponent %></td></tr>
-    <% @data[:ratings].each do |rating| %>
-      <tr><td><%= rating %></td></tr>
-    <% end %>
-    <tr><td></td></tr>
-    <% @data[:goals].each do |goals| %>
-      <tr><td><%= goals %></td></tr>
-    <% end %>
-    <tr><td></td></tr>
-    <% @data[:assists].each do |assists| %>
-      <tr><td><%= assists %></td></tr>
-    <% end %>
-  </table>
 </div>

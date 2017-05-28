@@ -36,7 +36,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-gem 'bootstrap'
+gem 'bootstrap-sass'
 gem 'jquery-datatables-rails'
 gem 'flatpickr_rails'
 gem "awesome_print", require:"ap"  
