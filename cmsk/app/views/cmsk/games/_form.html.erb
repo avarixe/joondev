@@ -114,10 +114,19 @@
       var value = parseInt($(target).val(), 10);
       $(this).val(isNaN(value) ? 1 : value+1);
     });
+    $(target).on('swiperight', function(event){
+      var value = parseInt($(target).val(), 10);
+      $(this).val(isNaN(value) ? 1 : value+1);
+    });
     $(target).contextmenu(function(event){
       event.preventDefault();
       var value = parseInt($(target).val(), 10);
       $(this).val((isNaN(value) || value == 1 || value == 0) ? (required ? 0 : null) : value-1);
+    });
+    $(target).on('swipeleft', function(event){
+      event.preventDefault();
+      var value = parseInt($(target).val(), 10);
+      $(this).val((isNaN(value) || value == 1 || value == 0) ? (required ? 0 : null) : value-1);      
     });
   }
 
