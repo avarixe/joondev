@@ -86,17 +86,16 @@
       }
 
       $.ajax({
-        url: '/cmsk/squads/'+squadId+'.json',
+        url: '/cmsk/squads/'+squadId,
         type: 'PUT',
         beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token %>')},
-        data: { squad: squadParams }
-      }).error(function(){
-        swal('Error', 'Attempt to update the Squad failed.', 'error');
+        data: { squad: squadParams },
+        statusCode: {
+          500: function(){ swal('Error', 'Attempt to update the Squad failed.', 'error'); }
+        }
       }).then(function(){
         swal('Success', 'Squad has been updated to the current lineup.', 'success');
-      })
-
-      console.log(squadParams)
+      });
     });
   });
 
