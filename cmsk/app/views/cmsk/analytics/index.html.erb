@@ -1,6 +1,7 @@
 <style>
   .table-container { overflow-x: scroll; }
   .table { min-width: 550px; }
+  tr.inactive { background-color: #f4d5d5 !important; }
 </style>
 
 <div class="col-md-4">
@@ -66,7 +67,12 @@
         { data: 'goals' },
         { data: 'assists' },
         { data: 'cs' },
-      ]
+      ],
+      rowCallback: function(nRow, aData){
+        if (!aData.active){
+          $(nRow).addClass('inactive')
+        }
+      }
     });
 
     $('#season, #competition').change(function(){
