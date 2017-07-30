@@ -3,6 +3,9 @@ module Cmsk
     default_scope { order(id: :asc)}
 
     belongs_to :team
+    has_many :records, class_name: 'PlayerRecord'
+    has_many :game_records, -> { with_game_data }, class_name: 'PlayerRecord'
+
     scope :active, -> { where(active: true) }
     scope :inactive, -> { where(active: false) }
 

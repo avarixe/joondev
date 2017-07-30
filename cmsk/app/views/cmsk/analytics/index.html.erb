@@ -3,14 +3,6 @@
   .table { min-width: 550px; }
 </style>
 
-<script>
-  $(function(){
-    $('table').DataTable({
-      order: [[3, "desc"]]  
-    });
-  });
-</script>
-
 <div class="col-md-4">
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -46,19 +38,36 @@
         <th><%= header %></th>
       <% end %>
     </thead>
-  
-    <tbody>
-      <% @totals.each do |player, data| %>
-        <tr>
-          <td><%= player %></td>
-          <td><%= data[:pos] %></td>
-          <td><%= data[:gp] %></td>
-          <td><%= number_with_precision(data[:rating], precision: 2) %></td>
-          <td><%= data[:goals].to_i %></td>
-          <td><%= data[:assists].to_i %></td>
-          <td><%= data[:cs] %></td>
-        </tr>
-      <% end %>
-    </tbody>
   </table>
 </div>
+
+<script>
+  var table;
+
+  $(function(){
+    table = $('table').DataTable({
+      order: [[3, "desc"]],
+      ajax: {
+        url: '/cmsk/analytics',
+        data: function(d){
+          d.season = $('select#season').val();
+          d.competition = $('select#competition').val();
+        }
+      },
+      processing: true,
+      columns: [
+        { data: 'player' },
+        { data: 'pos' },
+        { data: 'gp' },
+        { data: 'rating' },
+        { data: 'goals' },
+        { data: 'assists' },
+        { data: 'cs' },
+      ],
+    });
+
+    $('#season, #competition').change(function(){
+      table.ajax.reload(null, false);
+    })
+  });
+</script>

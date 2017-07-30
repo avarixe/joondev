@@ -7,6 +7,22 @@
   $(function(){
     $('table').DataTable({
       bSort: false,
+      ajax: {
+        url: '/cmsk/games'
+      },
+      processing: true,
+      columns: [
+        { data: 'opponent' },
+        { data: 'competition' },
+        { data: 'score', searchable: false },
+        { data: 'motm' },
+        { data: 'date_played', searchable: false },
+      ],
+      rowCallback: function(nRow, aData){
+        $(nRow)
+          .data('id', aData.id)
+          .addClass(aData.result);
+      }
     });    
     
     $('table').on('click', 'tr', function(){
@@ -25,17 +41,5 @@
         <% end %>
       </tr>
     </thead>
-  
-    <tbody>
-      <% @games.reverse.each do |game| %>
-        <tr data-id=<%= game.id %> class="<%= game.result %>">
-          <td><%= game.opponent %></td>
-          <td><%= game.competition %></td>
-          <td><%= game.score %></td>
-          <td><%= game.motm %></td>
-          <td><%= time_to_string(game.date_played, '%B %e, %Y') %></td>
-        </tr>
-      <% end %>
-    </tbody>
   </table>
 </div>

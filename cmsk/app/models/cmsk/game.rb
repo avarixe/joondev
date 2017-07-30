@@ -4,6 +4,10 @@ module Cmsk
 
     belongs_to :team
     has_many :player_records
+    has_many :players, through: :player_records
+
+    has_one :best_record, -> { motm }, class_name: 'PlayerRecord'
+
     accepts_nested_attributes_for :player_records, reject_if: :invalid_record?
     after_save :set_records
     

@@ -7,8 +7,27 @@ module Cmsk
 
     # GET /players
     def index
-      @title = "#{@team.team_name} - Game Archives"
-      @games = @team.games
+      respond_to do |format|
+        format.html {
+          @title = "#{@team.team_name} - Game Archives"
+        }
+        format.json {
+          @games = @team.games
+          render json: {
+            data: @games.reverse.map{ |game|
+              {
+                id:          game.id,
+                result:      game.result,
+                opponent:    game.opponent,
+                competition: game.competition,
+                score:       game.score,
+                motm:        game.motm,
+                date_played: time_to_string(game.date_played, '%B %e, %Y')
+              }
+            }
+          }.to_json
+        }
+      end
     end
 
     # GET /players/1
