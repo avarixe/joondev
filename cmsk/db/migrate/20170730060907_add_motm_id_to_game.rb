@@ -4,7 +4,7 @@ class AddMotmIdToGame < ActiveRecord::Migration
 
     Cmsk::Game.all.each do |game|
       motm = game.player_records.sort_by(&:rating).last.player
-      game.update_attribute(:motm_id, motm.id)
+      game.update_column(:motm_id, motm.id)
     end
   end
 
