@@ -31,9 +31,7 @@ module Cmsk
     end
     
     def sorted_players
-      positions = players.active.group_by(&:pos)
-      positions = positions.sort_by{ |pos, players| Player.positions.index(pos) }
-      positions.map{ |pos, players| players }.flatten
+      positions = players.active
     end
   end
 end

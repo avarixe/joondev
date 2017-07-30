@@ -1,5 +1,5 @@
 <td><%= f.text_field :pos, class: 'pos form-control', readonly: true %></td>
-<td><%= f.select :player_id, options_for_select(@team.sorted_players.map{ |p| ["#{p.pos} - #{p.name}", p.id] }, f.object.player_id), {include_blank: true}, {class: 'player_id form-control'} %></td>
+<td><%= f.select :player_id, options_for_select(@sorted_players.map{ |p| ["#{p.pos} - #{p.name}", p.id] }, f.object.player_id), {include_blank: true}, {class: 'player_id form-control'} %></td>
 <td><%= f.number_field :rating, class: 'rating form-control', step: 0.01, min: 0, tabindex: i %></td>
 <td><%= f.number_field :goals, class: 'goals click-form form-control', min: 0, readonly: true %></td>
 <td><%= f.number_field :assists, class: 'assists click-form form-control', min: 0, readonly: true %></td>

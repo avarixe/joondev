@@ -30,10 +30,10 @@
           </tr>
         </thead>
         <tbody>
-        <% @game.player_records.each do |record| %>
-          <tr class="<%= 'warning' if record.player.name == @game.motm(true) %>">
+        <% @records.each do |record| %>
+          <tr class="<%= 'warning' if record.player_id == @game.motm_id %>">
             <td><%= record.pos %></td>
-            <td><%= record.player.name %></td>
+            <td><%= record.player_name %></td>
             <td><%= record.rating %></td>
             <td><%= record.goals %></td>
             <td><%= record.assists %></td>

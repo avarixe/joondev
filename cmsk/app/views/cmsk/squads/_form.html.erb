@@ -39,7 +39,7 @@
     <div class="form-group row">
       <%= f.label "player_id_#{no}".to_sym, "#{Cmsk::Squad.positions[no-1]}: ", class: 'col-xs-2 control-label' %>
       <div class="col-xs-10">
-        <%= f.select "player_id_#{no}", options_for_select(@team.sorted_players.map{ |p| ["#{p.pos} - #{p.name}", p.id] }, @squad.send("player_id_#{no}")), {include_blank: true}, {class: 'form-control player-field'} %>
+        <%= f.select "player_id_#{no}", options_for_select(@sorted_players.map{ |p| ["#{p.pos} - #{p.name}", p.id] }, @squad.send("player_id_#{no}")), {include_blank: true}, {class: 'form-control player-field'} %>
       </div>
     </div>
   <% end %>

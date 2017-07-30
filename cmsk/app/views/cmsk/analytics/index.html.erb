@@ -56,14 +56,17 @@
       },
       processing: true,
       columns: [
-        { data: 'player' },
+        { data: 'name' },
         { data: 'pos' },
         { data: 'gp' },
-        { data: 'rating' },
+        { 
+          data: 'rating',
+          render: $.fn.dataTable.render.number(',', '.', '2')
+        },
         { data: 'goals' },
         { data: 'assists' },
         { data: 'cs' },
-      ],
+      ]
     });
 
     $('#season, #competition').change(function(){

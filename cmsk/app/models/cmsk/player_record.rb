@@ -4,24 +4,17 @@ module Cmsk
     belongs_to :game
     belongs_to :player
 
-    scope :with_game_data, -> {
-      joins('LEFT JOIN cmsk_games ON cmsk_player_records.game_id = cmsk_games.id')
-        .select('cmsk_player_records.*, ' + [
-          # 'opponent',
-          # 'competition',
-          # 'score_gf',
-          'score_ga',
-          # 'penalties_gf',
-          # 'penalties_ga',
-          # 'date_played'
-        ].map{ |f| "cmsk_games.#{f} AS #{f}"}.join(', ') )
-    }
-
-    scope :motm, -> {
+    scope :with_player, -> {
       joins('LEFT JOIN cmsk_players ON cmsk_player_records.player_id = cmsk_players.id')
-        .select()
+        .select([
+          'cmsk_player_records.*',
+          'cmsk_players.name as player_name'
+        ].join(', ') )
     }
 
+    scope :exclusively, -> (ids) {
+      where(id: ids)
+    }
 
     validates_presence_of :player_id, :rating, :pos
   end

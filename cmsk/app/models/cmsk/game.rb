@@ -6,11 +6,15 @@ module Cmsk
     has_many :player_records
     has_many :players, through: :player_records
 
-    has_one :best_record, -> { motm }, class_name: 'PlayerRecord'
+    belongs_to :motm, class_name: 'Player'
+    scope :with_motm, -> { 
+      joins('LEFT JOIN cmsk_players ON cmsk_games.motm_id = cmsk_players.id')
+        .select('cmsk_games.*, cmsk_players.name AS motm_name')
+    }
 
     accepts_nested_attributes_for :player_records, reject_if: :invalid_record?
     after_save :set_records
-    
+
     def invalid_record?(attributed)
       attributed['pos'].blank?
     end
@@ -26,8 +30,13 @@ module Cmsk
     def set_records
       self.player_records.each do |record|
         record.team_id = self.team_id
+        record.cs = self.score_gf == 0
         record.save
       end
+
+      # TODO: Remove after I add radio buttons to select MOTM
+      motm_id = self.player_records.sort_by(&:rating).last.player_id
+      update_column(:motm_id, motm_id)      
     end
   
     def score
@@ -39,12 +48,7 @@ module Cmsk
         self.penalties_ga.present? ? " (#{self.penalties_ga})" : ''
       ].join('')
     end
-    
-    def motm(full_name=false)
-      player = self.player_records.sort_by(&:rating).last.player
-      full_name ? player.name : player.shorthand_name
-    end
-    
+        
     def result
       if self.score_gf > self.score_ga
         'success'

@@ -14,14 +14,14 @@ module Cmsk
         format.json {
           @games = @team.games
           render json: {
-            data: @games.reverse.map{ |game|
+            data: @games.with_motm.reverse.map{ |game|
               {
                 id:          game.id,
                 result:      game.result,
                 opponent:    game.opponent,
                 competition: game.competition,
                 score:       game.score,
-                motm:        game.motm,
+                motm:        game.motm_name,
                 date_played: time_to_string(game.date_played, '%B %e, %Y')
               }
             }
@@ -31,30 +31,37 @@ module Cmsk
     end
 
     # GET /players/1
-    def show
-      @title = "#{@team.team_name} - Game Record"
-      
-      # Prepare Copy Table
-      @data = { 
-        # names: [], 
-        ratings: [],
-        goals: [],
-        assists: []
-      }
-      player_ids = @game.player_records.map(&:player_id)
-      @team.sorted_players.each do |player|
-        played = player_ids.include?(player.id)
-        record = PlayerRecord.where(game_id: @game.id, player_id: player.id).first
-        
-        # @data[:names].push(player.names)
-        @data[:ratings].push(played ? record.rating  : nil)
-        @data[:goals].push  (played ? record.goals   : nil)
-        @data[:assists].push(played ? record.assists : nil)
-      end
-      
+    def show         
       respond_to do |format|
-        format.html
-        format.xlsx
+        @records = @game.player_records.with_player
+
+        format.html {
+          @title = "#{@team.team_name} - Game Record"
+        }
+        format.xlsx {
+          # Prepare Copy Table
+          @data = { 
+            ratings: [],
+            goals: [],
+            assists: []
+          }
+          player_ids = @records.map(&:player_id)
+          @team.sorted_players.each do |player|
+            played = player_ids.include?(player.id)
+
+            if played
+              record = @records.find_by(player_id: player.id)
+
+              @data[:ratings] << record.rating
+              @data[:goals]   << record.goals
+              @data[:assists] << record.assists
+            else
+              @data[:ratings] << nil
+              @data[:goals]   << nil
+              @data[:assists] << nil
+            end
+          end
+        }
       end
     end
 
@@ -64,11 +71,13 @@ module Cmsk
       @last_played = @team.games.last.date_played unless @team.games.empty?
       @game = Game.new
       @game.build_records
+      @sorted_players = @team.sorted_players
     end
 
     # GET /players/1/edit
     def edit
       @title = "#{@team.team_name} - Edit Game"
+      @sorted_players = @team.sorted_players
     end
 
     # POST /players
@@ -81,7 +90,8 @@ module Cmsk
       if @team.games.push @game
         redirect_to @game, notice: 'Game was successfully created.'
       else
-        render :new
+       @sorted_players = @team.sorted_players
+       render :new
       end
     end
 
@@ -90,6 +100,7 @@ module Cmsk
       if @game.update(game_params)
         redirect_to @game, notice: 'Game was successfully updated.'
       else
+        @sorted_players = @team.sorted_players
         render :edit
       end
     end
@@ -103,7 +114,7 @@ module Cmsk
     private
       # Use callbacks to share common setup or constraints between actions.
       def set_game
-        @game = Game.find(params[:id])
+        @game = Game.with_motm.find(params[:id])
       end
 
       # Only allow a trusted parameter "white list" through.

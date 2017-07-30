@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170106051922) do
+ActiveRecord::Schema.define(version: 20170730070027) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20170106051922) do
     t.integer "penalties_gf"
     t.integer "penalties_ga"
     t.date    "date_played"
+    t.integer "motm_id"
   end
 
   create_table "cmsk_player_records", force: :cascade do |t|
@@ -35,6 +36,7 @@ ActiveRecord::Schema.define(version: 20170106051922) do
     t.integer "goals"
     t.integer "assists"
     t.string  "pos",       limit: 10
+    t.boolean "cs"
   end
 
   create_table "cmsk_players", force: :cascade do |t|

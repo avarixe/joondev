@@ -12,10 +12,14 @@ module Cmsk
         }
         format.json {
           filter_records
-          set_totals
+          # set_totals
+
+          @players = Player.active
+            .with_stats(@games.map(&:id))
+            .where(id: @records.map(&:player_id).uniq)
 
           render json: {
-            data: @totals
+            data: @players
           }.to_json
         }
       end
@@ -46,14 +50,18 @@ module Cmsk
         end
 
         if query[:strings].any?
-          games = Game.where(query[:strings].join(' AND '), *query[:args])
-          @records = @records.where(game_id: games.map(&:id))
+          @games = Game.where(query[:strings].join(' AND '), *query[:args])
+          @records = @records.where(game_id: @games.map(&:id))
+        else
+          @games = []
         end
       end
 
       def set_totals
+
+
         @totals = []
-        Player.active.each do |player|
+        Player.active.with_stats.each do |player|
           records = @records.where(player_id: player.id).with_game_data
 
           next if records.length == 0
