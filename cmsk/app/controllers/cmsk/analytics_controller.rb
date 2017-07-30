@@ -14,8 +14,7 @@ module Cmsk
           filter_records
           # set_totals
 
-          @players = Player.active
-            .with_stats(@games.map(&:id))
+          @players = Player.with_stats(@games.map(&:id))
             .where(id: @records.map(&:player_id).uniq)
 
           render json: {
@@ -54,30 +53,6 @@ module Cmsk
           @records = @records.where(game_id: @games.map(&:id))
         else
           @games = []
-        end
-      end
-
-      def set_totals
-
-
-        @totals = []
-        Player.active.with_stats.each do |player|
-          records = @records.where(player_id: player.id).with_game_data
-
-          next if records.length == 0
-
-          total_rating = sum(records.map(&:rating))
-          avg_rating = total_rating > 0 ? total_rating / records.length : 0
-
-          @totals << {
-            player:  player.name,
-            pos:     player.pos,
-            gp:      records.length,
-            rating:  sprintf( "%0.02f", avg_rating),
-            goals:   sum(records.map(&:goals)),
-            assists: sum(records.map(&:assists)),
-            cs:      records.select{ |rec| rec.score_ga == 0 }.length
-          }
         end
       end
   end
