@@ -7,6 +7,7 @@ Cmsk::Engine.routes.draw do
   end
   resources :teams
   resources :games
+  resources :competitions
   resources :squads, except: [:except, :destroy] do
     member do 
       get 'players_json'
@@ -14,7 +15,7 @@ Cmsk::Engine.routes.draw do
   end
   resources :analytics, only: [:index] do
     collection do
-      match 'search', via: [:get, :post]
+      get 'players'
     end
   end
   root 'teams#index'

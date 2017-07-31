@@ -3,16 +3,15 @@ require_dependency "cmsk/application_controller"
 module Cmsk
   class AnalyticsController < ApplicationController
     before_action :set_current_team
-    before_action :set_records
     
-    def index
+    def players
       respond_to do |format|
         format.html {
-          @title = "#{@team.team_name} - Analytics"
+          @page = "Analytics"
         }
         format.json {
+          @records = @team.player_records
           filter_records
-          # set_totals
 
           @players = Player.with_stats(@games.map(&:id))
             .where(id: @records.map(&:player_id).uniq)
@@ -25,10 +24,6 @@ module Cmsk
     end
       
     private
-      def set_records
-        @records = @team.player_records
-      end
-    
       def filter_records
         query = {
           strings: [],

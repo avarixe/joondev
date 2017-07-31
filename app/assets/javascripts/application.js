@@ -20,4 +20,5 @@
 //= require turbolinks
 //= require sweetalert2.min
 //= require flatpickr
+//= require moment
 //= require_tree .

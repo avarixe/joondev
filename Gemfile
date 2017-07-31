@@ -44,6 +44,8 @@ gem "awesome_print", require:"ap"
 gem 'axlsx_rails'
 gem 'tzinfo-data'
 
+gem 'momentjs-rails'
+
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.1.0'
 end

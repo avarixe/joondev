@@ -10,24 +10,18 @@
       <div class="panel-title text-center">Search Analytics</div>
     </div>
     <div class="panel-body">
-      <%= form_tag search_analytics_path do %>
-        <div class="form-group row">
-          <%= label_tag :season, 'Season: ', class: 'col-xs-4 control-label' %>
-          <div class="col-xs-8">
-            <%= select_tag :season, options_for_select(@team.season_options, params[:season]), include_blank: true, class: 'form-control' %>
-          </div>
+      <div class="form-group row">
+        <%= label_tag :season, 'Season: ', class: 'col-xs-4 control-label' %>
+        <div class="col-xs-8">
+          <%= select_tag :season, options_for_select(@team.season_options, params[:season]), include_blank: true, class: 'form-control' %>
         </div>
-        <div class="form-group row">
-          <%= label_tag :competition, 'Competition: ', class: 'col-xs-4 control-label' %>
-          <div class="col-xs-8">
-            <%= select_tag :competition, options_for_select(@team.recorded_competitions, params[:competition]), include_blank: true, class: 'form-control' %>
-          </div>
+      </div>
+      <div class="form-group row">
+        <%= label_tag :competition, 'Competition: ', class: 'col-xs-4 control-label' %>
+        <div class="col-xs-8">
+          <%= select_tag :competition, options_for_select(@team.recorded_competitions, params[:competition]), include_blank: true, class: 'form-control' %>
         </div>
-      
-        <div class="text-right col-xs-12">
-          <%= submit_tag 'Search', class: 'btn btn-success' %>
-        </div>
-      <% end %>
+      </div>
     </div>
   </div>
 </div>
@@ -49,7 +43,7 @@
     table = $('table').DataTable({
       order: [[3, "desc"]],
       ajax: {
-        url: '/cmsk/analytics',
+        url: '/cmsk/analytics/players',
         data: function(d){
           d.season = $('select#season').val();
           d.competition = $('select#competition').val();

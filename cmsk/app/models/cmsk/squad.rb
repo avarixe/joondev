@@ -24,7 +24,10 @@ module Cmsk
     
     def player_names
       names = []
-      (1..11).each { |no| names.push(Player.find(self.send("player_id_#{no}")).name) }
+      (1..11).each { |no|
+        player = Player.find(self.send("player_id_#{no}")) rescue nil
+        names << player.name if player.present?
+      }
       names.join(', ')
     end
   end

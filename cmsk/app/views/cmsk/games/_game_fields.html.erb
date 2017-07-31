@@ -7,7 +7,8 @@
 <div class="form-group row">
   <%= f.label :competition, 'Competition: ', class: 'col-xs-4 col-md-offset-2 control-label' %>
   <div class="col-md-4 col-xs-8">
-    <%= f.select :competition, options_for_select(@team.competition_options, @game.competition), {include_blank: true}, {class: 'form-control', tabindex: 2} %>
+    <%#= f.select :competition, options_for_select(@team.competition_options, @game.competition), {include_blank: true}, {class: 'form-control', tabindex: 2} %>
+    <%= f.text_field :competition, class: 'form-control', tabindex: 2 %>
   </div>
 </div>
 <div class="form-group row">

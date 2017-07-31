@@ -8,7 +8,7 @@ module Cmsk
     def index
       @players = @team.sorted_players
       @inactive_players = @team.players.inactive
-      @title = "#{@team.team_name} - Players"
+      @page = "Players"
 
       respond_to do |format|
         format.html
@@ -24,7 +24,7 @@ module Cmsk
     # GET /players/new
     def new
       @player = Player.new
-      @title = "#{@team.team_name} - New Player"
+      @page = "New Player"
     end
 
     # POST /players
@@ -34,6 +34,7 @@ module Cmsk
       if @team.players.push @player
         redirect_to action: 'index'
       else
+        @page = "New Player"
         render :new
       end
     end

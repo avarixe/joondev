@@ -13,18 +13,16 @@
 <i>Note: The current active Team is highlighted. To switch, click and view the Team of your choice.</i>
 
 <table class="table table-hover table-striped">
-  <thead>
-    <tr class="thead-inverse">
-      <th>Name</th>
-      <th>Competitions</th>
-    </tr>
+  <thead class="thead-inverse">
+    <th>Name</th>
+    <!-- <th>Competitions</th> -->
   </thead>
 
   <tbody>
     <% current_user.teams.each do |team| %>
       <tr data-team-id=<%= team.id %> class="<%= 'success' if session[:team].to_i == team.id %>">
         <td><%= team.team_name %></td>
-        <td><%= team.competitions %></td>
+        <!-- <td><%#= team.competitions %></td> -->
       </tr>
     <% end %>
   </tbody>

@@ -9,7 +9,7 @@ module Cmsk
     def index
       respond_to do |format|
         format.html {
-          @title = "#{@team.team_name} - Game Archives"
+          @page = "Game Archives"
         }
         format.json {
           @games = @team.games
@@ -36,7 +36,7 @@ module Cmsk
         @records = @game.player_records.with_player
 
         format.html {
-          @title = "#{@team.team_name} - Game Record"
+          @page = "Game Record"
         }
         format.xlsx {
           # Prepare Copy Table
@@ -67,7 +67,7 @@ module Cmsk
 
     # GET /players/new
     def new
-      @title = "#{@team.team_name} - New Game"
+      @page = "New Game"
       @last_played = @team.games.last.date_played unless @team.games.empty?
       @game = Game.new
       @game.build_records
@@ -76,7 +76,7 @@ module Cmsk
 
     # GET /players/1/edit
     def edit
-      @title = "#{@team.team_name} - Edit Game"
+      @page = "Edit Game"
       @sorted_players = @team.sorted_players
     end
 
@@ -84,14 +84,12 @@ module Cmsk
     def create
       @game = Game.new(game_params)
 
-      puts "Hello"
-      puts @games.inspect
-
       if @team.games.push @game
         redirect_to @game, notice: 'Game was successfully created.'
       else
-       @sorted_players = @team.sorted_players
-       render :new
+        @page = "New Game"
+        @sorted_players = @team.sorted_players
+        render :new
       end
     end
 
@@ -100,6 +98,7 @@ module Cmsk
       if @game.update(game_params)
         redirect_to @game, notice: 'Game was successfully updated.'
       else
+        @page = "Edit Game"
         @sorted_players = @team.sorted_players
         render :edit
       end

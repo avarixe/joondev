@@ -3,6 +3,18 @@
   .table { min-width: 550px; }
 </style>
 
+<div class="table-container">
+  <table class="table table-hover  table-striped">
+    <thead class="thead-inverse">
+      <tr>
+        <% ['Opponent Team', 'Competition', 'Score', 'MOTM', 'Date Played'].each do |header| %>
+          <th><%= header %></th>
+        <% end %>
+      </tr>
+    </thead>
+  </table>
+</div>
+
 <script>
   $(function(){
     $('table').DataTable({
@@ -25,21 +37,9 @@
       }
     });    
     
-    $('table').on('click', 'tr', function(){
+    $('table').on('click', 'tbody tr', function(){
       if ($(this).data('id'))
         window.location = "/cmsk/games/"+$(this).data('id');
     });
   });
 </script>
-
-<div class="table-container">
-  <table class="table table-hover  table-striped">
-    <thead class="thead-inverse">
-      <tr>
-        <% ['Opponent Team', 'Competition', 'Score', 'MOTM', 'Date Played'].each do |header| %>
-          <th><%= header %></th>
-        <% end %>
-      </tr>
-    </thead>
-  </table>
-</div>

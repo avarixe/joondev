@@ -1,0 +1,67 @@
+<style>
+  textarea { resize: vertical; }
+</style>
+
+<%= form_for(@competition) do |f| %>
+  <div class="form-group row">
+    <%= f.label :title, 'Competition: ', class: 'col-sm-4 col-sm-offset-2 control-label' %>
+    <div class="col-sm-4">
+      <%= f.text_field :title, class: 'form-control', required: true %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <%= f.label :season, 'Season: ', class: 'col-sm-4 col-sm-offset-2 control-label' %>
+    <div class="col-sm-4">
+      <%= f.text_field :season, class: 'form-control', required: true %>
+    </div>
+  </div>
+
+  <div class="stages-template hidden">
+    <%= f.fields_for :stages, Cmsk::Stage.new do |s| %>
+      <%= render 'stage_fields', f: s, i: 0 %>
+    <% end %>
+  </div>
+
+  <div class="form-group row text-center">
+    <a class="add-stage-btn btn btn-primary">+ Stage</a>
+  </div>
+
+  <div id="stages" class="panel-group">
+    <% @competition.stages.each_with_index do |stage, i| %>
+      <%= f.fields_for :stages, stage do |s| %>
+        <%= render 'stage_fields', f: s, i: i+1 %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="text-center">
+    <hr>
+    <%= f.submit 'Save Competition', class: 'btn btn-warning', onclick: 'return checkForm()' %>
+    <%= link_to 'Back', teams_path, class: 'btn btn-default' %>
+  </div>
+<% end %>
+
+<script>
+  $(function(){
+    var id = <%= @competition.stages.count %>;
+
+    $('.add-stage-btn').click(function(){
+      id++;
+      var html = $('.stages-template').html()
+        .replace(/\[stages_attributes\]\[\d+\]/g, '[stages_attributes]['+id+']')
+        .replace(/stage_attributes_\d+/g, 'stage_attributes_'+id)
+        .replace(/\<div class=\"panel-title\"\>Stage 0\<\/div\>/g, '<div class="panel-title">Stage '+id+'</div>')
+      $('#stages').append(html);
+    })
+  })
+
+  function checkForm(){
+    if (!$('#competition_title').val())
+      return error_alert('Please enter the Competition Title.')  
+    else if (!$('#competition_season').val())
+      return error_alert('Please enter the Season.')
+    else
+      return true;
+  }
+</script>

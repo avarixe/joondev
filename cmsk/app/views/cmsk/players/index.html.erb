@@ -11,6 +11,23 @@
   }
 </style>
 
+<%= render 'import_csv' %>
+
+<div class="col-sm-12 text-right mb10">
+  <%= link_to 'New Player', new_player_path, class: 'btn btn-warning' %>
+  <%= content_tag :a, 'Import CSV', class: 'btn btn-primary', id: 'import-csv-btn' %>
+</div>
+
+<div class="table-container">
+  <table id="players-table" class="table table-sm table-striped table-hover text-center">
+    <thead class="thead-inverse">
+      <% ['Name', 'Position', '2nd Positions', 'Active?', ''].each do |header| %>
+        <th class="text-center"><%= header %></th>
+      <% end %>
+    </thead>
+  </table>  
+</div>
+
 <script>
   var playersTable;
 
@@ -89,20 +106,3 @@
     })
   });
 </script>
-
-<%= render 'import_csv' %>
-
-<div class="col-sm-12 text-right mb10">
-  <%= link_to 'New Player', new_player_path, class: 'btn btn-warning' %>
-  <%= content_tag :a, 'Import CSV', class: 'btn btn-primary', id: 'import-csv-btn' %>
-</div>
-
-<div class="table-container">
-  <table id="players-table" class="table table-sm table-striped table-hover text-center">
-    <thead class="thead-inverse">
-      <% ['Name', 'Position', '2nd Positions', 'Active?', ''].each do |header| %>
-        <th class="text-center"><%= header %></th>
-      <% end %>
-    </thead>
-  </table>  
-</div>

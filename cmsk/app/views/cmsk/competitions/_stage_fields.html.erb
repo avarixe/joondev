@@ -1,0 +1,28 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-title">Stage <%= i %></div>
+    <div class="panel-controls panel-controls-right mt5">
+      <a class="rem-btn btn btn-danger">&times;</a>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="form-group row">
+      <%= f.label :category, 'Type: ', class: 'col-sm-3 control-label' %>
+      <div class="col-sm-3">
+        <%= f.select :category, options_for_select(Cmsk::Stage::CATEGORIES, f.object.category), {}, {class: 'form-control'} %>
+      </div>
+      <%= f.label :num_plays, 'Games Played per Fixture: ', class: 'col-sm-3 control-label' %>
+      <div class="col-sm-3">
+        <%= f.number_field :num_plays, value: f.object.num_plays || 1, class: 'form-control', min: 1 %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <%= f.label :opponents, 'Opponents: ', class: 'col-sm-3 control-label' %>
+      <div class="col-sm-9">
+        <%= f.text_area :opponents, rows: 2, placeholder: "One Opponent Team per line", class: 'form-control' %>
+      </div>
+    </div>
+
+  </div>
+</div>

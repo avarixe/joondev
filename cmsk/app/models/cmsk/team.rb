@@ -4,11 +4,11 @@ module Cmsk
 
     has_many :players
     has_many :squads
+    has_many :competitions
     has_many :games
     has_many :player_records
     
     validates_presence_of :team_name
-    validates_presence_of :competitions
     
     def season_options
       start_year = games.first.date_played.strftime('%Y').to_i
@@ -23,7 +23,7 @@ module Cmsk
     end
     
     def competition_options
-      competitions.split(',').map{ |x| x.strip }
+      competitions_names.split(',').map{ |x| x.strip }
     end
     
     def recorded_competitions

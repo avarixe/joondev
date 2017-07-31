@@ -68,7 +68,8 @@
             <li><%= link_to 'Teams', teams_path %></li>
             <li><%= link_to 'Players', players_path %></li>
             <li><%= link_to 'Squads', squads_path %></li>
-            <li><%= link_to 'Analytics', analytics_path %></li>
+            <li><%= link_to 'Analytics', players_analytics_path %></li>
+            <li><%= link_to 'Competitions', competitions_path %></li>
             <li><%= link_to 'Game Archives', games_path %></li>
             <li><%= link_to 'Play a Game', new_game_path %></li>
           </ul>
@@ -84,7 +85,7 @@
           <div class="panel-heading"><%= params[:controller].split('/').last.capitalize %></div>
           <div class="panel-body">
             <div class="page-header">
-              <h4><%= @title %></h4>
+              <h4><%= @page.present? ?  "#{@team.team_name} - #{@page}" : @title %></h4>
             </div>
             <div class="mt10">
               <%= yield %>

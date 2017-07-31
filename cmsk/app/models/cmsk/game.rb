@@ -6,6 +6,8 @@ module Cmsk
     has_many :player_records
     has_many :players, through: :player_records
 
+    belongs_to :fixture
+
     belongs_to :motm, class_name: 'Player'
     scope :with_motm, -> { 
       joins('LEFT JOIN cmsk_players ON cmsk_games.motm_id = cmsk_players.id')

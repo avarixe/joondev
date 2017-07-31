@@ -11,10 +11,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170730070027) do
+ActiveRecord::Schema.define(version: 20170731005036) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "cmsk_competitions", force: :cascade do |t|
+    t.integer  "team_id",    null: false
+    t.string   "season",     null: false
+    t.string   "title",      null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "cmsk_competitions", ["team_id"], name: "index_cmsk_competitions_on_team_id", using: :btree
+
+  create_table "cmsk_fixtures", force: :cascade do |t|
+    t.integer  "stage_id",                   null: false
+    t.integer  "result",         default: 0, null: false
+    t.string   "home",                       null: false
+    t.string   "away",                       null: false
+    t.integer  "goals_home",     default: 0
+    t.integer  "goals_away",     default: 0
+    t.integer  "penalties_home"
+    t.integer  "penalties_away"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "cmsk_fixtures", ["stage_id"], name: "index_cmsk_fixtures_on_stage_id", using: :btree
 
   create_table "cmsk_games", force: :cascade do |t|
     t.integer "team_id"
@@ -26,6 +51,7 @@ ActiveRecord::Schema.define(version: 20170730070027) do
     t.integer "penalties_ga"
     t.date    "date_played"
     t.integer "motm_id"
+    t.integer "fixture_id"
   end
 
   create_table "cmsk_player_records", force: :cascade do |t|
@@ -65,12 +91,22 @@ ActiveRecord::Schema.define(version: 20170730070027) do
     t.integer "player_id_11"
   end
 
+  create_table "cmsk_stages", force: :cascade do |t|
+    t.integer  "competition_id", null: false
+    t.string   "category",       null: false
+    t.integer  "num_plays",      null: false
+    t.text     "opponents"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "cmsk_stages", ["competition_id"], name: "index_cmsk_stages_on_competition_id", using: :btree
+
   create_table "cmsk_teams", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "team_name"
-    t.string   "competitions"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

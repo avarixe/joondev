@@ -7,20 +7,20 @@ module Cmsk
 
     # GET /players
     def index
-      @title = "#{@team.team_name} - Squads"
+      @page = "Squads"
       @squads = @team.squads
     end
 
     # GET /players/1
     def show
-      @title = "#{@team.team_name} - #{@squad.squad_name}"
+      @page = @squad.squad_name
       @sorted_players = @team.sorted_players
       render :edit
     end
 
     # GET /players/new
     def new
-      @title = "#{@team.team_name} - New Squad"
+      @page = "New Squad"
       @sorted_players = @team.sorted_players
       @squad = Squad.new
     end
@@ -32,6 +32,7 @@ module Cmsk
       if @team.squads.push @squad
         redirect_to @squad, notice: 'Squad was successfully created.'
       else
+        @page = "New Squad"
         @sorted_players = @team.sorted_players
         render :new
       end
