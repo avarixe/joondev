@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/knapo/jquery-inputmask-rails.git
+  revision: 20df4fa329da0235b1e2ae3f0e225ce33fcc029c
+  specs:
+    jquery-inputmask-rails (0.4.0)
+      railties (>= 3.1)
+
 PATH
   remote: cmsk
   specs:
@@ -214,6 +221,7 @@ DEPENDENCIES
   flatpickr_rails
   jbuilder (~> 2.0)
   jquery-datatables-rails
+  jquery-inputmask-rails!
   jquery-rails
   jquery-ui-rails
   momentjs-rails

@@ -5,6 +5,8 @@ module Cmsk
     has_many :players
     has_many :squads
     has_many :competitions
+    has_many :stages
+    has_many :fixtures
     has_many :games
     has_many :player_records
     

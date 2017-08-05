@@ -1,0 +1,3 @@
+textarea { resize: vertical; }
+
+.form-control[readonly] { background-color: white; }

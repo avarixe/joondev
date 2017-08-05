@@ -44,6 +44,7 @@ gem "awesome_print", require:"ap"
 gem 'axlsx_rails'
 gem 'tzinfo-data'
 
+gem 'jquery-inputmask-rails', github: 'knapo/jquery-inputmask-rails'
 gem 'momentjs-rails'
 
 source 'https://rails-assets.org' do

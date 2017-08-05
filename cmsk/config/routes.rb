@@ -8,6 +8,7 @@ Cmsk::Engine.routes.draw do
   resources :teams
   resources :games
   resources :competitions
+  resources :fixtures, only: [:update]
   resources :squads, except: [:except, :destroy] do
     member do 
       get 'players_json'

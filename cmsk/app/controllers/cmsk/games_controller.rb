@@ -69,7 +69,14 @@ module Cmsk
     def new
       @page = "New Game"
       @last_played = @team.games.last.date_played unless @team.games.empty?
-      @game = Game.new
+
+      if params[:fixture].present?
+        fixture = Fixture.find(params[:fixture])
+        @game = fixture.init_game
+      else
+        @game = Game.new
+      end
+
       @game.build_records
       @sorted_players = @team.sorted_players
     end

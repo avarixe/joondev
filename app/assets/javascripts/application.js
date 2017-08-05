@@ -21,4 +21,9 @@
 //= require sweetalert2.min
 //= require flatpickr
 //= require moment
+//= require inputmask
+//= require jquery.inputmask
+//= require inputmask.numeric.extensions
+//= require inputmask.regex.extensions
+//= require global
 //= require_tree .

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170731005036) do
+ActiveRecord::Schema.define(version: 20170805181335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20170731005036) do
     t.integer  "penalties_away"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.integer  "team_id"
   end
 
   add_index "cmsk_fixtures", ["stage_id"], name: "index_cmsk_fixtures_on_stage_id", using: :btree
@@ -99,6 +100,7 @@ ActiveRecord::Schema.define(version: 20170731005036) do
     t.text     "opponents"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.integer  "team_id"
   end
 
   add_index "cmsk_stages", ["competition_id"], name: "index_cmsk_stages_on_competition_id", using: :btree

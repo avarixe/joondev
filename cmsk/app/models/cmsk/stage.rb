@@ -28,7 +28,7 @@ module Cmsk
         set_teams << home
 
         (teams - set_teams).each do |away|
-          new_fixtures << self.fixtures.new(home: home, away: away)
+          new_fixtures << self.fixtures.new(team_id: team_id, home: home, away: away)
         end
       end
 

@@ -13,9 +13,7 @@ module Cmsk
     end
     
     def set_team_cookie
-      unless current_user.teams.blank?
-        session[:team] = current_user.teams.last.id if session[:team].blank?
-      end
+      session[:team] = current_user.teams.last.id if session[:team].blank? && current_user.teams.any?
     end
     
     def set_current_team

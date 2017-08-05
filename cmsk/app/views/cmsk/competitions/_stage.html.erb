@@ -7,11 +7,11 @@
       <%= label_tag :category, 'Type: ', class: 'col-sm-3 control-label' %>
       <div class="col-sm-3">
 
-        <%= select_tag :category, options_for_select(Cmsk::Stage::CATEGORIES, stage.category), class: 'form-control', disabled: true %>
+        <%= text_field_tag :category, stage.category, class: 'form-control', readonly: true %>
       </div>
       <%= label_tag :num_plays, 'Games Played per Fixture: ', class: 'col-sm-3 control-label' %>
       <div class="col-sm-3">
-        <%= select_tag :num_plays, options_for_select([1,2], stage.num_plays), class: 'form-control', disabled: true %>
+        <%= text_field_tag :num_plays, stage.num_plays, class: 'form-control', readonly: true %>
       </div>
     </div>
 
@@ -23,7 +23,9 @@
     </div>
 
     <div class="form-group row">
-      <%= render 'fixtures', stage: stage %>
+      <div class="col-sm-12">
+        <%= render 'fixtures', stage: stage %>
+      </div>
     </div>
   </div>
 </div>
