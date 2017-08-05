@@ -5,7 +5,7 @@ module Cmsk
     accepts_nested_attributes_for :stages, allow_destroy: true, reject_if: :invalid_stage?
 
     def invalid_stage?(stage)
-      [:category, :num_plays, :teams].any?{ |att| stage[att].blank? }
+      [:category, :num_plays, :opponents].any?{ |att| stage[att].blank? }
     end
   end
 end

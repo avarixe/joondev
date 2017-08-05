@@ -1,0 +1,29 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-title">Stage</div>
+  </div>
+  <div class="panel-body">
+    <div class="form-group row">
+      <%= label_tag :category, 'Type: ', class: 'col-sm-3 control-label' %>
+      <div class="col-sm-3">
+
+        <%= select_tag :category, options_for_select(Cmsk::Stage::CATEGORIES, stage.category), class: 'form-control', disabled: true %>
+      </div>
+      <%= label_tag :num_plays, 'Games Played per Fixture: ', class: 'col-sm-3 control-label' %>
+      <div class="col-sm-3">
+        <%= select_tag :num_plays, options_for_select([1,2], stage.num_plays), class: 'form-control', disabled: true %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <%= label_tag :opponents, 'Opponents: ', class: 'col-sm-3 control-label' %>
+      <div class="col-sm-9">
+        <%= text_area_tag :opponents, stage.opponents.join("\n"), rows: 2, class: 'form-control', readonly: true %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <%= render 'fixtures', stage: stage %>
+    </div>
+  </div>
+</div>

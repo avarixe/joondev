@@ -28,11 +28,12 @@ ActiveRecord::Schema.define(version: 20170731005036) do
 
   create_table "cmsk_fixtures", force: :cascade do |t|
     t.integer  "stage_id",                   null: false
+    t.date     "date_played"
     t.integer  "result",         default: 0, null: false
     t.string   "home",                       null: false
     t.string   "away",                       null: false
-    t.integer  "goals_home",     default: 0
-    t.integer  "goals_away",     default: 0
+    t.integer  "goals_home"
+    t.integer  "goals_away"
     t.integer  "penalties_home"
     t.integer  "penalties_away"
     t.datetime "created_at",                 null: false

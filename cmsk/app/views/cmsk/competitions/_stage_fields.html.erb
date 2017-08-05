@@ -1,8 +1,9 @@
-<div class="panel panel-default">
+<div class="panel panel-default" data-id=<%= f.object.id %>>
   <div class="panel-heading">
-    <div class="panel-title">Stage <%= i %></div>
-    <div class="panel-controls panel-controls-right mt5">
-      <a class="rem-btn btn btn-danger">&times;</a>
+    <div class="panel-title">
+      Stage
+      <a class="rem-btn btn btn-danger pull-right">X</a>
+      <%= f.hidden_field :_destroy %>
     </div>
   </div>
   <div class="panel-body">
@@ -13,14 +14,14 @@
       </div>
       <%= f.label :num_plays, 'Games Played per Fixture: ', class: 'col-sm-3 control-label' %>
       <div class="col-sm-3">
-        <%= f.number_field :num_plays, value: f.object.num_plays || 1, class: 'form-control', min: 1 %>
+        <%= f.select :num_plays, options_for_select([1,2], f.object.num_plays), {}, {class: 'form-control'} %>
       </div>
     </div>
 
     <div class="form-group row">
       <%= f.label :opponents, 'Opponents: ', class: 'col-sm-3 control-label' %>
       <div class="col-sm-9">
-        <%= f.text_area :opponents, rows: 2, placeholder: "One Opponent Team per line", class: 'form-control' %>
+        <%= f.text_area :opponents, value: (f.object.opponents.join("\n") rescue ''), rows: 2, placeholder: "One Opponent Team per line", class: 'form-control' %>
       </div>
     </div>
 

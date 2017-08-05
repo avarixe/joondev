@@ -1,5 +1,6 @@
 <style>
   textarea { resize: vertical; }
+  .rem-btn { padding-bottom: 0px; padding-top: 0px; }
 </style>
 
 <%= form_for(@competition) do |f| %>
@@ -19,7 +20,7 @@
 
   <div class="stages-template hidden">
     <%= f.fields_for :stages, Cmsk::Stage.new do |s| %>
-      <%= render 'stage_fields', f: s, i: 0 %>
+      <%= render 'stage_fields', f: s %>
     <% end %>
   </div>
 
@@ -30,7 +31,7 @@
   <div id="stages" class="panel-group">
     <% @competition.stages.each_with_index do |stage, i| %>
       <%= f.fields_for :stages, stage do |s| %>
-        <%= render 'stage_fields', f: s, i: i+1 %>
+        <%= render 'stage_fields', f: s %>
       <% end %>
     <% end %>
   </div>
@@ -50,9 +51,19 @@
       id++;
       var html = $('.stages-template').html()
         .replace(/\[stages_attributes\]\[\d+\]/g, '[stages_attributes]['+id+']')
-        .replace(/stage_attributes_\d+/g, 'stage_attributes_'+id)
-        .replace(/\<div class=\"panel-title\"\>Stage 0\<\/div\>/g, '<div class="panel-title">Stage '+id+'</div>')
+        .replace(/stage_attributes_\d+/g, 'stage_attributes_'+id);
       $('#stages').append(html);
+    });
+
+    $('#stages').on('click', '.rem-btn', function(){
+      var id = $(this).closest('.panel').data('id');
+
+      if (id){
+        $(this).next().val(1);
+        $(this).closest('.panel').addClass('hidden');
+      } else{
+        $(this).closest('.panel').remove();
+      }
     })
   })
 

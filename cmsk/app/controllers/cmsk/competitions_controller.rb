@@ -55,7 +55,7 @@ module Cmsk
 
     private
       # Use callbacks to share common setup or constraints between actions.
-      def set_game
+      def set_competition
         @competition = Competition.find(params[:id])
       end
 
