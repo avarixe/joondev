@@ -5,6 +5,8 @@
 </style>
 
 <%= form_for(@game) do |f| %>
+  <%= f.hidden_field :fixture_id %>
+
   <%= render 'game_fields', f: f %>
 
   <div class="panel panel-default">

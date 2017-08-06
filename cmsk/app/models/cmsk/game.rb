@@ -16,6 +16,7 @@ module Cmsk
 
     accepts_nested_attributes_for :player_records, reject_if: :invalid_record?
     after_save :set_records
+    after_save :set_fixture
 
     def invalid_record?(attributed)
       attributed['pos'].blank?
@@ -39,6 +40,20 @@ module Cmsk
       # TODO: Remove after I add radio buttons to select MOTM
       motm_id = self.player_records.sort_by(&:rating).last.player_id
       update_column(:motm_id, motm_id)      
+    end
+
+    def set_fixture
+      if fixture_id.present?
+        side, opp_side = team.team_name == fixture.home ? ['home', 'away'] : ['away', 'home']
+
+        fixture.update_columns(
+          date_played: date_played,
+          :"goals_#{side}"         => score_gf,
+          :"penalties_#{side}"     => penalties_gf, 
+          :"goals_#{opp_side}"     => score_ga,
+          :"penalties_#{opp_side}" => penalties_ga,
+        )
+      end
     end
   
     def score

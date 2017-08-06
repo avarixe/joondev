@@ -24,10 +24,7 @@ module Cmsk
       set_teams = [] # For one only fixtures
 
       teams.each do |home|
-        set_teams = [] if num_plays > 1
-        set_teams << home
-
-        (teams - set_teams).each do |away|
+        (teams - [home]).each do |away|
           new_fixtures << self.fixtures.new(team_id: team_id, home: home, away: away)
         end
       end

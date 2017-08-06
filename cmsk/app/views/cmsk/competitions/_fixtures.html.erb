@@ -16,7 +16,9 @@
         <td> - </td>
         <td><%= text_field_tag :away_score, fixture.away_score, class: 'form-control full-score', disabled: fixture.user_team_playing %></td>
         <td><%= fixture.away %></td>
-        <td><%= text_field_tag :date_played, fixture.date_played, class: 'form-control flatpickr', disabled: fixture.user_team_playing %></td>
+        <td>
+          <%= text_field_tag :date_played, time_to_string(fixture.date_played, '%B %e, %Y'), class: "form-control #{'datepicker' unless fixture.user_team_playing}" %>
+        </td>
         <td>
           <% if fixture.user_team_playing %>
             <!-- Link to new Game or existing Game -->

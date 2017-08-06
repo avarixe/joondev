@@ -3,7 +3,7 @@
 var vars = {};
 
 $(function(){
-  $('.flatpickr').flatpickr({ altInput: true });
+  $('.datepicker').flatpickr({ altInput: true });
 
   $('.data-table').each(function(){
     // Click behavior if table has links to other pages
