@@ -32,7 +32,7 @@
 <div class="form-group row">
   <%= f.label :date_played, 'Date Played: ', class: 'col-xs-4 col-md-offset-2 control-label' %>
   <div class="col-md-4 col-xs-8">
-    <%= f.text_field :date_played, value: (@game.id.nil? ? @last_played : @game.date_played), class: 'form-control' %>
+    <%= f.text_field :date_played, value: (@game.id.nil? ? @last_played : @game.date_played), class: 'form-control flatpickr' %>
   </div>
 </div>
 <% if @game.id.blank? %>

@@ -54,7 +54,6 @@
 
   $(function(){
     $('.click-form').each(function(){ toggleClickForm($(this), $(this).hasClass('required')); });
-    $('#game_date_played').flatpickr();
     $('#add-sub-btn').click(function(){ addRecord(); });
     $('#remove-sub-btn').click(function(){
       if (num_subs > 0){
