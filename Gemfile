@@ -40,12 +40,14 @@ gem 'bootstrap-sass'
 gem 'jquery-datatables-rails'
 gem 'flatpickr_rails'
 gem "awesome_print", require:"ap"  
+gem 'font-awesome-rails'
 
 gem 'axlsx_rails'
 gem 'tzinfo-data'
 
 gem 'jquery-inputmask-rails', github: 'knapo/jquery-inputmask-rails'
 gem 'momentjs-rails'
+gem 'jquery-dirtyforms-rails'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.1.0'

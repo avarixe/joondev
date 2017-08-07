@@ -1,3 +1,38 @@
-textarea { resize: vertical; }
+body {
+  background: #c2d6d6;
+  background: linear-gradient(150deg, #c2d6d6, #99b3ff);
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+@media (min-width: 576px){ .container{ min-width: 540px; width: 95%; } }
+@media (min-width: 768px){ .container{ min-width: 760px; width: 95%; } }
+@media (min-width: 992px){ .container{ min-width: 960px; width: 95%; } }
 
+*:not(.swal2-icon):not(.placeholder):not(.swal2-confirm):not(.flatpickr-day):not(.fa) {
+  font-family: 'Crimson Text', serif;
+  border-radius: 0px;
+}
+.glyphicon{ font-size: 1.3em; }
+.mt10 { margin-top: 10px; }
+.mb10 { margin-bottom: 10px; }
+.main-brand {
+  font-size: 24px;
+  color: #527a7a !important;
+  text-shadow: 1px 1px 1px black;
+}
+#cmsk-navbar { margin-top: -20px; }
+.page-header{ border-bottom: 1px solid #527a7a; margin-top: 0px;}
+.thead-inverse th { background-color: #292b2c; color: white; }
+.control-label { text-align: left; padding-top: 7px; }
 .form-control[readonly] { background-color: white; }
+textarea { resize: vertical; }
+.panel-group > .panel { margin-top: 5px; }
+
+
+/* Supplementary to Awesome Fonts */
+.fa { vertical-align: -10%; }
+
+/* Supplementary to Buttons */
+.button { padding: 0px 20px; }
+.button-block { width: 100%; }

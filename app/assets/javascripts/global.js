@@ -5,19 +5,19 @@ var vars = {};
 $(function(){
   $('.datepicker').flatpickr({ altInput: true });
 
-  $('.data-table').each(function(){
-    // Click behavior if table has links to other pages
-    if ((_dTLink = $(this).data('link'))){
-      $(this).on('click', 'tbody tr', function(evt){
-        if ((_dTRowId = $(this).data('id')) && !$(evt.target).closest('td').is('[no-link]')){
-          if (evt.ctrlKey)
-            window.open(_dTLink + _dTRowId);
-          else
-            window.location = _dTLink + _dTRowId;
-        }
-      })
+  // Click behavior if table has links to other pages
+  $('table').on('click', 'tbody tr', function(evt){
+    if ((_dTLink = $(this).closest('table').data('link')) &&
+        (_dTRowId = $(this).data('id')) &&
+        !$(evt.target).closest('td').is('[no-link]')){
+      if (evt.ctrlKey)
+        window.open(_dTLink + _dTRowId);
+      else
+        window.location = _dTLink + _dTRowId;
     }
+  });
 
+  $('.data-table').each(function(){
     // Set columns that can't be sorted or filtered
     var _unsortable = [];
     var _unfilterable = [];
@@ -44,5 +44,9 @@ $(function(){
     mask: "9{1,2}[ \(9{1,2}\)]",
     greedy: false,
     skipOptionalPartCharacter: ' '
+  });
+
+  $(document).on('click', '.panel-heading', function(){
+    $('.panel-collapse', $(this).closest('.panel')).toggle('collapse');
   })
 })

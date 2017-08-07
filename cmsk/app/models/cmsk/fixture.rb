@@ -36,7 +36,11 @@ module Cmsk
           penalties_home > penalties_away ? 1 : 3
         end
       )
+
+      stage.set_status
     end
+
+    def stage_incomplete?() stage.status == 0 end
 
     def home_score() "#{goals_home}#{" (#{penalties_home})" if penalties_home.present?}" end
     def away_score() "#{goals_away}#{" (#{penalties_away})" if penalties_away.present?}" end

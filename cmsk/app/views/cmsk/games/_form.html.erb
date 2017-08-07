@@ -38,16 +38,20 @@
 
     <!--<div id="add-record" class="collapse text-xs-center">-->
     <div class="text-center">
-      <%= content_tag 'a', '+ SUB', class: 'btn btn-primary', id: 'add-sub-btn' %>
-      <%= content_tag 'a', '- SUB', class: 'btn btn-danger', id: 'remove-sub-btn' %>
+      <a class="button button-small button-raised button-action" id="add-sub-btn">
+        <%= fa_icon 'plus', text: 'SUB' %>
+      </a>
+      <a class="button button-small button-raised button-caution" id="remove-sub-btn">
+        <%= fa_icon 'minus', text: 'SUB' %>
+      </a>
     </div>
   </div>
   </div>
 
   <div class="text-center">
-    <%= f.submit 'Save Game', class: 'btn btn-warning', onclick: 'return checkForm()' %>
-    <%= content_tag 'a', 'Update Squad', class: 'btn btn-primary', id: 'update-squad-btn', disabled: true %>
-    <%= link_to 'Back', games_path, class: 'btn btn-default' %>
+    <%= f.submit 'Save Game', class: 'button button-raised button-highlight', onclick: 'return checkForm()' %>
+    <%= content_tag 'button', 'Update Squad', class: 'button button-raised button-primary', id: 'update-squad-btn', disabled: true %>
+    <%= link_to 'Back', games_path, class: 'button button-raised' %>
   </div>
 <% end %>
 

@@ -14,8 +14,8 @@
 <%= render 'import_csv' %>
 
 <div class="col-sm-12 text-right mb10">
-  <%= link_to 'New Player', new_player_path, class: 'btn btn-warning' %>
-  <%= content_tag :a, 'Import CSV', class: 'btn btn-primary', id: 'import-csv-btn' %>
+  <%= link_to 'New Player', new_player_path, class: 'button button-raised button-highlight' %>
+  <%= content_tag :a, 'Import CSV', class: 'button button-raised button-action', id: 'import-csv-btn' %>
 </div>
 
 <div class="table-container">
@@ -57,7 +57,7 @@
         { targets: 1, defaultContent: '<%= raw select_tag(:pos, options_for_select(Cmsk::Player.positions), class: 'pos form-control').gsub(/\n/, '<br>') %>' },
         { targets: 2, defaultContent: '<input id="sec_pos" class="form-control">' },
         { targets: 3, defaultContent: '<input id="active" type="checkbox">' },
-        { targets: 4, defaultContent: '<a class="btn btn-primary update-player-btn">Update</a>'}
+        { targets: 4, defaultContent: '<a class="button button-raised button-small button-block button-primary update-player-btn">Update</a>'}
       ],
       createdRow: function(row, data, dataIndex){
         $('#name', $(row)).val(data.name);

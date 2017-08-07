@@ -6,7 +6,7 @@ module Cmsk
     before_action :set_current_team
 
     def update
-      if @fixture.update_attributes(fixture_params)
+      if @fixture.stage_incomplete? && @fixture.update_attributes(fixture_params)
         head :ok
       else
         status 500

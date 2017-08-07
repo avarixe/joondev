@@ -4,7 +4,7 @@
 </style>
 
 <div class="table-container">
-  <table class="table table-hover  table-striped">
+  <table class="table table-hover table-striped" data-link="/cmsk/games/">
     <thead class="thead-inverse">
       <tr>
         <% ['Opponent Team', 'Competition', 'Score', 'MOTM', 'Date Played'].each do |header| %>
@@ -36,10 +36,5 @@
           .addClass(aData.result);
       }
     });    
-    
-    $('table').on('click', 'tbody tr', function(){
-      if ($(this).data('id'))
-        window.location = "/cmsk/games/"+$(this).data('id');
-    });
   });
 </script>

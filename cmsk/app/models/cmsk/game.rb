@@ -53,6 +53,7 @@ module Cmsk
           :"goals_#{opp_side}"     => score_ga,
           :"penalties_#{opp_side}" => penalties_ga,
         )
+        fixture.set_result
       end
     end
   

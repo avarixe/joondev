@@ -1,12 +1,12 @@
 <table id="stage_<%= stage.id %>" class="data-table table table-hover">
   <thead>
-    <th class="col-xs-2">Home</th>
-    <th class="col-xs-2" no-sort no-filter>GH</th>
-    <th class="col-xs-1" no-sort no-filter> - </th>
-    <th class="col-xs-2" no-sort no-filter>GA</th>
-    <th class="col-xs-2">Away</th>
-    <th class="col-xs-2">Date Played</th>
-    <th class="col-xs-1" no-sort no-filter><!-- Actions --></th>
+    <th width="15%">Home</th>
+    <th width="15%" no-sort no-filter>GH</th>
+    <th width="5%" no-sort no-filter> - </th>
+    <th width="15%" no-sort no-filter>GA</th>
+    <th width="15%">Away</th>
+    <th width="20%">Date Played</th>
+    <th width="15%" no-sort no-filter><!-- Actions --></th>
   </thead>
   <tbody>
     <% stage.fixtures.with_game.each do |fixture| %>
@@ -17,16 +17,16 @@
         <td><%= text_field_tag :away_score, fixture.away_score, class: 'form-control full-score', disabled: fixture.user_team_playing %></td>
         <td><%= fixture.away %></td>
         <td>
-          <%= text_field_tag :date_played, time_to_string(fixture.date_played, '%B %e, %Y'), class: "form-control #{'datepicker' unless fixture.user_team_playing}" %>
+          <%= text_field_tag :date_played, time_to_string(fixture.date_played, '%B %e, %Y'), class: "form-control #{'datepicker' unless fixture.user_team_playing}", disabled: true %>
         </td>
         <td>
           <% if fixture.user_team_playing %>
             <!-- Link to new Game or existing Game -->
             <%= fixture.game_exists ?
-              link_to('View Game', fixture.game, class: 'btn btn-block btn-primary', target: '_blank') :
-              link_to('Play Game', new_game_path(fixture: fixture.id), class: 'btn btn-block btn-danger', target: '_blank') %>
+              link_to('View Game', fixture.game, class: 'button button-small button-block button-raised button-primary', target: '_blank') :
+              link_to('Play Game', new_game_path(fixture: fixture.id), class: 'button button-small button-block button-raised button-action', target: '_blank') %>
           <% else %>
-            <button class="update-btn btn btn-block btn-warning" disabled>Update</button>
+            <button class="update-btn button button-small button-block button-raised button-highlight" disabled>Update</button>
           <% end %>
         </td>
       </tr>

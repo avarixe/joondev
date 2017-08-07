@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170805181335) do
+ActiveRecord::Schema.define(version: 20170807033057) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,13 +94,15 @@ ActiveRecord::Schema.define(version: 20170805181335) do
   end
 
   create_table "cmsk_stages", force: :cascade do |t|
-    t.integer  "competition_id", null: false
-    t.string   "category",       null: false
-    t.integer  "num_plays",      null: false
+    t.integer  "competition_id",             null: false
+    t.string   "category",                   null: false
+    t.integer  "num_plays",                  null: false
     t.text     "opponents"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.integer  "team_id"
+    t.integer  "status",         default: 0
+    t.string   "title"
   end
 
   add_index "cmsk_stages", ["competition_id"], name: "index_cmsk_stages_on_competition_id", using: :btree

@@ -1,0 +1,15 @@
+<% if object.errors.any? %>
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="alert alert-danger">
+        <a class="close" data-dismiss="alert">&times;</a>
+        <b>Please resolve the following issues before submitting:</b>
+        <ul>
+          <% object.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+<% end %>
