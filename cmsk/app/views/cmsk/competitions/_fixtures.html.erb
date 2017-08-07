@@ -1,67 +1,104 @@
-<table id="stage_<%= stage.id %>" class="data-table table table-hover">
-  <thead>
-    <th width="15%">Home</th>
-    <th width="15%" no-sort no-filter>GH</th>
-    <th width="5%" no-sort no-filter> - </th>
-    <th width="15%" no-sort no-filter>GA</th>
-    <th width="15%">Away</th>
-    <th width="20%">Date Played</th>
-    <th width="15%" no-sort no-filter><!-- Actions --></th>
-  </thead>
-  <tbody>
-    <% stage.fixtures.with_game.each do |fixture| %>
-      <tr data-id=<%= fixture.id %>>
-        <td><%= fixture.home %></td>
-        <td><%= text_field_tag :home_score, fixture.home_score, class: 'form-control full-score', disabled: fixture.user_team_playing %></td>
-        <td> - </td>
-        <td><%= text_field_tag :away_score, fixture.away_score, class: 'form-control full-score', disabled: fixture.user_team_playing %></td>
-        <td><%= fixture.away %></td>
-        <td>
-          <%= text_field_tag :date_played, time_to_string(fixture.date_played, '%B %e, %Y'), class: "form-control #{'datepicker' unless fixture.user_team_playing}", disabled: true %>
-        </td>
-        <td>
-          <% if fixture.user_team_playing %>
-            <!-- Link to new Game or existing Game -->
-            <%= fixture.game_exists ?
-              link_to('View Game', fixture.game, class: 'button button-small button-block button-raised button-primary', target: '_blank') :
-              link_to('Play Game', new_game_path(fixture: fixture.id), class: 'button button-small button-block button-raised button-action', target: '_blank') %>
-          <% else %>
-            <button class="update-btn button button-small button-block button-raised button-highlight" disabled>Update</button>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<form>
+  <table id="stage_<%= stage.id %>" class="table table-hover">
+    <thead>
+      <th width="15%">Home</th>
+      <th width="15%">GH</th>
+      <th width="5%"> - </th>
+      <th width="15%">GA</th>
+      <th width="15%">Away</th>
+      <th width="20%">Date Played</th>
+      <th width="15%"><!-- Actions --></th>
+    </thead>
+  </table>
+</form>
 
 <script>
   $(function(){
-    $('table#stage_<%= stage.id %>').on('input', 'input', function(){
-      var tr = $(this).closest('tr');
-      var empty = false;
-      $('input', tr).each(function(){
-        if (!$(this).val())
-          empty = true;
-      })
+    var stageTable_<%= stage.id %> = $('table#stage_<%= stage.id %>').DataTable({
+      ajax: {
+        url: '<%= get_fixtures_stage_path(stage) %>'
+      },
+      columns: [
+        { data: 'home' },
+        { data: null },
+        { data: null },
+        { data: null },
+        { data: 'away' },
+        { data: { _: null, sort: 'date_played_string.timestamp' } },
+        { render: function(data, type, full, meta){ return fixtureAction(full); }},
+      ],
+      columnDefs: [
+        { targets: 1, defaultContent: '<input id="home_score" class="form-control full-score">' },
+        { targets: 2, defaultContent: ' - ' },
+        { targets: 3, defaultContent: '<input id="away_score" class="form-control full-score">' },
+        { targets: 5, defaultContent: '<input id="date_played" class="form-control" disabled>' },
+        { targets: [1,2,3,6], sortable: false, searchable: false }
+      ],
+      createdRow: function(nRow, aData){
+        $(nRow).data('id', aData.id);
+        $('#home_score', $(nRow)).val(aData.home_score);
+        $('#away_score', $(nRow)).val(aData.away_score);
+        $('#date_played', $(nRow))
+          .prop('disabled', false)
+          .val(aData.date_played_string.display);
 
-      $('.update-btn', tr).prop('disabled', empty);
+        console.log(aData);
+        if (aData.user_team_playing || !aData['stage_incomplete?']){
+          $('input', $(nRow)).prop('disabled', true);
+        } else{
+          initFullScore($('#home_score', $(nRow)));
+          initFullScore($('#away_score', $(nRow)));
+          initFlatpickr($('#date_played', $(nRow)));
+        }
+      },
+      fnDrawCallback: function(){
+        $('table#stage_<%= stage.id %>').closest('form').dirtyForms('setClean');
+      }
+    })
+
+    $('table#stage_<%= stage.id %>').on('input click', 'input', function(){
+      var tr = $(this).closest('tr');
+      $('.update-btn', tr).prop('disabled', $('.dirty', tr).length == 0);
     });
 
-    $('table#stage_<%= stage.id %>').on('click', '.update-btn', function(){
+    $('table#stage_<%= stage.id %>').on('click', '.update-btn', function(evt){
       var tr = $(this).closest('tr');
       var id = tr.data('id');
-      if (id && !$(this).prop('disabled'))
-        $.ajax({
-          url: '/cmsk/fixtures/'+id,
-          type: 'PUT',
-          data: { 
-            fixture: {
-              home_score: $('#home_score', tr).val(),
-              away_score: $('#away_score', tr).val(),
-              date_played: $('#date_played', tr).val()
+      if (id && !$(this).prop('disabled')){
+        if (!$('#home_score', tr).val())
+          swal('Invalid Fixture', 'Home Score cannot be blank.', 'error');
+        else if (!$('#away_score', tr).val())
+          swal('Invalid Fixture', 'Away Score cannot be blank.', 'error');
+        else if (!$('#date_played', tr).val())
+          swal('Invalid Fixture', 'Date Played cannot be blank.', 'error');
+        else
+          $.ajax({
+            url: '/cmsk/fixtures/'+id,
+            type: 'PUT',
+            data: {
+              fixture: {
+                home_score: $('#home_score', tr).val(),
+                away_score: $('#away_score', tr).val(),
+                date_played: $('#date_played', tr).val()
+              }
             }
-          }
-        })
+          }).then(function(){
+            stageTable_<%= stage.id %>.ajax.reload(null, false);
+          });
+      }
+
+      return false;
     })
   })
+
+  function fixtureAction(fixture){
+    var buttonClasses = "button button-small button-block button-raised"
+
+    if (fixture.user_team_playing){
+      return fixture.game_exists ?
+        "<a href=\"/cmsk/games/"+fixture.game_id+"\" class=\""+buttonClasses+" button-primary\" target=\"_blank\">View Game</a>" :
+        "<a href=\"/cmsk/games/new?fixture="+fixture.id+"\" class=\""+buttonClasses+" button-action\" target=\"_blank\">Play Game</a>";
+    } else
+      return "<button class=\"update-btn "+buttonClasses+" button-highlight\" disabled>Update</button>";
+  }  
 </script>

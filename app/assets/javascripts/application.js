@@ -12,18 +12,26 @@
 //
 //= require jquery
 //= require tether
+
 //= require bootstrap-sprockets
 //= require bootstrap-switch.min
+
 //= require jquery-ui
 //= require jquery_ujs
+
 //= require dataTables/jquery.dataTables
 //= require turbolinks
 //= require sweetalert2.min
 //= require flatpickr
 //= require moment
+
 //= require inputmask
 //= require jquery.inputmask
 //= require inputmask.numeric.extensions
 //= require inputmask.regex.extensions
+
+//= require jquery.dirtyforms
+//= require jquery.dirtyforms.dialogs.bootstrap
+
 //= require global
 //= require_tree .

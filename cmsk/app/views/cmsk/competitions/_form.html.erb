@@ -52,17 +52,20 @@
         .replace(/\[stages_attributes\]\[\d+\]/g, '[stages_attributes]['+id+']')
         .replace(/stage_attributes_\d+/g, 'stage_attributes_'+id);
       $('#stages').append(html);
+      $('#stages > .collapse:last-child').collapse('show');
     });
 
     $('#stages').on('click', '.rem-btn', function(){
-      var id = $(this).closest('.panel').data('id');
+      var btn = $(this);
+      var panel = btn.closest('.panel');
 
-      if (id){
-        $(this).next().val(1);
-        $(this).closest('.panel').addClass('hidden');
-      } else{
-        $(this).closest('.panel').remove();
-      }
+      panel.on('hidden.bs.collapse', function(){
+        btn.next().val(1);
+        $(this).data('id') ?
+          $(this).addClass('hidden') :
+          $(this).remove();
+      });
+      panel.collapse('hide');
     })
   })
 

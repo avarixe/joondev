@@ -1,13 +1,14 @@
 module Cmsk
   class Fixture < Base
     belongs_to :team, inverse_of: :fixtures
-    belongs_to :stage
+    belongs_to :stage, inverse_of: :fixtures
     has_one :game
 
     scope :with_game, -> {
       joins(:team, 'LEFT JOIN cmsk_games ON cmsk_fixtures.id = cmsk_games.fixture_id')
         .select([
           'cmsk_fixtures.*', 
+          'cmsk_games.id AS game_id',
           '(CASE WHEN cmsk_games.fixture_id IS NULL THEN FALSE ELSE TRUE END) as game_exists',
           '(CASE WHEN cmsk_fixtures.home = cmsk_teams.team_name OR cmsk_fixtures.away = cmsk_teams.team_name THEN TRUE ELSE FALSE END) as user_team_playing'
         ].join(', '))
@@ -38,12 +39,19 @@ module Cmsk
       )
 
       stage.set_status
+      stage.remove_mirror_match(self) if stage.num_plays == 1
     end
 
     def stage_incomplete?() stage.status == 0 end
 
     def home_score() "#{goals_home}#{" (#{penalties_home})" if penalties_home.present?}" end
     def away_score() "#{goals_away}#{" (#{penalties_away})" if penalties_away.present?}" end
+    def date_played_string
+      {
+        display: time_to_string(date_played, '%B %e, %Y'),
+        timestamp: time_to_string(date_played, '%s')
+      }
+    end
 
     %w(home away).each do |side|
       define_method "#{side}_score=" do |val|

@@ -36,3 +36,6 @@ textarea { resize: vertical; }
 /* Supplementary to Buttons */
 .button { padding: 0px 20px; }
 .button-block { width: 100%; }
+
+/* Supplementary to DirtyForms */
+.dirty, .dirty:hover, .dirty:active, .dirty:focus { border-color: red; }

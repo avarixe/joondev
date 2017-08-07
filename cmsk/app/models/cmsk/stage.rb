@@ -61,10 +61,14 @@ module Cmsk
         num_fixtures *= num_teams - 1 if category == 'League'
 
         if fixtures.where.not(result: 0).count == num_fixtures
-          self.fixtures.where(result: 0).destroy_all
+          self.fixtures.where(result: 0).delete_all
           update_column(:status, 1)
         end
       end
+    end
+
+    def remove_mirror_match(fixture)
+      self.fixtures.where(home: fixture.away, away: fixture.home).delete_all
     end
   end
 end

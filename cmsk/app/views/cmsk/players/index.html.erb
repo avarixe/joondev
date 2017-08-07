@@ -19,13 +19,15 @@
 </div>
 
 <div class="table-container">
-  <table id="players-table" class="table table-sm table-striped table-hover text-center">
-    <thead class="thead-inverse">
-      <% ['Name', 'Position', '2nd Positions', 'Active?', ''].each do |header| %>
-        <th class="text-center"><%= header %></th>
-      <% end %>
-    </thead>
-  </table>  
+  <form>
+    <table id="players-table" class="table table-sm table-striped table-hover text-center">
+      <thead class="thead-inverse">
+        <% ['Name', 'Position', '2nd Positions', 'Active?', ''].each do |header| %>
+          <th class="text-center"><%= header %></th>
+        <% end %>
+      </thead>
+    </table>  
+  </form>
 </div>
 
 <script>
@@ -33,6 +35,7 @@
 
   function generateSwitch(){
     $('input[type="checkbox"]').each(function(){
+      $(this).data('dfOrig', $(this).prop('checked'));
       $(this).bootstrapSwitch({
         onColor: 'primary',
         offColor: 'danger',
@@ -57,7 +60,7 @@
         { targets: 1, defaultContent: '<%= raw select_tag(:pos, options_for_select(Cmsk::Player.positions), class: 'pos form-control').gsub(/\n/, '<br>') %>' },
         { targets: 2, defaultContent: '<input id="sec_pos" class="form-control">' },
         { targets: 3, defaultContent: '<input id="active" type="checkbox">' },
-        { targets: 4, defaultContent: '<a class="button button-raised button-small button-block button-primary update-player-btn">Update</a>'}
+        { targets: 4, defaultContent: '<button class="button button-raised button-small button-block button-primary update-player-btn" disabled>Update</button>'}
       ],
       createdRow: function(row, data, dataIndex){
         $('#name', $(row)).val(data.name);
@@ -70,6 +73,11 @@
         generateSwitch();
       }
     });
+
+    $('#players-table').on({
+      input: function(){ triggerField(this); },
+      'switchChange.bootstrapSwitch': function(){ triggerField(this); },
+    }, 'input, select');
 
     $('#players-table').on('click', '.update-player-btn', function(){
       var tr = $(this).closest('tr')      
@@ -92,17 +100,26 @@
               active,  active
           }},
           success: function(data, status){
-            swal({
-              title: data.header,
-              text: data.message,
-              type: data.status,
-              allowOutsideClick: false
-            }).then(function(){
-              playersTable.ajax.reload(null, false);
-            }).catch(swal.noop);
+            playersTable.ajax.reload(null, false);
           }
         })
       }
+
+      return false;
     })
   });
+
+  function triggerField(target){
+    var tr = $(target).closest('tr');
+
+    var value = $(target).attr('type') == 'checkbox' ?
+      $(target).prop('checked') :
+      $(target).val();
+
+    value != $(target).data('dfOrig') ?
+      $(target).addClass('dirty') :
+      $(target).removeClass('dirty');
+
+    $('.update-player-btn', tr).prop('disabled', $('.dirty', tr).length == 0);      
+  }
 </script>

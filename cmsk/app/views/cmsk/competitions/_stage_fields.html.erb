@@ -1,4 +1,4 @@
-<div class="panel panel-default" data-id=<%= f.object.id %>>
+<div class="panel panel-default collapse <%= 'in' if f.object.id.present? %>" data-id=<%= f.object.id %>>
   <%= f.hidden_field :team_id, value: @team.id %>
   <div class="panel-heading container-fluid">
     <div class="panel-title">
