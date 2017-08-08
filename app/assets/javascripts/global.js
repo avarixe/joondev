@@ -57,8 +57,9 @@ $(function(){
 })
 
 function initFlatpickr(target){
-  fp = $(target).flatpickr({ 
+  fp = $(target).flatpickr({
     altInput: true,
+    static: true,
     onChange: function(selectedDates, dateStr, instance){
       if ($(instance.input).data('dfOrig') != dateStr)
         $(instance.altInput).addClass('dirty');

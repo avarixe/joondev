@@ -34,7 +34,7 @@
         { targets: 5, defaultContent: '<input id="date_played" class="form-control" disabled>' },
         { targets: [1,2,3,6], sortable: false, searchable: false }
       ],
-      createdRow: function(nRow, aData){
+      rowCallback: function(nRow, aData){
         $(nRow).data('id', aData.id);
         $('#home_score', $(nRow)).val(aData.home_score);
         $('#away_score', $(nRow)).val(aData.away_score);
@@ -51,11 +51,10 @@
 
           fp.set('onClose', function(selectedDates, dateStr, instance){
             lastPickedDate = selectedDates[0];
-            // for( var i=0; i < flatPickers.length; i++)
-            //   flatPickers[i].set('defaultDate', selectedDates[0]);
           });
           fp.set('onOpen', function(selectedDates, dateStr, instance){
-            instance.setDate(lastPickedDate, true);
+            if (lastPickedDate)
+              instance.setDate(lastPickedDate, true);
           });
         }
       },
