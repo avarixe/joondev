@@ -11,7 +11,6 @@ $(function(){
 
   // Click behavior if table has links to other pages
   $('html').on('click', 'table tbody tr', function(evt){
-    console.log('click registered')
     if ((_dTLink = $(this).closest('table').data('link')) &&
         (_dTRowId = $(this).data('id')) &&
         !$(evt.target).closest('td').is('[no-link]')){
@@ -61,9 +60,8 @@ function initFlatpickr(target){
     altInput: true,
     static: true,
     onChange: function(selectedDates, dateStr, instance){
-      if ($(instance.input).data('dfOrig') != dateStr)
-        $(instance.altInput).addClass('dirty');
-      else
+      $(instance.input).data('dfOrig') != dateStr ?
+        $(instance.altInput).addClass('dirty') :
         $(instance.altInput).removeClass('dirty');
     }
   });

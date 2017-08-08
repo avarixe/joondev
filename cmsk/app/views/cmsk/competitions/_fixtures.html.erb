@@ -50,7 +50,11 @@
           initFullScore($('#away_score', $(nRow)));
           fp = initFlatpickr($('#date_played', $(nRow)));
 
-          fp.set('onClose', function(selectedDates, dateStr, instance){
+          fp.set('onChange', function(selectedDates, dateStr, instance){
+            $(instance.input).data('dfOrig') != dateStr ?
+              $(instance.altInput).addClass('dirty') :
+              $(instance.altInput).removeClass('dirty');
+
             lastPickedDate = selectedDates[0];
           });
           fp.set('onOpen', function(selectedDates, dateStr, instance){
