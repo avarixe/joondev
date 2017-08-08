@@ -9,7 +9,8 @@ $(function(){
   })
 
   // Click behavior if table has links to other pages
-  $('table').on('click', 'tbody tr', function(evt){
+  $('html').on('click', 'table tbody tr', function(evt){
+    console.log('click registered')
     if ((_dTLink = $(this).closest('table').data('link')) &&
         (_dTRowId = $(this).data('id')) &&
         !$(evt.target).closest('td').is('[no-link]')){
@@ -43,10 +44,6 @@ $(function(){
       vars[$(this).data('var')] = _dataTable;
   });
 
-  $('.full-score').each(function(){
-    initFullScore(target);
-  });
-
   // Collapsible panels collapse from clicking the panel heading
   $(document).on('click', '.panel-heading', function(){
     $('.panel-collapse', $(this).closest('.panel')).toggle('collapse');
@@ -54,7 +51,6 @@ $(function(){
 
   // All Forms have checks for Dirty Input
   if ($('form').length > 0){
-    console.log('form found. setting dirty forms')
     $('form').dirtyForms();
   }
 })
