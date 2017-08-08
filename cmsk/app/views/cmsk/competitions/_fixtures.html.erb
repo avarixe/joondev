@@ -40,9 +40,10 @@
         $('#away_score', $(nRow)).val(aData.away_score);
         $('#date_played', $(nRow))
           .prop('disabled', false)
-          .val(aData.date_played_string.display);
+          .val(aData.date_played);
 
         if (aData.user_team_playing || !aData['stage_incomplete?']){
+          $('#date_played', $(nRow)).val(aData.date_played_string.display);
           $('input', $(nRow)).prop('disabled', true);
         } else{
           initFullScore($('#home_score', $(nRow)));
