@@ -1,6 +1,7 @@
 // Contains universal JS code for the entire system
 
 var vars = {};
+var flatPickers = [];
 
 $(function(){
 
@@ -56,7 +57,7 @@ $(function(){
 })
 
 function initFlatpickr(target){
-  $(target).flatpickr({ 
+  fp = $(target).flatpickr({ 
     altInput: true,
     onChange: function(selectedDates, dateStr, instance){
       if ($(instance.input).data('dfOrig') != dateStr)
@@ -65,6 +66,8 @@ function initFlatpickr(target){
         $(instance.altInput).removeClass('dirty');
     }
   });
+  flatPickers.push(fp);
+  return fp;
 }
 
 function initFullScore(target){

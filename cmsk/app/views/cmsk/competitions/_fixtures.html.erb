@@ -42,13 +42,21 @@
           .prop('disabled', false)
           .val(aData.date_played_string.display);
 
-        console.log(aData);
         if (aData.user_team_playing || !aData['stage_incomplete?']){
           $('input', $(nRow)).prop('disabled', true);
         } else{
           initFullScore($('#home_score', $(nRow)));
           initFullScore($('#away_score', $(nRow)));
-          initFlatpickr($('#date_played', $(nRow)));
+          fp = initFlatpickr($('#date_played', $(nRow)));
+
+          fp.set('onClose', function(selectedDates, dateStr, instance){
+            lastPickedDate = selectedDates[0];
+            // for( var i=0; i < flatPickers.length; i++)
+            //   flatPickers[i].set('defaultDate', selectedDates[0]);
+          });
+          fp.set('onOpen', function(selectedDates, dateStr, instance){
+            instance.setDate(lastPickedDate, true);
+          });
         }
       },
       fnDrawCallback: function(){
