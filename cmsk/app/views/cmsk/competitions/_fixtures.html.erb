@@ -20,21 +20,18 @@
       },
       columns: [
         { data: 'home' },
-        { data: null },
-        { data: null },
-        { data: null },
+        { render: function(){ return '<input id="home_score" class="form-control full-score">' }},
+        { render: function(){ return ' - ' }},
+        { render: function(){ return '<input id="away_score" class="form-control full-score">' }},
         { data: 'away' },
         { data: { _: null, sort: 'date_played_string.timestamp' } },
         { render: function(data, type, full, meta){ return fixtureAction(full); }},
       ],
       columnDefs: [
-        { targets: 1, defaultContent: '<input id="home_score" class="form-control full-score">' },
-        { targets: 2, defaultContent: ' - ' },
-        { targets: 3, defaultContent: '<input id="away_score" class="form-control full-score">' },
         { targets: 5, defaultContent: '<input id="date_played" class="form-control" disabled>' },
         { targets: [1,2,3,6], sortable: false, searchable: false }
       ],
-      rowCallback: function(nRow, aData){
+      createdRow: function(nRow, aData){
         $(nRow).data('id', aData.id);
         $('#home_score', $(nRow)).val(aData.home_score);
         $('#away_score', $(nRow)).val(aData.away_score);

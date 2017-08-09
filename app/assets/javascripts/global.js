@@ -1,7 +1,6 @@
 // Contains universal JS code for the entire system
 
 var vars = {};
-var flatPickers = [];
 
 $(function(){
 
@@ -65,7 +64,6 @@ function initFlatpickr(target){
         $(instance.altInput).removeClass('dirty');
     }
   });
-  flatPickers.push(fp);
   return fp;
 }
 
