@@ -47,11 +47,6 @@ $(function(){
   $(document).on('click', '.panel-heading', function(){
     $('.panel-collapse', $(this).closest('.panel')).toggle('collapse');
   });
-
-  // All Forms have checks for Dirty Input
-  if ($('form').length > 0){
-    $('form').dirtyForms();
-  }
 })
 
 function initFlatpickr(target){

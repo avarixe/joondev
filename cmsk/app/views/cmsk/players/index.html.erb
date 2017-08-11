@@ -46,6 +46,8 @@
   }
 
   $(function(){
+    $('form').dirtyForms();
+
     playersTable = $('#players-table').DataTable({
       bSort: false,
       bFilter: false,
