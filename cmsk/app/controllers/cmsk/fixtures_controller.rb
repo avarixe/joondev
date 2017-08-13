@@ -6,7 +6,7 @@ module Cmsk
     before_action :set_current_team
 
     def update
-      if @fixture.stage_incomplete?
+      if @fixture.season_incomplete?
         @fixture.update_attributes(fixture_params)
       end
       head :ok
