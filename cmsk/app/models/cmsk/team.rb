@@ -4,15 +4,26 @@ module Cmsk
 
     has_many :players
     has_many :squads
-    has_many :competitions
+    has_many :leagues
     has_many :stages
     has_many :fixtures
+    has_many :seasons
     has_many :games
     has_many :player_records
     
     validates_presence_of :team_name
     
-    def season_options
+    serialize :competitions
+
+    def competitions=(val)
+      write_attribute :competitions, (val.is_a?(Array) ? val : val.split("\n").map(&:strip))
+    end
+   
+    def competition_options(delimiter)
+      competitions.join(delimiter) rescue ''
+    end
+
+    def recorded_seasons
       start_year = games.first.date_played.strftime('%Y').to_i
       start_year -= 1 if games.first.date_played < Date.new(start_year, 7, 1)
       
@@ -22,10 +33,6 @@ module Cmsk
       (start_year..latest_year).each.map do |i|
         ["#{i} - #{i+1}", i]
       end
-    end
-    
-    def competition_options
-      competitions_names.split(',').map{ |x| x.strip }
     end
     
     def recorded_competitions

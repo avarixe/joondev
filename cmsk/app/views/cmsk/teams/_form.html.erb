@@ -9,13 +9,20 @@
 
 <%= form_for(@team) do |f| %>
   <div class="form-group row">
-    <%= f.label :team_name, 'Name: ', class: 'col-sm-4 control-label' %>
-    <div class="col-sm-8">
+    <%= f.label :team_name, 'Name: ', class: 'col-sm-4 col-sm-offset-2 control-label' %>
+    <div class="col-sm-4">
       <%= f.text_field :team_name, class: 'form-control', required: true %>
     </div>
   </div>
 
-  <div class="text-xs-center">
+  <div class="form-group row">
+    <%= f.label :competitions, 'Competitions: ', class: 'col-sm-4 col-sm-offset-2 control-label' %>
+    <div class="col-sm-4">
+      <%= f.text_area :competitions, value: @team.competition_options("\n"), rows: 10, class: 'form-control', placeholder: 'One Competition per line', required: true %>
+    </div>
+  </div>
+
+  <div class="text-center">
     <%= f.submit 'Save Team', class: 'button button-raised button-highlight', onclick: 'return checkForm()' %>
     <%= link_to 'Back', teams_path, class: 'button button-raised' %>
   </div>

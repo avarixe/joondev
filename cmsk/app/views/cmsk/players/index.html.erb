@@ -19,15 +19,13 @@
 </div>
 
 <div class="table-container">
-  <form>
-    <table id="players-table" class="table table-sm table-striped table-hover text-center">
-      <thead class="thead-inverse">
-        <% ['Name', 'Position', '2nd Positions', 'Active?', ''].each do |header| %>
-          <th class="text-center"><%= header %></th>
-        <% end %>
-      </thead>
-    </table>  
-  </form>
+  <table id="players-table" class="table table-sm table-striped table-hover text-center">
+    <thead class="thead-inverse">
+      <% ['Name', 'Position', '2nd Positions', 'Active?', ''].each do |header| %>
+        <th class="text-center"><%= header %></th>
+      <% end %>
+    </thead>
+  </table>  
 </div>
 
 <script>
@@ -46,8 +44,6 @@
   }
 
   $(function(){
-    $('form').dirtyForms();
-
     playersTable = $('#players-table').DataTable({
       bSort: false,
       bFilter: false,
@@ -62,14 +58,17 @@
         { targets: 1, defaultContent: '<%= raw select_tag(:pos, options_for_select(Cmsk::Player.positions), class: 'pos form-control').gsub(/\n/, '<br>') %>' },
         { targets: 2, defaultContent: '<input id="sec_pos" class="form-control">' },
         { targets: 3, defaultContent: '<input id="active" type="checkbox">' },
-        { targets: 4, defaultContent: '<button class="button button-raised button-small button-block button-primary update-player-btn" disabled>Update</button>'}
+        { targets: 4, defaultContent: '<button class="button button-raised button-small button-block button-primary update-btn" disabled>Update</button>'}
       ],
       createdRow: function(row, data, dataIndex){
         $('#name', $(row)).val(data.name);
         $('#pos', $(row)).val(data.pos);
         $('#sec_pos', $(row)).val(data.sec_pos);
         $('#active', $(row)).bootstrapSwitch('state', data.active);
-        $(row).data('player-id', data.id);
+        $(row).data('id', data.id);
+
+        // Save original value to see if inputs get dirtied
+        saveOrigVal($(row));
       },
       drawCallback: function(){
         generateSwitch();
@@ -77,11 +76,11 @@
     });
 
     $('#players-table').on({
-      input: function(){ triggerField(this); },
-      'switchChange.bootstrapSwitch': function(){ triggerField(this); },
+      input: function(){ triggerTrField(this); },
+      'switchChange.bootstrapSwitch': function(){ triggerTrField(this); },
     }, 'input, select');
 
-    $('#players-table').on('click', '.update-player-btn', function(){
+    $('#players-table').on('click', '.update-btn', function(){
       var tr = $(this).closest('tr')      
       var name = $('#name', tr).val();
       var pos = $('#pos', tr).val();
@@ -93,7 +92,7 @@
       else{
         $.ajax({
           type: 'PUT',
-          url: '/cmsk/players/'+tr.data('player-id'),
+          url: '/cmsk/players/'+tr.data('id'),
           beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token %>') },
           data: { player: {
               name:    name,
@@ -110,18 +109,4 @@
       return false;
     })
   });
-
-  function triggerField(target){
-    var tr = $(target).closest('tr');
-
-    var value = $(target).attr('type') == 'checkbox' ?
-      $(target).prop('checked') :
-      $(target).val();
-
-    value != $(target).data('dfOrig') ?
-      $(target).addClass('dirty') :
-      $(target).removeClass('dirty');
-
-    $('.update-player-btn', tr).prop('disabled', $('.dirty', tr).length == 0);      
-  }
 </script>

@@ -30,8 +30,5 @@
 //= require inputmask.numeric.extensions
 //= require inputmask.regex.extensions
 
-//= require jquery.dirtyforms
-//= require jquery.dirtyforms.dialogs.bootstrap
-
 //= require global
 //= require_tree .

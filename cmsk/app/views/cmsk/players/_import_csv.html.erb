@@ -8,6 +8,8 @@
           accept: '.csv',
         },
         showLoaderOnConfirm: true,
+        confirmButtonText: 'Upload',
+        showCancelButton: true,
         allowOutsideClick: false,
         preConfirm: function(file){
           return new Promise(function(resolve, reject){

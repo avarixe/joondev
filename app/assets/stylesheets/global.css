@@ -9,10 +9,10 @@ body {
 @media (min-width: 768px){ .container{ min-width: 760px; width: 95%; } }
 @media (min-width: 992px){ .container{ min-width: 960px; width: 95%; } }
 
-*:not(.swal2-icon):not(.placeholder):not(.swal2-confirm):not(.flatpickr-day):not(.fa) {
+*:not(.fa) {
   font-family: 'Crimson Text', serif;
-  border-radius: 0px;
 }
+.navbar { border-radius: 0px; }
 .glyphicon{ font-size: 1.3em; }
 .mt10 { margin-top: 10px; }
 .mb10 { margin-bottom: 10px; }
@@ -39,3 +39,6 @@ textarea { resize: vertical; }
 
 /* Supplementary to DirtyForms */
 .dirty, .dirty:hover, .dirty:active, .dirty:focus { border-color: red; }
+
+/* Supplementary to Flatpickr */
+.flatpickr-wrapper { width: 100%; }

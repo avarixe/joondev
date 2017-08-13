@@ -14,7 +14,7 @@
     <% current_user.teams.each do |team| %>
       <tr data-id=<%= team.id %> class="<%= 'success' if session[:team].to_i == team.id %>">
         <td><%= team.team_name %></td>
-        <td><%= team.competitions.map(&:title).join(', ') %></td>
+        <td><%= team.competition_options(', ') %></td>
       </tr>
     <% end %>
   </tbody>

@@ -50,7 +50,7 @@
 
   <div class="text-center">
     <%= f.submit 'Save Game', class: 'button button-raised button-highlight', onclick: 'return checkForm()' %>
-    <%= content_tag 'button', 'Update Squad', class: 'button button-raised button-primary', id: 'update-squad-btn', disabled: true %>
+    <%= content_tag :button, 'Update Squad', class: 'button button-raised button-primary', id: 'update-squad-btn', disabled: true %>
     <%= link_to 'Back', games_path, class: 'button button-raised' %>
   </div>
 <% end %>
@@ -59,6 +59,7 @@
   var num_subs = <%= @game.player_records.length - 11 %>;
 
   $(function(){
+    initFlatpickr($('#game_date_played'));
     $('.click-form').each(function(){ toggleClickForm($(this), $(this).hasClass('required')); });
     $('#add-sub-btn').click(function(){ addRecord(); });
     $('#remove-sub-btn').click(function(){
@@ -72,8 +73,8 @@
       if ($('#squad').val()){
         $.get("/cmsk/squads/"+$('#squad').val()+"/players_json", function(data){
           $.each(data.players, function(i, player){
-            var row = $('#game_player_records_attributes_'+i+'_pos').closest('tr');
-            row.find('select[id$="player_id"]').val(player.id);
+            var tr = $('#game_player_records_attributes_'+i+'_pos').closest('tr');
+            $('select[id$="player_id"]', tr).val(player.id);
           });
         });
         $('#update-squad-btn').attr('disabled', false);
@@ -81,14 +82,15 @@
         $('#update-squad-btn').attr('disabled', true);
     });
 
-    $('#update-squad-btn').click(function(){
+    $('#update-squad-btn').click(function(evt){
+      evt.preventDefault();
+
       var squadId = $('#squad').val();
 
       var rows = $('#records-table tbody tr');
       var squadParams = {};
-      for(var i=0; i < 11; i++){
+      for(var i=0; i < 11; i++)
         squadParams['player_id_'+(i+1)] = $('.player_id', $(rows[i])).val();
-      }
 
       $.ajax({
         url: '/cmsk/squads/'+squadId,
@@ -118,28 +120,21 @@
       var value = parseInt($(target).val(), 10);
       $(this).val(isNaN(value) ? 1 : value+1);
     });
-    $(target).on('swiperight', function(event){
-      var value = parseInt($(target).val(), 10);
-      $(this).val(isNaN(value) ? 1 : value+1);
-    });
     $(target).contextmenu(function(event){
       event.preventDefault();
       var value = parseInt($(target).val(), 10);
       $(this).val((isNaN(value) || value == 1 || value == 0) ? (required ? 0 : null) : value-1);
     });
-    $(target).on('swipeleft', function(event){
-      event.preventDefault();
-      var value = parseInt($(target).val(), 10);
-      $(this).val((isNaN(value) || value == 1 || value == 0) ? (required ? 0 : null) : value-1);      
-    });
   }
 
   function addRecord(){
+    var id = moment().valueOf();
+
     // Generate new Record table row
     var record = $('<tr/>');
-    record.append($('#record-template').html().
-      replace(/game\[player\_records\_attributes\]\[\d+\]/g, 'game[player_records_attributes]['+(num_subs+100)+']').
-      replace(/game\_player\_records\_attributes\_\d+/g, 'game_player_records_attributes_'+(num_subs+100)));
+    record.append($('#record-template').html()
+      .replace(/game\[player\_records\_attributes\]\[\d+\]/g, 'game[player_records_attributes]['+id+']')
+      .replace(/game\_player\_records\_attributes\_\d+/g, 'game_player_records_attributes_'+id));
     $('.pos', record).val('SUB '+(++num_subs));
 
     // Append new row to table

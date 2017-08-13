@@ -9,7 +9,7 @@
       <div class="panel-title">Competitions</div>
     </div>
     <div class="panel-body">
-      <%#= @team.competitions.split(',').map{ |c| "<u><b>#{c}</b></u>" }.join(', ').html_safe %>
+      <%= @team.competitions.map{ |c| "<u><b>#{c}</b></u>" }.join(', ').html_safe %>
     </div>
   </div>
 </div>

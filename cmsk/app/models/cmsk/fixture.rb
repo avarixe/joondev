@@ -1,7 +1,7 @@
 module Cmsk
   class Fixture < Base
     belongs_to :team, inverse_of: :fixtures
-    belongs_to :stage, inverse_of: :fixtures
+    belongs_to :season, inverse_of: :fixtures
     has_one :game
 
     scope :with_game, -> {
@@ -38,11 +38,10 @@ module Cmsk
         end
       )
 
-      stage.set_status
-      stage.remove_mirror_match(self) if stage.num_plays == 1
+      season.set_status
     end
 
-    def stage_incomplete?() stage.status == 0 end
+    def season_incomplete?() season.status == 0 end
 
     def home_score() "#{goals_home}#{" (#{penalties_home})" if penalties_home.present?}" end
     def away_score() "#{goals_away}#{" (#{penalties_away})" if penalties_away.present?}" end
@@ -65,7 +64,7 @@ module Cmsk
       game = self.build_game(
         team_id:     self.team_id,
         opponent:    self.team.team_name == home ? away : home,
-        competition: self.stage.competition.title,
+        competition: self.season.league,
       )
     end
   end

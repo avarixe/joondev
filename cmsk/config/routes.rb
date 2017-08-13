@@ -7,8 +7,7 @@ Cmsk::Engine.routes.draw do
   end
   resources :teams
   resources :games
-  resources :competitions
-  resources :stages do
+  resources :seasons do
     member {
       get 'get_fixtures'
     }

@@ -47,7 +47,6 @@ gem 'tzinfo-data'
 
 gem 'jquery-inputmask-rails', github: 'knapo/jquery-inputmask-rails'
 gem 'momentjs-rails'
-gem 'jquery-dirtyforms-rails'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.1.0'

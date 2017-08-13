@@ -3,11 +3,6 @@
 var vars = {};
 
 $(function(){
-
-  $('.datepicker').each(function(){
-    initFlatpickr(this);
-  })
-
   // Click behavior if table has links to other pages
   $('html').on('click', 'table tbody tr', function(evt){
     if ((_dTLink = $(this).closest('table').data('link')) &&
@@ -53,30 +48,31 @@ function initFlatpickr(target){
   fp = $(target).flatpickr({
     altInput: true,
     static: true,
-    onChange: function(selectedDates, dateStr, instance){
-      $(instance.input).data('dfOrig') != dateStr ?
-        $(instance.altInput).addClass('dirty') :
-        $(instance.altInput).removeClass('dirty');
-    }
   });
   return fp;
 }
 
-function initFullScore(target){
-  var _input = $(target);
-  var _dfOrig = $(target).val();
+function saveOrigVal(scope){
+  $('input', scope).each(function(){
+    $(this).data(
+      'origVal', 
+      $(this).attr('type') == 'checkbox' ?
+        $(this).prop('checked') :
+        $(this).val()
+    );
+  })
+}
 
-  _input.inputmask({
-    mask: "9{1,2}[ \(9{1,2}\)]",
-    greedy: false,
-    skipOptionalPartCharacter: ' ',
-    onBeforeWrite: function(evt, buffer, caretPos, opts){
-      (_dfOrig != buffer.join("")) ?
-        _input.addClass('dirty') :
-        _input.removeClass('dirty');
+function triggerTrField(target){
+  var tr = $(target).closest('tr');
 
-      _input.trigger('click');
-      return true;        
-    }
-  });
+  var value = $(target).attr('type') == 'checkbox' ?
+    $(target).prop('checked') :
+    $(target).val();
+
+  value != $(target).data('origVal') ?
+    $(target).addClass('dirty') :
+    $(target).removeClass('dirty');
+
+  $('.update-btn', tr).prop('disabled', $('.dirty', tr).length == 0);      
 }

@@ -1,0 +1,19 @@
+<style>
+  table th, tr, td {
+    vertical-align: middle !important;
+    text-align: center;
+  }
+</style>
+
+<div class="form-group text-right">
+  <%= link_to 'Edit', edit_season_path(@season), class: 'button button-raised button-highlight' %>
+  <%= link_to 'Back', seasons_path, class: 'button button-raised' %>
+</div>
+
+<div class="form-group">
+  <%= render 'fixtures' %>
+</div>
+
+<script>
+  var lastPickedDate = null;
+</script>

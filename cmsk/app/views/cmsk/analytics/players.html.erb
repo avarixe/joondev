@@ -15,13 +15,19 @@
       <div class="form-group row">
         <%= label_tag :season, 'Season: ', class: 'col-xs-4 control-label' %>
         <div class="col-xs-8">
-          <%= select_tag :season, options_for_select(@team.season_options, params[:season]), include_blank: true, class: 'form-control' %>
+          <%= select_tag :season, 
+            options_for_select(@team.recorded_seasons, params[:season]),
+            include_blank: true,
+            class: 'form-control' %>
         </div>
       </div>
       <div class="form-group row">
         <%= label_tag :competition, 'Competition: ', class: 'col-xs-4 control-label' %>
         <div class="col-xs-8">
-          <%= select_tag :competition, options_for_select(@team.recorded_competitions, params[:competition]), include_blank: true, class: 'form-control' %>
+          <%= select_tag :competition,
+            options_for_select(@team.recorded_competitions, params[:competition]),
+            include_blank: true,
+            class: 'form-control' %>
         </div>
       </div>
     </div>
@@ -56,23 +62,30 @@
         { data: 'name' },
         { data: 'pos' },
         { data: 'gp' },
-        { 
-          data: 'rating',
-          render: $.fn.dataTable.render.number(',', '.', '2')
-        },
+        { data: 'rating', render: $.fn.dataTable.render.number(',', '.', '2') },
         { data: 'goals' },
         { data: 'assists' },
         { data: 'cs' },
       ],
       rowCallback: function(nRow, aData){
-        if (!aData.active){
-          $(nRow).addClass('inactive')
-        }
+        if (!aData.active) $(nRow).addClass('inactive')
       }
     });
 
-    $('#season, #competition').change(function(){
+    $('#competition').change(function(){
       table.ajax.reload(null, false);
-    })
+
+      $.getJSON('/cmsk/analytics/get_seasons?competition='+$('#competition').val(), function(data){
+
+      });
+    });
+
+    $('#season').change(function(){
+      table.ajax.reload(null, false);
+
+      $.getJSON('/cmsk/analytics/get_competitions?season='+$('#season').val(), function(data){
+
+      });      
+    });
   });
 </script>

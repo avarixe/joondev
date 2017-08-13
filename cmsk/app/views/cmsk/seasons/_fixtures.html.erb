@@ -1,22 +1,20 @@
-<form>
-  <table id="stage_<%= stage.id %>" class="table table-hover">
-    <thead>
-      <th width="15%">Home</th>
-      <th width="15%">GH</th>
-      <th width="5%"> - </th>
-      <th width="15%">GA</th>
-      <th width="15%">Away</th>
-      <th width="20%">Date Played</th>
-      <th width="15%"><!-- Actions --></th>
-    </thead>
-  </table>
-</form>
+<table class="table table-hover">
+  <thead>
+    <th width="15%">Home</th>
+    <th width="15%">GH</th>
+    <th width="5%"> - </th>
+    <th width="15%">GA</th>
+    <th width="15%">Away</th>
+    <th width="20%">Date Played</th>
+    <th width="15%"><!-- Actions --></th>
+  </thead>
+</table>
 
 <script>
   $(function(){
-    var stageTable_<%= stage.id %> = $('table#stage_<%= stage.id %>').DataTable({
+    var stageTable = $('table').DataTable({
       ajax: {
-        url: '<%= get_fixtures_stage_path(stage) %>'
+        url: '<%= get_fixtures_season_path(@season) %>'
       },
       columns: [
         { data: 'home' },
@@ -39,7 +37,7 @@
           .prop('disabled', false)
           .val(aData.date_played);
 
-        if (aData.user_team_playing || !aData['stage_incomplete?']){
+        if (aData.user_team_playing || !aData['season_incomplete?']){
           $('#date_played', $(nRow)).val(aData.date_played_string.display);
           $('input', $(nRow)).prop('disabled', true);
         } else{
@@ -50,7 +48,7 @@
             altInput: true,
             static: true,
             onChange: function(selectedDates, dateStr, instance){
-              $(instance.input).data('dfOrig') != dateStr ?
+              $(instance.input).data('origVal') != dateStr ?
                 $(instance.altInput).addClass('dirty') :
                 $(instance.altInput).removeClass('dirty');
 
@@ -62,18 +60,16 @@
             }
           });
         }
+
+        saveOrigVal($(nRow));
       },
-      fnDrawCallback: function(){
-        $('table#stage_<%= stage.id %>').closest('form').dirtyForms('setClean');
-      }
     })
 
-    $('table#stage_<%= stage.id %>').on('input click', 'input', function(){
-      var tr = $(this).closest('tr');
-      $('.update-btn', tr).prop('disabled', $('.dirty', tr).length == 0);
+    $('table').on('input click', 'input', function(){
+      triggerTrField(this);
     });
 
-    $('table#stage_<%= stage.id %>').on('click', '.update-btn', function(evt){
+    $('table').on('click', '.update-btn', function(evt){
       var tr = $(this).closest('tr');
       var id = tr.data('id');
       if (id && !$(this).prop('disabled')){
@@ -95,7 +91,7 @@
               }
             }
           }).then(function(){
-            stageTable_<%= stage.id %>.ajax.reload(null, false);
+            stageTable.ajax.reload(null, false);
           });
       }
 
@@ -112,5 +108,24 @@
         "<a href=\"/cmsk/games/new?fixture="+fixture.id+"\" class=\""+buttonClasses+" button-action\" target=\"_blank\">Play Game</a>";
     } else
       return "<button class=\"update-btn "+buttonClasses+" button-highlight\" disabled>Update</button>";
+  }  
+
+  function initFullScore(target){
+    var _input = $(target);
+    var _origVal = $(target).val();
+
+    _input.inputmask({
+      mask: "9{1,2}[ \(9{1,2}\)]",
+      greedy: false,
+      skipOptionalPartCharacter: ' ',
+      onBeforeWrite: function(evt, buffer, caretPos, opts){
+        (_origVal != buffer.join("")) ?
+          _input.addClass('dirty') :
+          _input.removeClass('dirty');
+
+        _input.trigger('click');
+        return true;        
+      }
+    });
   }  
 </script>

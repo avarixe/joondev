@@ -1,0 +1,44 @@
+<%= form_for(@season) do |f| %>
+  <%= render '/cmsk/shared/errors', object: @season %>
+
+  <div class="form-group row">
+    <%= f.label :title, 'Season: ', class: 'col-sm-4 col-sm-offset-2 control-label' %>
+    <div class="col-sm-4">
+      <%= f.text_field :title, class: 'form-control', required: true %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <%= f.label :league, 'League: ', class: 'col-sm-4 col-sm-offset-2 control-label' %>
+    <div class="col-sm-4">
+      <%= f.select :league, 
+        options_for_select(@team.competitions, @season.league),
+        { include_blank: true},
+        { class: 'form-control', required: true } %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <%= f.label :opponents, 'Opponent Teams: ', class: 'col-sm-4 col-sm-offset-2 control-label' %>
+    <div class="col-sm-4">
+      <%= f.text_area :opponents, value: (f.object.opponents.join("\n") rescue ''), rows: 10, placeholder: "One Opponent Team per line", class: 'form-control', disabled: f.object.complete? %>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <hr>
+    <%= f.submit 'Save', class: 'button button-raised button-highlight', onclick: 'return checkForm()' %>
+    <%= link_to 'Back', teams_path, class: 'button button-raised button-border' %>
+  </div>
+<% end %>
+
+<script>
+  function checkForm(){
+    if (!$('#season_title').val())
+      return error_alert('Please enter the League Title.')  
+    else if (!$('#season_league').val())
+      return error_alert('Please enter the Season.')
+    else
+      return true;
+  }
+</script>
