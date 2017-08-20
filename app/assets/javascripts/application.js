@@ -25,6 +25,9 @@
 //= require flatpickr
 //= require moment
 
+//= require Chart.bundle
+//= require chartkick
+
 //= require inputmask
 //= require jquery.inputmask
 //= require inputmask.numeric.extensions

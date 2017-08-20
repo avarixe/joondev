@@ -33,7 +33,7 @@ module Cmsk
     def set_records
       self.player_records.each do |record|
         record.team_id = self.team_id
-        record.cs = self.score_gf == 0
+        record.cs = self.score_ga == 0
         record.save
       end
 
