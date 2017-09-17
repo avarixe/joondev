@@ -16,6 +16,8 @@
 //= require bootstrap-sprockets
 //= require bootstrap-switch.min
 
+//= require semantic.min
+
 //= require jquery-ui
 //= require jquery_ujs
 
@@ -34,4 +36,5 @@
 //= require inputmask.regex.extensions
 
 //= require global
+//= require sematic_global
 //= require_tree .

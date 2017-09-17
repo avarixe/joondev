@@ -11,15 +11,28 @@
   <link href="https://fonts.googleapis.com/css?family=Crimson+Text" rel="stylesheet">
 </head>
 <body>
-  <%= render 'shared/navbar' %>
+  <% if current_user %>
 
-  <div class="container">
-    <div class="panel panel-primary">
-      <div class="panel-heading"><%= @page %></div>
-      <div class="panel-body">
-        <%= yield %>
+    <%= render 'shared/navbar' %>
+  
+    <div class="container">
+      <div class="panel panel-primary">
+        <div class="panel-heading"><%= @page %></div>
+        <div class="panel-body">
+          <%= yield %>
+        </div>
       </div>
     </div>
-  </div>
+
+  <% else # Login/Registration Pages %>
+
+    <div class="ui middle aligned center aligned grid">
+      <div class="column">
+        <%= yield %>
+        <%= render "devise/shared/links" %>
+      </div>
+    </div>
+
+  <% end %>
 </body>
 </html>
