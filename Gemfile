@@ -1,8 +1,5 @@
 source 'https://rubygems.org'
 
-# Engines
-gem 'cmsk', path: 'cmsk'
-
 # Devise authentication
 gem 'devise'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

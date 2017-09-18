@@ -1,0 +1,86 @@
+<style>
+  .table-container { overflow-x: scroll; }
+  .table { min-width: 550px; }
+</style>
+
+<div class="ui raised segment">
+  <div class="ui header">
+    <i class="search icon"></i>
+    Filter Analytics
+  </div>
+
+  <div class="ui form">
+    <div class="equal width fields">
+      <div class="field">
+        <%= label_tag :season %>
+        <%= select_tag :season, 
+          options_for_select(@team.recorded_seasons, params[:season]),
+          include_blank: true,
+          class: 'form-control' %>
+      </div>
+      <div class="field">
+        <%= label_tag :competition %>
+        <%= select_tag :competition,
+          options_for_select(@team.recorded_competitions, params[:competition]),
+          include_blank: true,
+          class: 'form-control' %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<table class="ui basic sortable definition selectable compact small table">
+  <thead>
+    <% ['Name', 'Position', 'GP', 'Rating', 'Goals', 'Assists', 'CS'].each do |header| %>
+      <th><%= header %></th>
+    <% end %>
+  </thead>
+</table>
+
+<script>
+  var table;
+
+  $(function(){
+    table = $('table').DataTable({
+      order: [[3, "desc"]],
+      ajax: {
+        url: '/my_fifa/analytics/players',
+        data: function(d){
+          d.season = $('select#season').val();
+          d.competition = $('select#competition').val();
+        }
+      },
+      processing: true,
+      columns: [
+        { data: 'name' },
+        { data: 'pos' },
+        { data: 'gp' },
+        { data: 'rating', render: $.fn.dataTable.render.number(',', '.', '2') },
+        { data: 'goals' },
+        { data: 'assists' },
+        { data: 'cs' },
+      ],
+      createdRow: function(nRow, aData){
+        if (!aData.active){
+          $('td:first-child', $(nRow)).prepend('<i class="red attention icon"></i>');
+          $(nRow).addClass('disabled')
+        }
+      }
+    });
+
+    // TODO: NOT YET
+    // $('#competition').change(function(){
+    //   table.ajax.reload(null, false);
+
+    //   $.getJSON('/my_fifa/analytics/get_seasons?competition='+$('#competition').val(), function(data){
+    //   });
+    // });
+
+    // $('#season').change(function(){
+    //   table.ajax.reload(null, false);
+
+    //   $.getJSON('/my_fifa/analytics/get_competitions?season='+$('#season').val(), function(data){
+    //   });
+    // });
+  });
+</script>

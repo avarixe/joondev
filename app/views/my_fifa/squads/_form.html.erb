@@ -1,0 +1,78 @@
+<style>
+  .dropdown.player-field .header { color: red !important; }
+</style>
+
+<%= form_for(@squad, html: { class: 'ui large fluid form' }) do |f| %>
+  <div class="fields">
+    <div class="inline required field">
+      <%= f.label :squad_name, 'Squad Name' %>
+      <%= f.text_field :squad_name, placeholder: 'Squad Name' %>
+    </div>
+  </div>
+
+  <div class="ui tertiary green inverted segment">
+
+    <!-- FWD row -->
+    <div class="fields">
+      <% (9..11).each do |no| %>
+        <%= render 'player_field', f: f, no: no %>
+        <%= content_tag(:div, nil, class: 'two wide field') if no < 11 %>
+      <% end %>
+    </div>
+
+    <!-- MID row -->
+    <div class="fields">
+      <% (6..8).each do |no| %>
+        <%= render 'player_field', f: f, no: no %>
+        <%= content_tag(:div, nil, class: 'two wide field') if no < 8 %>
+      <% end %>
+    </div>
+
+    <!-- DEF row -->
+    <div class="fields">
+      <% (2..5).each do |no| %>
+        <%= render 'player_field', f: f, no: no %>
+      <% end %>
+    </div>
+
+    <!-- GK row -->
+    <div class="fields">
+      <div class="six wide field"></div>
+      <%= render 'player_field', f: f, no: 1 %>
+      <div class="six wide field"></div>
+    </div>
+  </div>
+
+  <%= f.submit 'Save Squad', class: 'ui primary button', onclick: 'return checkForm()' %>
+  <%= link_to 'Back', my_fifa_squads_path, class: 'ui basic button' %>
+<% end %>
+
+<script>
+  function checkForm(){
+    if (!$('#my_fifa_squad_squad_name').val())
+      return error_alert('Please enter a Name.')  
+    else{
+      <% if @squad.id.present? %>
+        var squadParams = { squad_name: $('#my_fifa_squad_squad_name').val() };
+        for(var i=0; i < 11; i++)
+          squadParams['player_id_'+(i+1)] = $('#my_fifa_squad_player_id_'+(i+1)).val();
+
+        $.ajax({
+          url: '<%= my_fifa_squad_path(@squad) %>',
+          type: 'PUT',
+          beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token %>')},
+          data: { squad: squadParams },
+          statusCode: {
+            500: function(){ swal('Error', 'Attempt to update the Squad failed.', 'error'); }
+          }
+        }).then(function(){
+          swal('Success', 'Squad has been updated.', 'success');
+        })
+
+        return false;
+      <% else %>
+        return true;
+      <% end %>
+    }
+  }
+</script>

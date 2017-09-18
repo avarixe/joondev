@@ -1,0 +1,56 @@
+<style>
+  select.form-control:not([size]):not([multiple]){ height: auto; }
+  #players-table_paginate a { color: black; }
+  #players-table {
+    min-width: 750px;
+  }
+  .table-container {
+    width: 100%;
+    float: left;
+    overflow-x: scroll;
+  }
+</style>
+
+<%= render 'import_csv' %>
+
+<%= content_for :page_links do %>
+  <%= link_to 'New Player', new_my_fifa_player_path, class: 'ui basic primary button' %>
+  <a class="ui basic violet button" id="import-csv-btn">Import CSV</a>
+<% end %>
+
+<table id="players-table" class="ui basic definition selectable compact small table">
+  <thead class="thead-inverse">
+    <% ['Name', 'Position', '2nd Positions', 'Actions'].each do |header| %>
+      <th><%= header %></th>
+    <% end %>
+  </thead>
+</table>  
+
+<script>
+  var playersTable;
+
+  $(function(){
+    $('table').on('click', 'a', function(){
+      console.log('click!');
+    })
+
+    playersTable = $('#players-table').DataTable({
+      bSort: false,
+      bFilter: false,
+      ajax: '/my_fifa/players',
+      columnDefs: [
+        { targets: 0, data: 'name' },
+        { targets: 1, data: 'pos' },
+        { targets: 2, data: 'sec_pos' },
+        { targets: 3, defaultContent: '<a class="button button-raised button-small button-block button-primary update-btn">Update</a>'}
+      ],
+      createdRow: function(row, data, dataIndex){
+        $(row).data('id', data.id);
+        if (!data.active){
+          $('td:first-child', $(row)).prepend('<i class="red attention icon"></i>');
+          $('td:not(:last-child)', $(row)).addClass('disabled');
+        }
+      },
+    });
+  });
+</script>

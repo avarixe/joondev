@@ -1,25 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>JoonDEV</title>
+  <title><%= @title || 'JoonDEV' %></title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <%= favicon_link_tag 'favicon.ico' %>
-
-  <link href="https://fonts.googleapis.com/css?family=Crimson+Text" rel="stylesheet">
 </head>
 <body>
-  <% if current_user %>
-
-    <%= render 'shared/navbar' %>
-  
-    <div class="ui main text container">
-      <%= yield %>
-    </div>
-
-  <% else # Login/Registration Pages %>
+  <% unless current_user # Login/Registration Pages %>
 
     <div class="ui middle aligned center aligned grid">
       <div class="column">
@@ -27,6 +17,66 @@
         <%= render "devise/shared/links" %>
       </div>
     </div>
+
+  <% else %>
+
+    <div class="ui fixed huge inverted menu">
+      <div class="ui fluid container">
+        <a class="header image item toggle button">
+          <i class="sidebar icon"></i>
+          JoonDEV
+        </a>
+        <div class="right menu">
+          <%= link_to content_tag(:i, nil, class: 'edit icon'), edit_user_registration_path, class: 'ui item', title: 'Manage Account' %>
+          <%= link_to content_tag(:i, nil, class: 'sign out icon'), destroy_user_session_path, method: :delete, class: 'ui item', title: 'Sign Out' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui left massive vertical sidebar inverted menu">
+      <%= render 'my_fifa/shared/menu' %>
+    </div>
+
+    <div class="pusher">
+      <div class="ui main text container">
+        <%= yield :system_header %>
+
+        <% if content_for? :page_links %>
+          <div class="ui text fluid menu">
+            <%= yield :page_links %>
+          </div>
+        <% end %>
+
+        <%= yield %>
+      </div>
+    </div>
+
+    <script>
+      $(function(){
+        $('div.sidebar')
+          .sidebar({
+            // context: $('body > .ui.container'),
+            transition: 'overlay'
+          })
+          .sidebar('attach events', '.toggle.button')
+          .sidebar('hide');
+          // .sidebar('setting', { transition: 'overlay' });
+
+        $('select.dropdown, .ui.dropdown').dropdown();
+
+        $('.ui.dropdown').has('optgroup').each(function() {
+          var $menu;
+          $menu = $('<div/>').addClass('menu');
+          $(this).find('optgroup').each(function() {
+            $menu.append("<div class=\"header\">" + this.label + "</div><div class=\"divider\"></div>");
+            return $(this).children().each(function() {
+              return $menu.append("<div class=\"item\" data-value=\"" + this.value + "\">" + this.innerHTML + "</div>");
+            });
+          });
+          return $(this).find('.menu').html($menu.html());
+        });
+      })
+    </script>
 
   <% end %>
 </body>

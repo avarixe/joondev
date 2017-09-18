@@ -30,5 +30,5 @@ class User < ActiveRecord::Base
   ######################################################
   ######################################################
   
-  has_many :teams, class_name: 'Cmsk::Team'
+  has_many :teams, class_name: 'MyFifa::Team'
 end

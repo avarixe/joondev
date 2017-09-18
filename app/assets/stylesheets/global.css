@@ -1,11 +1,9 @@
 textarea { resize: vertical; }
 
-/* Supplementary to Awesome Fonts */
-.fa { vertical-align: -10%; }
-
-/* Supplementary to Buttons */
-/*.button { padding: 0px 20px; }*/
-/*.button-block { width: 100%; }*/
+/* Supplementary to Semantic UI */
+.ui.left.menu { padding-top: 3em; }
+.ui.main { margin-top: 5em !important; }
+.pusher { overflow-y:auto !important; }
 
 /* Supplementary to DirtyForms */
 .dirty, .dirty:hover, .dirty:active, .dirty:focus { border-color: red; }

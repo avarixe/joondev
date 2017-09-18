@@ -1,0 +1,65 @@
+<% content_for :system_header do %>
+  <h1 class="ui teal header">
+    <i class="soccer icon"></i>
+    <div class="content">
+      MyFIFA Manager
+      <div class="sub header"><%= @title %></div>
+    </div>
+  </h1>
+
+  <div class="ui fluid three item menu">
+
+    <!-- Squad Hub Menu -->
+    <div class="ui up pointing dropdown item">
+      Squad Hub
+      <i class="dropdown icon"></i>
+      <div class="menu">
+        <div class="header">
+          <i class="user circle outline icon"></i>
+          Players
+        </div>
+        <div class="divider"></div>
+        <%= link_to 'Player List',     my_fifa_players_path,    class: 'item' %>
+        <%= link_to 'Sign New Player', new_my_fifa_player_path, class: 'item' %>
+        <div class="divider"></div>
+        <div class="header">
+          <i class="users icon"></i>
+          Squads
+        </div>
+        <div class="divider"></div>
+        <%= link_to 'Manage Squads',   my_fifa_squads_path,     class: 'item' %>
+      </div>
+    </div>
+
+    <!-- Records Menu -->
+    <div class="ui up pointing dropdown item">
+      Records
+      <i class="dropdown icon"></i>
+      <div class="menu">
+        <div class="header">
+          <i class="soccer icon"></i>
+          Fixtures
+        </div>
+        <div class="divider"></div>
+        <%= link_to 'Archive', my_fifa_fixtures_path, class: 'item' %>
+        <%= link_to 'New Fixture', new_my_fifa_fixture_path, class: 'item' %>
+      </div>
+    </div>
+
+    <!-- Analytics Menu -->
+    <div class="ui up pointing dropdown item">
+      Analytics
+      <i class="dropdown icon"></i>
+      <div class="menu">
+        <div class="header">
+          <i class="pie chart icon"></i>
+          Statistics
+        </div>
+        <div class="divider"></div>
+        <%= link_to 'Players', players_my_fifa_analytics_path, class: 'item' %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<%= render file: 'layouts/application' %>

@@ -1,0 +1,52 @@
+<div class="ui violet segment">
+  <div class="inline fields">
+    <div class="required field">
+      <%= f.label :opponent, 'Opponent Team' %>
+      <%= f.text_field :opponent, tabindex: 1 %>
+    </div>
+  </div>
+  <div class="inline fields">
+    <div class="required field">
+      <%= f.label :competition, 'Competition' %>
+      <%= f.select :competition, options_for_select(@team.competitions, @fixture.competition), {prompt: true}, {class: 'dropdown', tabindex: 2} %>
+    </div>
+  </div>
+
+  <div class="inline fields">
+    <div class="field">
+      <%= f.label :score_gf, 'GF' %>
+      <%= f.number_field :score_gf, class: 'click-form required', min: 0, readonly: true, value: @fixture.score_gf || 0 %>
+    </div>
+    <div class="field">
+      <%= f.label :score_ga, 'GA' %>
+      <%= f.number_field :score_ga, class: 'click-form required', min: 0, readonly: true, value: @fixture.score_ga || 0 %>
+    </div>
+  </div>
+
+  <div class="inline fields">
+    <div class="field">
+      <%= f.label :penalties_gf, 'PF' %>
+      <%= f.number_field :penalties_gf, class: 'click-form', min: 0, readonly: true, value: @fixture.penalties_gf.presence %>
+    </div>
+    <div class="field">
+      <%= f.label :penalties_ga, 'PA' %>
+      <%= f.number_field :penalties_ga, class: 'click-form', min: 0, readonly: true, value: @fixture.penalties_ga.presence %>
+    </div>
+  </div>
+
+  <div class="inline fields">
+    <div class="field">
+      <%= f.label :date_played, 'Date Played' %>
+      <%= f.text_field :date_played %>
+    </div>
+  </div>
+
+  <% if @fixture.id.blank? %>
+    <div class="inline fields">
+      <div class="field">
+        <%= label_tag :squad %>
+        <%= select_tag :squad, options_for_select(@team.squads.map{ |s| [s.squad_name, s.id] }), include_blank: true, class: 'dropdown' %>
+      </div>
+    </div>
+  <% end %>
+</div>

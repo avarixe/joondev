@@ -1,0 +1,31 @@
+<table class="ui basic sortable definition selectable compact small table" data-link="/my_fifa/fixtures/">
+  <thead>
+    <tr>
+      <% ['Opponent Team', 'Competition', 'Score', 'MOTM', 'Date Played'].each do |header| %>
+        <th><%= header %></th>
+      <% end %>
+    </tr>
+  </thead>
+</table>
+
+<script>
+  $(function(){
+    $('table').DataTable({
+      processing: true,      
+      ajax: '/my_fifa/fixtures',
+      order: [[4, 'desc']],
+      columns: [
+        { data: 'opponent' },
+        { data: 'competition' },
+        { data: 'score', searchable: false, sortable: false },
+        { data: 'motm' },
+        { data: 'date_played', searchable: false },
+      ],
+      rowCallback: function(nRow, aData){
+        $(nRow)
+          .data('id', aData.id)
+          .addClass(aData.result);
+      }
+    });    
+  });
+</script>

@@ -36,5 +36,4 @@
 //= require inputmask.regex.extensions
 
 //= require global
-//= require semantic_global
 //= require_tree .

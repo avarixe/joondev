@@ -5,13 +5,6 @@ GIT
     jquery-inputmask-rails (0.4.0)
       railties (>= 3.1)
 
-PATH
-  remote: cmsk
-  specs:
-    cmsk (0.0.1)
-      rails (~> 4.2.5)
-      sass-rails (~> 5.0)
-
 GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
@@ -227,7 +220,6 @@ DEPENDENCIES
   bootstrap-sass
   byebug
   chartkick
-  cmsk!
   coffee-rails (~> 4.1.0)
   devise
   flatpickr_rails

@@ -1,0 +1,21 @@
+<% content_for :page_links do %>
+  <%= link_to 'New Team', new_my_fifa_team_path, class: 'ui basic primary button' %>
+<% end %>
+
+<i>Note: The current active Team is highlighted. To switch, click and view the Team of your choice.</i>
+
+<table class="ui basic definition selectable compact small table" data-link="/my_fifa/teams/">
+  <thead>
+    <th>Name</th>
+    <th>Competitions</th>
+  </thead>
+
+  <tbody>
+    <% current_user.teams.each do |team| %>
+      <tr data-id=<%= team.id %> class="<%= 'success' if session[:team].to_i == team.id %>">
+        <td><%= team.team_name %></td>
+        <td><%= team.competition_options(', ') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
