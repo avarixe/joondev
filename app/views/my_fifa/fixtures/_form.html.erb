@@ -49,8 +49,18 @@
   var num_subs = <%= @fixture.player_records.length - 11 %>;
 
   $(function(){
+    // Flatpickr functionality
     $('#my_fifa_fixture_date_played').flatpickr({ altInput: true });
+    
+    // Score Masking
+    $('.score-field').inputmask({
+      mask: "9{+}[ (9{+})]", greedy: false
+    });
+    
+    // Click fields functionality
     $('.click-form').each(function(){ toggleClickForm($(this), $(this).hasClass('required')); });
+    
+    // +/- SUB button functionality
     $('#add-sub-btn').click(function(){ addRecord(); });
     $('#remove-sub-btn').click(function(){
       if (num_subs > 0){
@@ -76,7 +86,6 @@
       evt.preventDefault();
 
       var squadId = $('#squad').val();
-
       var rows = $('#records-table tbody tr');
       var squadParams = {};
       for(var i=0; i < 11; i++)

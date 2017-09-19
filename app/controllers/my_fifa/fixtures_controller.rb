@@ -96,7 +96,7 @@ module MyFifa
 
     # PATCH/PUT /players/1
     def update
-      if @fixture.update(fixture_params)
+      if @fixture.update_attributes(fixture_params)
         redirect_to @fixture, notice: 'Fixture was successfully updated.'
       else
         @title = "Edit Fixture"
@@ -107,7 +107,7 @@ module MyFifa
 
     # DELETE /players/1
     def destroy
-      @fixtures.destroy
+      @fixture.destroy
       redirect_to fixtures_url, notice: 'Fixture was successfully destroyed.'
     end
 

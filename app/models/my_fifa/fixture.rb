@@ -42,14 +42,22 @@ module MyFifa
       motm_id = self.player_records.sort_by(&:rating).last.player_id
       update_column(:motm_id, motm_id)
     end
- 
+
     def score
-      [
-        self.score_gf,
+      "#{self.score_f} - #{self.score_a}"
+    end
+      
+    # GF (PF) 
+    def score_f
+      [ self.score_gf,
         self.penalties_gf.present? ? " (#{self.penalties_gf})" : '',
-        ' - ',
-        self.score_ga,
-        self.penalties_ga.present? ? " (#{self.penalties_ga})" : ''
+      ].join('')
+    end
+
+    # GA (PA) 
+    def score_a
+      [ self.score_ga,
+        self.penalties_ga.present? ? " (#{self.penalties_ga})" : '',
       ].join('')
     end
         

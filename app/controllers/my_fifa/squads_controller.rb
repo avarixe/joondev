@@ -65,7 +65,7 @@ module MyFifa
 
       # Only allow a trusted parameter "white list" through.
       def squad_params
-        params[:squad].permit!
+        params[:my_fifa_squad].permit!
       end
   end
 end

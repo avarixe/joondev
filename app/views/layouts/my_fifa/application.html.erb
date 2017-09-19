@@ -3,12 +3,11 @@
     <i class="soccer icon"></i>
     <div class="content">
       MyFIFA Manager
-      <div class="sub header"><%= @title %></div>
+      <div class="sub header"><%= @team.team_name rescue nil %></div>
     </div>
   </h1>
 
   <div class="ui fluid three item menu">
-
     <!-- Squad Hub Menu -->
     <div class="ui up pointing dropdown item">
       Squad Hub
@@ -60,6 +59,10 @@
       </div>
     </div>
   </div>
+  
+  <h2 class="ui violet dividing header">
+    <%= @title %>
+  </h2>
 <% end %>
 
 <%= render file: 'layouts/application' %>
