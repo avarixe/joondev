@@ -3,22 +3,18 @@ require_dependency "my_fifa/application_controller"
 module MyFifa
   class PlayersController < ApplicationController
     before_action :set_current_team
+    before_action :set_player, only: [:show, :edit, :update, :exit, :sign, :get_ovr]
 
     # GET /players
     def index
       @players = @team.sorted_players
       @inactive_players = @team.players.inactive
+      @all_players = @players+@inactive_players
       @title = "Players"
+    end
 
-      respond_to do |format|
-        format.html
-        format.json {
-          render json: {
-            draw: 1,
-            data: @players+@inactive_players
-          }.to_json
-        }
-      end
+    def show
+      @title = @player.name
     end
 
     # GET /players/new
@@ -39,6 +35,10 @@ module MyFifa
       end
     end
 
+    def edit
+      @title = "Edit Player: #{@player.name}"
+    end
+
     # POST /players/update_json
     def update
       @player = Player.find(params[:id])
@@ -53,6 +53,16 @@ module MyFifa
         end
 
       render_json_response(status, message)
+    end
+
+    def exit
+      @player.update_attributes(active: false)
+      redirect_to :back
+    end
+
+    def sign
+      @player.update_attributes(active: true)
+      redirect_to @player
     end
 
     def import_csv
@@ -96,10 +106,18 @@ module MyFifa
       render_json_response(status, message)
     end
 
+    def get_ovr
+      render json: @player.current_ovr.to_json
+    end
+
     private
       # Only allow a trusted parameter "white list" through.
       def player_params
         params[:my_fifa_player].permit!
+      end
+
+      def set_player
+        @player = Player.find(params[:id])
       end
   end
 end

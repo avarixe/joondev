@@ -2,44 +2,43 @@
   .dropdown.player-field .header { color: red !important; }
 </style>
 
-<%= form_for(@squad, html: { class: 'ui large fluid form' }) do |f| %>
+<%= form_for(@squad, html: { class: 'ui fluid form' }) do |f| %>
   <div class="fields">
     <div class="inline required field">
       <%= f.label :squad_name, 'Squad Name' %>
-      <%= f.text_field :squad_name, placeholder: 'Squad Name' %>
+      <%= f.text_field :squad_name %>
     </div>
   </div>
 
-  <div class="ui tertiary green inverted segment">
+  <div class="ui raised green segment">
+    <div class="ui stackable grid">
+      <!-- FWD row -->
+      <div class="five columns centered row">
+        <% (9..11).each do |no| %>
+          <%= render 'player_field', f: f, no: no %>
+          <%= content_tag(:div, nil, class: 'two wide field') if no < 11 %>
+        <% end %>
+      </div>
 
-    <!-- FWD row -->
-    <div class="fields">
-      <% (9..11).each do |no| %>
-        <%= render 'player_field', f: f, no: no %>
-        <%= content_tag(:div, nil, class: 'two wide field') if no < 11 %>
-      <% end %>
-    </div>
+      <!-- MID row -->
+      <div class="five columns centered row">
+        <% (6..8).each do |no| %>
+          <%= render 'player_field', f: f, no: no %>
+          <%= content_tag(:div, nil, class: 'two wide field') if no < 8 %>
+        <% end %>
+      </div>
 
-    <!-- MID row -->
-    <div class="fields">
-      <% (6..8).each do |no| %>
-        <%= render 'player_field', f: f, no: no %>
-        <%= content_tag(:div, nil, class: 'two wide field') if no < 8 %>
-      <% end %>
-    </div>
+      <!-- DEF row -->
+      <div class="four columns row">
+        <% (2..5).each do |no| %>
+          <%= render 'player_field', f: f, no: no %>
+        <% end %>
+      </div>
 
-    <!-- DEF row -->
-    <div class="fields">
-      <% (2..5).each do |no| %>
-        <%= render 'player_field', f: f, no: no %>
-      <% end %>
-    </div>
-
-    <!-- GK row -->
-    <div class="fields">
-      <div class="six wide field"></div>
-      <%= render 'player_field', f: f, no: 1 %>
-      <div class="six wide field"></div>
+      <!-- GK row -->
+      <div class="three columns centered row">
+        <%= render 'player_field', f: f, no: 1 %>
+      </div>
     </div>
   </div>
 

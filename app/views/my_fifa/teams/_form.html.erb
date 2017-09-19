@@ -7,17 +7,21 @@
   }
 </script>
 
-<%= form_for(@team, html: { class: 'ui large fluid centered form' }) do |f| %>
-  <div class="fields">
-    <div class="required fluid inline field">
-      <%= f.label :team_name, 'Name' %>
-      <%= f.text_field :team_name, required: true %>
-    </div>
-  </div>
-  <div class="fields">
-    <div class="required fluid inline field">
-      <%= f.label :competitions, 'Competitions (One per line)' %>
-      <%= f.text_area :competitions, value: @team.competition_options("\n"), rows: 10, class: 'form-control', required: true %>
+<%= form_for(@team, html: { class: 'ui large fluid form' }) do |f| %>
+  <div class="ui teal raised segment">
+    <div class="ui grid">
+      <div class="sixteen wide column">
+        <div class="required fluid inline field">
+          <%= f.label :team_name, 'Name' %>
+          <%= f.text_field :team_name, required: true %>
+        </div>
+      </div>
+      <div class="sixteen wide column">
+        <div class="required fluid inline field">
+          <%= f.label :competitions, 'Competitions (One per line)' %>
+          <%= f.text_area :competitions, value: @team.competition_options("\n"), rows: 10, class: 'form-control', required: true %>
+        </div>
+      </div>
     </div>
   </div>
 

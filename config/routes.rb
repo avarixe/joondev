@@ -7,10 +7,15 @@ Rails.application.routes.draw do
   root 'home#index'
 
   namespace :my_fifa do
-    resources :players, except: [:show, :edit, :destroy] do
+    resources :players, except: [:destroy] do
       collection {
         post 'update_json'
         post 'import_csv'
+      }
+      member {
+        post 'exit'
+        post 'sign'
+        get 'get_ovr'
       }
     end
     resources :teams

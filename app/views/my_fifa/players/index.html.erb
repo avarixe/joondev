@@ -1,56 +1,61 @@
-<style>
-  select.form-control:not([size]):not([multiple]){ height: auto; }
-  #players-table_paginate a { color: black; }
-  #players-table {
-    min-width: 750px;
-  }
-  .table-container {
-    width: 100%;
-    float: left;
-    overflow-x: scroll;
-  }
-</style>
-
 <%= render 'import_csv' %>
 
 <%= content_for :page_links do %>
   <%= link_to 'New Player', new_my_fifa_player_path, class: 'ui basic primary button' %>
-  <a class="ui basic violet button" id="import-csv-btn">Import CSV</a>
+  <a class="ui basic olive button" id="import-csv-btn">Import CSV</a>
 <% end %>
 
-<table id="players-table" class="ui basic definition selectable compact small table">
-  <thead class="thead-inverse">
-    <% ['Name', 'Position', '2nd Positions', 'Actions'].each do |header| %>
-      <th><%= header %></th>
-    <% end %>
+<table class="ui celled basic definition sortable selectable compact small table">
+  <thead>
+    <tr class="center aligned">
+      <% ['Name', 'Position', 'OVR', 'Actions'].each do |header| %>
+        <th><%= header %></th>
+      <% end %>
+    </tr>
   </thead>
-</table>  
+  <tbody>
+    <% @all_players.each do |player| %>
+      <tr class="center aligned">
+        <td>
+          <%= content_tag(:i, nil, class: 'red attention icon') if !player.active %>
+          <%= player.name %>
+        </td>
+        <td class="<%= 'disabled' if !player.active %>"><%= player.pos %></td>
+        <td class="<%= 'disabled' if !player.active %>"><%= player.current_ovr %></td>
+        <td>
+          <div class="ui left pointing dropdown circular teal icon button">
+            <i class="settings icon"></i>
+            <div class="fluid menu">
+              <%= link_to(player, class: 'item') do %>
+                <i class="user icon"></i> View
+              <% end %>
+              <% if player.active %>
+                <%= link_to(edit_my_fifa_player_path(player), class: 'item') do %>
+                  <i class="edit icon"></i> Edit
+                <% end %>
+                <%= link_to(exit_my_fifa_player_path(player), method: :post, "data-confirm" => "#{player.name} is leaving #{@team.team_name}?", class: 'item') do %>
+                  <i class="sign out icon"></i> Exit
+                <% end %>
+              <% else %>
+                <%= link_to(sign_my_fifa_player_path(player), method: :post, "data-confirm" => "#{player.name} is resigning to #{@team.team_name}?", class: 'item') do %>
+                  <i class="sign in icon"></i> Sign
+                <% end %>                
+              <% end %>
+            </div>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
 <script>
-  var playersTable;
-
   $(function(){
-    $('table').on('click', 'a', function(){
-      console.log('click!');
-    })
-
-    playersTable = $('#players-table').DataTable({
-      bSort: false,
-      bFilter: false,
-      ajax: '/my_fifa/players',
-      columnDefs: [
-        { targets: 0, data: 'name' },
-        { targets: 1, data: 'pos' },
-        { targets: 2, data: 'sec_pos' },
-        { targets: 3, defaultContent: '<a class="button button-raised button-small button-block button-primary update-btn">Update</a>'}
-      ],
-      createdRow: function(row, data, dataIndex){
-        $(row).data('id', data.id);
-        if (!data.active){
-          $('td:first-child', $(row)).prepend('<i class="red attention icon"></i>');
-          $('td:not(:last-child)', $(row)).addClass('disabled');
-        }
-      },
+    $('table').DataTable({
+      order: [],
+      rowCallback: function(row, data){
+        $('.ui.dropdown').dropdown();
+      }
     });
-  });
+  })
 </script>

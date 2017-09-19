@@ -4,18 +4,20 @@
 
 <%= form_for(@fixture, html: { class: 'ui small fluid form' }) do |f| %>
   <%= f.hidden_field :fixture_id %>
+  <%= f.hidden_field :motm_id %>
 
   <%= render 'fixture_fields', f: f %>
 
-  <div class="ui teal top attached segment">
-    <table id="records-table" class="ui table">
-      <thead class="thead-inverse">
+  <div class="ui teal raised segment">
+    <table id="records-table" class="ui very compact table">
+      <thead>
         <tr>
-          <th style="width:15%"></th>
-          <th style="width:40%">Name</th>
-          <th style="width:15%">Rating</th>
-          <th style="width:15%">Goals</th>
-          <th style="width:15%">Assists</th>
+          <th class="one wide"></th>
+          <th class="six wide">Name</th>
+          <th>OVR</th>
+          <th>Rating</th>
+          <th>Goals</th>
+          <th>Assists</th>
         </tr>
       </thead>
       <tbody>
@@ -32,21 +34,31 @@
         </tr>
       </tbody>
     </table>
-  </div>
-  <div class="ui two bottom attached buttons">
-    <a class="ui teal button" id="add-sub-btn"><i class="plus icon"></i> SUB</a>
-    <a class="ui orange button" id="remove-sub-btn"><i class="minus icon"></i> SUB</a>
+
+    <div class="ui grid">
+      <div class="three column centered row">
+        <div class="eight wide aligned center column">
+          <div class="ui fluid buttons">
+            <a class="ui teal button" id="add-sub-btn"><i class="plus icon"></i> SUB</a>
+            <div class="or"></div>
+            <a class="ui orange button" id="remove-sub-btn"><i class="minus icon"></i> SUB</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <div class="ui horizontal divider"></div>
 
   <%= f.submit 'Save Fixture', class: 'ui primary button', onclick: 'return checkForm()' %>
   <%= content_tag :button, 'Update Squad', class: 'ui violet button', id: 'update-squad-btn', disabled: true %>
-  <%= link_to 'Back', my_fifa_fixtures_path, class: 'ui basic button' %>
+  <%= link_to 'Back', @fixture, class: 'ui basic button' %>
 <% end %>
 
 <script>
   var num_subs = <%= @fixture.player_records.length - 11 %>;
+  var highest_rating;
 
   $(function(){
     // Flatpickr functionality
@@ -69,12 +81,36 @@
       }
     });
     
+    // By default, highest rating gets MOTM
+    highest_rating = $('input.rating').map(function(){
+      return this.value;
+    }).get().sort().pop();
+    $('table').on('input', '.rating', function(){
+      if (this.value > highest_rating){
+        highest_rating = this.value;
+        setMOTM($('.ui.ribbon.pos', $(this).closest('tr')));
+      }
+    });
+
+    // Clicking a ribbon label sets MOTM
+    $('table').on('click', '.ui.ribbon.pos', function(){ setMOTM(this); });
+
+    // Selecting a Player loads OVR
+    $('table').on('change', '.player_id', function(){
+      var this_ = this;
+      $.get("/my_fifa/players/"+$('select', $(this_)).val()+"/get_ovr", function(data){
+        $('.ovr', $(this_).closest('tr')).val(data);
+      });
+    });
+
+    // Squad auto populates players
     $('#squad').change(function(){
       if ($('#squad').val()){
         $.get("/my_fifa/squads/"+$('#squad').val()+"/players_json", function(data){
           $.each(data.players, function(i, player){
             var tr = $('#my_fifa_fixture_player_records_attributes_'+i+'_pos').closest('tr');
             $('select[id$="player_id"]', tr).dropdown('set selected', player.id);
+            // $('.ovr', tr).val(player.current_ovr);
           });
         });
         $('#update-squad-btn').attr('disabled', false);
@@ -134,7 +170,8 @@
     record.append($('#record-template').html()
       .replace(/fixture\[player\_records\_attributes\]\[\d+\]/g, 'fixture[player_records_attributes]['+id+']')
       .replace(/fixture\_player\_records\_attributes\_\d+/g, 'fixture_player_records_attributes_'+id));
-    $('.pos', record).val('SUB '+(++num_subs));
+    $('.pos', record).text('SUB '+(++num_subs));
+    $('.pos', record).prev().val('SUB '+(num_subs));
 
     // Append new row to table
     $('#records-table tbody').append(record);
@@ -144,4 +181,13 @@
       toggleClickForm($(this));
     });
   }  
+
+  function setMOTM(target){
+    var playerId = $('.player_id', $(target).closest('tr')).dropdown('get value');
+    if (playerId){
+      $('#my_fifa_fixture_motm_id').val(playerId);
+      $('.ui.ribbon.pos').removeClass('yellow');
+      $(target).addClass('yellow');        
+    }
+  }
 </script>

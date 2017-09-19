@@ -18,5 +18,9 @@ module MyFifa
     }
 
     validates_presence_of :player_id, :rating, :pos
+
+    def motm?
+      player_id == fixture.motm_id
+    end
   end
 end

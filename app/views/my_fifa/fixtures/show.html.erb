@@ -1,46 +1,46 @@
-<style>
-  .table-container { overflow-x: scroll; }
-  #records-table { min-width: 450px; }
-</style>
+<% content_for :page_links do %>
+  <%= link_to 'Edit', edit_my_fifa_fixture_path(@fixture), class: 'ui orange button' %>
+  <%= link_to 'Save Stats', my_fifa_fixture_path(@fixture, format: :xlsx), class: 'ui primary button' %>
+  <%= link_to 'Back', my_fifa_fixtures_path, class: 'ui basic button' %>
+<% end %>
 
-<div class="col-sm-12 text-right">
-  <%= link_to 'Edit', edit_my_fifa_fixture_path(@fixture), class: 'button button-raised button-highlight' %>
-  <%= link_to 'Save Stats', my_fifa_fixture_path(@fixture, format: :xlsx), class: 'button button-raised button-primary' %>
-  <%= link_to 'Back', my_fifa_fixtures_path, class: 'button button-raised' %>
+<div class="ui olive raised segment" >
+  <h2 class="ui center aligned dividing icon header">
+    <i class="trophy icon"></i>
+    <%= @fixture.competition %>    
+    <div class="sub header"><%= time_to_string(@fixture.date_played, "%B %e, %Y") %></div>
+  </h2>
+  <h4 class="ui center aligned header"><%= @team.team_name %> v <%= @fixture.opponent %>
+    <div class="ui center aligned sub header"><%= @fixture.score %></div>
+  </h4>
 </div>
 
-<div class="col-sm-12 text-center" >
-  <h1><%= @fixture.competition %></h1>
-  <h2><%= @team.team_name %> v <%= @fixture.opponent %></h2>
-  <h2><%= @fixture.score %></h2>
-  <h4>Date Played: <%= time_to_string(@fixture.date_played, "%B %e, %Y") %></h4>
-</div>
-
-<div class="col-xs-12 mt10">
-  <div class="panel panel-<%= @fixture.result %>">
-    <div class="panel-body">
-      <table id="records-table" class="table table-sm table-hover">
-        <thead class="thead-inverse">
-          <tr>
-            <th style="width:15%"></th>
-            <th style="width:40%">Name</th>
-            <th style="width:15%">Rating</th>
-            <th style="width:15%">Goals</th>
-            <th style="width:15%">Assists</th>
-          </tr>
-        </thead>
-        <tbody>
-        <% @records.each do |record| %>
-          <tr class="<%= 'warning' if record.player_id == @fixture.motm_id %>">
-            <td><%= record.pos %></td>
-            <td><%= record.player_name %></td>
-            <td><%= record.rating %></td>
-            <td><%= record.goals %></td>
-            <td><%= record.assists %></td>
-          </tr>
-        <% end %>
-        </tbody>
-      </table>
-    </div>
+<div class="ui teal raised segment">
+  <div class="panel-body">
+    <table class="ui table">
+      <thead class="thead-inverse">
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>Rating</th>
+          <th>Goals</th>
+          <th>Assists</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @records.each do |record| %>
+        <tr class="<%= 'warning' if record.player_id == @fixture.motm_id %>">
+          <td><%= record.pos %></td>
+          <td><%= record.player_name %></td>
+          <td>
+            <%= content_tag(:i, nil, class: 'soccer icon') if record.motm? %>
+            <%= record.rating %>    
+          </td>
+          <td><%= record.goals %></td>
+          <td><%= record.assists %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
   </div>
 </div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170918043808) do
+ActiveRecord::Schema.define(version: 20170919031749) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20170918043808) do
     t.integer "assists"
     t.string  "pos",        limit: 10
     t.boolean "cs"
+    t.integer "ovr"
   end
 
   create_table "my_fifa_players", force: :cascade do |t|
@@ -49,6 +50,7 @@ ActiveRecord::Schema.define(version: 20170918043808) do
     t.boolean  "active",     default: true
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.integer  "start_ovr",  default: 0
   end
 
   create_table "my_fifa_squads", force: :cascade do |t|

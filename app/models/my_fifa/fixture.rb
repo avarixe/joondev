@@ -17,7 +17,6 @@ module MyFifa
 
     accepts_nested_attributes_for :player_records, reject_if: :invalid_record?
     after_save :set_records
-    after_save :set_fixture
 
     def invalid_record?(attributed)
       attributed['pos'].blank?
@@ -43,23 +42,27 @@ module MyFifa
       update_column(:motm_id, motm_id)
     end
 
+    # score_f: GF (PF) 
+    # score_a: GA (PA) 
+    # score: GF (PF) - GA (PA) 
+    %w(f a).each do |type|
+      define_method "score_#{type}" do
+        goals = self.send("score_g#{type}")
+        penalties = self.send("penalties_g#{type}")
+        "#{goals}#{penalties.present? ? " (#{penalties})" : ''}"
+      end
+
+      define_method "score_#{type}=" do |val|
+        goals, penalties = val.match(/^(\d+)(?: \((\d+)\))*$/i).captures
+        write_attribute :"score_g#{type}", goals
+        write_attribute :"penalties_g#{type}", penalties
+      end
+    end
+
     def score
       "#{self.score_f} - #{self.score_a}"
     end
-      
-    # GF (PF) 
-    def score_f
-      [ self.score_gf,
-        self.penalties_gf.present? ? " (#{self.penalties_gf})" : '',
-      ].join('')
-    end
 
-    # GA (PA) 
-    def score_a
-      [ self.score_ga,
-        self.penalties_ga.present? ? " (#{self.penalties_ga})" : '',
-      ].join('')
-    end
         
     def result
       if self.score_gf > self.score_ga

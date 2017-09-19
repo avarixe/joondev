@@ -3,7 +3,7 @@
   <%= link_to 'Back', my_fifa_teams_path, class: 'ui basic button' %>
 <% end %>
 
-<div class="ui segment">
+<div class="ui teal raised segment">
   <div class="ui dividing header">Competitions</div>
   <%= @team.competitions.map{ |c| "<u><b>#{c}</b></u>" }.join(', ').html_safe %>
 </div>

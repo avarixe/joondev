@@ -13,7 +13,6 @@
 //= require jquery
 //= require tether
 
-//= require bootstrap-sprockets
 //= require bootstrap-switch.min
 
 //= require semantic.min
@@ -21,7 +20,6 @@
 //= require jquery-ui
 //= require jquery_ujs
 
-//= require dataTables/jquery.dataTables
 //= require turbolinks
 //= require sweetalert2.min
 //= require flatpickr
@@ -29,6 +27,9 @@
 
 //= require Chart.bundle
 //= require chartkick
+
+//= require jquery.dataTables.min
+//= require dataTables.semanticui
 
 //= require inputmask
 //= require jquery.inputmask

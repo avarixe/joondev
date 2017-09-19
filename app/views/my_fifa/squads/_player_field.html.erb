@@ -1,4 +1,3 @@
-<div class="four wide required  field">
-  <%= f.label "player_id_#{no}".to_sym, "#{MyFifa::Squad.positions[no-1]}: " %>
-  <%= f.select "player_id_#{no}", grouped_options_for_select(@grouped_players, @squad.send("player_id_#{no}")), {prompt: true}, {class: 'small fluid dropdown player-field'} %>
+<div class="four wide column">
+  <%= f.select "player_id_#{no}", grouped_options_for_select(@grouped_players, @squad.send("player_id_#{no}")), {prompt: MyFifa::Squad.positions[no-1]}, {class: 'small fluid dropdown player-field'} %>
 </div>

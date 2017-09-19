@@ -47,7 +47,9 @@ module MyFifa
 
     def players_json
       render json: {
-        players: (1..11).map{ |no| Player.find(@squad.send("player_id_#{no}")) }
+        players: (1..11).map{ |no|
+          Player.find(@squad.send("player_id_#{no}")).as_json(methods: :current_ovr)
+        }
       }
     end
 

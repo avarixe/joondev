@@ -1,0 +1,40 @@
+<script>
+  function checkForm(){
+    if (!$('#my_fifa_player_name').val())
+      return error_alert('Please enter a Name.')  
+    else if (!$('#my_fifa_player_pos').val())
+      return error_alert('Please enter a Position.')
+    else
+      return true;
+  }
+</script>
+
+<%= form_for(@player, html: { class: 'ui large fluid form' }) do |f| %>
+  <div class="ui raised teal segment">
+    <div class="ui stackable grid">
+      <div class="equal width row">
+        <div class="column">
+          <div class="required field">
+            <%= f.label :name %>
+            <%= f.text_field :name %>
+          </div>
+        </div>
+        <div class="column">
+          <div class="required field">
+            <%= f.label :pos, 'Position' %>
+            <%= f.select :pos, options_for_select(MyFifa::Player.positions, @player.pos), {prompt: true}, {class: 'fluid dropdown'} %>
+          </div>
+        </div>
+        <div class="column">
+          <div class="field">
+            <%= f.label :sec_pos, 'Secondary Position(s)' %>
+            <%= f.text_field :sec_pos, class: 'form-control' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%= f.submit 'Save Player', class: 'ui primary button', onclick: 'return checkForm()' %>
+  <%= link_to 'Back', my_fifa_players_path, class: 'ui basic button' %>
+<% end %>

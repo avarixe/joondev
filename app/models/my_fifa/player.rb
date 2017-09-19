@@ -60,5 +60,9 @@ module MyFifa
       names = self.name.split(' ')
       names.length == 1 ? self.name : "#{names.first[0]}. #{names.drop(1).join(' ')}"
     end
+
+    def current_ovr
+      self.player_records.last.ovr rescue self.start_ovr
+    end
   end
 end
