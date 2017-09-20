@@ -18,7 +18,7 @@ module MyFifa
       @title = @player.name
 
       @stats = [
-        { type: :num_games,   label: 'Games Played',     color: 'grey'   },
+        { type: :num_games,   label: 'Games Played',     color: 'blue'   },
         { type: :num_motm,    label: 'Man of the Match', color: 'yellow' },
         { type: :num_goals,   label: 'Goals Scored',     color: 'teal'   },
         { type: :num_assists, label: 'Goal Assists',     color: 'brown'  },

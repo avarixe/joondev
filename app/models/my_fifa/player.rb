@@ -62,7 +62,7 @@ module MyFifa
     end
 
     def current_ovr
-      self.player_records.last.ovr rescue self.start_ovr
+      self.records.last.ovr rescue self.start_ovr
     end
 
     # STATISTICS
@@ -71,6 +71,6 @@ module MyFifa
     def num_goals()   records.map(&:goals).compact.inject(0, :+) end
     def num_assists() records.map(&:assists).compact.inject(0, :+) end
     def num_cs()      records.where(cs: 1).count end
-      
+
   end
 end

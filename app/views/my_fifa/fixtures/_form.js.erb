@@ -104,6 +104,7 @@ function addRecord(){
   $('#records-table tbody').append(record);
 
   // Activate jQuery event listeners
+  $('.ui.dropdown', $(record)).dropdown();
   $('.click-form', $(record)).each(function(){
     toggleClickForm($(this));
   });

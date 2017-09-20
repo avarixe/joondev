@@ -23,22 +23,20 @@
       </div>
     </div>
   </div>
-</div>
 
-<div class="ui raised violet segment">
   <div class="ui dividing header">
-    Player Statistics
+    Statistics
   </div>
   <div class="ui stackable grid">
     <div class="four columns centered row">
       <div class="aligned column">
-        <div class="ui statistic">
+        <div class="ui grey statistic">
           <div class="label">Start OVR</div>
           <div class="value"><%= @player.start_ovr %></div>
         </div>
       </div>
       <div class="aligned column">
-        <div class="ui statistic">
+        <div class="ui green statistic">
           <div class="label"><%= @player.active ? 'Current' : 'Last' %> OVR</div>
           <div class="value"><%= @player.current_ovr %></div>
         </div>
@@ -60,21 +58,28 @@
 
 <div class="ui raised olive segment">
   <div class="ui dividing header">
-    Player Performance
+    OVR Rating
+  </div>
+
+  <%= line_chart @player.records.map{ |r| [r.fixture.date_played.strftime('%F'), r.ovr ] },
+    id: 'ovr-chart',
+    min: 50, max: 100,
+    library: {
+      chart: { zoomType: 'x' },
+      tooltip: { pointFormat: 'OVR: <b>{point.y}</b>' }
+    } %>
+
+  <div class="ui dividing header">
+    Performance
   </div>
 
   <%= line_chart @player.records.map{ |r| [ r.fixture.date_played.strftime('%F'), r.rating ] },
     id: 'ratings-chart',
     min: 5, max: 10, 
     library: {
-      chart: {
-        zoomType: 'x',
-      },
-      tooltip: {
-        pointFormat: 'Rating: <b>{point.y}</b>'
-      }
-    }
-  %>
+      chart: { zoomType: 'x' },
+      tooltip: { pointFormat: 'Rating: <b>{point.y}</b>' }
+    } %>
 </div>
 
 <script>
