@@ -3,7 +3,7 @@ require_dependency "my_fifa/application_controller"
 module MyFifa
   class PlayersController < ApplicationController
     before_action :set_current_team
-    before_action :set_player, only: [:show, :edit, :update, :exit, :sign, :get_ovr]
+    before_action :set_player, only: [:edit, :update, :exit, :sign, :get_ovr]
 
     # GET /players
     def index
@@ -14,7 +14,16 @@ module MyFifa
     end
 
     def show
+      @player = Player.includes(records: [:fixture]).find(params[:id])
       @title = @player.name
+
+      @stats = [
+        { type: :num_games,   label: 'Games Played',     color: 'grey'   },
+        { type: :num_motm,    label: 'Man of the Match', color: 'yellow' },
+        { type: :num_goals,   label: 'Goals Scored',     color: 'teal'   },
+        { type: :num_assists, label: 'Goal Assists',     color: 'brown'  },
+        { type: :num_cs,      label: 'Clean Sheets',     color: 'pink'   },
+      ]
     end
 
     # GET /players/new

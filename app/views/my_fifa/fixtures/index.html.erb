@@ -2,7 +2,7 @@
   <%= link_to 'New Fixture', new_my_fifa_fixture_path, class: 'ui basic primary button' %>
 <% end %>
 
-<table class="ui basic sortable definition selectable compact small table" data-link="/my_fifa/fixtures/">
+<table class="ui basic sortable definition selectable compact small table" data-link="/my_fifa/fixtures/" width="100%">
   <thead>
     <tr>
       <% ['Opponent Team', 'Competition', 'Score', 'MOTM', 'Date Played'].each do |header| %>
@@ -20,16 +20,20 @@
       order: [[4, 'desc']],
       columns: [
         { data: 'opponent' },
-        { data: 'competition' },
-        { data: 'score', searchable: false, sortable: false },
-        { data: 'motm' },
-        { data: 'date_played', searchable: false },
+        { data: 'competition', render: function(meta, row, data){ return labeledData('Competition', data.competition) }},
+        { data: 'score', render: function(meta, row, data){ return labeledData('Score', data.score) }, searchable: false, sortable: false },
+        { data: 'motm', render: function(meta, row, data){ return labeledData('MOTM', data.motm) } },
+        { data: 'date_played', render: function(meta, row, data){ return labeledData('Date Played', data.date_played) }, searchable: false },
       ],
-      rowCallback: function(nRow, aData){
+      createdRow: function(nRow, aData){
         $(nRow)
           .data('id', aData.id)
           .addClass(aData.result);
       }
     });    
   });
+
+  function labeledData(label, data){
+    return "<div class=\"ui responsive basic right pointing label\">"+label+"</div>"+data;
+  }
 </script>

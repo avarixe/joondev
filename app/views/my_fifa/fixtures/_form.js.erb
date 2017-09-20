@@ -94,7 +94,7 @@ function addRecord(){
 
   // Generate new Record table row
   var record = $('<tr/>');
-  record.append($('#record-template').html()
+  record.append($('#template').html()
     .replace(/fixture\[player\_records\_attributes\]\[\d+\]/g, 'fixture[player_records_attributes]['+id+']')
     .replace(/fixture\_player\_records\_attributes\_\d+/g, 'fixture_player_records_attributes_'+id));
   $('.pos', record).text('SUB '+(++num_subs));

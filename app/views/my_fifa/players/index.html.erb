@@ -3,7 +3,7 @@
   <a class="ui basic olive button" id="import-csv-btn">Import CSV</a>
 <% end %>
 
-<table class="ui basic definition sortable selectable compact small table" data-link="/my_fifa/players/">
+<table class="ui basic definition sortable compact small table" data-link="/my_fifa/players/" width="100%">
   <thead>
     <tr class="center aligned">
       <% ['Name', 'Position', 'OVR', 'Actions'].each do |header| %>
@@ -14,12 +14,18 @@
   <tbody>
     <% @all_players.each do |player| %>
       <tr data-id=<%= player.id %> class="center aligned">
-        <td>
+        <td class="selectable">
           <%= content_tag(:i, nil, class: 'red attention icon') if !player.active %>
           <%= player.name %>
         </td>
-        <td class="<%= 'disabled' if !player.active %>"><%= player.pos %></td>
-        <td class="<%= 'disabled' if !player.active %>"><%= player.current_ovr %></td>
+        <td no-link class="<%= 'disabled' if !player.active %>">
+          <div class="ui basic responsive right pointing label">Position</div>
+          <%= player.pos %>    
+        </td>
+        <td no-link class="<%= 'disabled' if !player.active %>">
+          <div class="ui basic responsive right pointing label">OVR</div>
+          <%= player.current_ovr %>    
+        </td>
         <td no-link>
           <div class="ui left pointing dropdown circular teal icon button">
             <i class="settings icon"></i>

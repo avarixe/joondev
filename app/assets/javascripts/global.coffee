@@ -22,11 +22,14 @@ App.init = ->
 
   # Tables with links are clickable
   $('html').on 'click', 'table tbody tr', (evt) ->
-    if (_link = $(this).closest('table').data('link')) and (_rowId = $(this).data('id')) and not $(evt.target).hasClass('button')
-      if evt.ctrlKey or evt.metaKey
-        window.open _link + _rowId
-      else
-        window.location = _link + _rowId
+    if (_link = $(this).closest('table').data('link')) and 
+      (_rowId = $(this).data('id')) and 
+      !$(evt.target).is('.button, i') and
+      !$(evt.target).closest('td').is('[no-link]')
+        if evt.ctrlKey or evt.metaKey
+          window.open _link + _rowId
+        else
+          window.location = _link + _rowId
     return
 
 $(document).on "turbolinks:load", ->

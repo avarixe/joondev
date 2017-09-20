@@ -1,11 +1,7 @@
 <div class="ui olive raised segment">
   <div class="ui grid">
     <!-- Row -->
-    <div class="four column centered row">
-      <div class="six wide column required field">
-          <%= f.label :opponent, 'Opponent Team' %>
-          <%= f.text_field :opponent, required: true, tabindex: 1 %>
-      </div>
+    <div class="four column stackable centered row">
       <div class="six wide column required field">
         <%= f.label :competition, 'Competition' %>
         <%= f.select :competition, 
@@ -13,8 +9,12 @@
           {prompt: true}, 
           {class: 'fluid dropdown', required: true, tabindex: 2} %>
       </div>
+      <div class="six wide column required field">
+          <%= f.label :opponent, 'Opponent Team' %>
+          <%= f.text_field :opponent, required: true, tabindex: 1 %>
+      </div>
     </div>
-    <div class="four column centered row">
+    <div class="four column stackable centered row">
       <div class="six wide column required field">
         <%= f.label :date_played, 'Date Played' %>
         <%= f.text_field :date_played %>
@@ -22,7 +22,7 @@
       <% if @fixture.id.blank? %>
         <div class="six wide column required field">
           <%= label_tag :squad %>
-          <%= select_tag :squad, options_for_select(@team.squads.map{ |s| [s.squad_name, s.id] }), include_blank: true, class: 'dropdown' %>
+          <%= select_tag :squad, options_for_select(@team.squads.map{ |s| [s.squad_name, s.id] }), include_blank: true, class: 'fluid dropdown' %>
         </div>
       <% end %>
     </div>

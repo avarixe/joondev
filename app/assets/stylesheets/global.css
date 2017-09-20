@@ -1,4 +1,11 @@
 textarea { resize: vertical; }
+#template { display: none !important; }
+
+/* Responsive Labels */
+.ui.label.responsive { display: none; }
+@media only screen and (max-width: 767px){
+  .ui.label.responsive { display: inline-block; }
+}
 
 /* Supplementary to Semantic UI */
 .ui.left.menu { padding-top: 3em; }

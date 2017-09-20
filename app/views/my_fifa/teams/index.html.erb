@@ -4,7 +4,7 @@
 
 <i>Note: The current active Team is highlighted. To switch, click and view the Team of your choice.</i>
 
-<table class="ui basic definition selectable compact small table" data-link="/my_fifa/teams/">
+<table class="ui basic definition selectable compact small table" data-link="/my_fifa/teams/" width="100%">
   <thead>
     <th>Name</th>
     <th>Competitions</th>
@@ -14,7 +14,10 @@
     <% current_user.teams.each do |team| %>
       <tr data-id=<%= team.id %> class="<%= 'success' if session[:team].to_i == team.id %>">
         <td><%= team.team_name %></td>
-        <td><%= team.competition_options(', ') %></td>
+        <td>
+          <div class="ui responsive right pointing basic label">Competitions</div>
+          <%= team.competition_options(', ') %>    
+        </td>
       </tr>
     <% end %>
   </tbody>

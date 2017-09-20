@@ -26,20 +26,21 @@
       Squad Hub
       <i class="dropdown icon"></i>
       <div class="menu">
-        <div class="header">
-          <i class="user circle outline icon"></i>
-          Players
-        </div>
+        <div class="header">Players</div>
         <div class="divider"></div>
-        <%= link_to 'Player List',     my_fifa_players_path,    class: 'item' %>
-        <%= link_to 'Sign New Player', new_my_fifa_player_path, class: 'item' %>
+        <%= link_to(my_fifa_players_path, class: 'item') do %>
+          <i class="address book icon"></i>
+          Player List
+        <% end %>
+        <%= link_to(new_my_fifa_player_path, class: 'item') do %>
+          <i class="add user icon"></i>
+          Sign New Player
+        <% end %>
         <div class="divider"></div>
-        <div class="header">
-          <i class="users icon"></i>
-          Squads
-        </div>
-        <div class="divider"></div>
-        <%= link_to 'Manage Squads',   my_fifa_squads_path,     class: 'item' %>
+        <%= link_to(my_fifa_squads_path, class: 'item') do %>
+          <i class="dashboard icon"></i>
+          Manage Squads
+        <% end %>
       </div>
     </div>
 
@@ -48,13 +49,16 @@
       Records
       <i class="dropdown icon"></i>
       <div class="menu">
-        <div class="header">
-          <i class="soccer icon"></i>
-          Fixtures
-        </div>
+        <div class="header">Fixtures</div>
         <div class="divider"></div>
-        <%= link_to 'Archive', my_fifa_fixtures_path, class: 'item' %>
-        <%= link_to 'New Fixture', new_my_fifa_fixture_path, class: 'item' %>
+        <%= link_to(my_fifa_fixtures_path, class: 'item') do  %>
+          <i class="archive icon"></i>
+          Archive
+        <% end %>
+        <%= link_to(new_my_fifa_fixture_path, class: 'item') do %>
+          <i class="soccer icon"></i>
+          New Fixture
+        <% end %>
       </div>
     </div>
 
@@ -63,12 +67,21 @@
       Analytics
       <i class="dropdown icon"></i>
       <div class="menu">
-        <div class="header">
-          <i class="pie chart icon"></i>
-          Statistics
-        </div>
+        <div class="header">Statistics</div>
         <div class="divider"></div>
-        <%= link_to 'Players', players_my_fifa_analytics_path, class: 'item' %>
+        <%= link_to(players_my_fifa_analytics_path, class: 'item') do %>
+          <i class="pie chart icon"></i>
+          Individual
+        <% end %>
+        <%= link_to('#', class: 'item') do %>
+          <i class="users icon"></i>
+          Team
+        <% end %>
+        <div class="divider"></div>
+        <%= link_to('#', class: 'item') do %>
+          <i class="exchange icon"></i>
+          Compare Players
+        <% end %>
       </div>
     </div>
   </div>

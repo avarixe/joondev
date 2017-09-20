@@ -17,31 +17,43 @@
 
 <div class="ui teal raised segment">
   <div class="panel-body">
-    <table class="ui table">
-      <thead class="thead-inverse">
+    <table class="ui table" data-link="/my_fifa/players/">
+      <thead>
         <tr>
-          <th></th>
+          <th class="one wide"></th>
           <th class="six wide">Name</th>
-          <th>Rating</th>
-          <th>Goals</th>
-          <th>Assists</th>
+          <th class="center aligned">OVR</th>
+          <th class="center aligned">Rating</th>
+          <th class="center aligned">Goals</th>
+          <th class="center aligned">Assists</th>
         </tr>
       </thead>
       <tbody>
       <% @records.each do |record| %>
-        <tr>
-          <td>
+        <tr data-id=<%= record.player_id %>>
+          <td no-link>
             <div class="ui <%= 'yellow' if record.motm? %> ribbon label">
-              <%= record.pos %>  
+              <%= record.pos %>
             </div>
           </td>
-          <td><%= record.player_name %></td>
-          <td>
-            <%= content_tag(:i, nil, class: 'soccer icon') if record.motm? %>
-            <%= record.rating %>    
+          <td class="selectable"><%= record.player_name %></td>
+          <td class="center aligned" no-link>
+            <div class="ui responsive right pointing basic label">OVR</div>
+            <%= record.ovr %>
           </td>
-          <td><%= record.goals %></td>
-          <td><%= record.assists %></td>
+          <td class="center aligned" no-link>
+            <div class="ui responsive right pointing basic label">Rating</div>
+              <%= record.rating %>
+              <%= content_tag(:i, nil, class: 'soccer icon') if record.motm? %>
+          </td>
+          <td class="center aligned" no-link>
+            <div class="ui responsive right pointing basic label">Goals</div>
+            <%= record.goals || 0 %>
+          </td>
+          <td class="center aligned" no-link>
+            <div class="ui responsive right pointing basic label">Assists</div>
+            <%= record.assists || 0 %>
+          </td>
         </tr>
       <% end %>
       </tbody>
