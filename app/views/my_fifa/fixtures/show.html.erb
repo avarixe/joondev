@@ -21,7 +21,7 @@
       <thead class="thead-inverse">
         <tr>
           <th></th>
-          <th>Name</th>
+          <th class="six wide">Name</th>
           <th>Rating</th>
           <th>Goals</th>
           <th>Assists</th>
@@ -29,8 +29,12 @@
       </thead>
       <tbody>
       <% @records.each do |record| %>
-        <tr class="<%= 'warning' if record.player_id == @fixture.motm_id %>">
-          <td><%= record.pos %></td>
+        <tr>
+          <td>
+            <div class="ui <%= 'yellow' if record.motm? %> ribbon label">
+              <%= record.pos %>  
+            </div>
+          </td>
           <td><%= record.player_name %></td>
           <td>
             <%= content_tag(:i, nil, class: 'soccer icon') if record.motm? %>

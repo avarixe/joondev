@@ -7,8 +7,11 @@
   <%= csrf_meta_tags %>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <%= favicon_link_tag 'favicon.ico' %>
+  <style>
+    <%= yield :module_css %>
+  </style>
 </head>
-<body>
+<body class="<%= controller_name %> <%= action_name %>">
   <% unless current_user # Login/Registration Pages %>
 
     <div class="ui middle aligned center aligned grid">
@@ -20,17 +23,16 @@
 
   <% else %>
 
-    <div class="ui fixed huge inverted menu">
-      <div class="ui fluid container">
+    <div class="ui fixed huge inverted fluid menu">
         <a class="header image item toggle button">
           <i class="sidebar icon"></i>
           JoonDEV
         </a>
+        <%= module_item %>
         <div class="right menu">
           <%= link_to content_tag(:i, nil, class: 'edit icon'), edit_user_registration_path, class: 'ui item', title: 'Manage Account' %>
           <%= link_to content_tag(:i, nil, class: 'sign out icon'), destroy_user_session_path, method: :delete, class: 'ui item', title: 'Sign Out' %>
         </div>
-      </div>
     </div>
 
     <div class="ui left massive vertical sidebar inverted menu">
@@ -50,34 +52,6 @@
         <%= yield %>
       </div>
     </div>
-
-    <script>
-      $(function(){
-        $('div.sidebar')
-          .sidebar({
-            // context: $('body > .ui.container'),
-            transition: 'overlay'
-          })
-          .sidebar('attach events', '.toggle.button')
-          .sidebar('hide');
-          // .sidebar('setting', { transition: 'overlay' });
-
-        $('select.dropdown, .ui.dropdown').dropdown();
-
-        $('.ui.dropdown').has('optgroup').each(function() {
-          var $menu;
-          $menu = $('<div/>').addClass('menu');
-          $(this).find('optgroup').each(function() {
-            $menu.append("<div class=\"header\">" + this.label + "</div><div class=\"divider\"></div>");
-            return $(this).children().each(function() {
-              return $menu.append("<div class=\"item\" data-value=\"" + this.value + "\">" + this.innerHTML + "</div>");
-            });
-          });
-          return $(this).find('.menu').html($menu.html());
-        });
-      })
-    </script>
-
   <% end %>
 </body>
 </html>

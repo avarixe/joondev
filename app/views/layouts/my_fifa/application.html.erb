@@ -1,3 +1,16 @@
+<% content_for :module_css do %>
+  /* Top Nav Menu */
+  body > .ui.inverted.menu .dropdown.item:hover, 
+  body > .ui.inverted.menu .link.item:hover, 
+  body > .ui.inverted.menu a.item:hover, 
+  body > .ui.link.inverted.menu .item:hover {
+    background-color: teal;
+  }
+
+  .dropdown.players .header { color: red !important; }
+  <%= yield :page_css %>
+<% end %>
+
 <% content_for :system_header do %>
   <h1 class="ui teal header">
     <i class="soccer icon"></i>

@@ -1,0 +1,50 @@
+$('#import-csv-btn').click(function(){
+  swal({
+    title: 'Add Players by CSV File',
+    input: 'file',
+    inputAttributes: {
+      accept: '.csv',
+    },
+    showLoaderOnConfirm: true,
+    confirmButtonText: 'Upload',
+    showCancelButton: true,
+    allowOutsideClick: false,
+    preConfirm: function(file){
+      return new Promise(function(resolve, reject){
+        if (!file)
+          reject('Please upload a CSV File.');
+        else{
+          var reader = new FileReader();
+          reader.readAsText(file);
+          reader.onload = function(e){
+            $.ajax({
+              type: 'POST',
+              url: '<%= import_csv_my_fifa_players_path %>',
+              beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token %>') },
+              data: {
+                team: <%= @team.id %>,
+                file: e.target.result,
+              },
+              success: function(data){
+                resolve([
+                  data.header,
+                  data.message,
+                  data.status
+                ]);
+              }
+            });
+          };
+        }
+      });
+    }
+  }).then(function(result){
+    swal({
+      title: result[0],
+      text: result[1],
+      type: result[2],
+      allowOutsideClick: false
+    }).then(function(){
+      window.location.reload(true);
+    });
+  }).catch(swal.noop);
+});

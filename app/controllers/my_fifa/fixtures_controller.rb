@@ -119,7 +119,7 @@ module MyFifa
 
       # Only allow a trusted parameter "white list" through.
       def fixture_params
-        params[:my_fifa_fixture].permit!
+        params[:fixture].permit!
       end
   end
 end

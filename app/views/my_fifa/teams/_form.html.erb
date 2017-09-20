@@ -1,13 +1,4 @@
-<script>
-  function checkForm(){
-    if (!$('#my_fifa_team_team_name').val())
-      return error_alert('Please enter a Team Name.')
-    else
-      return true;
-  }
-</script>
-
-<%= form_for(@team, html: { class: 'ui large fluid form' }) do |f| %>
+<%= form_for(@team, as: :team, html: { class: 'ui large fluid form' }) do |f| %>
   <div class="ui teal raised segment">
     <div class="ui grid">
       <div class="sixteen wide column">

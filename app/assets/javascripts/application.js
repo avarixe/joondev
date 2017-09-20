@@ -36,5 +36,5 @@
 //= require inputmask.numeric.extensions
 //= require inputmask.regex.extensions
 
+//= require turbolinks
 //= require global
-//= require_tree .

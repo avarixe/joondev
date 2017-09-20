@@ -1,12 +1,8 @@
-<style>
-  .dropdown.player-field .header { color: red !important; }
-</style>
-
-<%= form_for(@squad, html: { class: 'ui fluid form' }) do |f| %>
+<%= form_for(@squad, as: :squad, html: { class: 'ui fluid form' }) do |f| %>
   <div class="fields">
     <div class="inline required field">
       <%= f.label :squad_name, 'Squad Name' %>
-      <%= f.text_field :squad_name %>
+      <%= f.text_field :squad_name, required: true %>
     </div>
   </div>
 
@@ -48,30 +44,26 @@
 
 <script>
   function checkForm(){
-    if (!$('#my_fifa_squad_squad_name').val())
-      return error_alert('Please enter a Name.')  
-    else{
-      <% if @squad.id.present? %>
-        var squadParams = { squad_name: $('#my_fifa_squad_squad_name').val() };
-        for(var i=0; i < 11; i++)
-          squadParams['player_id_'+(i+1)] = $('#my_fifa_squad_player_id_'+(i+1)).val();
+    <% if @squad.id.present? %>
+      var squadParams = { squad_name: $('#squad_squad_name').val() };
+      for(var i=0; i < 11; i++)
+        squadParams['player_id_'+(i+1)] = $('#squad_player_id_'+(i+1)).val();
 
-        $.ajax({
-          url: '<%= my_fifa_squad_path(@squad) %>',
-          type: 'PUT',
-          beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token %>')},
-          data: { squad: squadParams },
-          statusCode: {
-            500: function(){ swal('Error', 'Attempt to update the Squad failed.', 'error'); }
-          }
-        }).then(function(){
-          swal('Success', 'Squad has been updated.', 'success');
-        })
+      $.ajax({
+        url: '<%= my_fifa_squad_path(@squad) %>',
+        type: 'PUT',
+        beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token %>')},
+        data: { squad: squadParams },
+        statusCode: {
+          500: function(){ swal('Error', 'Attempt to update the Squad failed.', 'error'); }
+        }
+      }).then(function(){
+        swal('Success', 'Squad has been updated.', 'success');
+      })
 
-        return false;
-      <% else %>
-        return true;
-      <% end %>
-    }
+      return false;
+    <% else %>
+      return true;
+    <% end %>
   }
 </script>

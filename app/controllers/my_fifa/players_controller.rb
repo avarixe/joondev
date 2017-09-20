@@ -113,7 +113,7 @@ module MyFifa
     private
       # Only allow a trusted parameter "white list" through.
       def player_params
-        params[:my_fifa_player].permit!
+        params[:player].permit!
       end
 
       def set_player
