@@ -12,13 +12,15 @@
 <% end %>
 
 <% content_for :system_header do %>
-  <h1 class="ui teal header">
-    <i class="soccer icon"></i>
-    <div class="content">
-      MyFIFA Manager
-      <div class="sub header"><%= @team.team_name rescue nil %></div>
-    </div>
-  </h1>
+  <%= link_to(my_fifa_teams_path) do %>
+    <h1 class="ui teal header">
+      <i class="soccer icon"></i>
+      <div class="content">
+        MyFIFA Manager
+        <div class="sub header"><%= @team.team_name rescue nil %></div>
+      </div>
+    </h1>
+  <% end %>
 
   <div class="ui fluid three item menu">
     <!-- Squad Hub Menu -->

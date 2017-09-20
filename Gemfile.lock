@@ -84,8 +84,6 @@ GEM
       railties (>= 3.2, < 5.2)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
-    groupdate (3.2.0)
-      activesupport (>= 3)
     htmlentities (4.3.4)
     i18n (0.8.6)
     jbuilder (2.7.0)
@@ -215,7 +213,6 @@ DEPENDENCIES
   devise
   flatpickr_rails
   font-awesome-rails
-  groupdate
   jbuilder (~> 2.0)
   jquery-inputmask-rails!
   jquery-rails
