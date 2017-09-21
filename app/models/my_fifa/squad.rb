@@ -6,6 +6,11 @@ module MyFifa
     belongs_to :team
     belongs_to :formation
     
+    validates :squad_name, presence: { message: "Squad Name can't be blank." }
+    (1..11).each do |no|
+      validates :"player_id_#{no}", presence: { message: "Position can't be blank."}
+    end
+
     POSITIONS = [
       'GK',
       'LB',
@@ -23,14 +28,13 @@ module MyFifa
     def self.positions
       POSITIONS
     end
+
+    def player_ids
+      (1..11).map{ |no| self.send("player_id_#{no}") }
+    end
     
     def player_names
-      names = []
-      (1..11).each { |no|
-        player = Player.find(self.send("player_id_#{no}")) rescue nil
-        names << player.name if player.present?
-      }
-      names.join(', ')
+      Player.find(player_ids.compact).map(&:name).join(', ')
     end
   end
 end

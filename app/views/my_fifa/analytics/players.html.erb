@@ -48,34 +48,24 @@
       processing: true,
       columns: [
         { data: 'name' },
-        { data: 'pos' },
-        { data: 'gp' },
-        { data: 'rating', render: $.fn.dataTable.render.number(',', '.', '2') },
-        { data: 'goals' },
-        { data: 'assists' },
-        { data: 'cs' },
+        { data: 'pos',     render: function(meta, row, data){ return labeledData('Position', data.pos) }},
+        { data: 'gp',      render: function(meta, row, data){ return labeledData('GP', data.gp) }},
+        { data: 'rating',  render: $.fn.dataTable.render.number(',', '.', '2') },
+        { data: 'goals',   render: function(meta, row, data){ return labeledData('Goals', data.goals) }},
+        { data: 'assists', render: function(meta, row, data){ return labeledData('Assists', data.assists) }},
+        { data: 'cs',      render: function(meta, row, data){ return labeledData('CS', data.cs) }},
       ],
       createdRow: function(nRow, aData){
+        $('td:nth-child(4)', $(nRow)).prepend(labeledData('Rating', ''));
         if (!aData.active){
           $('td:first-child', $(nRow)).prepend('<i class="red attention icon"></i>');
           $(nRow).addClass('disabled')
         }
       }
     });
-
-    // TODO: NOT YET
-    // $('#competition').change(function(){
-    //   table.ajax.reload(null, false);
-
-    //   $.getJSON('/my_fifa/analytics/get_seasons?competition='+$('#competition').val(), function(data){
-    //   });
-    // });
-
-    // $('#season').change(function(){
-    //   table.ajax.reload(null, false);
-
-    //   $.getJSON('/my_fifa/analytics/get_competitions?season='+$('#season').val(), function(data){
-    //   });
-    // });
   });
+
+  function labeledData(label, data){
+    return "<div class=\"ui responsive basic right pointing label\">"+label+"</div>"+data;
+  }
 </script>

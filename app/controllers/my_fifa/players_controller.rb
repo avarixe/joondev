@@ -7,8 +7,8 @@ module MyFifa
 
     # GET /players
     def index
-      @players = @team.sorted_players
-      @inactive_players = @team.players.inactive
+      @players = @team.players.includes(:fixtures).sorted
+      @inactive_players = @team.players.inactive.includes(:fixtures).sorted
       @all_players = @players+@inactive_players
       @title = "Players"
     end
@@ -40,7 +40,7 @@ module MyFifa
         redirect_to @player
       else
         respond_to do |format|
-          format.js { render 'my_fifa/shared/errors' }
+          format.js { render 'my_fifa/shared/errors', locals: { object: @player } }
         end
       end
     end
@@ -51,11 +51,11 @@ module MyFifa
 
     # POST /players/update_json
     def update
-      if @player.update_attributes(player_params)
+      if @player.update(player_params)
         redirect_to @player
       else
         respond_to do |format|
-          format.js { render 'my_fifa/shared/errors' }
+          format.js { render 'my_fifa/shared/errors', locals: { object: @player } }
         end
       end
     end

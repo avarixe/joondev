@@ -31,7 +31,7 @@ Rails.application.routes.draw do
         get 'players_json'
       }
     end
-    resources :formation, except: [:destroy] do
+    resources :formations, except: [:destroy] do
     end
     resources :analytics, only: [:index] do
       collection {

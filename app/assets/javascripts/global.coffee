@@ -17,6 +17,10 @@ App.init = ->
           $menu.append '<div class="item" data-value="' + @value + '">' + @innerHTML + '</div>'
       $(this).find('.menu').html $menu.html()
 
+  $('html').on 'click', '.message .close', ->
+    $(this).closest('.message').transition 'fade'
+    return
+    
   # Input Masks
   $('[data-inputmask]').inputmask()
 

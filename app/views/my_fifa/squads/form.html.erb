@@ -1,0 +1,32 @@
+<%= form_for(@squad, as: :squad, remote: true, html: { class: 'ui fluid form' }) do |f| %>
+  <%= f.hidden_field :formation_id %>
+
+  <div class="fields">
+    <div class="inline required field" no-empty>
+      <%= f.label :squad_name, 'Squad Name' %>
+      <%= f.text_field :squad_name %>
+    </div>
+  </div>
+
+  <div class="ui raised green segment">
+    <div class="ui mobile reversed stackable grid">
+
+      <!-- Generate format based on Formation -->
+      <% @formation.layout_to_a.each do |row| %>
+        <div class="<%= row.length % 2 == 0 ? 'four' : 'five' %> columns centered row">
+          <% row.each do |pos| %>
+            <%= render 'player_field', f: f, no: pos %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <!-- GK row -->
+      <div class="three columns centered row">
+        <%= render 'player_field', f: f, no: 1 %>
+      </div>
+    </div>
+  </div>
+
+  <%= f.submit 'Save Squad', class: 'ui primary button' %>
+  <%= link_to 'Back', my_fifa_squads_path, class: 'ui basic button' %>
+<% end %>

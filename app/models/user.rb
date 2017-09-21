@@ -31,4 +31,5 @@ class User < ActiveRecord::Base
   ######################################################
   
   has_many :teams, class_name: 'MyFifa::Team'
+  has_many :formations, class_name: 'MyFifa::Formation'
 end

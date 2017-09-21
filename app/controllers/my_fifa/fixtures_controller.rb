@@ -88,20 +88,20 @@ module MyFifa
       if @team.fixtures << @fixture
         redirect_to @fixture, notice: 'Fixture was successfully created.'
       else
-        @title = "New Fixture"
-        @grouped_players = @team.grouped_players
-        render :new
+        respond_to do |format|
+          format.js { render 'my_fifa/shared/errors', locals: { object: @fixture } }
+        end
       end
     end
 
     # PATCH/PUT /players/1
     def update
-      if @fixture.update_attributes(fixture_params)
+      if @fixture.update(fixture_params)
         redirect_to @fixture, notice: 'Fixture was successfully updated.'
       else
-        @title = "Edit Fixture"
-        @grouped_players = @team.grouped_players
-        render :edit
+        respond_to do |format|
+          format.js { render 'my_fifa/shared/errors', locals: { object: @fixture } }
+        end
       end
     end
 

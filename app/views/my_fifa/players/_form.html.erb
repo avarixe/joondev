@@ -3,7 +3,7 @@
     <div class="ui stackable grid">
       <div class="equal width row">
         <div class="column">
-          <div class="required field">
+          <div class="required field" no-empty>
             <%= f.label :name %>
             <%= f.text_field :name %>
           </div>
@@ -11,7 +11,7 @@
       </div>
       <div class="equal width row">
         <div class="column">
-          <div class="required field">
+          <div class="required field" no-empty>
             <%= f.label :pos, 'Position' %>
             <%= f.select :pos, 
               options_for_select(MyFifa::Player.positions, @player.pos), 
@@ -26,7 +26,7 @@
           </div>
         </div>
         <div class="column">
-          <div class="required field">
+          <div class="required field" no-empty>
             <%= f.label :start_ovr, 'Start OVR Rating' %>
             <%= f.text_field :start_ovr %>
           </div>

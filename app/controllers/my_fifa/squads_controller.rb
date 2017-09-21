@@ -13,14 +13,18 @@ module MyFifa
 
     # GET /players/1
     def show
+      @formation = @squad.formation
       @title = @squad.squad_name
       set_squad_form
     end
 
     # GET /players/new
     def new
+      return redirect_to my_fifa_formations_path if params[:id].blank?
+
+      @formation = Formation.find(params[:id])
       @title = "New Squad"
-      @squad = Squad.new
+      @squad = @formation.squads.new
       set_squad_form
     end
 
@@ -31,17 +35,22 @@ module MyFifa
       if @team.squads.push @squad
         redirect_to @squad, notice: 'Squad was successfully created.'
       else
-        @title = "New Squad"
-        set_squad_form
+        respond_to do |format|
+          format.js { render 'my_fifa/shared/errors', locals: { object: @squad } }
+        end
       end
     end
 
     # PATCH/PUT /players/1
     def update
-      if @squad.update(squad_params)
-        head :ok
-      else
-        head 500
+      respond_to do |format|
+        format.js {
+          if @squad.update(squad_params)
+            render
+          else
+            render 'my_fifa/shared/errors', locals: { object: @squad }
+          end
+        }
       end
     end
 
@@ -61,8 +70,7 @@ module MyFifa
 
       def set_squad_form
         @grouped_players = @team.grouped_players
-        puts @grouped_players.inspect
-        render :new
+        render :form
       end
 
       # Only allow a trusted parameter "white list" through.

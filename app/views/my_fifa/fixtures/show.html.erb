@@ -32,7 +32,7 @@
       <% @records.each do |record| %>
         <tr data-id=<%= record.player_id %>>
           <td no-link>
-            <div class="ui <%= 'yellow' if record.motm? %> ribbon label">
+            <div class="ui <%= 'yellow' if record.player_id == @fixture.motm_id  %> ribbon label">
               <%= record.pos %>
             </div>
           </td>
@@ -44,7 +44,7 @@
           <td class="center aligned" no-link>
             <div class="ui responsive right pointing basic label">Rating</div>
               <%= record.rating %>
-              <%= content_tag(:i, nil, class: 'soccer icon') if record.motm? %>
+              <%= content_tag(:i, nil, class: 'soccer icon') if record.player_id == @fixture.motm_id %>
           </td>
           <td class="center aligned" no-link>
             <div class="ui responsive right pointing basic label">Goals</div>

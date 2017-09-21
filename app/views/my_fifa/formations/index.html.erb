@@ -1,0 +1,19 @@
+<% content_for :page_links do %>
+  <%= link_to 'New Formation', new_my_fifa_formation_path, class: 'ui basic primary button' %>
+<% end %>
+
+<table class="ui basic definition selectable compact small table" data-link="/my_fifa/formations/" width="100%">
+  <thead>
+    <th width="20%">Title</th>
+    <th width="80%">Positions</th>
+  </thead>
+
+  <tbody>
+    <% @formations.each do |formation| %>
+      <tr data-id=<%= formation.id %>>
+        <td><%= "#{formation.title} (#{formation.layout})" %></td>
+        <td><%= formation.positions %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

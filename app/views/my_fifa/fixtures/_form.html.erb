@@ -1,4 +1,4 @@
-<%= form_for(@fixture, as: :fixture, html: { class: 'ui small fluid form' }) do |f| %>
+<%= form_for(@fixture, as: :fixture, remote: true, html: { class: 'ui small fluid form' }) do |f| %>
   <%= f.hidden_field :fixture_id %>
   <%= f.hidden_field :motm_id %>
 

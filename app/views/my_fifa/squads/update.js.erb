@@ -1,0 +1,11 @@
+// Clear any previous error messages and highlights
+$('.message').remove();
+$('.error').removeClass('error');
+
+// Output succuess message
+$('form').prepend(
+  '<div class="ui success tiny message" style="display:block">' +
+    '<i class="close icon"></i>' +
+    '<div class="header">Squad has been successfully saved.</div>' +
+  '</div>'
+);

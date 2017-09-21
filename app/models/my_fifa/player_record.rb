@@ -5,6 +5,10 @@ module MyFifa
     belongs_to :fixture
     belongs_to :player
 
+    validate :player_selected?
+    validate :rating_selected?, if: -> { player_id.present? }
+    validate :ovr_selected?,    if: -> { player_id.present? }
+
     scope :with_player, -> {
       joins('LEFT JOIN my_fifa_players ON my_fifa_player_records.player_id = my_fifa_players.id')
         .select([
@@ -17,7 +21,9 @@ module MyFifa
       where(id: ids)
     }
 
-    validates_presence_of :player_id, :rating, :pos
+    def player_selected?() errors.add(:player_id, "No Player has been assigned as #{pos}") if player_id.blank? end
+    def rating_selected?() errors.add(:rating, "#{player.name}: Rating cannot be blank.") if rating.blank? end
+    def ovr_selected?()    errors.add(:ovr, "#{player.name}: OVR cannot be blank.") if ovr.blank? end
 
     def motm?
       player_id == fixture.motm_id

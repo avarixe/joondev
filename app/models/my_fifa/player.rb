@@ -3,9 +3,9 @@ module MyFifa
     self.table_name = 'my_fifa_players'
     default_scope { sorted.order(id: :asc) }
 
-    validates_presence_of :name
-    validates_presence_of :pos
-    validates_presence_of :start_ovr
+    validates :name,      presence: { message: "Name can't be blank." }
+    validates :pos,       presence: { message: "Position can't be blank." }    
+    validates :start_ovr, presence: { message: "Start OVR Rating can't be blank." }          
 
     belongs_to :team
     has_many :records, class_name: 'PlayerRecord'
@@ -49,9 +49,7 @@ module MyFifa
     scope :sorted, -> {
       order([
         'CASE',
-        *POSITIONS.map.with_index{ |pos, i|
-          "WHEN my_fifa_players.pos = '#{pos}' THEN #{i+1}"
-        },
+        *POSITIONS.map.with_index{ |pos, i| "WHEN my_fifa_players.pos = '#{pos}' THEN #{i+1}" },
         'ELSE 100 END ASC'
       ].join(' '))
     }

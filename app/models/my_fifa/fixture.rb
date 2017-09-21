@@ -3,6 +3,12 @@ module MyFifa
     self.table_name = 'my_fifa_fixtures'
     default_scope { order(id: :asc)}
 
+    validates :competition, presence: { message: "Competition can't be blank." }
+    validates :opponent,    presence: { message: "Opponent Team can't be blank." }
+    validates :date_played, presence: { message: "Date Played can't be blank." }
+    validates :score_gf,    presence: { message: "Score can't be blank." }
+    validates :score_ga,    presence: { if: -> { score_gf.present? }, message: "Score can't be blank." }
+
     belongs_to :team
     has_many :player_records
     has_many :players, through: :player_records
@@ -34,10 +40,6 @@ module MyFifa
         record.cs = self.score_ga == 0
         record.save
       end
-
-      # TODO: Remove after I add radio buttons to select MOTM
-      motm_id = self.player_records.sort_by(&:rating).last.player_id
-      update_column(:motm_id, motm_id)
     end
 
     # score_f: GF (PF) 
@@ -51,9 +53,12 @@ module MyFifa
       end
 
       define_method "score_#{type}=" do |val|
-        goals, penalties = val.match(/^(\d+)(?: \((\d+)\))*$/i).captures
-        write_attribute :"score_g#{type}", goals
-        write_attribute :"penalties_g#{type}", penalties
+        begin
+          goals, penalties = val.match(/^(\d+)(?: \((\d+)\))*$/i).captures
+          write_attribute :"score_g#{type}", goals
+          write_attribute :"penalties_g#{type}", penalties
+        rescue
+        end
       end
     end
 

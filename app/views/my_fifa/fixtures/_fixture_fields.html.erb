@@ -2,20 +2,20 @@
   <div class="ui grid">
     <!-- Row -->
     <div class="four column stackable centered row">
-      <div class="six wide column required field">
+      <div class="six wide column required field" no-empty>
         <%= f.label :competition, 'Competition' %>
         <%= f.select :competition, 
           options_for_select(@team.competitions, @fixture.competition), 
           {prompt: true}, 
-          {class: 'fluid dropdown', required: true, tabindex: 2} %>
+          {class: 'fluid dropdown', tabindex: 2} %>
       </div>
-      <div class="six wide column required field">
+      <div class="six wide column required field" no-empty>
           <%= f.label :opponent, 'Opponent Team' %>
-          <%= f.text_field :opponent, required: true, tabindex: 1 %>
+          <%= f.text_field :opponent, tabindex: 1 %>
       </div>
     </div>
     <div class="four column stackable centered row">
-      <div class="six wide column required field">
+      <div class="six wide column required field" no-empty>
         <%= f.label :date_played, 'Date Played' %>
         <%= f.text_field :date_played %>
       </div>
@@ -28,14 +28,14 @@
     </div>
 
     <div class="five column centered row">
-      <div class="four wide column">
+      <div class="four wide column field" no-empty>
         <%= f.text_field :score_f, 
           data: { inputmask: "'mask': '9{+}[ (9{+})]', 'greedy': false" } %>
       </div>
       <div class="ui four wide center aligned column">
         <label>GF - GA</label>
       </div>
-      <div class="four wide column">
+      <div class="four wide column field" no-empty>
         <%= f.text_field :score_a, 
           data: { inputmask: "'mask': '9{+}[ (9{+})]', 'greedy': false" } %>
       </div>

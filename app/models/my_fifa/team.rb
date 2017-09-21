@@ -3,10 +3,9 @@ module MyFifa
     self.table_name = 'my_fifa_teams'
     default_scope { order(id: :asc)}
 
+    belongs_to :user
     has_many :players
     has_many :squads
-    has_many :leagues
-    has_many :stages
     has_many :fixtures
     has_many :player_records
     
@@ -42,14 +41,14 @@ module MyFifa
     end
     
     def sorted_players
-      positions = players.active
+      positions = players.sorted.active
     end
 
     def grouped_players
       sorted_players
         .group_by(&:pos)
         .map{ |pos, players|
-          [ pos, players.map{ |player| [player.name, player.id] }]
+          [ pos, players.map{ |player| [player.shorthand_name, player.id] }]
         }
     end
   end

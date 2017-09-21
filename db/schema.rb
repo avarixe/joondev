@@ -16,12 +16,6 @@ ActiveRecord::Schema.define(version: 20170920203224) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "ar_internal_metadata", primary_key: "key", force: :cascade do |t|
-    t.string   "value"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "my_fifa_fixtures", force: :cascade do |t|
     t.integer "team_id"
     t.string  "opponent",                    null: false
@@ -37,20 +31,20 @@ ActiveRecord::Schema.define(version: 20170920203224) do
   end
 
   create_table "my_fifa_formations", force: :cascade do |t|
-    t.integer  "team_id"
+    t.integer  "user_id"
     t.string   "title"
     t.string   "layout"
-    t.integer  "pos_1"
-    t.integer  "pos_2"
-    t.integer  "pos_3"
-    t.integer  "pos_4"
-    t.integer  "pos_5"
-    t.integer  "pos_6"
-    t.integer  "pos_7"
-    t.integer  "pos_8"
-    t.integer  "pos_9"
-    t.integer  "pos_10"
-    t.integer  "pos_11"
+    t.string   "pos_1"
+    t.string   "pos_2"
+    t.string   "pos_3"
+    t.string   "pos_4"
+    t.string   "pos_5"
+    t.string   "pos_6"
+    t.string   "pos_7"
+    t.string   "pos_8"
+    t.string   "pos_9"
+    t.string   "pos_10"
+    t.string   "pos_11"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -64,7 +58,7 @@ ActiveRecord::Schema.define(version: 20170920203224) do
     t.integer "assists"
     t.string  "pos",        limit: 10
     t.boolean "cs"
-    t.integer "ovr",                   default: 0
+    t.integer "ovr"
   end
 
   create_table "my_fifa_players", force: :cascade do |t|
