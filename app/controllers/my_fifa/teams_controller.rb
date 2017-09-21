@@ -35,7 +35,9 @@ module MyFifa
       if current_user.teams.push @team
         redirect_to @team, notice: 'Team was successfully created.'
       else
-        render :new
+        respond_to do |format|
+          format.js { render 'my_fifa/shared/errors', locals: { object: @team } }
+        end
       end
     end
 
@@ -44,7 +46,9 @@ module MyFifa
       if @team.update(team_params)
         redirect_to @team, notice: 'Team was successfully updated.'
       else
-        render :edit
+        respond_to do |format|
+          format.js { render 'my_fifa/shared/errors', locals: { object: @team } }
+        end
       end
     end
 

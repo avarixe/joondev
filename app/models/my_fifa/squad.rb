@@ -4,6 +4,7 @@ module MyFifa
     default_scope { order(id: :asc)}
 
     belongs_to :team
+    belongs_to :formation
     
     POSITIONS = [
       'GK',

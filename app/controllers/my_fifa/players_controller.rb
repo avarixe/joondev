@@ -37,10 +37,11 @@ module MyFifa
       @player = Player.new(player_params)
 
       if @team.players.push @player
-        redirect_to action: 'index'
+        redirect_to @player
       else
-        @title = "New Player"
-        render :new
+        respond_to do |format|
+          format.js { render 'my_fifa/shared/errors' }
+        end
       end
     end
 
@@ -50,18 +51,13 @@ module MyFifa
 
     # POST /players/update_json
     def update
-      @player = Player.find(params[:id])
-  
-      status, message = 
-        if @team.players.include? @player
-          @player.update_attributes(player_params) ? 
-            ['success', 'Player has been updated.'] : 
-            ['error', 'Player could not be updated.']
-        else
-          ['error', 'You cannot access this Player.']
+      if @player.update_attributes(player_params)
+        redirect_to @player
+      else
+        respond_to do |format|
+          format.js { render 'my_fifa/shared/errors' }
         end
-
-      render_json_response(status, message)
+      end
     end
 
     def exit

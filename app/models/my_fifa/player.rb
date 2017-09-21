@@ -3,6 +3,10 @@ module MyFifa
     self.table_name = 'my_fifa_players'
     default_scope { sorted.order(id: :asc) }
 
+    validates_presence_of :name
+    validates_presence_of :pos
+    validates_presence_of :start_ovr
+
     belongs_to :team
     has_many :records, class_name: 'PlayerRecord'
     has_many :fixtures, through: :records

@@ -10,9 +10,12 @@ module MyFifa
     has_many :fixtures
     has_many :player_records
     
-    validates_presence_of :team_name
-    
-    serialize :competitions
+    serialize :competitions, Array
+
+    validates :team_name, presence: { message: "Team Name can't be blank." }
+    validates_each :competitions do |record, attr, value|
+      record.errors.add(:competitions, "Please supply at least one Competition.") if value.empty?
+    end
 
     def competitions=(val)
       write_attribute :competitions, (val.is_a?(Array) ? val : val.split("\n").map(&:strip))

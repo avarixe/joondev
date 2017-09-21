@@ -26,10 +26,12 @@ Rails.application.routes.draw do
       }
     end
     resources :fixtures, only: [:update]
-    resources :squads, except: [:except, :destroy] do
+    resources :squads, except: [:edit, :destroy] do
       member {
         get 'players_json'
       }
+    end
+    resources :formation, except: [:destroy] do
     end
     resources :analytics, only: [:index] do
       collection {

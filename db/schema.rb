@@ -11,10 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170919031749) do
+ActiveRecord::Schema.define(version: 20170920203224) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "ar_internal_metadata", primary_key: "key", force: :cascade do |t|
+    t.string   "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "my_fifa_fixtures", force: :cascade do |t|
     t.integer "team_id"
@@ -30,6 +36,25 @@ ActiveRecord::Schema.define(version: 20170919031749) do
     t.boolean "home",         default: true
   end
 
+  create_table "my_fifa_formations", force: :cascade do |t|
+    t.integer  "team_id"
+    t.string   "title"
+    t.string   "layout"
+    t.integer  "pos_1"
+    t.integer  "pos_2"
+    t.integer  "pos_3"
+    t.integer  "pos_4"
+    t.integer  "pos_5"
+    t.integer  "pos_6"
+    t.integer  "pos_7"
+    t.integer  "pos_8"
+    t.integer  "pos_9"
+    t.integer  "pos_10"
+    t.integer  "pos_11"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "my_fifa_player_records", force: :cascade do |t|
     t.integer "team_id"
     t.integer "fixture_id"
@@ -39,7 +64,7 @@ ActiveRecord::Schema.define(version: 20170919031749) do
     t.integer "assists"
     t.string  "pos",        limit: 10
     t.boolean "cs"
-    t.integer "ovr"
+    t.integer "ovr",                   default: 0
   end
 
   create_table "my_fifa_players", force: :cascade do |t|
@@ -67,6 +92,7 @@ ActiveRecord::Schema.define(version: 20170919031749) do
     t.integer "player_id_9"
     t.integer "player_id_10"
     t.integer "player_id_11"
+    t.integer "formation_id"
   end
 
   create_table "my_fifa_teams", force: :cascade do |t|
