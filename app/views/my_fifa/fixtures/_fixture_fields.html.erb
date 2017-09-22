@@ -19,12 +19,23 @@
         <%= f.label :date_played, 'Date Played' %>
         <%= f.text_field :date_played %>
       </div>
-      <% if @fixture.id.blank? %>
-        <div class="six wide column required field">
-          <%= label_tag :squad %>
-          <%= select_tag :squad, options_for_select(@team.squads.map{ |s| [s.squad_name, s.id] }), include_blank: true, class: 'fluid dropdown' %>
+      <div class="six wide column required field">
+        <label>Home or Away</label>
+        <div class="inline fields">
+          <div class="field">
+            <div class="ui radio checkbox">
+              <%= f.radio_button :home, true %>
+              <%= f.label :home_true, 'Home' %>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              <%= f.radio_button :home, false %> 
+              <%= f.label :home_false, 'Away' %>
+            </div>
+          </div>
         </div>
-      <% end %>
+      </div>
     </div>
 
     <div class="five column centered row">

@@ -12,8 +12,6 @@ module MyFifa
 
     # GET /teams/1
     def show
-      session[:team] = @team.id
-      
       @title = @team.team_name
     end
 
@@ -56,6 +54,11 @@ module MyFifa
     def destroy
       @team.destroy
       redirect_to teams_url, notice: 'Team was successfully destroyed.'
+    end
+
+    def set_active
+      session[:team] = params[:id]
+      head :ok
     end
 
     private

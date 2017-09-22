@@ -30,3 +30,11 @@
   <%= f.submit 'Save Squad', class: 'ui primary button' %>
   <%= link_to 'Back', my_fifa_squads_path, class: 'ui basic button' %>
 <% end %>
+
+<script>
+  $(function(){
+    $('select.players').change(function(){
+      console.log('change!')
+    })
+  });
+</script>

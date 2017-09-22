@@ -4,8 +4,8 @@ module MyFifa
     default_scope { sorted.order(id: :asc) }
 
     validates :name,      presence: { message: "Name can't be blank." }
-    validates :pos,       presence: { message: "Position can't be blank." }    
-    validates :start_ovr, presence: { message: "Start OVR Rating can't be blank." }          
+    validates :pos,       presence: { message: "Position can't be blank." }
+    validates :start_ovr, presence: { message: "Start OVR Rating can't be blank." }
 
     belongs_to :team
     has_many :records, class_name: 'PlayerRecord'
@@ -53,10 +53,6 @@ module MyFifa
         'ELSE 100 END ASC'
       ].join(' '))
     }
-    
-    def self.positions
-      POSITIONS
-    end
     
     def shorthand_name
       names = self.name.split(' ')

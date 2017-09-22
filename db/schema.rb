@@ -11,10 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170920203224) do
+ActiveRecord::Schema.define(version: 20170921234642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "ar_internal_metadata", primary_key: "key", force: :cascade do |t|
+    t.string   "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "my_fifa_fixtures", force: :cascade do |t|
     t.integer "team_id"
@@ -28,25 +34,26 @@ ActiveRecord::Schema.define(version: 20170920203224) do
     t.integer "motm_id"
     t.integer "fixture_id"
     t.boolean "home",         default: true
+    t.integer "squad_id"
   end
 
   create_table "my_fifa_formations", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "title"
     t.string   "layout"
-    t.string   "pos_1"
-    t.string   "pos_2"
-    t.string   "pos_3"
-    t.string   "pos_4"
-    t.string   "pos_5"
-    t.string   "pos_6"
-    t.string   "pos_7"
-    t.string   "pos_8"
-    t.string   "pos_9"
-    t.string   "pos_10"
-    t.string   "pos_11"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "pos_1",      default: "GK"
+    t.string   "pos_2",      default: "LB"
+    t.string   "pos_3",      default: "LCB"
+    t.string   "pos_4",      default: "RCB"
+    t.string   "pos_5",      default: "RB"
+    t.string   "pos_6",      default: "LCM"
+    t.string   "pos_7",      default: "CM"
+    t.string   "pos_8",      default: "RCM"
+    t.string   "pos_9",      default: "LW"
+    t.string   "pos_10",     default: "ST"
+    t.string   "pos_11",     default: "RW"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "my_fifa_player_records", force: :cascade do |t|
@@ -58,7 +65,8 @@ ActiveRecord::Schema.define(version: 20170920203224) do
     t.integer "assists"
     t.string  "pos",        limit: 10
     t.boolean "cs"
-    t.integer "ovr"
+    t.integer "ovr",                   default: 0
+    t.integer "record_id"
   end
 
   create_table "my_fifa_players", force: :cascade do |t|

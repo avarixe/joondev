@@ -29,13 +29,13 @@ module MyFifa
     ]
 
     def all_positions_labeled?
-      if (1..11).any?{ |no| self.send("pos_#{no}").blank? }
+      if positions.any? { |pos| pos.blank? }
         self.errors.add(:base, "Not all Positions are labeled.");
       end
     end
 
     def positions
-      (1..11).map{ |no| self.send("pos_#{no}") }.join(", ")
+      (1..11).map{ |no| self.send("pos_#{no}") }
     end
 
     def layout_to_a

@@ -2,12 +2,13 @@ module MyFifa
   class ApplicationController < ::ApplicationController
     helper Helper
     include Helper
-    before_filter :set_team_cookie
+    before_filter :set_module_session
 
     private
     
-      def set_team_cookie
+      def set_module_session
         session[:team] = current_user.teams.last.id if session[:team].blank? && current_user.teams.any?
+        session[:formation] = current_user.formations.first.id if session[:formation].blank? && current_user.formations.any?
       end
       
       def set_current_team

@@ -8,9 +8,11 @@ module MyFifa
     validates :date_played, presence: { message: "Date Played can't be blank." }
     validates :score_gf,    presence: { message: "Score can't be blank." }
     validates :score_ga,    presence: { if: -> { score_gf.present? }, message: "Score can't be blank." }
+    validate :unique_players?
 
     belongs_to :team
     has_many :player_records
+    accepts_nested_attributes_for :player_records, reject_if: :invalid_record?
     has_many :players, through: :player_records
 
     belongs_to :motm, class_name: 'Player'
@@ -19,19 +21,31 @@ module MyFifa
         .select('my_fifa_fixtures.*, my_fifa_players.name AS motm_name')
     }
 
-    accepts_nested_attributes_for :player_records, reject_if: :invalid_record?
     after_save :set_records
+
+    def unique_players?
+      player_ids = player_records.map(&:player_id)
+      if player_ids.any?{ |id| player_ids.count(id) > 1 }
+        errors.add(:base, "One Player has been selected at least twice.")
+      end
+    end
 
     def invalid_record?(attributed)
       attributed['pos'].blank?
     end
 
     def build_records
-      Squad.positions.each do |pos|
+      Squad::POSITIONS.each do |pos|
         self.player_records.build(
           pos: pos
         )
       end
+    end
+    
+    def player_ids
+      self.player_records.inject([]){ |ids, record|
+        ids + record.player_ids
+      }
     end
     
     def set_records

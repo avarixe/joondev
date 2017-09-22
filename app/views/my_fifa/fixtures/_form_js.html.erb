@@ -1,0 +1,138 @@
+<script>
+  var num_subs = <%= @fixture.player_records.length - 11 %>;
+  var highest_rating;
+
+  $(function(){
+    // Flatpickr functionality
+    $('#fixture_date_played').flatpickr({ altInput: true });
+    
+    // Click fields functionality
+    $('.click-form').each(function(){ toggleClickForm($(this)); });
+      
+    // +/- SUB button functionality
+    $('html').on('click', 'a[data-action="add-sub"]', function(){ 
+      addRecord(this);
+    });
+    // $('#remove-sub-btn').click(function(){
+    //   if (num_subs > 0){
+    //     $('#records-table tbody tr:last').remove();
+    //     num_subs--;
+    //   }
+    // });
+      
+    // By default, highest rating gets MOTM
+    highest_rating = $('input.rating').map(function(){
+      return this.value;
+    }).get().sort().pop();
+    $('table').on('input', '.rating', function(){
+      if (this.value > highest_rating){
+        highest_rating = this.value;
+        setMOTM($('.ui.ribbon.pos', $(this).closest('tr')));
+      }
+    });
+  
+    // Clicking a ribbon label sets MOTM
+    $('table').on('click', '.ui.ribbon.pos', function(){ setMOTM(this); });
+  
+    // Selecting a Player loads OVR
+    $('table').on('change', '.player_id', function(){
+      var this_ = this;
+      $.get("/my_fifa/players/"+$('select', $(this_)).val()+"/get_ovr", function(data){
+        $('.ovr', $(this_).closest('tr')).val(data);
+      });
+    });
+  
+    // Squad auto populates players and positions
+    $('select[id$="squad_id"]').change(function(){
+      if ($(this).val()){
+        $.get("/my_fifa/squads/"+$(this).val()+"/info", function(data){
+          $.each(data.player_ids, function(i, player_id){
+            var tr = $('#fixture_player_records_attributes_'+i+'_pos').closest('tr');
+            $('select[id$="player_id"]', tr).dropdown('set selected', player_id);
+
+            // Update Position labels
+            $('td:first-child input', tr).val(data.positions[i]);
+            $('td:first-child .ribbon', tr).text(data.positions[i]);
+          });
+        });
+        $('#update-squad-btn').attr('disabled', false);
+      } else
+        $('#update-squad-btn').attr('disabled', true);
+    });
+  
+    $('#update-squad-btn').click(function(evt){
+      evt.preventDefault();
+  
+      var squadId = $('#squad').val();
+      var rows = $('#records-table tbody tr');
+      var squadParams = {};
+      for(var i=0; i < 11; i++)
+        squadParams['player_id_'+(i+1)] = $('.player_id', $(rows[i])).val();
+  
+      $.ajax({
+        url: '/my_fifa/squads/'+squadId,
+        type: 'PUT',
+        beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token %>')},
+        data: { squad: squadParams },
+        statusCode: {
+          500: function(){ swal('Error', 'Attempt to update the Squad failed.', 'error'); }
+        }
+      }).then(function(){
+        swal('Success', 'Squad has been updated to the current lineup.', 'success');
+      });
+    });
+  });
+  
+  function toggleClickForm(target){
+    $(target).click(function(){
+      var value = parseInt($(target).val(), 10);
+      $(this).val(isNaN(value) ? 1 : value+1);
+    });
+    $(target).contextmenu(function(event){
+      event.preventDefault();
+      var value = parseInt($(target).val(), 10);
+      $(this).val((isNaN(value) || value == 1 || value == 0) ? null : value-1);
+    });
+  }
+  
+  function addRecord(target){
+    var id = moment().valueOf();
+    // var parentId = 
+  
+    // Generate new Record table row
+    var record = $('<tr/>');
+    record.append($('#template').html()
+      .replace(/\[player\_records\_attributes\]\[(\d+)\]/g, '[player_records_attributes][$1][sub_record_attributes]')
+      .replace(/\_player\_records\_attributes\_(\d+)/g, 'player_records_attributes_$1_sub_record_attributes'));
+
+    // Copy POS
+    var pos = $(target).closest('tr').find('.pos').text()
+    $('.pos', record)
+      .text(pos)
+      .append('<i class="level up green icon"></i>');
+    $('.pos', record).prev().val(pos);
+
+    // Add Indicators original Player has been SUBBED
+    $('.pos', $(target).closest('tr'))
+      .append('<i class="level down red icon"></i>');
+    $(target).closest('.item').addClass('disabled');
+  
+    // Append new row to table
+    $(target).closest('tr').after(record);
+  
+    // Activate jQuery event listeners
+    $('.ui.dropdown', $(record)).dropdown();
+    $('.click-form', $(record)).each(function(){
+      toggleClickForm($(this));
+    });
+  }  
+  
+  function setMOTM(target){
+    var playerId = $('.player_id', $(target).closest('tr')).dropdown('get value');
+    if (playerId){
+      $('#fixture_motm_id').val(playerId);
+      $('.ui.ribbon.pos').removeClass('yellow');
+      $(target).addClass('yellow');        
+    }
+  }
+</script>

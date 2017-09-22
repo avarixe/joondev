@@ -6,17 +6,17 @@ class CreateMyFifaFormations < ActiveRecord::Migration
       t.string :title
       t.string :layout
       
-      t.string :pos_1
-      t.string :pos_2
-      t.string :pos_3
-      t.string :pos_4
-      t.string :pos_5
-      t.string :pos_6
-      t.string :pos_7
-      t.string :pos_8
-      t.string :pos_9
-      t.string :pos_10
-      t.string :pos_11
+      t.string :pos_1, default: 'GK'
+      t.string :pos_2, default: 'LB'
+      t.string :pos_3, default: 'LCB'
+      t.string :pos_4, default: 'RCB'
+      t.string :pos_5, default: 'RB'
+      t.string :pos_6, default: 'LCM'
+      t.string :pos_7, default: 'CM'
+      t.string :pos_8, default: 'RCM'
+      t.string :pos_9, default: 'LW'
+      t.string :pos_10, default: 'ST'
+      t.string :pos_11, default: 'RW'
 
       t.timestamps null: false
     end

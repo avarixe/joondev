@@ -2,7 +2,7 @@ require_dependency "my_fifa/application_controller"
 
 module MyFifa
   class SquadsController < ApplicationController
-    before_action :set_squad, only: [:show, :update, :players_json]
+    before_action :set_squad, only: [:show, :update, :info]
     before_action :set_current_team
 
     # GET /players
@@ -20,9 +20,7 @@ module MyFifa
 
     # GET /players/new
     def new
-      return redirect_to my_fifa_formations_path if params[:id].blank?
-
-      @formation = Formation.find(params[:id])
+      @formation = Formation.find(session[:formation])
       @title = "New Squad"
       @squad = @formation.squads.new
       set_squad_form
@@ -54,11 +52,10 @@ module MyFifa
       end
     end
 
-    def players_json
+    def info
       render json: {
-        players: (1..11).map{ |no|
-          Player.find(@squad.send("player_id_#{no}")).as_json(methods: :current_ovr)
-        }
+        player_ids: (1..11).map{ |no| @squad.send("player_id_#{no}") },
+        positions: @squad.formation.positions
       }
     end
 
@@ -69,7 +66,7 @@ module MyFifa
       end
 
       def set_squad_form
-        @grouped_players = @team.grouped_players
+        @grouped_players = @team.grouped_players(abbrev: true)
         render :form
       end
 

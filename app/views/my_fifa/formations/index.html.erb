@@ -4,16 +4,25 @@
 
 <table class="ui basic definition selectable compact small table" data-link="/my_fifa/formations/" width="100%">
   <thead>
-    <th width="20%">Title</th>
-    <th width="80%">Positions</th>
+    <th>Active</th>
+    <th>Title</th>
+    <th class="ten wide">Positions</th>
   </thead>
 
   <tbody>
     <% @formations.each do |formation| %>
       <tr data-id=<%= formation.id %>>
+        <td class="center aligned" no-link>
+          <div class="ui fitted slider checkbox">
+            <%= radio_button_tag :set_formation, formation.id, session[:formation].to_i == formation.id %>
+            <label></label>
+          </div>
+        </td>
         <td><%= "#{formation.title} (#{formation.layout})" %></td>
-        <td><%= formation.positions %></td>
+        <td><%= formation.positions.join(", ") %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
+
+<%= render 'my_fifa/shared/toggle_session_var', session_class: 'formations' %>

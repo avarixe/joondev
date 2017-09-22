@@ -18,7 +18,11 @@ Rails.application.routes.draw do
         get 'get_ovr'
       }
     end
-    resources :teams
+    resources :teams do
+      member {
+        post 'set_active'
+      }
+    end
     resources :fixtures
     resources :seasons do
       member {
@@ -28,10 +32,14 @@ Rails.application.routes.draw do
     resources :fixtures, only: [:update]
     resources :squads, except: [:edit, :destroy] do
       member {
-        get 'players_json'
+        get 'info'
+        post 'set_active'
       }
     end
     resources :formations, except: [:destroy] do
+      member {
+        post 'set_active'
+      }
     end
     resources :analytics, only: [:index] do
       collection {

@@ -5,43 +5,53 @@
   <%= render 'fixture_fields', f: f %>
 
   <div class="ui teal raised segment">
+    <% if @fixture.id.blank? %>
+      <div class="field">
+        <%= f.select :squad_id, 
+          options_for_select(@team.squads.map{ |s| [s.squad_name, s.id] }), 
+          { include_blank: 'Squad' }, 
+          { class: 'fluid dropdown' } %>
+      </div>
+    <% end %>
+    
     <table id="records-table" class="ui very compact table">
       <thead>
         <tr>
           <th class="one wide"></th>
-          <th class="six wide">Player</th>
+          <th class="five wide">Player</th>
           <th class="center aligned">OVR</th>
           <th class="center aligned">Rating</th>
           <th class="center aligned">Goals</th>
           <th class="center aligned">Assists</th>
+          <th class="center aligned"></th>
         </tr>
       </thead>
       <tbody>
         <% @fixture.player_records.each_with_index do |record, i| %>
           <%= f.fields_for :player_records, record do |r| %>
-            <tr><%= render 'record_fields', f: r, i: i+3 %></tr>
+            <tr><%= render 'record_fields', f: r, i: 1000, player_is_sub: false %></tr>
           <% end %>
         <% end %>
 
         <tr id="template">
           <%= f.fields_for :player_records, MyFifa::PlayerRecord.new do |r| %>
-            <%= render 'record_fields', f: r, i: 1000 %>
+            <%= render 'record_fields', f: r, i: 1000, player_is_sub: true %>
           <% end %>
         </tr>
       </tbody>
     </table>
 
-    <div class="ui grid">
-      <div class="three column centered row">
-        <div class="eight wide aligned center column">
-          <div class="ui fluid buttons">
-            <a class="ui teal button" id="add-sub-btn"><i class="plus icon"></i> SUB</a>
-            <div class="or"></div>
-            <a class="ui orange button" id="remove-sub-btn"><i class="minus icon"></i> SUB</a>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!--<div class="ui grid">-->
+    <!--  <div class="three column centered row">-->
+    <!--    <div class="eight wide aligned center column">-->
+    <!--      <div class="ui fluid buttons">-->
+    <!--        <a class="ui teal button" id="add-sub-btn"><i class="plus icon"></i> SUB</a>-->
+    <!--        <div class="or"></div>-->
+    <!--        <a class="ui orange button" id="remove-sub-btn"><i class="minus icon"></i> SUB</a>-->
+    <!--      </div>-->
+    <!--    </div>-->
+    <!--  </div>-->
+    <!--</div>-->
 
   </div>
 
@@ -52,6 +62,4 @@
   <%= link_to 'Back', @fixture, class: 'ui basic button' %>
 <% end %>
 
-<script type="text/javascript">
-  <%= render 'form.js' %>
-</script>
+<%= render 'form_js' %>

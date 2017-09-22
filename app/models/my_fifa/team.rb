@@ -41,14 +41,14 @@ module MyFifa
     end
     
     def sorted_players
-      positions = players.sorted.active
+      players.sorted.active
     end
 
-    def grouped_players
+    def grouped_players(options = {})
       sorted_players
         .group_by(&:pos)
         .map{ |pos, players|
-          [ pos, players.map{ |player| [player.shorthand_name, player.id] }]
+          [ pos, players.map{ |player| [(options[:abbrev] ? player.shorthand_name : player.name), player.id] }]
         }
     end
   end

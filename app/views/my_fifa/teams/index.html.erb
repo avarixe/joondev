@@ -2,17 +2,22 @@
   <%= link_to 'New Team', new_my_fifa_team_path, class: 'ui basic primary button' %>
 <% end %>
 
-<i>Note: The current active Team is highlighted. To switch, click and view the Team of your choice.</i>
-
 <table class="ui basic definition selectable compact small table" data-link="/my_fifa/teams/" width="100%">
   <thead>
-    <th class="six wide">Name</th>
+    <th>Active</th>
+    <th>Name</th>
     <th class="ten wide">Competitions</th>
   </thead>
 
   <tbody>
     <% current_user.teams.each do |team| %>
-      <tr data-id=<%= team.id %> class="<%= 'success' if session[:team].to_i == team.id %>">
+      <tr data-id=<%= team.id %>>
+        <td class="center aligned" no-link>
+          <div class="ui fitted slider checkbox">
+            <%= radio_button_tag :set_current_team, team.id, session[:team].to_i == team.id %>
+            <label></label>
+          </div>
+        </td>
         <td><%= team.team_name %></td>
         <td>
           <div class="ui responsive right pointing basic label">Competitions</div>
@@ -22,3 +27,5 @@
     <% end %>
   </tbody>
 </table>
+
+<%= render 'my_fifa/shared/toggle_session_var', session_class: 'teams' %>
