@@ -34,8 +34,6 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'capistrano-rails', group: :development
 
 gem 'flatpickr_rails'
-gem "awesome_print", require:"ap"  
-gem 'font-awesome-rails'
 
 gem 'axlsx_rails'
 gem 'tzinfo-data'

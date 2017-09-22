@@ -1,6 +1,8 @@
 // Clear any previous error messages and highlights
-$('.message').remove();
-$('.error').removeClass('error');
+<% if params[:page].blank? %>
+  $('.message').remove();
+  $('.error').removeClass('error');
+<% end %>
 
 // Output success message
 $('.ui.success.modal').modal('show');

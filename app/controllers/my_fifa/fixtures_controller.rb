@@ -37,7 +37,9 @@ module MyFifa
         @records = @fixture.player_records.includes(:player)
 
         format.html {
-          @title = "Fixture Record"
+          @title = @fixture.home ?
+            "#{@team.team_name} v #{@fixture.opponent}" :
+            "#{@fixture.opponent} v #{@team.team_name}"
         }
         format.xlsx {
           # Prepare Copy Table

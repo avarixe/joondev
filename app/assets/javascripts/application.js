@@ -13,15 +13,12 @@
 //= require jquery
 //= require tether
 
-//= require bootstrap-switch.min
-
 //= require semantic.min
 
 //= require jquery-ui
 //= require jquery_ujs
 
 //= require turbolinks
-//= require sweetalert2.min
 //= require flatpickr
 //= require moment
 

@@ -10,7 +10,8 @@
     <%= @fixture.competition %>    
     <div class="sub header"><%= time_to_string(@fixture.date_played, "%B %e, %Y") %></div>
   </h2>
-  <h4 class="ui center aligned header"><%= @team.team_name %> v <%= @fixture.opponent %>
+  <h4 class="ui center aligned header">
+    <%= @title %>
     <div class="ui center aligned sub header"><%= @fixture.score %></div>
   </h4>
 </div>

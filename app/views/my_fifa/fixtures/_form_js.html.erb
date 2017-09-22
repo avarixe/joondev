@@ -65,22 +65,20 @@
     $('#update-squad-btn').click(function(evt){
       evt.preventDefault();
   
-      var squadId = $('#squad').val();
-      var rows = $('#records-table tbody tr');
+      var squadId = $('select[id$="squad_id"]').val();
+      var rows = $('table tbody tr');
       var squadParams = {};
       for(var i=0; i < 11; i++)
-        squadParams['player_id_'+(i+1)] = $('.player_id', $(rows[i])).val();
+        squadParams['player_id_'+(i+1)] = $('.player_id', $(rows[i])).dropdown('get value');
   
       $.ajax({
         url: '/my_fifa/squads/'+squadId,
         type: 'PUT',
         beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token %>')},
-        data: { squad: squadParams },
-        statusCode: {
-          500: function(){ swal('Error', 'Attempt to update the Squad failed.', 'error'); }
-        }
-      }).then(function(){
-        swal('Success', 'Squad has been updated to the current lineup.', 'success');
+        data: { 
+          squad: squadParams,
+          page:  'fixture',
+        },
       });
     });
   });
@@ -153,7 +151,6 @@
       .removeClass('transition visible animating slide down out')
       .attr('style', '');
     $('.ui.dropdown', record).dropdown().dropdown('clear');
-
   }
 
   function removeRecord(target){

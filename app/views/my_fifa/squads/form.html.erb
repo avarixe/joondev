@@ -31,10 +31,14 @@
   <%= link_to 'Back', my_fifa_squads_path, class: 'ui basic button' %>
 <% end %>
 
+<% content_for :modal_container do %>
+  <%= render 'responsive_modals' %>
+<% end %>
+
 <script>
   $(function(){
-    $('select.players').change(function(){
-      console.log('change!')
-    })
-  });
+    <% if flash[:notice].present? %>
+      $('.ui.success.modal').modal('show');
+    <% end %>
+  })
 </script>

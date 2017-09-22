@@ -1,6 +1,5 @@
 <%= content_for :page_links do %>
   <%= link_to 'New Player', new_my_fifa_player_path, class: 'ui basic primary button' %>
-  <a class="ui basic olive button" id="import-csv-btn">Import CSV</a>
 <% end %>
 
 <table class="ui basic definition sortable compact small table" data-link="/my_fifa/players/" width="100%">
@@ -64,7 +63,5 @@
         $('.ui.dropdown').dropdown();
       }
     });
-    
-    <%= render 'import_csv.js' %>
   })
 </script>

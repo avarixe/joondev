@@ -36,19 +36,6 @@
         <% end %>
       </tbody>
     </table>
-
-    <!--<div class="ui grid">-->
-    <!--  <div class="three column centered row">-->
-    <!--    <div class="eight wide aligned center column">-->
-    <!--      <div class="ui fluid buttons">-->
-    <!--        <a class="ui teal button" id="add-sub-btn"><i class="plus icon"></i> SUB</a>-->
-    <!--        <div class="or"></div>-->
-    <!--        <a class="ui orange button" id="remove-sub-btn"><i class="minus icon"></i> SUB</a>-->
-    <!--      </div>-->
-    <!--    </div>-->
-    <!--  </div>-->
-    <!--</div>-->
-
   </div>
 
   <div class="ui horizontal divider"></div>
@@ -56,6 +43,10 @@
   <%= f.submit 'Save Fixture', class: 'ui primary button' %>
   <%= content_tag :button, 'Update Squad', class: 'ui violet button', id: 'update-squad-btn', disabled: true %>
   <%= link_to 'Back', @fixture, class: 'ui basic button' %>
+<% end %>
+
+<% content_for :modal_container do %>
+  <%= render 'my_fifa/squads/responsive_modals' %>
 <% end %>
 
 <%= render 'form_js' %>

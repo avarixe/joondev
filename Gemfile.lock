@@ -44,7 +44,6 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.4)
-    awesome_print (1.8.0)
     axlsx (2.0.1)
       htmlentities (~> 4.3.1)
       nokogiri (>= 1.4.1)
@@ -80,8 +79,6 @@ GEM
     ffi (1.9.18-x86-mingw32)
     flatpickr_rails (1.1.0)
       railties (>= 3.0)
-    font-awesome-rails (4.7.0.2)
-      railties (>= 3.2, < 5.2)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
     htmlentities (4.3.4)
@@ -205,14 +202,12 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
-  awesome_print
   axlsx_rails
   byebug
   chartkick
   coffee-rails (~> 4.1.0)
   devise
   flatpickr_rails
-  font-awesome-rails
   jbuilder (~> 2.0)
   jquery-inputmask-rails!
   jquery-rails

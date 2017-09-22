@@ -7,7 +7,7 @@ module MyFifa
 
     # GET /players
     def index
-      @players = @team.players.includes(:fixtures).sorted
+      @players = @team.sorted_players.includes(:fixtures)
       @inactive_players = @team.players.inactive.includes(:fixtures).sorted
       @all_players = @players+@inactive_players
       @title = "Players"
