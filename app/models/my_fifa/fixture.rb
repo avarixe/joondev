@@ -11,7 +11,8 @@ module MyFifa
     validate :unique_players?
 
     belongs_to :team
-    has_many :player_records
+    has_many :player_records, -> { where record_id: nil }
+    has_many :all_records, class_name: 'PlayerRecord'
     accepts_nested_attributes_for :player_records, reject_if: :invalid_record?
     has_many :players, through: :player_records
 
@@ -24,7 +25,7 @@ module MyFifa
     after_save :set_records
 
     def unique_players?
-      player_ids = player_records.map(&:player_id)
+      player_ids = self.all_records.map(&:player_id).compact
       if player_ids.any?{ |id| player_ids.count(id) > 1 }
         errors.add(:base, "One Player has been selected at least twice.")
       end
@@ -49,10 +50,11 @@ module MyFifa
     end
     
     def set_records
-      self.player_records.each do |record|
-        record.team_id = self.team_id
-        record.cs = self.score_ga == 0
-        record.save
+      self.all_records.each do |record|
+        record.update_columns(
+          team_id: self.team_id,
+          cs:      self.score_ga == 0,
+        )
       end
     end
 

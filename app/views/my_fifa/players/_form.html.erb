@@ -14,7 +14,7 @@
           <div class="required field" no-empty>
             <%= f.label :pos, 'Position' %>
             <%= f.select :pos, 
-              options_for_select(MyFifa::Player.positions, @player.pos), 
+              options_for_select(MyFifa::Player::POSITIONS, @player.pos), 
               {prompt: true}, 
               {class: 'fluid dropdown'} %>
           </div>

@@ -20,7 +20,7 @@
     <table class="ui table" data-link="/my_fifa/players/">
       <thead>
         <tr>
-          <th class="one wide"></th>
+          <th></th>
           <th class="six wide">Name</th>
           <th class="center aligned">OVR</th>
           <th class="center aligned">Rating</th>
@@ -30,31 +30,7 @@
       </thead>
       <tbody>
       <% @records.each do |record| %>
-        <tr data-id=<%= record.player_id %>>
-          <td no-link>
-            <div class="ui <%= 'yellow' if record.player_id == @fixture.motm_id  %> ribbon label">
-              <%= record.pos %>
-            </div>
-          </td>
-          <td class="selectable"><%= record.player_name %></td>
-          <td class="center aligned" no-link>
-            <div class="ui responsive right pointing basic label">OVR</div>
-            <%= record.ovr %>
-          </td>
-          <td class="center aligned" no-link>
-            <div class="ui responsive right pointing basic label">Rating</div>
-              <%= record.rating %>
-              <%= content_tag(:i, nil, class: 'soccer icon') if record.player_id == @fixture.motm_id %>
-          </td>
-          <td class="center aligned" no-link>
-            <div class="ui responsive right pointing basic label">Goals</div>
-            <%= record.goals || 0 %>
-          </td>
-          <td class="center aligned" no-link>
-            <div class="ui responsive right pointing basic label">Assists</div>
-            <%= record.assists || 0 %>
-          </td>
-        </tr>
+        <%= render 'record', record: record, num_sub: 0 %>
       <% end %>
       </tbody>
     </table>

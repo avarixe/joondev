@@ -1,0 +1,35 @@
+<% sub_record = record.sub_record %>
+
+<tr data-id=<%= record.player_id %>>
+  <td no-link>
+    <div class="ui <%= 'yellow' if record.player_id == @fixture.motm_id  %> ribbon label">
+      <%= record.pos %>
+      <% num_sub.times do |i| %>
+        <i class="green level up icon" style="visibility:<%= i == num_sub-1 ? 'visible' : 'hidden' %>"></i>
+      <% end %>
+      <% if sub_record.present? %>
+        <i class="red level down icon"></i>
+      <% end %>
+    </div>
+  </td>
+  <td class="selectable"><%= record.player.name %></td>
+  <td class="center aligned" no-link>
+    <div class="ui responsive right pointing basic label">OVR</div>
+    <%= record.ovr %>
+  </td>
+  <td class="center aligned" no-link>
+    <div class="ui responsive right pointing basic label">Rating</div>
+      <%= record.rating %>
+      <%= content_tag(:i, nil, class: 'soccer icon') if record.player_id == @fixture.motm_id %>
+  </td>
+  <td class="center aligned" no-link>
+    <div class="ui responsive right pointing basic label">Goals</div>
+    <%= record.goals || 0 %>
+  </td>
+  <td class="center aligned" no-link>
+    <div class="ui responsive right pointing basic label">Assists</div>
+    <%= record.assists || 0 %>
+  </td>
+</tr>
+
+<%= render('record', record: sub_record, num_sub: num_sub+1) if sub_record.present? %>

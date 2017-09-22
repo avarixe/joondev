@@ -18,11 +18,11 @@
           <%= content_tag(:i, nil, class: 'red attention icon') if !player.active %>
           <%= player.name %>
         </td>
-        <td no-link class="<%= 'disabled' if !player.active %>">
+        <td no-link class="<%= 'disabled' if !player.active %>" data-sort="<%= player.pos %>">
           <div class="ui basic responsive right pointing label">Position</div>
           <%= player.pos %>    
         </td>
-        <td no-link class="<%= 'disabled' if !player.active %>">
+        <td no-link class="<%= 'disabled' if !player.active %>" data-sort=<%= player.current_ovr %>>
           <div class="ui basic responsive right pointing label">OVR</div>
           <%= player.current_ovr %>    
         </td>
@@ -57,6 +57,9 @@
   $(function(){
     $('table').DataTable({
       order: [],
+      columnDefs: [
+        { targets: [-1], orderable: false }
+      ],
       rowCallback: function(row, data){
         $('.ui.dropdown').dropdown();
       }

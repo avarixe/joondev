@@ -1,10 +1,10 @@
 wb = xlsx_package.workbook
 players = @team.sorted_players
 
-wb.add_worksheet(name: 'Game') do |sheet|
+wb.add_worksheet(name: 'Fixture') do |sheet|
   sheet.add_row
 
-  sheet.add_row [ '', '', @game.opponent]
+  sheet.add_row [ '', '', @fixture.opponent]
   
   @data[:ratings].each_with_index do |rating, i|
     sheet.add_row [ players[i].name, players[i].pos, rating ]

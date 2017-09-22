@@ -1,12 +1,15 @@
 module MyFifa
   class PlayerRecord < Base
     self.table_name = 'my_fifa_player_records'
+    default_scope { order(id: :asc)}
+
     belongs_to :team
     belongs_to :fixture
     belongs_to :player
     
     belongs_to :record, class_name: 'PlayerRecord'
     has_one :sub_record, class_name: 'PlayerRecord', foreign_key: :record_id
+    accepts_nested_attributes_for :sub_record, allow_destroy: true, reject_if: :invalid_record?
 
     validate :player_selected?
     validate :rating_selected?, if: -> { player_id.present? }
@@ -23,6 +26,20 @@ module MyFifa
     scope :exclusively, -> (ids) {
       where(id: ids)
     }
+
+    after_create :set_fixture_id
+    def set_fixture_id
+      puts 'in set_fixture_id'
+      update_columns(
+        fixture_id: record.fixture_id,
+        team_id: record.team_id,
+        cs: record.cs,
+      ) if fixture_id.nil?
+    end
+
+    def invalid_record?(record)
+      record[:pos].blank?
+    end
 
     def player_ids
       ids = [self.player_id]

@@ -1,3 +1,7 @@
+<style>
+  .ui.dropdown .menu > a.item[data-action="no remove"] { display: none }
+</style>
+
 <%= form_for(@fixture, as: :fixture, remote: true, html: { class: 'ui small fluid form' }) do |f| %>
   <%= f.hidden_field :fixture_id %>
   <%= f.hidden_field :motm_id %>
@@ -27,17 +31,9 @@
         </tr>
       </thead>
       <tbody>
-        <% @fixture.player_records.each_with_index do |record, i| %>
-          <%= f.fields_for :player_records, record do |r| %>
-            <tr><%= render 'record_fields', f: r, i: 1000, player_is_sub: false %></tr>
-          <% end %>
+        <%= f.fields_for :player_records, @fixture.player_records do |r| %>
+          <%= render 'record_fields', f: r, num_sub: 0, player_is_sub: false %>
         <% end %>
-
-        <tr id="template">
-          <%= f.fields_for :player_records, MyFifa::PlayerRecord.new do |r| %>
-            <%= render 'record_fields', f: r, i: 1000, player_is_sub: true %>
-          <% end %>
-        </tr>
       </tbody>
     </table>
 

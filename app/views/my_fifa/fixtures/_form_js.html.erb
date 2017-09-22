@@ -9,10 +9,11 @@
     // Click fields functionality
     $('.click-form').each(function(){ toggleClickForm($(this)); });
       
-    // +/- SUB button functionality
-    $('html').on('click', 'a[data-action="add-sub"]', function(){ 
-      addRecord(this);
-    });
+    $('html').on('click', 'a[data-action="add-sub"]', function(){ addRecord(this); });
+    $('html').on('click', 'a[data-action="remove"]',  function(){ removeRecord(this); });
+
+
+
     // $('#remove-sub-btn').click(function(){
     //   if (num_subs > 0){
     //     $('#records-table tbody tr:last').remove();
@@ -36,10 +37,11 @@
   
     // Selecting a Player loads OVR
     $('table').on('change', '.player_id', function(){
-      var this_ = this;
-      $.get("/my_fifa/players/"+$('select', $(this_)).val()+"/get_ovr", function(data){
-        $('.ovr', $(this_).closest('tr')).val(data);
-      });
+      var this_ = $(this);
+      if (this_.val())
+        $.get("/my_fifa/players/"+$('select', this_).val()+"/get_ovr", function(data){
+          $('.ovr', this_.closest('tr')).val(data);
+        });
     });
   
     // Squad auto populates players and positions
@@ -96,36 +98,79 @@
   }
   
   function addRecord(target){
-    var id = moment().valueOf();
-    // var parentId = 
-  
     // Generate new Record table row
     var record = $('<tr/>');
-    record.append($('#template').html()
-      .replace(/\[player\_records\_attributes\]\[(\d+)\]/g, '[player_records_attributes][$1][sub_record_attributes]')
-      .replace(/\_player\_records\_attributes\_(\d+)/g, 'player_records_attributes_$1_sub_record_attributes'));
+
+    // Parent is a Substitute
+    var id = moment().valueOf();
+    console.log($('input[id$="pos"]', $(target).closest('tr')).attr('id'))
+    console.log($('input[id$="pos"]', $(target).closest('tr')).attr('id').indexOf('sub_record'))
+    if ($('input[id$="pos"]', $(target).closest('tr')).attr('id').indexOf('sub_record') > 0){
+      record.append($(target).closest('tr').html()
+        .replace(/(\[sub_record_attributes\])/g, '$1[sub_record_attributes]')
+        .replace(/(_sub_record_attributes)/g, '$1_sub_record_attributes'));
+    } else { // Parent is not a Substitute
+      record.append($(target).closest('tr').html()
+        .replace(/(\[player_records_attributes\])\[(\d+)\]/g, '$1[$2][sub_record_attributes]')
+        .replace(/(_player_records_attributes)_(\d+)/g, '$1_$2_sub_record_attributes'));
+
+      // Set Substitute behavior
+      $(record)
+        .find('a[data-action="no remove"]')
+        .attr('data-action', "remove")
+    }
+
+    // Remove Error classes
+    $('.error', record).removeClass('error');
 
     // Copy POS
-    var pos = $(target).closest('tr').find('.pos').text()
+    var pos = $(target).closest('tr').find('.pos');
+    $('.pos > span', record).text(pos.text())
+    $('.pos .level.icon', record).last().css('visibility', 'hidden');
     $('.pos', record)
-      .text(pos)
-      .append('<i class="level up green icon"></i>');
-    $('.pos', record).prev().val(pos);
+      .append('<i class="level up green icon"></i>')
+      .prev()
+        .val(pos.prev().val());
+    $('input[type != "hidden"]', record).val('');
 
-    // Add Indicators original Player has been SUBBED
+
+    // Add indicators original Player has been SUBBED
     $('.pos', $(target).closest('tr'))
       .append('<i class="level down red icon"></i>');
-    $(target).closest('.item').addClass('disabled');
-  
+    $(target).closest('.item')
+      .addClass('disabled')
+      .siblings('[data-action="remove"]').addClass('disabled');
     // Append new row to table
     $(target).closest('tr').after(record);
   
     // Activate jQuery event listeners
-    $('.ui.dropdown', $(record)).dropdown();
-    $('.click-form', $(record)).each(function(){
+    $('.click-form', record).each(function(){
       toggleClickForm($(this));
     });
-  }  
+
+    // Substitute actions menu was copied weirdly. Hack fix
+    $('.teal.dropdown > .fluid.menu')
+      .removeClass('transition visible animating slide down out')
+      .attr('style', '');
+    $('.ui.dropdown', record).dropdown().dropdown('clear');
+
+  }
+
+  function removeRecord(target){
+    var tr = $(target).closest('tr');
+    var parentTr = tr.prev();
+
+    if (tr.data('id')){
+      $('input[id$="_destroy"]', tr).val(1);
+      $(tr).css('display', 'none !important');
+    }
+    else
+      tr.remove();
+
+    $('.ribbon .level.icon', parentTr).last().remove();
+    $('a[data-action="add-sub"]', parentTr).removeClass('disabled');
+    $('a[data-action="remove"]', parentTr).removeClass('disabled');
+  }
   
   function setMOTM(target){
     var playerId = $('.player_id', $(target).closest('tr')).dropdown('get value');

@@ -20,12 +20,15 @@
       order: [[4, 'desc']],
       columns: [
         { data: 'opponent' },
-        { data: 'competition', render: function(meta, row, data){ return labeledData('Competition', data.competition) }},
-        { data: 'score', render: function(meta, row, data){ return labeledData('Score', data.score) }, searchable: false, sortable: false },
-        { data: 'motm', render: function(meta, row, data){ return labeledData('MOTM', data.motm) } },
-        { data: 'date_played', render: function(meta, row, data){ return labeledData('Date Played', data.date_played) }, searchable: false },
+        { data: 'competition' },
+        { data: 'score', searchable: false, sortable: false },
+        { data: 'motm' },
+        { data: { _: 'date_played', sort: 'timestamp' }, searchable: false },
       ],
       createdRow: function(nRow, aData){
+        $.each(['Competition', 'Score', 'MOTM', 'Date Played'], function(i, label){
+          $('td:nth-child('+(i+2)+')', $(nRow)).prepend(labeledData(label, ''));
+        });
         $(nRow)
           .data('id', aData.id)
           .addClass(aData.result);

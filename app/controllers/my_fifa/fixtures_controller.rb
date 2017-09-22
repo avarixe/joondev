@@ -22,6 +22,7 @@ module MyFifa
                 competition: fixture.competition,
                 score:       fixture.score,
                 motm:        fixture.motm_name,
+                timestamp:   time_to_string(fixture.date_played, '%s'),
                 date_played: time_to_string(fixture.date_played, '%b %e, %Y')
               }
             }
@@ -33,7 +34,7 @@ module MyFifa
     # GET /players/1
     def show         
       respond_to do |format|
-        @records = @fixture.player_records.with_player
+        @records = @fixture.player_records.includes(:player)
 
         format.html {
           @title = "Fixture Record"
@@ -45,12 +46,14 @@ module MyFifa
             goals: [],
             assists: []
           }
-          player_ids = @records.map(&:player_id)
+
+          all_records = @fixture.all_records
+          player_ids = all_records.map(&:player_id)
           @team.sorted_players.each do |player|
             played = player_ids.include?(player.id)
 
             if played
-              record = @records.find_by(player_id: player.id)
+              record = all_records.find_by(player_id: player.id)
 
               @data[:ratings] << record.rating
               @data[:goals]   << record.goals
