@@ -30,10 +30,10 @@ module MyFifa
     def create
       @squad = Squad.new(squad_params)
 
-      if @team.squads << @squad
-        redirect_to @squad, notice: 'Squad was successfully created.'
-      else
-        respond_to do |format|
+      respond_to do |format|
+        if @team.squads << @squad
+          format.js
+        else
           format.js { render 'my_fifa/shared/errors', locals: { object: @squad } }
         end
       end
@@ -45,7 +45,7 @@ module MyFifa
         format.js {
           if @squad.update(squad_params)
             render :success
-          elsif params[:page] == 'fixture'
+          elsif params[:page] == 'match'
             render :errors
           else
             render 'my_fifa/shared/errors', locals: { object: @squad }

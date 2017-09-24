@@ -1,9 +1,5 @@
 <script>
   $(function(){
-    <% if flash[:notice].present? %>
-      $('.ui.success.modal').modal('show');
-    <% end %>
-
     organizePositions();
     $('#formation_layout').change(function(){
       organizePositions();

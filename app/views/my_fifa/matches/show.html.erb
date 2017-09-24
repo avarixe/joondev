@@ -1,18 +1,18 @@
 <% content_for :page_links do %>
-  <%= link_to 'Edit', edit_my_fifa_fixture_path(@fixture), class: 'ui orange button' %>
-  <%= link_to 'Save Stats', my_fifa_fixture_path(@fixture, format: :xlsx), class: 'ui primary button' %>
-  <%= link_to 'Back', my_fifa_fixtures_path, class: 'ui basic button' %>
+  <%= link_to 'Edit', edit_my_fifa_match_path(@match), class: 'ui orange button' %>
+  <%= link_to 'Save Stats', my_fifa_match_path(@match, format: :xlsx), class: 'ui primary button' %>
+  <%= link_to 'Back', my_fifa_matches_path, class: 'ui basic button' %>
 <% end %>
 
 <div class="ui olive raised segment" >
   <h2 class="ui center aligned dividing icon header">
     <i class="trophy icon"></i>
-    <%= @fixture.competition %>    
-    <div class="sub header"><%= time_to_string(@fixture.date_played, "%B %e, %Y") %></div>
+    <%= @match.competition %>    
+    <div class="sub header"><%= time_to_s(@match.date_played, "%B %e, %Y") %></div>
   </h2>
   <h4 class="ui center aligned header">
     <%= @title %>
-    <div class="ui center aligned sub header"><%= @fixture.score %></div>
+    <div class="ui center aligned sub header"><%= @match.score %></div>
   </h4>
 </div>
 

@@ -1,38 +1,11 @@
 <%= form_for(@player, as: :player, remote: true, html: { class: 'ui large fluid form' }) do |f| %>
   <div class="ui raised teal segment">
-    <div class="ui stackable grid">
-      <div class="equal width row">
-        <div class="column">
-          <div class="required field" no-empty>
-            <%= f.label :name %>
-            <%= f.text_field :name %>
-          </div>
-        </div>
-      </div>
-      <div class="equal width row">
-        <div class="column">
-          <div class="required field" no-empty>
-            <%= f.label :pos, 'Position' %>
-            <%= f.select :pos, 
-              options_for_select(MyFifa::Player::POSITIONS, @player.pos), 
-              {prompt: true}, 
-              {class: 'fluid dropdown'} %>
-          </div>
-        </div>
-        <div class="column">
-          <div class="field">
-            <%= f.label :sec_pos, 'Secondary Position(s)' %>
-            <%= f.text_field :sec_pos %>
-          </div>
-        </div>
-        <div class="column">
-          <div class="required field" no-empty>
-            <%= f.label :start_ovr, 'Start OVR Rating' %>
-            <%= f.text_field :start_ovr %>
-          </div>
-        </div>
-      </div>
-    </div>
+
+    <!-- Information Section -->
+    <%= render 'my_fifa/players/fields/info_form', f: f %>
+
+    <!-- Transfer Section -->
+    <%= render 'my_fifa/players/fields/transfer_form', f: f %>
   </div>
 
   <%= f.submit 'Save Player', class: 'ui primary button' %>

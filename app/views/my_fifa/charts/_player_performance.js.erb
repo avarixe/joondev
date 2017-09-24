@@ -1,9 +1,9 @@
-var fixtureIds = <%= raw @player.records.map(&:fixture_id) %>;
+var matchIds = <%= raw @player.records.map(&:match_id) %>;
 var chart = Chartkick.charts['ratings-chart'].getChartObject();
 
 chart.series[0].options.lineWidth = 1.5;
 chart.series[0].options.point.events = {
   click: function(e){
-    window.open("/my_fifa/fixtures/"+fixtureIds[e.point.index])
+    window.open("/my_fifa/matches/"+matchIds[e.point.index])
   }
 };

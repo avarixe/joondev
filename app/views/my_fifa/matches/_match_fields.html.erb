@@ -1,11 +1,11 @@
-<div class="ui olive raised segment">
+<div class="ui teal raised segment">
   <div class="ui grid">
     <!-- Row -->
     <div class="four column stackable centered row">
       <div class="six wide column required field" no-empty>
         <%= f.label :competition, 'Competition' %>
         <%= f.select :competition, 
-          options_for_select(@team.competitions, @fixture.competition), 
+          options_for_select(@team.competitions, @match.competition), 
           {prompt: true}, 
           {class: 'fluid dropdown', tabindex: 2} %>
       </div>
@@ -17,7 +17,7 @@
     <div class="four column stackable centered row">
       <div class="six wide column required field" no-empty>
         <%= f.label :date_played, 'Date Played' %>
-        <%= f.text_field :date_played %>
+        <%= f.text_field :date_played, data: { flatpickr: true } %>
       </div>
       <div class="six wide column required field">
         <label>Home or Away</label>
@@ -40,7 +40,7 @@
 
     <div class="five column centered row">
       <div class="four wide column field" no-empty>
-        <%= f.text_field :score_f, 
+        <%= f.text_field :score_f,
           data: { inputmask: "'mask': '9{+}[ (9{+})]', 'greedy': false" } %>
       </div>
       <div class="ui four wide center aligned column">

@@ -1,0 +1,8 @@
+// Output success message
+$('.ui.success.modal')
+  .modal({
+    onHide: function(){
+      window.location = "<%= url_for(@formation) %>";
+    }
+  })
+  .modal('show');

@@ -1,15 +1,14 @@
 <style>
-  .ui.dropdown .menu > a.item[data-action="no remove"] { display: none }
+  .ui.dropdown .menu > a.item.disabled { display: none }
 </style>
 
-<%= form_for(@fixture, as: :fixture, remote: true, html: { class: 'ui small fluid form' }) do |f| %>
-  <%= f.hidden_field :fixture_id %>
+<%= form_for(@match, as: :match, remote: true, html: { class: 'ui small fluid form' }) do |f| %>
   <%= f.hidden_field :motm_id %>
 
-  <%= render 'fixture_fields', f: f %>
+  <%= render 'match_fields', f: f %>
 
-  <div class="ui teal raised segment">
-    <% if @fixture.id.blank? %>
+  <div class="ui olive raised segment">
+    <% if @match.id.blank? %>
       <div class="field">
         <%= f.select :squad_id, 
           options_for_select(@team.squads.map{ |s| [s.squad_name, s.id] }), 
@@ -31,7 +30,7 @@
         </tr>
       </thead>
       <tbody>
-        <%= f.fields_for :player_records, @fixture.player_records do |r| %>
+        <%= f.fields_for :player_records, @match.player_records do |r| %>
           <%= render 'record_fields', f: r, num_sub: 0, player_is_sub: false %>
         <% end %>
       </tbody>
@@ -40,9 +39,9 @@
 
   <div class="ui horizontal divider"></div>
 
-  <%= f.submit 'Save Fixture', class: 'ui primary button' %>
+  <%= f.submit 'Save Match', class: 'ui primary button' %>
   <%= content_tag :button, 'Update Squad', class: 'ui violet button', id: 'update-squad-btn', disabled: true %>
-  <%= link_to 'Back', @fixture, class: 'ui basic button' %>
+  <%= link_to 'Back', @match, class: 'ui basic button' %>
 <% end %>
 
 <% content_for :modal_container do %>

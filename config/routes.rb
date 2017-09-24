@@ -13,8 +13,9 @@ Rails.application.routes.draw do
         post 'import_csv'
       }
       member {
+        post 'set_status'
         post 'exit'
-        post 'sign'
+        post 'rejoin'
         get 'get_ovr'
       }
     end
@@ -23,17 +24,11 @@ Rails.application.routes.draw do
         post 'set_active'
       }
     end
-    resources :fixtures
-    resources :seasons do
-      member {
-        get 'get_fixtures'
-      }
-    end
-    resources :fixtures, only: [:update]
+    resources :matches
+    resources :seasons
     resources :squads, except: [:edit, :destroy] do
       member {
         get 'info'
-        post 'set_active'
       }
     end
     resources :formations, except: [:destroy] do

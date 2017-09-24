@@ -1,30 +1,23 @@
 <script>
-  var num_subs = <%= @fixture.player_records.length - 11 %>;
+  var num_subs = <%= @match.player_records.length - 11 %>;
   var highest_rating;
 
   $(function(){
-    // Flatpickr functionality
-    $('#fixture_date_played').flatpickr({ altInput: true });
-    
     // Click fields functionality
     $('.click-form').each(function(){ toggleClickForm($(this)); });
       
-    $('html').on('click', 'a[data-action="add-sub"]', function(){ addRecord(this); });
-    $('html').on('click', 'a[data-action="remove"]',  function(){ removeRecord(this); });
+    $('html').on('click', 'a[data-action="add-sub"]',     function(){ addRecord(this); });
+    $('html').on('click', 'a[data-action="remove"]',      function(){ removeRecord(this); });
+    $('html').on('click', 'a[data-action="injury"]',      function(){ toggleInjury(this); });
+    $('html').on('click', 'a[data-action="yellow card"]', function(){ addBooking(this, 1); });
+    $('html').on('click', 'a[data-action="red card"]',    function(){ addBooking(this, 3); });
+    $('html').on('click', 'a[data-action="clear card"]',  function(){ clearBooking(this); });
 
-
-
-    // $('#remove-sub-btn').click(function(){
-    //   if (num_subs > 0){
-    //     $('#records-table tbody tr:last').remove();
-    //     num_subs--;
-    //   }
-    // });
-      
     // By default, highest rating gets MOTM
     highest_rating = $('input.rating').map(function(){
       return this.value;
     }).get().sort().pop();
+
     $('table').on('input', '.rating', function(){
       if (this.value > highest_rating){
         highest_rating = this.value;
@@ -36,10 +29,10 @@
     $('table').on('click', '.ui.ribbon.pos', function(){ setMOTM(this); });
   
     // Selecting a Player loads OVR
-    $('table').on('change', '.player_id', function(){
+    $('table').on('change', 'select[id$="player_id"]', function(){
       var this_ = $(this);
       if (this_.val())
-        $.get("/my_fifa/players/"+$('select', this_).val()+"/get_ovr", function(data){
+        $.get("/my_fifa/players/"+$(this_).val()+"/get_ovr", function(data){
           $('.ovr', this_.closest('tr')).val(data);
         });
     });
@@ -49,7 +42,7 @@
       if ($(this).val()){
         $.get("/my_fifa/squads/"+$(this).val()+"/info", function(data){
           $.each(data.player_ids, function(i, player_id){
-            var tr = $('#fixture_player_records_attributes_'+i+'_pos').closest('tr');
+            var tr = $('#match_player_records_attributes_'+i+'_pos').closest('tr');
             $('select[id$="player_id"]', tr).dropdown('set selected', player_id);
 
             // Update Position labels
@@ -77,7 +70,7 @@
         beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token %>')},
         data: { 
           squad: squadParams,
-          page:  'fixture',
+          page:  'match',
         },
       });
     });
@@ -98,25 +91,21 @@
   function addRecord(target){
     // Generate new Record table row
     var record = $('<tr/>');
-
-    // Parent is a Substitute
     var id = moment().valueOf();
-    console.log($('input[id$="pos"]', $(target).closest('tr')).attr('id'))
-    console.log($('input[id$="pos"]', $(target).closest('tr')).attr('id').indexOf('sub_record'))
-    if ($('input[id$="pos"]', $(target).closest('tr')).attr('id').indexOf('sub_record') > 0){
+    if ($('input[id$="pos"]', $(target).closest('tr')).attr('id').indexOf('sub_record') > 0)
       record.append($(target).closest('tr').html()
         .replace(/(\[sub_record_attributes\])/g, '$1[sub_record_attributes]')
         .replace(/(_sub_record_attributes)/g, '$1_sub_record_attributes'));
-    } else { // Parent is not a Substitute
+    else // Parent is not a Substitute
       record.append($(target).closest('tr').html()
         .replace(/(\[player_records_attributes\])\[(\d+)\]/g, '$1[$2][sub_record_attributes]')
         .replace(/(_player_records_attributes)_(\d+)/g, '$1_$2_sub_record_attributes'));
 
-      // Set Substitute behavior
-      $(record)
-        .find('a[data-action="no remove"]')
-        .attr('data-action', "remove")
-    }
+    // Set Substitute behavior
+    $('a[data-action!="clear card"]', record).removeClass('disabled');
+    $('a[data-action="clear card"]', record).addClass('disabled');
+    $('.ui.ribbon.label', record).removeClass('yellow');
+    setInjury($('a[data-action="injury"]', record), 0);
 
     // Remove Error classes
     $('.error', record).removeClass('error');
@@ -129,8 +118,10 @@
       .append('<i class="level up green icon"></i>')
       .prev()
         .val(pos.prev().val());
-    $('input[type != "hidden"]', record).val('');
 
+    $.each($('input,select', record), function(){
+      $(this).val($(this).data('default'));
+    });
 
     // Add indicators original Player has been SUBBED
     $('.pos', $(target).closest('tr'))
@@ -159,7 +150,7 @@
 
     if (tr.data('id')){
       $('input[id$="_destroy"]', tr).val(1);
-      $(tr).css('display', 'none !important');
+      $(tr).css('display', 'none');
     }
     else
       tr.remove();
@@ -169,10 +160,37 @@
     $('a[data-action="remove"]', parentTr).removeClass('disabled');
   }
   
+  function toggleInjury(target){
+    setInjury(target, $('input', $(target)).val() ^ true);
+  }
+
+  function setInjury(target, value){
+    $('input', $(target)).val(value);
+    $('span', $(target)).text(value ? 'Not Injured' : 'Injured');
+    value ?
+      $('.icon', $(target)).addClass('green') :
+      $('.icon', $(target)).removeClass('green');
+  }
+
+  function addBooking(target, increment){
+    var bookingField = $('a[data-action="yellow card"] input', $(target).closest('.menu'));
+    console.log(bookingField.val())
+    bookingField.val(parseInt(bookingField.val()) + increment);
+    console.log(bookingField.val())
+    if (bookingField.val() > 1)
+      $('a[data-action*="card"]', $(target).closest('.menu')).toggleClass('disabled');
+  }
+
+  function clearBooking(target){
+    var bookingField = $('a[data-action="yellow card"] input', $(target).closest('.menu'));
+    bookingField.val(0);
+    $('a[data-action*="card"]', $(target).closest('.menu')).toggleClass('disabled');
+  }
+
   function setMOTM(target){
     var playerId = $('.player_id', $(target).closest('tr')).dropdown('get value');
     if (playerId){
-      $('#fixture_motm_id').val(playerId);
+      $('#match_motm_id').val(playerId);
       $('.ui.ribbon.pos').removeClass('yellow');
       $(target).addClass('yellow');        
     }

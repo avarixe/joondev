@@ -1,0 +1,49 @@
+<% content_for :page_links do %>
+  <%= link_to 'Edit', edit_my_fifa_season_path(@season), class: 'ui orange button' %>
+  <%= link_to 'Back', my_fifa_seasons_path, class: 'ui basic button' %>
+<% end %>
+
+<div class="ui raised teal segment">
+  <div class="ui stackable grid">
+
+    <div class="equal width row">
+      <div class="column">
+        <div class="ui header">
+          <%= number_to_currency(@season.start_club_worth) %>
+          <div class="sub header">Club Worth (Start of Season)</div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="ui header">
+          <%= number_to_currency(@season.end_club_worth) || 'N/A' %>
+          <div class="sub header">Club Worth (End of Season)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="equal width row">
+      <div class="column">
+        <div class="ui header">
+          <%= number_to_currency(@season.transfer_budget) %>
+          <div class="sub header">Transfer Budget</div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="ui header">
+          <%= number_to_currency(@season.wage_budget) || 'N/A' %>
+          <div class="sub header">Wage Budget</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="equal width row">
+      <div class="column">
+        <div class="ui header">
+          <%= @season.captain.name %>
+          <div class="sub header">Captain</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div

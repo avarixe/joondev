@@ -23,7 +23,7 @@
   <div class="ui fluid three item menu">
     <!-- MANAGER HUB -->
     <div class="ui pointing dropdown item">
-      MANAGER HUB
+      MANAGER
       <i class="dropdown icon"></i>
       <div class="menu">
 
@@ -47,7 +47,7 @@
 
     <!-- TEAM HUB -->
     <div class="ui up pointing dropdown item">
-      TEAM HUB
+      TEAM
       <i class="dropdown icon"></i>
       <div class="menu">
         
@@ -57,6 +57,10 @@
           <i class="address book icon"></i>
           Player List
         <% end %>
+        <%= link_to(new_my_fifa_player_path, class: 'item') do %>
+          <i class="add user icon"></i>
+          Player List
+        <% end %>
         <%= link_to(players_my_fifa_analytics_path, class: 'item') do %>
           <i class="pie chart icon"></i>
           Statistics
@@ -64,9 +68,9 @@
 
         <div class="divider"></div>
 
-        <%= link_to(my_fifa_squads_path, class: 'item') do %>
-          <i class="users icon"></i>
-          Manage Squads
+        <%= link_to(my_fifa_seasons_path, class: 'item') do %>
+          <i class="calendar icon"></i>
+          View Seasons
         <% end %>
 
       </div>
@@ -74,19 +78,26 @@
 
     <!-- MATCH HUB -->
     <div class="ui up pointing dropdown item">
-      MATCH HUB
+      Match
       <i class="dropdown icon"></i>
       <div class="menu">
 
-        <div class="header">Fixtures</div>
+        <div class="header">Matches</div>
         <div class="divider"></div>
-        <%= link_to(my_fifa_fixtures_path, class: 'item') do  %>
+        <%= link_to(my_fifa_matches_path, class: 'item') do  %>
           <i class="archive icon"></i>
           Archive
         <% end %>
-        <%= link_to(new_my_fifa_fixture_path, class: 'item') do %>
+        <%= link_to(new_my_fifa_match_path, class: 'item') do %>
           <i class="soccer icon"></i>
-          New Fixture
+          New Match
+        <% end %>
+
+        <div class="divider"></div>
+
+        <%= link_to(my_fifa_squads_path, class: 'item') do %>
+          <i class="users icon"></i>
+          Manage Squads
         <% end %>
 
       </div>

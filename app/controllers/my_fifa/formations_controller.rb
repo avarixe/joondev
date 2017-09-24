@@ -27,10 +27,10 @@ module MyFifa
     def create
       @formation = Formation.new(formation_params)
 
-      if current_user.formations << @formation
-        redirect_to @formation, notice: 'Formation was successfully created.'
-      else
-        respond_to do |format|
+      respond_to do |format|
+        if current_user.formations << @formation
+          format.js
+        else
           format.js { render 'my_fifa/shared/errors', locals: { object: @formation } }
         end
       end

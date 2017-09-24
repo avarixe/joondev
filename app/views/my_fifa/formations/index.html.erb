@@ -18,8 +18,13 @@
             <label></label>
           </div>
         </td>
-        <td><%= "#{formation.title} (#{formation.layout})" %></td>
-        <td><%= formation.positions.join(", ") %></td>
+        <td>
+          <%= responsive_cell_label 'Title' %>
+          <%= "#{formation.title} (#{formation.layout})" %>
+        </td>
+        <td>
+          <%= responsive_cell_label 'Positions' %>
+          <%= formation.positions.join(", ") %></td>
       </tr>
     <% end %>
   </tbody>

@@ -20,7 +20,7 @@
         </td>
         <td><%= team.team_name %></td>
         <td>
-          <div class="ui responsive right pointing basic label">Competitions</div>
+          <%= responsive_cell_label 'Competitions' %>
           <%= team.competition_options(', ') %>    
         </td>
       </tr>

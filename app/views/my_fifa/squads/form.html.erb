@@ -37,7 +37,8 @@
 
 <script>
   $(function(){
-    <% if flash[:notice].present? %>
+    <% if session[:success].present? %>
+      <% session[:success] = nil %>
       $('.ui.success.modal').modal('show');
     <% end %>
   })

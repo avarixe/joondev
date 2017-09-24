@@ -1,12 +1,9 @@
-console.error("Invalid Form!")
-
 // Clear any previous error messages and highlights
 $('.error.message').remove();
 $('.error').removeClass('error');
 
 // Highlight invalid fields
 $('.field[no-empty]').each(function(){
-  console.log($('input,select', $(this)).val());
   if (!$('input,select', $(this)).val())
     $(this).addClass('error');
 });

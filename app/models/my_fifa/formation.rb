@@ -2,9 +2,6 @@ module MyFifa
   class Formation < Base
     self.table_name = 'my_fifa_formations'
 
-    validates :title, presence: { message: 'Title cannot be blank.' }
-    validate :all_positions_labeled?
-
     belongs_to :user
     has_many :squads
 
@@ -28,26 +25,50 @@ module MyFifa
       '4-4-2',
     ]
 
-    def all_positions_labeled?
-      if positions.any? { |pos| pos.blank? }
-        self.errors.add(:base, "Not all Positions are labeled.");
-      end
-    end
+    ############################
+    #  INITIALIZATION METHODS  #
+    ############################
 
-    def positions
-      (1..11).map{ |no| self.send("pos_#{no}") }
-    end
 
-    def layout_to_a
-      rows = []
-      pos = Array(2..11).reverse
-      layout.split("-").map(&:to_i).each do |num_pos|
-        rows << []
-        num_pos.times do
-          rows.last << pos.pop
+    ########################
+    #  ASSIGNMENT METHODS  #
+    ########################
+
+
+    ########################
+    #  VALIDATION METHODS  #
+    ########################
+      validates :title, presence: { message: 'Title cannot be blank.' }
+      validate :all_positions_labeled?
+
+      def all_positions_labeled?
+        if positions.any? { |pos| pos.blank? }
+          self.errors.add(:base, "Not all Positions are labeled.");
         end
       end
-      rows.reverse
-    end
+
+    ######################
+    #  CALLBACK METHODS  #
+    ######################
+
+
+    ######################
+    #  INSTANCE METHODS  #
+    ######################
+      def positions
+        (1..11).map{ |no| self.send("pos_#{no}") }
+      end
+
+      def layout_to_a
+        rows = []
+        pos = Array(2..11).reverse
+        layout.split("-").map(&:to_i).each do |num_pos|
+          rows << []
+          num_pos.times do
+            rows.last << pos.pop
+          end
+        end
+        rows.reverse
+      end
   end
 end

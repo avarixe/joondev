@@ -1,8 +1,8 @@
 <% content_for :page_links do %>
-  <%= link_to 'New Fixture', new_my_fifa_fixture_path, class: 'ui basic primary button' %>
+  <%= link_to 'New Match', new_my_fifa_match_path, class: 'ui basic primary button' %>
 <% end %>
 
-<table class="ui basic sortable definition selectable compact small table" data-link="/my_fifa/fixtures/" width="100%">
+<table class="ui basic sortable definition selectable compact small table" data-link="/my_fifa/matches/" width="100%">
   <thead>
     <tr>
       <% ['Opponent Team', 'Competition', 'Score', 'MOTM', 'Date Played'].each do |header| %>
@@ -16,7 +16,7 @@
   $(function(){
     $('table').DataTable({
       processing: true,      
-      ajax: '/my_fifa/fixtures',
+      ajax: '/my_fifa/matches',
       order: [[4, 'desc']],
       columns: [
         { data: 'opponent' },

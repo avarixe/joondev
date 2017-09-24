@@ -1,0 +1,23 @@
+<% if @player.loans.last.notes.present? %>
+  $('.ui.modal span.destination').text(' to <%= @player.loans.last.notes %>');
+<% end %>
+
+$('span[data-label="loan status"]')
+  .text("ON LOAN<%= " AT #{@player.loans.last.notes}" unless @player.loans.last.notes.blank? %>")
+  .parent()
+  .removeClass('green')
+  .addClass('orange');
+
+var form = $('div[data-label="update loan"] form');
+$('#type', form).val('return');
+$('#notes', form).val('');
+$('#notes', form)
+  .closest('.ui.input')
+  .addClass('disabled');
+$('.submit.button', form)
+  .removeClass('orange')
+  .addClass('green')
+  .val('RETURN TO CLUB');
+
+<%= render 'my_fifa/players/manage/recover' %>
+$('.ui.pink.segment, .ui.red.segment').addClass('hidden');

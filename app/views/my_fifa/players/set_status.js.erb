@@ -1,0 +1,5 @@
+<%= render "my_fifa/players/manage/#{params[:type]}" %>
+
+// Output the correct message
+$('.ui.modal span.player-name').text('<%= @player.name %>');
+$('.ui.modal[data-type="<%= params[:type] %>"]').modal('show');

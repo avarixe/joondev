@@ -2,7 +2,7 @@
 
 <tr data-id=<%= record.player_id %>>
   <td no-link>
-    <div class="ui <%= 'yellow' if record.player_id == @fixture.motm_id  %> ribbon label">
+    <div class="ui <%= 'yellow' if record.player_id == @match.motm_id  %> ribbon label">
       <%= record.pos %>
       <% num_sub.times do |i| %>
         <i class="green level up icon" style="visibility:<%= i == num_sub-1 ? 'visible' : 'hidden' %>"></i>
@@ -12,22 +12,27 @@
       <% end %>
     </div>
   </td>
-  <td class="selectable"><%= record.player.name %></td>
+  <td class="selectable">
+    <%= record.player.name %>
+    <%= content_tag(:i, nil, class: 'soccer icon') if record.player_id == @match.motm_id %>
+    <%= content_tag(:i, nil, class: 'first aid icon') if record.injured %>
+    <%= content_tag(:i, nil, class: 'yellow square icon') if [1,4].include?(record.booking) %>
+    <%= content_tag(:i, nil, class: 'red square icon') if [3,4].include?(record.booking) %>
+  </td>
   <td class="center aligned" no-link>
-    <div class="ui responsive right pointing basic label">OVR</div>
+    <%= responsive_cell_label 'OVR' %>
     <%= record.ovr %>
   </td>
   <td class="center aligned" no-link>
-    <div class="ui responsive right pointing basic label">Rating</div>
-      <%= record.rating %>
-      <%= content_tag(:i, nil, class: 'soccer icon') if record.player_id == @fixture.motm_id %>
+    <%= responsive_cell_label 'Rating' %>
+    <%= record.rating %>
   </td>
   <td class="center aligned" no-link>
-    <div class="ui responsive right pointing basic label">Goals</div>
+    <%= responsive_cell_label 'Goals' %>
     <%= record.goals || 0 %>
   </td>
   <td class="center aligned" no-link>
-    <div class="ui responsive right pointing basic label">Assists</div>
+    <%= responsive_cell_label 'Assists' %>
     <%= record.assists || 0 %>
   </td>
 </tr>

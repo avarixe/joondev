@@ -4,13 +4,25 @@ App.init = ->
   # JoonDEV sidebar
   $('div.sidebar').sidebar(transition: 'overlay').sidebar('attach events', '.toggle.button').sidebar 'hide'
 
+  $('.menu[data-menu="tabs"] .item').tab({
+      onLoad: ->
+        Chartkick.eachChart (chart) ->
+          chart.redraw()
+          return
+        return
+    });
+
   # Dropdown menus
-  $('select.dropdown, .ui.dropdown').dropdown()
+  $('select.dropdown, .ui.dropdown').dropdown({
+    placeholder: false
+  });
     
   # Dropdown menu support for grouped selects
   $('.ui.dropdown').has('optgroup').each ->
       $menu = undefined
       $menu = $('<div/>').addClass('menu')
+      $(this).find('select > option').each ->
+        $menu.append '<div class="item" data-value="">' + @innerHTML + '</div>'
       $(this).find('optgroup').each ->
         $menu.append '<div class="header">' + @label + '</div><div class="divider"></div>'
         $(this).children().each ->
@@ -21,6 +33,10 @@ App.init = ->
     $(this).closest('.message').transition 'fade'
     return
     
+  $('[data-flatpickr]').flatpickr({
+    altInput: true
+  });
+
   # Input Masks
   $('[data-inputmask]').inputmask()
 

@@ -2,10 +2,10 @@
   <%= link_to 'New Player', new_my_fifa_player_path, class: 'ui basic primary button' %>
 <% end %>
 
-<table class="ui basic definition sortable compact small table" data-link="/my_fifa/players/" width="100%">
+<table class="ui basic definition sortable selectable compact small table" data-link="/my_fifa/players/" width="100%">
   <thead>
     <tr class="center aligned">
-      <% ['Name', 'Position', 'OVR', 'Actions'].each do |header| %>
+      <% ['Name', 'Position', 'OVR'].each do |header| %>
         <th><%= header %></th>
       <% end %>
     </tr>
@@ -13,39 +13,17 @@
   <tbody>
     <% @all_players.each do |player| %>
       <tr data-id=<%= player.id %> class="center aligned">
-        <td class="selectable">
+        <td>
           <%= content_tag(:i, nil, class: 'red attention icon') if !player.active %>
           <%= player.name %>
         </td>
-        <td no-link class="<%= 'disabled' if !player.active %>" data-sort="<%= player.pos %>">
-          <div class="ui basic responsive right pointing label">Position</div>
+        <td class="<%= 'disabled' if !player.active %>" data-sort="<%= player.pos %>">
+          <%= responsive_cell_label 'Positions' %>
           <%= player.pos %>    
         </td>
-        <td no-link class="<%= 'disabled' if !player.active %>" data-sort=<%= player.current_ovr %>>
-          <div class="ui basic responsive right pointing label">OVR</div>
+        <td class="<%= 'disabled' if !player.active %>" data-sort=<%= player.current_ovr %>>
+          <%= responsive_cell_label 'OVR' %>
           <%= player.current_ovr %>    
-        </td>
-        <td no-link>
-          <div class="ui left pointing dropdown circular teal icon button">
-            <i class="settings icon"></i>
-            <div class="fluid menu">
-              <%= link_to(player, class: 'item') do %>
-                <i class="user icon"></i> View
-              <% end %>
-              <% if player.active %>
-                <%= link_to(edit_my_fifa_player_path(player), class: 'item') do %>
-                  <i class="edit icon"></i> Edit
-                <% end %>
-                <%= link_to(exit_my_fifa_player_path(player), method: :post, "data-confirm" => "#{player.name} is leaving #{@team.team_name}?", class: 'item') do %>
-                  <i class="sign out icon"></i> Exit
-                <% end %>
-              <% else %>
-                <%= link_to(sign_my_fifa_player_path(player), method: :post, "data-confirm" => "#{player.name} is resigning to #{@team.team_name}?", class: 'item') do %>
-                  <i class="sign in icon"></i> Sign
-                <% end %>                
-              <% end %>
-            </div>
-          </div>
         </td>
       </tr>
     <% end %>
@@ -56,12 +34,6 @@
   $(function(){
     $('table').DataTable({
       order: [],
-      columnDefs: [
-        { targets: [-1], orderable: false }
-      ],
-      rowCallback: function(row, data){
-        $('.ui.dropdown').dropdown();
-      }
     });
   })
 </script>

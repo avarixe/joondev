@@ -7,6 +7,14 @@
           <%= f.text_field :team_name %>
         </div>
       </div>
+      <% if @team.id.nil? %>
+        <div class="sixteen wide column">
+          <div class="required fluid inline field" no-empty>
+            <%= f.label :current_date, 'Start Date' %>
+            <%= f.text_field :current_date, data: { flatpickr: true } %>
+          </div>
+        </div>
+      <% end %>
       <div class="sixteen wide column">
         <div class="required fluid inline field" no-empty>
           <%= f.label :competitions, 'Competitions (One per line)' %>

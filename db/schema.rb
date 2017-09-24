@@ -11,24 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170922054952) do
+ActiveRecord::Schema.define(version: 20170924032503) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "my_fifa_fixtures", force: :cascade do |t|
-    t.integer "team_id"
-    t.string  "opponent",                    null: false
-    t.string  "competition",                 null: false
-    t.integer "score_gf",                    null: false
-    t.integer "score_ga",                    null: false
-    t.integer "penalties_gf"
-    t.integer "penalties_ga"
-    t.date    "date_played"
-    t.integer "motm_id"
-    t.integer "fixture_id"
-    t.boolean "home",         default: true
-    t.integer "squad_id"
+  create_table "my_fifa_costs", force: :cascade do |t|
+    t.integer "player_id"
+    t.integer "price"
+    t.integer "event_id"
+    t.text    "notes"
+    t.string  "dir",       default: "in"
   end
 
   create_table "my_fifa_formations", force: :cascade do |t|
@@ -50,28 +43,70 @@ ActiveRecord::Schema.define(version: 20170922054952) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "my_fifa_matches", force: :cascade do |t|
+    t.integer "team_id"
+    t.string  "opponent",                    null: false
+    t.string  "competition",                 null: false
+    t.integer "score_gf",                    null: false
+    t.integer "score_ga",                    null: false
+    t.integer "penalties_gf"
+    t.integer "penalties_ga"
+    t.date    "date_played"
+    t.integer "motm_id"
+    t.boolean "home",         default: true
+    t.integer "squad_id"
+  end
+
+  create_table "my_fifa_player_events", force: :cascade do |t|
+    t.string  "type"
+    t.integer "player_id"
+    t.date    "date_effective"
+    t.date    "date_expires"
+    t.text    "notes"
+    t.string  "party"
+    t.boolean "loan",           default: false
+  end
+
   create_table "my_fifa_player_records", force: :cascade do |t|
     t.integer "team_id"
-    t.integer "fixture_id"
+    t.integer "match_id"
     t.integer "player_id"
     t.float   "rating"
     t.integer "goals"
     t.integer "assists"
-    t.string  "pos",        limit: 10
+    t.string  "pos",       limit: 10
     t.boolean "cs"
     t.integer "ovr"
     t.integer "record_id"
+    t.boolean "injured",              default: false
+    t.integer "booking",              default: 0
   end
 
   create_table "my_fifa_players", force: :cascade do |t|
     t.integer  "team_id"
-    t.string   "name",                      null: false
-    t.string   "pos",                       null: false
+    t.string   "name",                          null: false
+    t.string   "pos",                           null: false
     t.string   "sec_pos"
-    t.boolean  "active",     default: true
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.integer  "start_ovr",  default: 0
+    t.boolean  "active",        default: true
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "start_ovr",     default: 0
+    t.string   "nationality"
+    t.integer  "year_of_birth"
+    t.boolean  "youth",         default: false
+    t.text     "notes"
+    t.string   "status",        default: ""
+  end
+
+  create_table "my_fifa_seasons", force: :cascade do |t|
+    t.integer "team_id"
+    t.integer "captain_id"
+    t.date    "start_date"
+    t.date    "end_date"
+    t.integer "start_club_worth"
+    t.integer "end_club_worth"
+    t.integer "transfer_budget"
+    t.integer "wage_budget"
   end
 
   create_table "my_fifa_squads", force: :cascade do |t|

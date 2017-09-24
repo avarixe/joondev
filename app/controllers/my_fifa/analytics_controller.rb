@@ -13,7 +13,7 @@ module MyFifa
           @records = @team.player_records
           filter_records
 
-          @players = Player.with_stats(@fixtures.map(&:id))
+          @players = Player.with_stats(@matches.map(&:id))
             .where(id: @records.map(&:player_id).uniq)
 
           render json: {
@@ -44,10 +44,10 @@ module MyFifa
         end
 
         if query[:strings].any?
-          @fixtures = Fixture.where(query[:strings].join(' AND '), *query[:args])
-          @records = @records.where(fixture_id: @fixtures.map(&:id))
+          @matches = Match.where(query[:strings].join(' AND '), *query[:args])
+          @records = @records.where(match_id: @matches.map(&:id))
         else
-          @fixtures = []
+          @matches = []
         end
       end
   end

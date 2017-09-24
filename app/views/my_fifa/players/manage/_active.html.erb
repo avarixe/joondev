@@ -1,0 +1,142 @@
+<!-- HEALTH section -->
+<div class="ui raised pink segment <%= 'hidden' if !@player.active || @player.loaned_out? %>">
+  <div class="ui dividing header">
+    <i class="pink first aid icon"></i>
+    <div class="content">
+      Health
+      <div class="sub header">
+        <span class="ui <%= @player.injured? ? 'pink' : 'green' %> mini statistic">
+          <span class="value" data-label="injury status">
+            <%= 'NOT' unless  @player.injured? %> INJURED
+          </span>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="ui content" data-label="update injury">
+    <%= form_for(@player, as: :player, method: :post, remote: true, url: { action: :set_status }, html: { class: 'ui large fluid form' }) do %>
+      <%= hidden_field_tag :type, @player.injured? ? 'recover' : 'injury' %>
+      <div class="ui stackable grid">
+        <div class="five wide column">
+          <div class="ui left icon fluid input">
+            <i class="calendar icon"></i>
+            <%= text_field_tag :date, @team.current_date, data: { flatpickr: true } %>
+          </div>
+        </div>
+        <div class="five wide column"></div>
+        <div class="six wide column">
+          <%= submit_tag "SET AS#{ ' NOT' if @player.injured? } INJURED", 
+            class: "ui #{@player.injured? ? 'green' : 'pink'} submit fluid button" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- LOAN section -->
+<div class="ui raised orange segment <%= 'hidden' unless @player.active %>">
+  <div class="ui dividing header">
+    <i class="orange plane icon"></i>
+    <div class="content">
+      Loan
+      <div class="sub header">
+        <span class="ui <%= @player.loaned_out? ? 'orange' : 'green' %> mini statistic">
+          <span class="value" data-label="loan status">
+            <%= @player.loaned_out? ? 
+              "ON LOAN #{ "AT #{@player.loans.last.notes}" if @player.loans.last.notes.present?} " :
+              "AT #{@team.team_name}" %>
+          </span>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="ui content" data-label="update loan">
+    <%= form_for(@player, as: :player, method: :post, remote: true, url: { action: :set_status }, html: { class: 'ui large fluid form' }) do %>
+      <%= hidden_field_tag :type, @player.loaned_out? ? 'return' : 'loan' %>
+      <div class="ui stackable grid">
+        <div class="five wide column">
+          <div class="ui left icon fluid input">
+            <i class="calendar icon"></i>
+            <%= text_field_tag :date, @team.current_date, data: { flatpickr: true } %>
+          </div>
+        </div>
+        <div class="five wide column">
+          <div class="ui left icon fluid input <%= 'disabled' if @player.loaned_out? %>">
+            <i class="handshake icon"></i>
+            <%= text_field_tag :notes, '', placeholder: 'Destination' %>
+          </div>
+        </div>
+        <div class="six wide column">
+          <%= submit_tag (@player.loaned_out? ? 'RETURN TO CLUB' : 'LOAN OUT' ), 
+            class: "ui #{@player.loaned_out? ? 'green' : 'orange'} submit fluid button" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- EXIT section -->
+<div class="ui raised red segment <%= 'hidden' if !@player.active || @player.loaned_out? %>">
+  <div class="ui dividing header">
+    <i class="red sign out icon"></i>
+    <div class="content">Exit Club</div>
+  </div>
+  <div class="ui content" data-label="update loan">
+    <%= form_for(@player, as: :player, method: :post, remote: true, url: { action: :exit }, html: { class: 'ui large fluid form', data: { confirm: "#{@player.name} is leaving the club?"} }) do %>
+      <div class="ui stackable grid">
+        <%= fields_for :contract, @player.contracts.last do |f| %>
+          <div class="equal width row">
+            <div class="column">
+              <div class="field" no-empty>
+                <div class="ui left icon input">
+                  <i class="calendar icon"></i>
+                  <%= f.text_field :date_expires, value: @team.current_date, placeholder: 'Exit Date', data: { flatpickr: true} %>
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <div class="field">
+                <div class="ui left icon input">
+                  <i class="handshake icon"></i>
+                  <%= f.text_field :notes, placeholder: 'Destination' %>
+                </div>
+              </div>
+            </div>
+            <div class="column"></div>
+          </div>
+          <%= f.fields_for :exit_cost, @player.contracts.last.build_exit_cost do |cf| %>
+            <div class="equal width row">
+              <div class="column">
+                <div class="field">
+                  <div class="ui left icon input">
+                    <i class="money icon"></i>
+                    <%= cf.number_field :price, placeholder: 'Transfer Fee' %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="column">
+                <div class="field">
+                  <%= cf.select :player_id,
+                    grouped_options_for_select(@team.grouped_players, cf.object.player_id),
+                    { include_blank: 'Traded Player' },
+                    { class: 'players fluid dropdown'} %>
+                </div>
+              </div>
+
+              <div class="column">
+                <div class="field">
+                  <%= cf.text_field :notes, placeholder: 'Notes' %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+
+        <div class="six wide column">
+          <%= submit_tag 'LEAVE CLUB', class: "ui red fluid submit button" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -3,18 +3,18 @@ require_dependency "my_fifa/application_controller"
 module MyFifa
   class PlayersController < ApplicationController
     before_action :set_current_team
-    before_action :set_player, only: [:edit, :update, :exit, :sign, :get_ovr]
+    before_action :set_player, only: [:edit, :update, :set_status, :exit, :rejoin, :get_ovr]
 
     # GET /players
     def index
-      @players = @team.sorted_players.includes(:fixtures)
-      @inactive_players = @team.players.inactive.includes(:fixtures).sorted
+      @players = @team.sorted_players.includes(:matches)
+      @inactive_players = @team.players.inactive.includes(:matches).sorted
       @all_players = @players+@inactive_players
       @title = "Players"
     end
 
     def show
-      @player = Player.includes(records: [:fixture]).find(params[:id])
+      @player = Player.includes(records: [:match]).find(params[:id])
       @title = @player.name
 
       @stats = [
@@ -28,7 +28,7 @@ module MyFifa
 
     # GET /players/new
     def new
-      @player = Player.new
+      @player = Player.new.init(@team.id)
       @title = "New Player"
     end
 
@@ -36,7 +36,7 @@ module MyFifa
     def create
       @player = Player.new(player_params)
 
-      if @team.players.push @player
+      if @team.players << @player
         redirect_to @player
       else
         respond_to do |format|
@@ -60,55 +60,46 @@ module MyFifa
       end
     end
 
+    def set_status
+      date = params[:date] || @team.current_date
+
+      case params[:type]
+      when 'injury', 'recover'
+        @player.toggle_injury(date)
+      when 'loan', 'return'
+        notes = params[:notes]
+        @player.toggle_loan(date, notes)
+      end
+
+      respond_to do |format|
+        format.js
+      end
+    end
+
     def exit
-      @player.update_attributes(active: false)
-      redirect_to :back
-    end
+      @contract = @player.contracts.last
 
-    def sign
-      @player.update_attributes(active: true)
-      redirect_to @player
-    end
-
-    def import_csv
-      status, message = ['', '']
-      players = []
-
-      # Validate uploaded CSV is in proper format
-      if (rows = params[:file]).present?
-        rows.tr("\r", '').split("\n").each do |row|
-          name, pos, sec_pos = row.split(';')
-          if name.blank? || pos.blank?
-            status, message = ['error', 'Invalid CSV File.']
-            break
-          elsif Player.positions.include?(pos) == false
-            status, message = ['error', "#{name} has an Invalid Position."]
-            break
-          else
-            players.push(
-              name: name,
-              pos: pos,
-              sec_pos: sec_pos
-            )
-          end
-        end
+      if @contract.update(params[:contract].permit!)
+        @player.update_column(:active, false)
+        redirect_to action: :index, notice: "#{@player.name} has left #{@team.team_name}"
       else
-        status, message = ['error', 'Blank CSV File.']
-      end
-      
-      # Create Players
-      unless players.blank? || status == 'error'
-        players.each do |player|
-          @team.players.push Player.new(
-            name:    player[:name],
-            pos:     player[:pos],
-            sec_pos: player[:sec_pos]
-          )
+        respond_to do |format|
+          format.js { render 'my_fifa/shared/errors', locals: { object: @contract } }
         end
-        status, message = ['success', 'Players have been added.']
       end
-      
-      render_json_response(status, message)
+    end
+
+    def rejoin
+      @contract = @player.contracts.new(params[:contracts].permit!)
+
+      if @contract.save
+        @player.update_column(:active, true)
+        redirect_to @player, notice: "#{@player.name} has rejoined #{@team.team_name}"
+      else
+        respond_to do |format|
+          format.js { render 'my_fifa/shared/errors', locals: { object: @contract } }
+        end
+      end
     end
 
     def get_ovr

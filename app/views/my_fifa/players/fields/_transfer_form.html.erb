@@ -1,0 +1,104 @@
+<div class="ui dividing header">
+  Initial Contract Information
+</div>
+<%= f.fields_for :contracts, @player.contracts.first do |contract| %>
+  <div class="ui stackable grid">
+    <div class="equal width row">
+      <div class="column">
+        <div class="required field" no-empty>
+          <%= contract.label :date_effective, 'Contract Starts' %>
+          <div class="ui left icon input">
+            <i class="calendar icon"></i>
+            <%= contract.text_field :date_effective, data: { flatpickr: true} %>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <!-- <div class="field"> -->
+          <%#= contract.label :date_expires, 'Contract Expires' %>
+          <!-- <div class="ui left icon input"> -->
+            <!-- <i class="calendar icon"></i> -->
+            <%#= contract.text_field :date_expires, data: { flatpickr: true} %>
+          <!-- </div> -->
+        <!-- </div> -->
+      </div>
+      <div class="column"></div>
+    </div>
+    <div class="equal width row">
+      <div class="column">
+        <div class="field">
+          <%= contract.label :party, 'Origin' %>
+          <%= contract.text_field :party %>
+        </div>
+      </div>
+      <div class="column">
+        <div class="field">
+          <label>Loaned Player?</label>
+          <div class="inline fields">
+            <div class="field">
+              <div class="ui radio checkbox">
+                <%= contract.radio_button :loan, false %>
+                <%= contract.label :loan_false, 'No' %>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <%= contract.radio_button :loan, true %>
+                <%= contract.label :loan_true, 'Yes' %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="field">
+          <label>Youth Academy Graduate?</label>
+          <div class="inline fields">
+            <div class="field">
+              <div class="ui radio checkbox">
+                <%= f.radio_button :youth, false %>
+                <%= f.label :youth_false, 'No' %>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <%= f.radio_button :youth, true %>
+                <%= f.label :youth_true, 'Yes' %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%= contract.fields_for :transfer_cost do |cost| %>
+      <div class="equal width row">
+        <div class="column">
+          <div class="field">
+            <%= cost.label :price, 'Transfer Fee' %>
+            <div class="ui left icon input">
+              <i class="money icon"></i>
+              <%= cost.number_field :price %>
+            </div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="field">
+            <%= cost.label :player_id, 'Traded Player' %>
+            <%= cost.select :player_id,
+              grouped_options_for_select(@team.grouped_players, cost.object.player_id),
+              { include_blank: true },
+              { class: 'players fluid dropdown'} %>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="field">
+            <%= cost.label :notes %>
+            <%= cost.text_field :notes %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
