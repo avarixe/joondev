@@ -16,6 +16,11 @@ module MyFifa
         @team = Team.find(session[:team].to_i)
       end
       
+      def set_current_formation
+        return redirect_to url_for(controller: :formations, action: :index) if session[:formation].blank?
+        @formation = Formation.find(session[:formation].to_i)
+      end
+
       def render_json_response(status, message)
         respond_to do |format|
           format.json {

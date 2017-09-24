@@ -4,6 +4,7 @@ module MyFifa
   class SquadsController < ApplicationController
     before_action :set_squad, only: [:show, :update, :info]
     before_action :set_current_team
+    before_action :set_current_formation, only: [:new]
 
     # GET /players
     def index
@@ -20,7 +21,6 @@ module MyFifa
 
     # GET /players/new
     def new
-      @formation = Formation.find(session[:formation])
       @title = "New Squad"
       @squad = @formation.squads.new
       set_squad_form
