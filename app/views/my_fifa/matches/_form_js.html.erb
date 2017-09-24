@@ -90,7 +90,7 @@
   
   function addRecord(target){
     // Generate new Record table row
-    var record = $('<tr/>');
+    var record = $('<tr data-sub />');
     var id = moment().valueOf();
     if ($('input[id$="pos"]', $(target).closest('tr')).attr('id').indexOf('sub_record') > 0)
       record.append($(target).closest('tr').html()
@@ -157,7 +157,9 @@
 
     $('.ribbon .level.icon', parentTr).last().remove();
     $('a[data-action="add-sub"]', parentTr).removeClass('disabled');
-    $('a[data-action="remove"]', parentTr).removeClass('disabled');
+    console.log(parentTr);
+    if (parentTr.is('[data-sub]'))
+      $('a[data-action="remove"]', parentTr).removeClass('disabled');
   }
   
   function toggleInjury(target){
