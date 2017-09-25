@@ -1,0 +1,28 @@
+- content_for :page_links do
+  = link_to('Edit', edit_my_fifa_player_path(@player), class: 'ui orange button') if @player.active?
+  = link_to 'Back', my_fifa_players_path, class: 'ui basic button'
+
+.ui.pointing.secondary.menu[data-menu="tabs"]
+  .item[data-tab="info"] Information
+  .active.item[data-tab="manage"] Manage
+  .item[data-tab="analytics"] Analytics
+
+.ui.basic.tab.segment[data-tab="info"]
+  .ui.raised.teal.segment
+    = render 'my_fifa/players/fields/info'
+    = render 'my_fifa/players/fields/stats'
+    = render 'my_fifa/players/fields/transfer'
+
+.ui.active.basic.tab.segment[data-tab="manage"]
+  = render @player.active ?          \
+   'my_fifa/players/manage/active' : \
+   'my_fifa/players/manage/inactive'
+
+.ui.basic.tab.segment[data-tab="analytics"]
+  .ui.raised.olive.segment
+    = render 'my_fifa/players/fields/analytics'
+
+= render 'my_fifa/charts/player_performance'
+
+= content_for :modal_container do
+  = render 'responsive_modals'

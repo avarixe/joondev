@@ -1,0 +1,61 @@
+- content_for :system_header do
+  h1.ui.teal.header
+    i.soccer.icon
+    .content
+      |  MyFIFA Manager 
+      .sub.header
+        = @team.team_name rescue nil
+  .ui.fluid.three.item.menu
+    .ui.pointing.dropdown.item
+      |  MANAGER 
+      i.dropdown.icon
+      .menu
+        = link_to(my_fifa_teams_path, class: 'item') do
+          i.world.icon
+          |  Manage Teams 
+        = link_to(my_fifa_formations_path, class: 'item') do
+          i.dashboard.icon
+          |  Manage Formations 
+        .divider
+        = link_to('#', class: 'item') do
+          i.trophy.icon
+          |  Career Overview 
+    .ui.up.pointing.dropdown.item
+      |  TEAM 
+      i.dropdown.icon
+      .menu
+        .header Players
+        .divider
+        = link_to(my_fifa_players_path, class: 'item') do
+          i.address.book.icon
+          |  Player List 
+        = link_to(new_my_fifa_player_path, class: 'item') do
+          i.add.user.icon
+          |  Player List 
+        = link_to(players_my_fifa_analytics_path, class: 'item') do
+          i.pie.chart.icon
+          |  Statistics 
+        .divider
+        = link_to(my_fifa_seasons_path, class: 'item') do
+          i.calendar.icon
+          |  View Seasons 
+    .ui.up.pointing.dropdown.item
+      |  Match 
+      i.dropdown.icon
+      .menu
+        .header
+          | Matches
+        .divider
+        = link_to(my_fifa_matches_path, class: 'item') do
+          i.archive.icon
+          |  Archive 
+        = link_to(new_my_fifa_match_path, class: 'item') do
+          i.soccer.icon
+          |  New Match 
+        .divider
+        = link_to(my_fifa_squads_path, class: 'item') do
+          i.users.icon
+          |  Manage Squads 
+  h2.ui.violet.dividing.header
+    = @title
+= render file: 'layouts/application'

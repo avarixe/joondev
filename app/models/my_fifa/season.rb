@@ -28,9 +28,9 @@ module MyFifa
     #  CALLBACK METHODS  #
     ######################
 
-    ######################
-    #  MUTATORS METHODS  #
-    ######################
+    #####################
+    #  MUTATOR METHODS  #
+    #####################
 
     ######################
     #  ACCESSOR METHODS  #

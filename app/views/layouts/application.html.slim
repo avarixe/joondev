@@ -1,0 +1,36 @@
+doctype html
+html
+  head
+    title
+      = @title || 'JoonDEV'
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+    meta[name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"]
+    = favicon_link_tag 'favicon.ico'
+    style
+      = yield :module_css
+  body[class="#{controller_name} #{action_name}"]
+    - unless current_user # Login/Registration Pages
+      .ui.middle.aligned.center.aligned.grid
+        .column
+          = yield
+          = render "users/shared/links"
+    - else
+      .ui.fixed.huge.inverted.fluid.menu
+        a.header.image.item.toggle.button
+          i.sidebar.icon
+          |  JoonDEV 
+        .right.menu
+          = link_to content_tag(:i, nil, class: 'edit icon'), edit_user_registration_path, class: 'item', title: 'Manage Account'
+          = link_to content_tag(:i, nil, class: 'sign out icon'), destroy_user_session_path, method: :delete, class: 'item', title: 'Sign Out'
+      .ui.left.massive.vertical.sidebar.inverted.menu
+        = render 'shared/menu'
+      .pusher
+        .ui.main.text.container
+          = yield :system_header
+          - if content_for? :page_links
+            .ui.text.fluid.menu
+              = yield :page_links
+          = yield
+      = yield :modal_container

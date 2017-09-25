@@ -1,4 +1,0 @@
-<div class="four wide column field pos" data-no=<%= no %> no-empty>
-  <%= f.text_field "pos_#{no}", 
-    value: (no == 1 ? 'GK' : f.object.public_send("pos_#{no}")) %>
-</div>

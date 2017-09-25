@@ -1,0 +1,19 @@
+.ui.dividing.header OVR Rating
+
+= line_chart @player.records.map{ |r| [r.match.date_played.strftime('%F'), r.ovr ] }, \
+  id: 'ovr-chart',                                                                    \
+  min: 50, max: 100,                                                                  \
+  library: {                                                                          \
+    chart: { zoomType: 'x' },                                                         \
+    tooltip: { pointFormat: 'OVR: <b>{point.y}</b>' }                                 \
+  }
+
+.ui.dividing.header Performance
+
+= line_chart @player.records.map{ |r| [ r.match.date_played.strftime('%F'), r.rating ] }, \
+  id: 'ratings-chart',                                                                    \
+  min: 5, max: 10,                                                                        \
+  library: {                                                                              \
+    chart: { zoomType: 'x' },                                                             \
+    tooltip: { pointFormat: 'Rating: <b>{point.y}</b>' }                                  \
+  }

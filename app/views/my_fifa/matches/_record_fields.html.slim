@@ -1,0 +1,61 @@
+tr[data-id=f.object.id]
+  td
+    = f.hidden_field(:_destroy) if player_is_sub
+    = f.hidden_field(:record_id) if player_is_sub
+    = f.hidden_field :pos, data: { default: f.object.pos }
+    div[class="pos ui ribbon #{'yellow' if f.object.id.present? && f.object.player_id == @match.motm_id} label"]
+      span
+        = f.object.pos
+      - num_sub.times do |i|
+        i.green.level.up.icon[style="visibility:#{ i == num_sub-1 ? 'visible' : 'hidden'}"]
+      - if f.object.sub_record.present?
+        i.red.level.down.icon
+  td
+    .field[no-empty]
+      = responsive_cell_label 'Player'
+      = f.select :player_id,                                              \
+        grouped_options_for_select(@grouped_players, f.object.player_id), \
+        {include_blank: true},                                            \
+        {class: 'player_id players fluid dropdown'}
+  td
+    .field[no-empty]
+      = responsive_cell_label 'OVR'
+      = f.number_field :ovr, class: 'ovr', min: 0, tabindex: 500
+  td
+    .field[no-empty]
+      = responsive_cell_label 'Rating'
+      = f.number_field :rating, class: 'rating', step: 0.01, min: 0, tabindex: 1000
+  td
+    = responsive_cell_label 'Goals'
+    = f.number_field :goals, class: 'goals click-form', min: 0, readonly: true
+  td
+    = responsive_cell_label 'Assists'
+    = f.number_field :assists, class: 'assists click-form', min: 0, readonly: true
+  td
+    .ui.left.pointing.dropdown.circular.teal.icon.button
+      i.settings.icon
+      .fluid.menu
+        a[data-action="add sub" class="#{'disabled' if f.object.sub_record.present?} item"]
+          i.level.down.red.icon
+          | Substitute
+        a.item[data-action="injury"]
+          i.first.aid.icon
+          span Injured
+          = f.hidden_field :injured, data: { default: false }
+        a[data-action="yellow card" class="#{'disabled' if f.object.booking > 1} item"]
+          i.yellow.square.icon
+          | Yellow Card
+          = f.hidden_field :booking, data: { default: 0}
+        a[data-action="red card" class="#{'disabled' if f.object.booking > 1} item"]
+          i.red.square.icon
+          | Red Card
+        a[data-action="clear card" class="#{'disabled' if f.object.booking < 2} item"]
+          i.green.minus.square.icon
+          | Clear Bookings
+        a[data-action="remove" class="#{'disabled' unless player_is_sub} item"]
+          i.remove.icon
+          | Remove
+
+- if (sub_record = f.object.sub_record).present?
+  = f.fields_for :sub_record do |sub_f|
+    = render 'record_fields', f: sub_f, num_sub: num_sub+1, player_is_sub: true

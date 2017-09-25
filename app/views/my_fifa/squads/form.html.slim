@@ -1,0 +1,26 @@
+= form_for(@squad, as: :squad, remote: true, html: { class: 'ui fluid form' }) do |f|
+  = f.hidden_field :formation_id
+
+  .fields
+    .inline.required.field[no-empty]
+      = f.label :squad_name, 'Squad Name'
+      = f.text_field :squad_name
+
+  .ui.raised.green.segment
+    .ui.mobile.reversed.stackable.grid
+
+      / Generate format based on Formation
+      - @formation.layout_to_a.each do |row|
+        div class=[ row.length % 2 == 0 ? 'four' : 'five', "columns centered row"]
+          - row.each do |pos|
+            = render 'player_field', f: f, no: pos
+
+      / GK row
+      .three.columns.centered.row
+        = render 'player_field', f: f, no: 1
+
+  = f.submit 'Save Squad', class: 'ui primary button'
+  = link_to 'Back', my_fifa_squads_path, class: 'ui basic button'
+
+- content_for :modal_container do
+  = render 'responsive_modals'

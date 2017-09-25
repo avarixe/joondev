@@ -1,0 +1,35 @@
+- content_for :page_links do
+  = link_to 'New Team', new_my_fifa_team_path, class: 'ui basic primary button'
+
+table.ui.basic.definition.selectable.compact.small.table[data-link="/my_fifa/teams/" width="100%"]
+  thead
+    th Active
+    th Name
+    th.ten.wide Competitions
+  tbody
+    - current_user.teams.each do |team|
+      tr [data-id="#{team.id}"]
+        td.center.aligned[no-link]
+          .ui.fitted.slider.checkbox
+            = radio_button_tag :set_current_team, team.id, current_user.team_id == team.id
+            label
+        td
+          = team.team_name
+        td
+          = responsive_cell_label 'Competitions'
+          = team.competition_options(', ')
+
+javascript:
+  $(function(){
+    $('.ui.checkbox').checkbox({
+      uncheckable: false,
+      onChecked: function(){
+        var this_ = this;
+        $.ajax({
+          type: 'POST',
+          url: '/my_fifa/teams/'+this_.value+'/set_active',
+          beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token %>') },
+        });
+      }
+    })
+  })

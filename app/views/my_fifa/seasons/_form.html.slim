@@ -1,0 +1,55 @@
+= form_for(@season, as: :season, remote: true, html: { class: 'ui large fluid form' }) do |f|
+  .ui.raised.teal.segment
+    .ui.dividing.header Season Information 
+    .ui.stackable.grid
+      .equal.width.row
+        .column
+          .required.field[no-empty]
+            = f.label :start_date, 'Start Date'
+            .ui.left.icon.input
+              i.calendar.icon
+              = f.text_field :start_date, data: { flatpickr: true }
+        .column
+          .required.field[no-empty]
+            = f.label :end_date, 'End Date'
+            .ui.left.icon.input
+              i.calendar.icon
+              = f.text_field :end_date, data: { flatpickr: true }
+      .equal.width.row
+        .column
+          .required.field[no-empty]
+            = f.label :start_club_worth, 'Club Worth (Start of Season)'
+            .ui.left.icon.input
+              i.money.icon
+              = f.number_field :start_club_worth
+        .column
+          .field
+            = f.label :end_club_worth, 'Club Worth (End of Season)'
+            .ui.left.icon.input
+              i.money.icon
+              = f.number_field :end_club_worth
+      .equal.width.row
+        .column
+          .required.field[no-empty]
+            = f.label :transfer_budget, 'Transfer Budget'
+            .ui.left.icon.input
+              i.money.icon
+              = f.number_field :transfer_budget
+        .column
+          .required.field[no-empty]
+            = f.label :wage_budget, 'Wage Budget'
+            .ui.left.icon.input
+              i.money.icon
+              = f.number_field :wage_budget
+      .equal.width.row
+        .column
+          .required.field[no-empty]
+            = f.label :captain_id, 'Captain'
+            .ui.left.icon.input
+              i.money.icon
+              = f.select :captain_id,                                                   \
+                grouped_options_for_select(@team.grouped_players, f.object.captain_id), \
+                { include_blank: true },                                                \
+                { class: 'fluid dropdown' }
+  = f.submit 'Save Season', class: 'ui primary button'
+  = link_to 'Back', @season, class: 'ui basic button'

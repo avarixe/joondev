@@ -38,14 +38,20 @@ module MyFifa
     ######################
 
 
+    #####################
+    #  MUTATOR METHODS  #
+    #####################
+
     ######################
-    #  INSTANCE METHODS  #
+    #  ACCESSOR METHODS  #
     ###################### 
       def competition_options(delimiter)
         competitions.join(delimiter) rescue ''
       end
 
       def recorded_seasons
+        return [] if matches.empty?
+
         start_year = matches.first.date_played.strftime('%Y').to_i
         start_year -= 1 if matches.first.date_played < Date.new(start_year, 7, 1)
         

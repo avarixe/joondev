@@ -1,0 +1,27 @@
+css:
+  body > .grid { height: 100%; }
+  .column { max-width: 450px; }
+
+h2.ui.teal.header
+  .content Welcome to JoonDEV
+= form_for(resource, as: resource_name, remote: true, url: session_path(resource_name), html: { class: 'ui large form fluid raised segment' }) do |f|
+  .field no-empty="" 
+    .ui.left.icon.input
+      i.user.icon
+      = f.text_field :login,    \
+        autofocus: true,        \
+        autocapitalize: "none", \
+        autocomplete: "off",    \
+        placeholder: 'Username'
+  .field no-empty=""
+    .ui.left.icon.input
+      i.lock.icon
+      = f.password_field :password, \
+        autocomplete: "off",        \
+        placeholder: 'Password'
+  - if devise_mapping.rememberable?
+    .field
+      .ui.checkbox
+        = f.check_box :remember_me
+        = f.label :remember_me
+  = f.submit "Log In", class: 'ui fluid large teal submit button'

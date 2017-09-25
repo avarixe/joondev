@@ -1,0 +1,60 @@
+.ui.dividing.header Transfer Information 
+- if @player.youth?
+  .ui.stackable.grid
+    .equal.width.row
+      .column
+        .ui.header
+          |  Class of 
+          = @player.date_joined.strftime('%Y')
+          .sub.header Youth Academy Graduate
+
+table.ui.compact.basic.small.table[width="100%"]
+  thead
+    tr
+      th
+      th Origin
+      th Date
+      th Transfer Fee
+  tbody
+    - @player.contracts.each_with_index do |contract, i|
+      tr
+        td.center.aligned[rowspan=(contract.transfer_cost.notes.present? ? 2 : 1)]
+          = @player.youth? && i == 0 ?                             \
+            content_tag(:i, nil, class: "green university icon") : \
+            content_tag(:i, nil, class: "green sign in icon")
+        td
+          = responsive_cell_label 'Origin'
+          = @player.youth? && i == 0 ?                           \
+            'YOUTH ACADEMY' :                                    \
+            contract.party + (contract.loan? ? "(LOAN)" : "")
+        td
+          = responsive_cell_label 'Date'
+          = time_to_s(contract.date_effective)
+        td
+          = responsive_cell_label 'Transfer Fee'
+          = contract.transfer_cost.fee
+      - if contract.transfer_cost.notes.present?
+        tr
+          td[colspan=3]
+            = responsive_cell_label 'Transfer Notes'
+            = contract.transfer_cost.notes
+
+      - if contract.exit_cost.present?
+        tr
+          td.center.aligned[rowspan=(contract.exit_cost.notes.present? ? 2 : 1)]
+            i.red.sign.out.icon
+          td
+            = responsive_cell_label 'Destination'
+            = contract.notes.present? ? contract.notes : 'N/A'
+          td
+            = responsive_cell_label 'Date'
+            = time_to_s(contract.date_expires)
+          td
+            = responsive_cell_label 'Transfer Fee'
+            = contract.exit_cost.fee
+
+        - if (contract.exit_cost.notes.present? rescue false)
+          tr
+            td[colspan=3]
+              = responsive_cell_label 'Transfer Notes'
+              = contract.exit_cost.notes

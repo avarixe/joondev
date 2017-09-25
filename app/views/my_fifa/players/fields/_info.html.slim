@@ -1,0 +1,20 @@
+.ui.dividing.header Player Information 
+.ui.stackable.grid
+  .equal.width.row
+    .column
+      .ui.header
+        = @player.pos
+        .sub.header Position
+    .column
+      .ui.header
+        = @player.nationality
+        .sub.header Nationality
+    .column
+      .ui.header
+        = @player.year_of_birth
+        .sub.header Year of Birth
+  .equal.width.row
+    .column
+      .ui.header
+        = @player.get_sec_pos || 'N/A'
+        .sub.header Secondary Position(s)

@@ -8,7 +8,7 @@ module MyFifa
       def set_current_team
         @team = current_user.default_team
       end
-      
+
       def render_json_response(status, message)
         respond_to do |format|
           format.json {

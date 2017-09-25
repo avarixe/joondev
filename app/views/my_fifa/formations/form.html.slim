@@ -1,0 +1,30 @@
+= form_for(@formation, as: :formation, remote: true, html: { class: 'ui fluid form' }) do |f|
+  .ui.grid
+    .two.column.stackable.row
+      .required.field.column[no-empty]
+        = f.label :title, 'Title'
+        = f.text_field :title
+      .required.field.column[no-empty]
+        = f.label :layout, 'Layout'
+        = f.select :layout,                                                  \
+          options_for_select(MyFifa::Formation::LAYOUTS, @formation.layout), \
+          { include_blank: false },                                          \
+          { class: 'fluid dropdown' }
+
+  .ui.raised.green.segment
+    #positions-container[style="display:none!important"]
+      - (2..11).each do |no|
+        = render 'position_field', f: f, no: no
+
+    .ui.mobile.reversed.stackable.grid
+      / GK row
+      .three.columns.centered.row
+        = render 'position_field', f: f, no: 1
+
+  = f.submit 'Save Formation', class: 'ui primary button'
+  = link_to 'Back', my_fifa_formations_path, class: 'ui basic button'
+
+= render 'form_js'
+
+- content_for :modal_container do
+  = render 'responsive_modals'

@@ -1,0 +1,42 @@
+css:
+  .ui.dropdown .menu > a.item.disabled { display: none }
+
+= form_for(@match, as: :match, remote: true, html: { class: 'ui small fluid form' }) do |f|
+  = f.hidden_field :team_id
+  = f.hidden_field :motm_id
+
+  = render 'match_fields', f: f
+
+  .ui.olive.raised.segment
+    - if @match.id.blank?
+      .field
+        = f.select :squad_id,                                               \
+          options_for_select(@team.squads.map{ |s| [s.squad_name, s.id] }), \
+          { include_blank: 'Squad' },                                       \
+          { class: 'fluid dropdown' }
+
+    table.ui.very.compact.table
+      thead
+        tr
+          th.one.wide
+          th.five.wide Player
+          th.center.aligned OVR
+          th.center.aligned Rating
+          th.center.aligned Goals
+          th.center.aligned Assists
+          th.center.aligned
+      tbody
+        - @match.player_records.each do |record|
+          = f.fields_for :player_records, record do |r|
+            = render 'record_fields', f: r, num_sub: 0, player_is_sub: false
+
+  .ui.horizontal.divider
+
+  = f.submit 'Save Match', class: 'ui primary button'
+  = content_tag :button, 'Update Squad', class: 'ui violet button', id: 'update-squad-btn', disabled: true
+  = link_to 'Back', @match, class: 'ui basic button'
+
+- content_for :modal_container do
+  = render 'my_fifa/squads/responsive_modals'
+
+= render 'form_js'

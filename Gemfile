@@ -33,11 +33,12 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-gem 'flatpickr_rails'
+gem 'slim'
 
 gem 'axlsx_rails'
-gem 'tzinfo-data'
 
+gem 'flatpickr_rails'
+gem 'tzinfo-data'
 gem 'chartkick'
 
 gem 'jquery-inputmask-rails', github: 'knapo/jquery-inputmask-rails'

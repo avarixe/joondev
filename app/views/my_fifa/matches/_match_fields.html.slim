@@ -1,0 +1,35 @@
+.ui.teal.raised.segment
+  .ui.grid
+    .four.column.stackable.centered.row
+      .six.wide.column.required.field[no-empty]
+        = f.label :competition, 'Competition'
+        = f.select :competition,                                      \
+          options_for_select(@team.competitions, @match.competition), \
+          {prompt: true},                                             \
+          {class: 'fluid dropdown', tabindex: 2}
+      .six.wide.column.required.field[no-empty]
+          = f.label :opponent, 'Opponent Team'
+          = f.text_field :opponent, tabindex: 1
+    .four.column.stackable.centered.row
+      .six.wide.column.required.field[no-empty]
+        = f.label :date_played, 'Date Played'
+        = f.text_field :date_played, data: { flatpickr: true }
+      .six.wide.column.required.field[no-empty]
+        label Home or Away
+        .inline.fields
+          .field
+            .ui.radio.checkbox
+              = f.radio_button :home, true
+              = f.label :home_true, 'Home'
+          .field
+            .ui.radio.checkbox
+              = f.radio_button :home, false 
+              = f.label :home_false, 'Away'
+
+    .five.column.centered.row
+      .four.wide.column.field[no-empty]
+        = f.text_field :score_f, data: { inputmask: "'mask': '9{+}[ (9{+})]', 'greedy': false" }
+      .ui.four.wide.center.aligned.column
+        label GF - GA
+      .four.wide.column.field[no-empty]
+        = f.text_field :score_a, data: { inputmask: "'mask': '9{+}[ (9{+})]', 'greedy': false" }

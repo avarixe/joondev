@@ -1,0 +1,36 @@
+h2.ui.violet.header
+  .content
+    | Edit 
+    = current_user.full_name
+= form_for(resource, as: resource_name, remote: true, url: registration_path(resource_name), html: { method: :put, class: 'ui large form fluid raised violet segment' }) do |f|
+  h4.ui.top.attached.olive.header Account Information
+  .ui.bottom.attached.olive.segment
+    .field[no-empty]
+      .ui.left.icon.input
+        i.address.book.icon
+        = f.text_field :full_name, required: true, placeholder: 'Name'
+    .disabled.field
+      .ui.left.icon.input
+        i.user.icon
+        = f.text_field :username, required: true, readonly: true, placeholder: 'Username'
+    .disabled.field
+      .ui.left.icon.input
+        i.mail.icon
+        = f.email_field :email, required: true, readonly: true, placeholder: 'Email Address'
+  h4.ui.top.attached.red.header Change Password
+  .ui.bottom.attached.red.segment
+    .field
+      em NOTE: Leave Blank if No Password Change
+    .field
+      .ui.left.icon.input
+        i.lock.icon
+        = f.password_field :password, autocomplete: "off", placeholder: "Password (#{ @minimum_password_length} characters minimum)"
+    .field
+      .ui.left.icon.input
+        i.lock.icon
+        = f.password_field :password_confirmation, autocomplete: "off", placeholder: 'Confirm Password'
+  .field[no-empty]
+    .ui.left.icon.input
+      i.lock.icon
+      = f.password_field :current_password, autocomplete: "off", placeholder: 'Confirm Changes with Current Password'
+  = f.submit "Update Account", class: 'ui fluid violet submit button'

@@ -1,0 +1,60 @@
+.ui.dividing.header Initial Contract Information
+= f.fields_for :contracts, @player.contracts.first do |contract|
+  .ui.stackable.grid
+    .equal.width.row
+      .column
+        .required.field[no-empty]
+          = contract.label :date_effective, 'Contract Starts'
+          .ui.left.icon.input
+            i.calendar.icon
+            = contract.text_field :date_effective, data: { flatpickr: true}
+      .column
+      .column
+    .equal.width.row
+      .column
+        .field
+          = contract.label :party, 'Origin'
+          = contract.text_field :party
+      .column
+        .field
+          label Loaned Player?
+          .inline.fields
+            .field
+              .ui.radio.checkbox
+                = contract.radio_button :loan, false
+                = contract.label :loan_false, 'No'
+            .field
+              .ui.radio.checkbox
+                = contract.radio_button :loan, true
+                = contract.label :loan_true, 'Yes'
+      .column
+        .field
+          label Youth Academy Graduate?
+          .inline.fields
+            .field
+              .ui.radio.checkbox
+                = f.radio_button :youth, false
+                = f.label :youth_false, 'No'
+            .field
+              .ui.radio.checkbox
+                = f.radio_button :youth, true
+                = f.label :youth_true, 'Yes'
+    = contract.fields_for :transfer_cost do |cost|
+      .equal.width.row
+        .column
+          .field
+            = cost.label :price, 'Transfer Fee'
+            .ui.left.icon.input
+              i.money.icon
+              = cost.number_field :price
+        .column
+          .field
+            = cost.label :player_id, 'Traded Player'
+            = cost.select :player_id,                                                   \
+              grouped_options_for_select(@team.grouped_players, cost.object.player_id), \
+              { include_blank: true },                                                  \
+              { class: 'players fluid dropdown'}
+        .column
+          .field
+            = cost.label :notes
+            = cost.text_field :notes

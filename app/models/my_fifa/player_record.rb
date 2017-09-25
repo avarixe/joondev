@@ -68,14 +68,28 @@ module MyFifa
         end
       end
 
-    ######################
-    #  INSTANCE METHODS  #
-    ######################
+      def set_sub_match_data
+        if self.sub_record.present?
+          self.sub_record.update_columns(
+            team_id: self.team_id,
+            cs:      self.cs,
+          )
+
+          self.sub_record.set_sub_match_data
+        end
+      end
+
+    #####################
+    #  MUTATOR METHODS  #
+    #####################
       def player_ids
         ids = [self.player_id]
         ids << self.sub_record.player_ids if self.sub_record.present?
       end
 
+    ######################
+    #  ACCESSOR METHODS  #
+    ######################
       def motm?
         player_id == self.match.motm_id
       end

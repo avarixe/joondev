@@ -55,8 +55,12 @@ module MyFifa
     ######################
 
 
+    #####################
+    #  MUTATOR METHODS  #
+    #####################
+
     ######################
-    #  INSTANCE METHODS  #
+    #  ACCESSOR METHODS  #
     ######################
       def player_ids
         (1..11).map{ |n| self.send("player_id_#{n}") }

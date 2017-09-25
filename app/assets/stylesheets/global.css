@@ -1,6 +1,15 @@
 textarea { resize: vertical; }
 #template { display: none !important; }
 
+body > .ui.inverted.menu .dropdown.item:hover,
+body > .ui.inverted.menu .link.item:hover,
+body > .ui.inverted.menu a.item:hover,
+body > .ui.link.inverted.menu .item:hover {
+  background-color: teal;
+}
+
+.dropdown.players .header { color: red !important; }
+
 /* Responsive Labels */
 .ui.label.responsive { display: none; }
 @media only screen and (max-width: 767px){

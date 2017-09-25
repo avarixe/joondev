@@ -1,0 +1,29 @@
+- content_for :page_links do
+  = link_to 'Edit', edit_my_fifa_season_path(@season), class: 'ui orange button'
+  = link_to 'Back', my_fifa_seasons_path, class: 'ui basic button'
+
+.ui.raised.teal.segment
+  .ui.stackable.grid
+    .equal.width.row
+      .column
+        .ui.header
+          = number_to_currency(@season.start_club_worth)
+          .sub.header Club Worth (Start of Season)
+      .column
+        .ui.header
+          = number_to_currency(@season.end_club_worth) || 'N/A'
+          .sub.header Club Worth (End of Season)
+    .equal.width.row
+      .column
+        .ui.header
+          = number_to_currency(@season.transfer_budget)
+          .sub.header Transfer Budget
+      .column
+        .ui.header
+          = number_to_currency(@season.wage_budget) || 'N/A'
+          .sub.header Wage Budget
+    .equal.width.row
+      .column
+        .ui.header
+          = @season.captain.name
+          .sub.header Captain

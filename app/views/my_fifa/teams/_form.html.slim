@@ -1,0 +1,19 @@
+= form_for(@team, as: :team, remote: true, html: { class: 'ui large fluid form' }) do |f|
+  .ui.teal.raised.segment
+    .ui.grid
+      .sixteen.wide.column
+        .required.fluid.inline.field[no-empty]
+          = f.label :team_name, 'Name'
+          = f.text_field :team_name
+      - if @team.id.nil?
+        .sixteen.wide.column
+          .required.fluid.inline.field[no-empty]
+            = f.label :current_date, 'Start Date'
+            = f.text_field :current_date, data: { flatpickr: true }
+      .sixteen.wide.column
+        .required.fluid.inline.field[no-empty]
+          = f.label :competitions, 'Competitions (One per line)'
+          = f.text_area :competitions, value: @team.competition_options("\n"), rows: 10
+  .ui.error.message
+  = f.submit 'Save Team', class: 'ui primary submit button'
+  = link_to 'Back', @team, class: 'ui basic button'

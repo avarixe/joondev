@@ -73,15 +73,17 @@ module MyFifa
     ######################
     #  CALLBACK METHODS  #
     ######################
-      after_save :set_records
+      after_commit :set_records_match_data
       after_save :update_current_date
 
-      def set_records
-        self.all_records.each do |record|
+      def set_records_match_data
+        self.player_records.each do |record|
           record.update_columns(
             team_id: self.team_id,
             cs:      self.score_ga == 0,
           )
+
+          record.set_sub_match_data
         end
       end
 
@@ -91,8 +93,12 @@ module MyFifa
         end
       end
     
+    #####################
+    #  MUTATOR METHODS  #
+    #####################
+
     ######################
-    #  INSTANCE METHODS  #
+    #  ACCESSOR METHODS  #
     ######################
       def player_ids
         self.player_records.inject([]){ |ids, record|

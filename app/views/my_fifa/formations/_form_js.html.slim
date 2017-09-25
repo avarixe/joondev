@@ -1,0 +1,43 @@
+javascript:
+  $(function(){
+    organizePositions();
+    $('#formation_layout').change(function(){
+      organizePositions();
+    })
+  })
+  
+  function organizePositions(){
+    var layout = $('#formation_layout').val().split("-").map(function(n){
+      return parseInt(n);
+    });
+  
+    var rows = [[]];
+    var nRow = 0;     // current row index
+    var posInRow = 0; // counter of pos in currow row
+    
+    for (var pos=2; pos <= 11; pos++){
+      // If reached threshold of row, create next row
+      if (rows[nRow].length == layout[nRow]){
+        nRow++;
+        rows.push([]);
+      }
+      rows[nRow].push(pos);
+    }
+  
+    // Clear the grid of the previous layout
+    $('.field.pos[data-no != 1]').appendTo('#positions-container');
+    $('.grid > .row:not(:last-child)').remove();
+  
+    // Repopular the grid with row data
+    for (var i=0; i < rows.length; i++){
+      var rowClass = (rows[i].length % 2 == 0 ? 'four' : 'five') + " columns centered row";
+  
+      // Collect rows in container
+      var rowElem = $('<div class="'+rowClass+'"></div>');
+      for (var j=0; j < rows[i].length; j++)
+        $('#positions-container .field[data-no='+rows[i][j]+']').appendTo(rowElem);
+  
+      // Add row to stackable grid
+      $('.ui.stackable.grid').prepend(rowElem);
+    }
+  }

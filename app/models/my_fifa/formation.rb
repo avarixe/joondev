@@ -52,8 +52,12 @@ module MyFifa
     ######################
 
 
+    #####################
+    #  MUTATOR METHODS  #
+    #####################
+
     ######################
-    #  INSTANCE METHODS  #
+    #  ACCESSOR METHODS  #
     ######################
       def positions
         (1..11).map{ |no| self.send("pos_#{no}") }

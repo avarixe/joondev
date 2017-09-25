@@ -1,0 +1,29 @@
+- content_for :page_links do
+  = link_to 'Edit', edit_my_fifa_match_path(@match), class: 'ui orange button'
+  = link_to 'Save Stats', my_fifa_match_path(@match, format: :xlsx), class: 'ui primary button'
+  = link_to 'Back', my_fifa_matches_path, class: 'ui basic button'
+
+.ui.olive.raised.segment
+  h2.ui.center.aligned.dividing.icon.header
+    i.trophy.icon
+    = @match.competition
+    .sub.header
+      = time_to_s(@match.date_played, "%B %e, %Y")
+  h4.ui.center.aligned.header
+    = @title
+    .ui.center.aligned.sub.header
+      = @match.score
+
+.ui.teal.raised.segment
+  table.ui.table[data-link="/my_fifa/players/"]
+    thead
+      tr
+        th
+        th.six.wide Name
+        th.center.aligned OVR
+        th.center.aligned Rating
+        th.center.aligned Goals
+        th.center.aligned Assists
+    tbody
+      - @records.each do |record|
+        = render 'record', record: record, num_sub: 0

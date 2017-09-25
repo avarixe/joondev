@@ -1,0 +1,23 @@
+- content_for :page_links do
+  = link_to 'New Season', new_my_fifa_season_path, class: 'ui basic primary button'
+
+table.ui.basic.definition.selectable.compact.small.table[data-link="/my_fifa/seasons/" width="100%"]
+  thead
+    th Season
+    th Club Worth (Start of Season)
+    th Transfer Budget
+    th Wage Budget
+  tbody
+    - @seasons.each do |season|
+      tr[data-id=season.id]
+        td
+          = season.title
+        td
+          = responsive_cell_label 'Club Worth (Start of Season)'
+          = number_to_currency(season.start_club_worth)
+        td
+          = responsive_cell_label 'Transfer Budget'
+          = number_to_currency(season.transfer_budget)
+        td
+          = responsive_cell_label 'Wage Budget'
+          = number_to_currency(season.wage_budget)

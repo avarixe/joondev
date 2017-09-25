@@ -1,0 +1,23 @@
+.ui.dividing.header Statistics 
+.ui.stackable.grid
+  .four.columns.centered.row
+    .aligned.column
+      .ui.grey.statistic
+        .label Start OVR
+        .value
+          = @player.start_ovr
+    .aligned.column
+      .ui.green.statistic
+        .label
+          = @player.active ? 'Current' : 'Last'
+          |  OVR
+        .value
+          = @player.current_ovr
+  .five.columns.centered.row
+    - @stats.each do |stat|
+      .aligned.column
+        div[class="ui #{stat[:color]} statistic"]
+          .value
+            = @player.public_send(stat[:type])
+          .label
+            = stat[:label]
