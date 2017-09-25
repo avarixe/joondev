@@ -34,7 +34,7 @@ module MyFifa
         redirect_to @team, notice: 'Team was successfully created.'
       else
         respond_to do |format|
-          format.js { render 'my_fifa/shared/errors', locals: { object: @team } }
+          format.js { render 'shared/errors', locals: { object: @team } }
         end
       end
     end
@@ -45,7 +45,7 @@ module MyFifa
         redirect_to @team, notice: 'Team was successfully updated.'
       else
         respond_to do |format|
-          format.js { render 'my_fifa/shared/errors', locals: { object: @team } }
+          format.js { render 'shared/errors', locals: { object: @team } }
         end
       end
     end
@@ -57,7 +57,7 @@ module MyFifa
     end
 
     def set_active
-      session[:team] = params[:id]
+      current_user.update_column(:team_id, params[:id])
       head :ok
     end
 

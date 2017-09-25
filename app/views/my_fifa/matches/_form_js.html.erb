@@ -46,7 +46,9 @@
             $('select[id$="player_id"]', tr).dropdown('set selected', player_id);
 
             // Update Position labels
-            $('td:first-child input', tr).val(data.positions[i]);
+            $('td:first-child input', tr)
+              .attr('data-default', data.positions[i])
+              .val(data.positions[i]);
             $('td:first-child .ribbon', tr).text(data.positions[i]);
           });
         });

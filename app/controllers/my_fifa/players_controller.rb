@@ -40,7 +40,7 @@ module MyFifa
         redirect_to @player
       else
         respond_to do |format|
-          format.js { render 'my_fifa/shared/errors', locals: { object: @player } }
+          format.js { render 'shared/errors', locals: { object: @player } }
         end
       end
     end
@@ -55,7 +55,7 @@ module MyFifa
         redirect_to @player
       else
         respond_to do |format|
-          format.js { render 'my_fifa/shared/errors', locals: { object: @player } }
+          format.js { render 'shared/errors', locals: { object: @player } }
         end
       end
     end
@@ -84,7 +84,7 @@ module MyFifa
         redirect_to action: :index, notice: "#{@player.name} has left #{@team.team_name}"
       else
         respond_to do |format|
-          format.js { render 'my_fifa/shared/errors', locals: { object: @contract } }
+          format.js { render 'shared/errors', locals: { object: @contract } }
         end
       end
     end
@@ -97,7 +97,7 @@ module MyFifa
         redirect_to @player, notice: "#{@player.name} has rejoined #{@team.team_name}"
       else
         respond_to do |format|
-          format.js { render 'my_fifa/shared/errors', locals: { object: @contract } }
+          format.js { render 'shared/errors', locals: { object: @contract } }
         end
       end
     end

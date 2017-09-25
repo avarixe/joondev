@@ -14,7 +14,7 @@
       <tr data-id=<%= formation.id %>>
         <td class="center aligned" no-link>
           <div class="ui fitted slider checkbox">
-            <%= radio_button_tag :set_formation, formation.id, session[:formation].to_i == formation.id %>
+            <%= radio_button_tag :set_formation, formation.id, current_user.formation_id == formation.id %>
             <label></label>
           </div>
         </td>
@@ -30,4 +30,18 @@
   </tbody>
 </table>
 
-<%= render 'my_fifa/shared/toggle_session_var', session_class: 'formations' %>
+<script>
+  $(function(){
+    $('.ui.checkbox').checkbox({
+      uncheckable: false,
+      onChecked: function(){
+        var this_ = this;
+        $.ajax({
+          type: 'POST',
+          url: '/my_fifa/formations/'+this_.value+'/set_active',
+          beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token %>') },
+        });
+      }
+    })
+  })
+</script>

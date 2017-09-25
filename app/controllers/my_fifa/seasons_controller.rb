@@ -35,7 +35,7 @@ module MyFifa
         redirect_to @season
       else
         respond_to do |format|
-          format.js { render 'my_fifa/shared/errors', locals: { object: @season } }
+          format.js { render 'shared/errors', locals: { object: @season } }
         end
       end
     end
@@ -47,7 +47,7 @@ module MyFifa
       else
         respond_to do |format|
           format.js {
-            render 'my_fifa/shared/errors', locals: { object: @season }
+            render 'shared/errors', locals: { object: @season }
           }
         end
       end

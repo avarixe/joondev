@@ -31,7 +31,7 @@ module MyFifa
         if current_user.formations << @formation
           format.js
         else
-          format.js { render 'my_fifa/shared/errors', locals: { object: @formation } }
+          format.js { render 'shared/errors', locals: { object: @formation } }
         end
       end
     end
@@ -43,14 +43,14 @@ module MyFifa
           if @formation.update(formation_params)
             render
           else
-            render 'my_fifa/shared/errors', locals: { object: @formation }
+            render 'shared/errors', locals: { object: @formation }
           end
         }
       end
     end
 
     def set_active
-      session[:formation] = params[:id]
+      current_user.update_column(:formation_id, params[:id])
       head :ok
     end
 

@@ -14,7 +14,7 @@ module MyFifa
 
     # GET /players/1
     def show
-      @formation = @squad.formation
+      @formation = current_user.default_formation
       @title = @squad.squad_name
       set_squad_form
     end
@@ -34,7 +34,7 @@ module MyFifa
         if @team.squads << @squad
           format.js
         else
-          format.js { render 'my_fifa/shared/errors', locals: { object: @squad } }
+          format.js { render 'shared/errors', locals: { object: @squad } }
         end
       end
     end
@@ -48,7 +48,7 @@ module MyFifa
           elsif params[:page] == 'match'
             render :errors
           else
-            render 'my_fifa/shared/errors', locals: { object: @squad }
+            render 'shared/errors', locals: { object: @squad }
           end
         }
       end

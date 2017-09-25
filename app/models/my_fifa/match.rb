@@ -18,10 +18,10 @@ module MyFifa
     ############################
     #  INITIALIZATION METHODS  #
     ############################
-      def build_records
-        Squad::DEFAULT_POSITIONS.each do |pos|
+      def build_records(formation)
+        (1..11).each do |n|
           self.player_records.build(
-            pos: pos
+            pos: formation.public_send("pos_#{n}")
           )
         end
       end

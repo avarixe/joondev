@@ -1,0 +1,17 @@
+// Clear any previous error messages and highlights
+$('.error.message').remove();
+$('.error').removeClass('error');
+
+// Highlight invalid fields
+$('.field[no-empty]').each(function(){
+  if (!$('input', $(this)).val())
+    $(this).addClass('error');
+});
+
+// Output error messages
+$('form').prepend(
+  '<div class="ui error mini message" style="text-align:left;display:block">' +
+    '<i class="close icon"></i>' +
+    "Incorrect Username/Password Combination." +
+  '</div>'
+);

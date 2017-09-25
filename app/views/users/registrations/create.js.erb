@@ -1,0 +1,16 @@
+$('body').append(
+  '<div class="ui basic tiny success modal">' +
+    '<div class="ui icon header">' +
+      '<i class="green checkmark icon"></i>' +
+      'User Account has been successfully created.' +
+    '</div>' +
+  '</div>');
+
+// Output success message
+$('.ui.success.modal')
+  .modal({
+    onHide: function(){
+      window.location = "<%= root_path %>";
+    }
+  })
+  .modal('show');

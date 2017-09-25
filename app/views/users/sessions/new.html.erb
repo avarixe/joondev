@@ -7,22 +7,28 @@
   <div class="content">Welcome to JoonDEV</div>
 </h2>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'ui large form fluid raised segment' }) do |f| %>
+<%= form_for(resource, as: resource_name, remote: true, url: session_path(resource_name), html: { class: 'ui large form fluid raised segment' }) do |f| %>
   <%= devise_error_messages! %>
 
-  <div class="field">
+  <div class="field" no-empty>
     <div class="ui left icon input">
       <i class="user icon"></i>
-      <%= f.text_field :login, autofocus: true, class: 'form-control', placeholder: 'Username' %>
+      <%= f.text_field :login,
+        autofocus: true,
+        autocapitalize: "none",
+        autocomplete: "off",
+        placeholder: 'Username' %>
     </div>
   </div>
-  <div class="field">
+  <div class="field" no-empty>
     <div class="ui left icon input">
       <i class="lock icon"></i>
-      <%= f.password_field :password, autocomplete: "off", class: 'form-control', placeholder: 'Password' %>
+      <%= f.password_field :password,
+        autocomplete: "off",
+        placeholder: 'Password' %>
     </div>
   </div>
-  
+
   <% if devise_mapping.rememberable? -%>
     <div class="field">
       <div class="ui checkbox">

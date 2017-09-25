@@ -76,7 +76,7 @@ module MyFifa
       last_played = @team.matches.last.date_played unless @team.matches.empty?
       @match = Match.new(date_played: @team.current_date)
 
-      @match.build_records
+      @match.build_records(current_user.default_formation)
       @grouped_players = @team.grouped_players(no_injured: true)
     end
 
@@ -94,7 +94,7 @@ module MyFifa
         redirect_to @match, notice: 'Match was successfully created.'
       else
         respond_to do |format|
-          format.js { render 'my_fifa/shared/errors', locals: { object: @match } }
+          format.js { render 'shared/errors', locals: { object: @match } }
         end
       end
     end
@@ -105,7 +105,7 @@ module MyFifa
         redirect_to @match, notice: 'Match was successfully updated.'
       else
         respond_to do |format|
-          format.js { render 'my_fifa/shared/errors', locals: { object: @match } }
+          format.js { render 'shared/errors', locals: { object: @match } }
         end
       end
     end

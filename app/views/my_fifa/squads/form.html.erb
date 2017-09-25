@@ -34,12 +34,3 @@
 <% content_for :modal_container do %>
   <%= render 'responsive_modals' %>
 <% end %>
-
-<script>
-  $(function(){
-    <% if session[:success].present? %>
-      <% session[:success] = nil %>
-      $('.ui.success.modal').modal('show');
-    <% end %>
-  })
-</script>
