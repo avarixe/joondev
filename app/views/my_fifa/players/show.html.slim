@@ -3,17 +3,17 @@
   = link_to 'Back', my_fifa_players_path, class: 'ui basic button'
 
 .ui.pointing.secondary.menu[data-menu="tabs"]
-  .item[data-tab="info"] Information
-  .active.item[data-tab="manage"] Manage
+  div[class="item #{'active' unless @play.active?}" data-tab="info"] Information
+  div[class="item #{'active' if @player.active?}" data-tab="manage"] Manage
   .item[data-tab="analytics"] Analytics
 
-.ui.basic.tab.segment[data-tab="info"]
+div[class="ui basic tab segment #{'active' unless @player.active?}" data-tab="info"]
   .ui.raised.teal.segment
     = render 'my_fifa/players/fields/info'
     = render 'my_fifa/players/fields/stats'
     = render 'my_fifa/players/fields/transfer'
 
-.ui.active.basic.tab.segment[data-tab="manage"]
+div[class="ui basic tab segment #{'active' if @player.active?}" data-tab="manage"]
   = render @player.active ?          \
    'my_fifa/players/manage/active' : \
    'my_fifa/players/manage/inactive'
