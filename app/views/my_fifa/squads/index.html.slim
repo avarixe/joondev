@@ -8,7 +8,5 @@ table.ui.basic.definition.selectable.compact.small.table[data-link="/my_fifa/squ
   tbody
     - @squads.each do |squad|
       tr[data-id=squad.id]
-        td
-          = squad.squad_name
-        td
-          = squad.player_names
+        td = squad.squad_name
+        td = squad.player_names

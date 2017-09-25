@@ -8,13 +8,12 @@ table.ui.basic.definition.selectable.compact.small.table[data-link="/my_fifa/tea
     th.ten.wide Competitions
   tbody
     - current_user.teams.each do |team|
-      tr [data-id="#{team.id}"]
+      tr [data-id=team.id]
         td.center.aligned[no-link]
           .ui.fitted.slider.checkbox
             = radio_button_tag :set_current_team, team.id, current_user.team_id == team.id
             label
-        td
-          = team.team_name
+        td = team.team_name
         td
           = responsive_cell_label 'Competitions'
           = team.competition_options(', ')

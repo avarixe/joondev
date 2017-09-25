@@ -10,8 +10,7 @@ table.ui.basic.definition.selectable.compact.small.table[data-link="/my_fifa/sea
   tbody
     - @seasons.each do |season|
       tr[data-id=season.id]
-        td
-          = season.title
+        td = season.title
         td
           = responsive_cell_label 'Club Worth (Start of Season)'
           = number_to_currency(season.start_club_worth)

@@ -6,11 +6,10 @@ table.ui.basic.definition.sortable.selectable.compact.small.table[data-link="/my
   thead
     tr.center.aligned
       - ['Name', 'Position', 'OVR'].each do |header|
-        th
-          = header
+        th = header
   tbody
     - @all_players.each do |player|
-      tr.center.aligned[data-id="#{player.id}"]
+      tr.center.aligned[data-id=player.id]
         td
           = content_tag(:i, nil, class: 'red attention icon') if !player.active
           = player.name

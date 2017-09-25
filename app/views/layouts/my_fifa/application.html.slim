@@ -3,8 +3,7 @@
     i.soccer.icon
     .content
       |  MyFIFA Manager 
-      .sub.header
-        = @team.team_name rescue nil
+      .sub.header = @team.team_name rescue nil
   .ui.fluid.three.item.menu
     .ui.pointing.dropdown.item
       |  MANAGER 
@@ -43,8 +42,7 @@
       |  Match 
       i.dropdown.icon
       .menu
-        .header
-          | Matches
+        .header  Matches
         .divider
         = link_to(my_fifa_matches_path, class: 'item') do
           i.archive.icon
@@ -56,6 +54,6 @@
         = link_to(my_fifa_squads_path, class: 'item') do
           i.users.icon
           |  Manage Squads 
-  h2.ui.violet.dividing.header
-    = @title
+  h2.ui.violet.dividing.header = @title
+  
 = render file: 'layouts/application'

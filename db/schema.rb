@@ -34,19 +34,19 @@ ActiveRecord::Schema.define(version: 20170924230101) do
     t.integer  "user_id"
     t.string   "title"
     t.string   "layout"
-    t.string   "pos_1"
-    t.string   "pos_2"
-    t.string   "pos_3"
-    t.string   "pos_4"
-    t.string   "pos_5"
-    t.string   "pos_6"
-    t.string   "pos_7"
-    t.string   "pos_8"
-    t.string   "pos_9"
-    t.string   "pos_10"
-    t.string   "pos_11"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "pos_1",      default: "GK"
+    t.string   "pos_2",      default: "LB"
+    t.string   "pos_3",      default: "LCB"
+    t.string   "pos_4",      default: "RCB"
+    t.string   "pos_5",      default: "RB"
+    t.string   "pos_6",      default: "LCM"
+    t.string   "pos_7",      default: "CM"
+    t.string   "pos_8",      default: "RCM"
+    t.string   "pos_9",      default: "LW"
+    t.string   "pos_10",     default: "ST"
+    t.string   "pos_11",     default: "RW"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "my_fifa_matches", force: :cascade do |t|
@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(version: 20170924230101) do
     t.integer "assists"
     t.string  "pos",       limit: 10
     t.boolean "cs"
-    t.integer "ovr"
+    t.integer "ovr",                  default: 0
     t.integer "record_id"
     t.boolean "injured",              default: false
     t.integer "booking",              default: 0
