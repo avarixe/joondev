@@ -10,12 +10,19 @@ default: &default
   pool: 5
   timeout: 5000
   host: localhost
-  database: joondev_db
+
+test:
+  <<: *default
+  database: test_db
+  username: devuser
+  password: 18349276
 
 development:
   <<: *default
+  database: joondev_db
   username: devuser
   password: 18349276
 
 production:
   <<: *default
+  database: joondev_db
