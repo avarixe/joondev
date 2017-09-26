@@ -1,9 +1,6 @@
-# DEPRECATED MODEL: Kept Only for Transitioning Migration
-
 module MyFifa
-  class PlayerEvent < Base
-    self.table_name = 'my_fifa_player_events'
-    default_scope { order(id: :asc) }
+  class Event < Base
+    self.abstract_class = true
 
     belongs_to :player
 

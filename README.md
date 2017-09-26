@@ -12,6 +12,9 @@
 Team Class:
   Overhead class that encapsulates Players, Squads, Games, Records
 
+Formation Class:
+  Stores possible formation layouts for Squads
+
 Player Class:
   Store general information about Players on the Team
   
@@ -24,28 +27,39 @@ Game Class:
   Collection of many Player Records
 
 PlayerRecord Class:
-  Collection of a Player's Rating, Goals and Assists in a game
+  Collection of a Player's Match stats in a game
 
-## CHANGE LOG
 
-#### 0.1.0 (1-7-17)
-  - Reorganized previous CMSK into Rails Engine
-  - Live on play.joondev.com, replacing cmsk.joondev.com
-  - Created top level for organizing future projects
-  - Cookies to set current Team observed
-  - Players have "ACTIVE" status to indicate visibility status
-  - Added functionality to add as many SUBs as needed
-  - Upgraded to Bootstrap 4alpha
+PLAYER MANAGEMENT CLASSES
 
-## TODO
+  Contract Class:
+    Information about Player's Contract (length, $, origin, etc)
+      - Start Date
+      - End Date
+      * has_many ContractTerms
+      - Origin
+      - Transfer Cost
+      - Loan
+      * Destination
+      - Exit Cost
 
-#### DASHBOARD
-  - Add image button for CMSK
+  Cost Class:
+    record of Cost of a player for transaction
+      - Price (TODO: Rename to Fee)
+      - Traded Player
+      * Add-on Clause
   
-#### CMSK
-  - New Team, Player actions into modals and AJAX calls
-  - Player Performance Analysis
-  - MAYBE: Competition model with jQuery Bracket display, based on competition type
-  - Better side menu for Engine level
-  - MAYBE: Add More Player Details
-  - User Customizability to control Excel output 
+  ContractTerm Class:
+    Latest instance supercedes previous terms of Contract
+      + Date Expires
+      + Wage
+      + Bonus
+      + Number of Stats
+      + Stat Type
+      + Release Clause
+    
+  Injury Class:
+    Record of a Player's Injury
+  
+  Loan Class:
+    Record of a Player going on Loan
