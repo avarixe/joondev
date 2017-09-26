@@ -1,5 +1,3 @@
-# DEPRECATED MODEL: Kept Only for Transitioning Migration
-
 module MyFifa
   class PlayerEvent < Base
     self.table_name = 'my_fifa_player_events'

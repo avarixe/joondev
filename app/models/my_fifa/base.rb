@@ -1,7 +1,6 @@
 module MyFifa
   class Base < ActiveRecord::Base
     self.abstract_class = true
-    default_scope { order(id: :asc) }
 
     include Helper
 

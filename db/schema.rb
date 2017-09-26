@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170925225219) do
+ActiveRecord::Schema.define(version: 20170924230101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,64 +22,31 @@ ActiveRecord::Schema.define(version: 20170925225219) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "my_fifa_contract_terms", force: :cascade do |t|
-    t.integer "player_id"
-    t.date    "end_date"
-    t.integer "wage"
-    t.integer "signing_bonus"
-    t.integer "stat_bonus"
-    t.integer "num_stats"
-    t.string  "stat_type"
-    t.integer "release_clause"
-  end
-
-  create_table "my_fifa_contracts", force: :cascade do |t|
-    t.integer "player_id"
-    t.date    "start_date"
-    t.string  "origin"
-    t.string  "destination"
-    t.boolean "loan",        default: false
-  end
-
   create_table "my_fifa_costs", force: :cascade do |t|
     t.integer "player_id"
-    t.integer "fee"
-    t.integer "contract_id"
+    t.integer "price"
+    t.integer "event_id"
     t.text    "notes"
-    t.string  "dir",           default: "in"
-    t.integer "add_on_clause", default: 0
+    t.string  "dir",       default: "in"
   end
 
   create_table "my_fifa_formations", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "title"
     t.string   "layout"
-    t.string   "pos_1"
-    t.string   "pos_2"
-    t.string   "pos_3"
-    t.string   "pos_4"
-    t.string   "pos_5"
-    t.string   "pos_6"
-    t.string   "pos_7"
-    t.string   "pos_8"
-    t.string   "pos_9"
-    t.string   "pos_10"
-    t.string   "pos_11"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "my_fifa_injuries", force: :cascade do |t|
-    t.integer "player_id"
-    t.date    "start_date"
-    t.date    "end_date"
-  end
-
-  create_table "my_fifa_loans", force: :cascade do |t|
-    t.integer "player_id"
-    t.date    "start_date"
-    t.date    "end_date"
-    t.string  "destination"
+    t.string   "pos_1",      default: "GK"
+    t.string   "pos_2",      default: "LB"
+    t.string   "pos_3",      default: "LCB"
+    t.string   "pos_4",      default: "RCB"
+    t.string   "pos_5",      default: "RB"
+    t.string   "pos_6",      default: "LCM"
+    t.string   "pos_7",      default: "CM"
+    t.string   "pos_8",      default: "RCM"
+    t.string   "pos_9",      default: "LW"
+    t.string   "pos_10",     default: "ST"
+    t.string   "pos_11",     default: "RW"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "my_fifa_matches", force: :cascade do |t|
@@ -115,7 +82,7 @@ ActiveRecord::Schema.define(version: 20170925225219) do
     t.integer "assists"
     t.string  "pos",       limit: 10
     t.boolean "cs"
-    t.integer "ovr"
+    t.integer "ovr",                  default: 0
     t.integer "record_id"
     t.boolean "injured",              default: false
     t.integer "booking",              default: 0

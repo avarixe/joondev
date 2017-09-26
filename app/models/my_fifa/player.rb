@@ -88,7 +88,7 @@ module MyFifa
         if self.youth? 
           if contract.loan.present?
             errors.add(:base, "A player cannot be both a Loaned Player and a Youth Academy Graduate.")            
-          elsif contract.origin.present?
+          elsif contract.party.present?
             errors.add(:base, "Youth Academy Graduates should not have an Origin.")            
           elsif [contract.transfer_cost.price, contract.transfer_cost.player_id].any?(&:present?)
             errors.add(:base, "Youth Academy Graduates should not have a Transfer Cost.")
@@ -106,22 +106,22 @@ module MyFifa
       def toggle_injury(date)
         if injured?
           self.update_column(:status, '')
-          injuries.last.update(end_date: date)
+          injuries.last.update(date_expires: date)
         else
           self.update_column(:status, 'injured')
-          injuries.create(start_date: date)
+          injuries.create(date_effective: date)
         end
       end
 
       def toggle_loan(date, destination)
         if loaned_out?
           self.update_column(:status, '')          
-          loans.last.update(end_date: date)
+          loans.last.update(date_expires: date)
         else
           # end any injury event
-          injuries.where(end_date: nil).update_all(end_date: date)
+          injuries.where(date_expires: nil).update_all(date_expires: date)
           self.update_column(:status, 'loan')
-          loans.create(start_date: date, destination: destination)
+          loans.create(date_effective: date, notes: destination)
         end
       end
 
