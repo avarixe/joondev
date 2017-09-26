@@ -13,8 +13,13 @@
       .ui.header
         = @player.year_of_birth
         .sub.header Year of Birth
-  .equal.width.row
-    .column
+  - if @player.youth?
+    .six.wide.column
       .ui.header
-        = @player.get_sec_pos || 'N/A'
-        .sub.header Secondary Position(s)
+        | Class of 
+        = @player.date_joined.strftime('%Y')
+        .sub.header Youth Academy Graduate
+  .ten.wide.column
+    .ui.header
+      = @player.get_sec_pos || 'N/A'
+      .sub.header Secondary Position(s)

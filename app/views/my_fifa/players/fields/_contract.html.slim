@@ -1,0 +1,28 @@
+- if (current_contract = @player.current_contract.terms.last rescue nil)
+  .ui.dividing.header Current Contract
+
+  .ui.stackable.grid
+    .equal.width.row
+      .column
+        .ui.header
+          = number_to_currency(current_contract.wage) || 'N/A'
+          .sub.header Wage
+      .column
+        .ui.header
+          = number_to_currency(current_contract.release_clause) || 'N/A'
+          .sub.header Release Clause
+    .equal.width.row
+      .column
+        .ui.header
+          = number_to_currency(current_contract.signing_bonus) || 'N/A'
+          .sub.header Signing Bonus
+      .column
+        .ui.header
+          - if current_contract.stat_bonus.present?
+            = [ number_to_currency(current_contract.stat_bonus),
+              '/',
+              current_contract.num_stats,
+              current_contract.stat_type ].join(' ')
+          - else
+            | N/A
+          .sub.header Bonus

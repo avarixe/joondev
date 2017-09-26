@@ -1,60 +1,113 @@
-.ui.dividing.header Initial Contract Information
-= f.fields_for :contracts, @player.contracts.first do |contract|
-  .ui.stackable.grid
-    .equal.width.row
-      .column
-        .required.field[no-empty]
-          = contract.label :date_effective, 'Contract Starts'
-          .ui.left.icon.input
-            i.calendar.icon
-            = contract.text_field :date_effective, data: { flatpickr: true}
-      .column
-      .column
-    .equal.width.row
-      .column
-        .field
-          = contract.label :party, 'Origin'
-          = contract.text_field :party
-      .column
-        .field
-          label Loaned Player?
-          .inline.fields
-            .field
-              .ui.radio.checkbox
-                = contract.radio_button :loan, false
-                = contract.label :loan_false, 'No'
-            .field
-              .ui.radio.checkbox
-                = contract.radio_button :loan, true
-                = contract.label :loan_true, 'Yes'
-      .column
-        .field
-          label Youth Academy Graduate?
-          .inline.fields
-            .field
-              .ui.radio.checkbox
-                = f.radio_button :youth, false
-                = f.label :youth_false, 'No'
-            .field
-              .ui.radio.checkbox
-                = f.radio_button :youth, true
-                = f.label :youth_true, 'Yes'
-    = contract.fields_for :transfer_cost do |cost|
+.ui.raised.olive.segment
+  .ui.dividing.header #{@player.id.nil? ? 'Initial' : 'Current'} Contract Information
+  = f.fields_for :contracts, @player.current_contract do |contract|
+    .ui.stackable.grid
       .equal.width.row
         .column
-          .field
-            = cost.label :price, 'Transfer Fee'
+          div[class="required field #{'disabled' if @player.id.present?}" no-empty]
+            = contract.label :start_date, 'Contract Starts'
             .ui.left.icon.input
-              i.money.icon
-              = cost.number_field :price
+              i.calendar.icon
+              = contract.text_field :start_date, data: { flatpickr: true}
         .column
-          .field
-            = cost.label :player_id, 'Traded Player'
-            = cost.select :player_id,                                                   \
-              grouped_options_for_select(@team.grouped_players, cost.object.player_id), \
-              { include_blank: true },                                                  \
-              { class: 'players fluid dropdown'}
+          div[class="required field #{'disabled' if @player.id.present?}" no-empty]
+            = contract.fields_for :terms, contract.object.terms.last do |term|
+              = term.label :end_date, 'Contract Ends'
+              .ui.left.icon.input
+                i.calendar.outline.icon
+                = term.text_field :end_date, data: { flatpickr: true }
         .column
-          .field
-            = cost.label :notes
-            = cost.text_field :notes
+
+      - unless @player.youth?
+        .ui.horizontal.divider Transfer Details
+
+        .equal.width.row
+          .column
+            .field
+              = contract.label :origin
+              = contract.text_field :origin
+          .column
+            .field
+              label Loaned Player?
+              div[class="inline fields #{'disabled' if @player.id.present?}"]
+                .field
+                  .ui.radio.checkbox
+                    = contract.radio_button :loan, false
+                    = contract.label :loan_false, 'No'
+                .field
+                  .ui.radio.checkbox
+                    = contract.radio_button :loan, true
+                    = contract.label :loan_true, 'Yes'
+          .column
+            .field
+              label Youth Academy Graduate?
+              div[class="inline fields #{'disabled' if @player.id.present?}"]
+                .field
+                  .ui.radio.checkbox
+                    = f.radio_button :youth, false
+                    = f.label :youth_false, 'No'
+                .field
+                  .ui.radio.checkbox
+                    = f.radio_button :youth, true
+                    = f.label :youth_true, 'Yes'
+
+        = contract.fields_for :transfer_cost do |cost|
+          .equal.width.row
+            .column
+              .field
+                = cost.label :fee, 'Transfer Fee'
+                .ui.left.icon.input
+                  i.money.icon
+                  = cost.number_field :fee
+            .column
+              .field
+                = cost.label :player_id, 'Traded Player'
+                = cost.select :player_id,                                                   \
+                  grouped_options_for_select(@team.grouped_players, cost.object.player_id), \
+                  { include_blank: true },                                                  \
+                  { class: 'players fluid dropdown'}
+            .column
+              .field
+                = cost.label :add_on_clause, 'Add-On Clause'
+                .ui.icon.input
+                  i.percent.icon
+                  = cost.number_field :add_on_clause
+
+      - if @player.id.nil?
+        .ui.horizontal.divider Terms of Contract
+
+        = contract.fields_for :terms, contract.object.terms.first do |term|
+          .equal.width.row
+            .column
+              .field.required[no-empty]
+                = term.label :wage
+                .ui.left.icon.input
+                  i.money.icon
+                  = term.number_field :wage
+            .column
+              .field
+                = term.label :signing_bonus, 'Signing Bonus'
+                .ui.left.icon.input
+                  i.money.icon
+                  = term.number_field :signing_bonus
+            .column
+              .field
+                = term.label :release_clause, 'Release Clause'
+                .ui.left.icon.input
+                  i.money.icon
+                  = term.number_field :release_clause
+          .equal.width.row
+            .column
+              .field
+                = term.label :stat_bonus, 'Bonus'
+                .ui.left.icon.input
+                  i.money.icon
+                  = term.number_field :stat_bonus
+            .column
+              .field
+                = term.label :num_stats, 'Requirements for Bonus'
+                = term.number_field :num_stats
+            .column
+              .field
+                = term.label :stat_type, 'Type of Requirement', style: 'visibility:hidden'
+                = term.select :stat_type, ['Goals', 'Assists', 'Clean Sheets'], {include_blank: true}, {class: 'fluid dropdown'}

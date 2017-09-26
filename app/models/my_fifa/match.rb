@@ -1,6 +1,5 @@
 module MyFifa
   class Match < Base
-    self.table_name = 'my_fifa_matches'
     default_scope { order(id: :asc)}
 
     belongs_to :team

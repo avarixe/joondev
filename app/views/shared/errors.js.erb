@@ -9,17 +9,19 @@ $('.field[no-empty]').each(function(){
 });
 
 // Output error messages
-$('form').prepend(
-  '<div class="ui error tiny message" style="display:block">' +
-    '<i class="close icon"></i>' +
-    '<div class="header">Please resolve the following errors:</div>' +
-    '<ul class="list">' +
-    <% object.errors.messages.each do |attr, messages| %>
-      <% puts "#{attr}: #{messages}" %>
-      <% messages.each do |msg| %>
-        '<li><%= msg %></li>' +
+$(':input[value="<%= params[:commit] %>"]')
+  .closest('form')
+  .prepend(
+    '<div class="ui error tiny message" style="display:block">' +
+      '<i class="close icon"></i>' +
+      '<div class="header">Please resolve the following errors:</div>' +
+      '<ul class="list">' +
+      <% object.errors.messages.each do |attr, messages| %>
+        <% puts "#{attr}: #{messages}" %>
+        <% messages.each do |msg| %>
+          '<li><%= msg %></li>' +
+        <% end %>
       <% end %>
-    <% end %>
-    '</ul>' +
-  '</div>'
-);
+      '</ul>' +
+    '</div>'
+  );

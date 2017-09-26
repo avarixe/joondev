@@ -3,7 +3,7 @@ require_dependency "my_fifa/application_controller"
 module MyFifa
   class PlayersController < ApplicationController
     before_action :set_current_team
-    before_action :set_player, only: [:edit, :update, :set_status, :exit, :rejoin, :get_ovr]
+    before_action :set_player, only: [:edit, :update, :set_status, :sign_new_contract, :exit, :rejoin, :get_ovr]
 
     # GET /players
     def index
@@ -65,14 +65,28 @@ module MyFifa
 
       case params[:type]
       when 'injury', 'recover'
-        @player.toggle_injury(date)
+        @player.toggle_injury(date, params[:notes])
       when 'loan', 'return'
-        notes = params[:notes]
-        @player.toggle_loan(date, notes)
+        @player.toggle_loan(date, params[:notes])
       end
 
       respond_to do |format|
         format.js
+      end
+    end
+
+    def sign_new_contract
+      @contract = @player.current_contract
+      @term = @contract.terms.build(params[:term].permit!)
+
+      respond_to do |format|
+        format.js { 
+          if @term.save
+            render 'my_fifa/players/manage/sign_new_contract'
+          else
+            render 'shared/errors', locals: { object: @term }
+          end
+        }
       end
     end
 

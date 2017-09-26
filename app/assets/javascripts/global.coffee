@@ -34,7 +34,8 @@ App.init = ->
     return
     
   $('[data-flatpickr]').flatpickr({
-    altInput: true
+    altInput: true,
+    altFormat: "M j, Y"
   });
 
   # Input Masks

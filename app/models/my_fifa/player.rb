@@ -1,6 +1,5 @@
 module MyFifa
   class Player < Base
-    self.table_name = 'my_fifa_players'
     default_scope { sorted.order(id: :asc) }
 
     belongs_to :team
@@ -64,7 +63,7 @@ module MyFifa
     #  INITIALIZATION METHODS  #
     ############################
       def init(team_id)
-        contracts.build(date_effective: Team.find(team_id).current_date).init
+        contracts.build(start_date: Team.find(team_id).current_date).init
         return self
       end
 
@@ -88,9 +87,9 @@ module MyFifa
         if self.youth? 
           if contract.loan.present?
             errors.add(:base, "A player cannot be both a Loaned Player and a Youth Academy Graduate.")            
-          elsif contract.party.present?
+          elsif contract.origin.present?
             errors.add(:base, "Youth Academy Graduates should not have an Origin.")            
-          elsif [contract.transfer_cost.price, contract.transfer_cost.player_id].any?(&:present?)
+          elsif [contract.transfer_cost.fee, contract.transfer_cost.player_id].any?(&:present?)
             errors.add(:base, "Youth Academy Graduates should not have a Transfer Cost.")
           end
         end
@@ -103,25 +102,25 @@ module MyFifa
     #####################
     #  MUTATOR METHODS  #
     #####################
-      def toggle_injury(date)
+      def toggle_injury(date, notes)
         if injured?
           self.update_column(:status, '')
-          injuries.last.update(date_expires: date)
+          injuries.last.update(end_date: date)
         else
           self.update_column(:status, 'injured')
-          injuries.create(date_effective: date)
+          injuries.create(start_date: date, notes: notes)
         end
       end
 
       def toggle_loan(date, destination)
         if loaned_out?
           self.update_column(:status, '')          
-          loans.last.update(date_expires: date)
+          loans.last.update(end_date: date)
         else
           # end any injury event
-          injuries.where(date_expires: nil).update_all(date_expires: date)
+          injuries.where(end_date: nil).update_all(end_date: date)
           self.update_column(:status, 'loan')
-          loans.create(date_effective: date, notes: destination)
+          loans.create(start_date: date, destination: destination)
         end
       end
 
@@ -129,9 +128,6 @@ module MyFifa
     ######################
     #  ACCESSOR METHODS  #
     ######################
-      def transfer_cost() self.contracts.first.transfer_cost end
-      def exit_cost()     self.contracts.last.exit_cost end
-
       def shorthand_name
         names = self.name.split(' ')
         names.length == 1 ? self.name : "#{names.first[0]}. #{names.drop(1).join(' ')}"
@@ -142,12 +138,16 @@ module MyFifa
       end
 
       def date_joined
-        contracts.first.date_effective
+        contracts.first.start_date
       end
 
       def get_sec_pos
         positions = sec_pos.reject(&:blank?).join(", ")
         positions.blank? ? nil : positions
+      end
+
+      def current_contract
+        self.contracts.last
       end
 
       # STATUS

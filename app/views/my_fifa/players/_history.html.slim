@@ -1,0 +1,122 @@
+.ui.basic.tab.segment[data-tab="history"]
+  .ui.raised.segment
+    .ui.pink.dividing.header Injuries
+    table.ui.basic.very.compact.table
+      thead
+        tr
+          th Type of Injury
+          th Date Injured
+          th Date Recovered
+      tbody
+        - @player.injuries.each do |injury|
+          tr
+            td
+              = responsive_cell_label 'Type of Injury'
+              = injury.notes
+            td
+              = responsive_cell_label 'Date Injured'
+              = time_to_s injury.start_date
+            td 
+              = responsive_cell_label 'Date Recovered'
+              = time_to_s injury.end_date
+
+    .ui.blue.dividing.header Contracts
+    table.ui.basic.small.very.compact.table[width="100%"]
+      thead
+        tr
+          th Date Signed
+          th Wage
+          th Bonus
+          th Release Clause
+      tbody
+        - @player.contracts.each do |contract|
+          - contract.terms.each do |terms|
+            tr
+              td
+                = responsive_cell_label 'Date Signed'
+                = time_to_s terms.start_date
+              td
+                = responsive_cell_label 'Wage'
+                = number_to_currency terms.wage
+              td
+                = responsive_cell_label 'Bonus'
+                - if terms.signing_bonus.present?
+                  = "#{number_to_currency(terms.signing_bonus)}" + \
+                    (" (+#{number_to_currency(terms.stat_bonus)} if #{terms.num_stats} #{terms.stat_type})" if terms.stat_bonus.present?)
+                - else
+                  | N/A
+              td
+                = responsive_cell_label 'Release Clause'
+                = number_to_currency(terms.release_clause) || 'N/A'
+
+    .ui.orange.dividing.header Loans
+    table.ui.basic.small.very.compact.table[width="100%"]
+      thead
+        tr
+          th Destination
+          th Loan Date
+          th Return Date
+      tbody
+        - @player.loans.each do |loan|
+          tr
+            td
+              = responsive_cell_label 'Destination'
+              = loan.notes
+            td
+              = responsive_cell_label 'Loan Date'
+              = time_to_s loan.start_date
+            td
+              = responsive_cell_label 'Return Date'
+              = time_to_s loan.end_date
+
+    .ui.red.dividing.header Transfers
+    table.ui.basic.small.very.compact.table[width="100%"]
+      thead
+        tr
+          th
+          th Origin
+          th Date
+          th Transfer Fee
+      tbody
+        - @player.contracts.each_with_index do |contract, i|
+          tr
+            td.center.aligned[rowspan=(contract.transfer_cost.notes.present? ? 2 : 1)]
+              = @player.youth? && i == 0 ?                             \
+                content_tag(:i, nil, class: "green university icon") : \
+                content_tag(:i, nil, class: "green sign in icon")
+            td
+              = responsive_cell_label 'Origin'
+              = @player.youth? && i == 0 ?                           \
+                'YOUTH ACADEMY' :                                    \
+                contract.origin + (contract.loan? ? "(LOAN)" : "")
+            td
+              = responsive_cell_label 'Date'
+              = time_to_s(contract.start_date)
+            td
+              = responsive_cell_label 'Transfer Fee'
+              = contract.transfer_cost.total_fee
+          - if contract.transfer_cost.notes.present?
+            tr
+              td[colspan=3]
+                = responsive_cell_label 'Transfer Notes'
+                = contract.transfer_cost.notes
+
+          - if contract.exit_cost.present?
+            tr
+              td.center.aligned[rowspan=(contract.exit_cost.notes.present? ? 2 : 1)]
+                i.red.sign.out.icon
+              td
+                = responsive_cell_label 'Destination'
+                = contract.destination.present? ? contract.destination : 'N/A'
+              td
+                = responsive_cell_label 'Date'
+                = time_to_s(contract.end_date)
+              td
+                = responsive_cell_label 'Transfer Fee'
+                = contract.exit_cost.fee
+
+            - if (contract.exit_cost.notes.present? rescue false)
+              tr
+                td[colspan=3]
+                  = responsive_cell_label 'Transfer Notes'
+                  = contract.exit_cost.notes

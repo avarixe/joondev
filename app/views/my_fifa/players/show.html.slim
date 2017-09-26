@@ -6,12 +6,13 @@
   div[class="item #{'active' unless @player.active?}" data-tab="info"] Information
   div[class="item #{'active' if @player.active?}" data-tab="manage"] Manage
   .item[data-tab="analytics"] Analytics
+  .item[data-tab="history"] History
 
 div[class="ui basic tab segment #{'active' unless @player.active?}" data-tab="info"]
   .ui.raised.teal.segment
     = render 'my_fifa/players/fields/info'
     = render 'my_fifa/players/fields/stats'
-    = render 'my_fifa/players/fields/transfer'
+    = render 'my_fifa/players/fields/contract'
 
 div[class="ui basic tab segment #{'active' if @player.active?}" data-tab="manage"]
   = render @player.active ?          \
@@ -23,6 +24,8 @@ div[class="ui basic tab segment #{'active' if @player.active?}" data-tab="manage
     = render 'my_fifa/players/fields/analytics'
 
 = render 'my_fifa/charts/player_performance'
+
+= render 'history'
 
 = content_for :modal_container do
   = render 'responsive_modals'

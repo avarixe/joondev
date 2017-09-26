@@ -1,9 +1,9 @@
-<% if @player.loans.last.notes.present? %>
-  $('.ui.modal span.destination').text(' to <%= @player.loans.last.notes %>');
+<% if @player.loans.last.destination.present? %>
+  $('.ui.modal span.destination').text(' to <%= @player.loans.last.destination %>');
 <% end %>
 
 $('span[data-label="loan status"]')
-  .text("ON LOAN<%= " AT #{@player.loans.last.notes}" unless @player.loans.last.notes.blank? %>")
+  .text("ON LOAN<%= " AT #{@player.loans.last.destination}" unless @player.loans.last.destination.blank? %>")
   .parent()
   .removeClass('green')
   .addClass('orange');

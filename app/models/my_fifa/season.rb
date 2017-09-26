@@ -1,6 +1,5 @@
 module MyFifa
   class Season < Base
-    self.table_name = 'my_fifa_seasons'
     default_scope { order(id: :asc)}
 
     belongs_to :team

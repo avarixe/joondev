@@ -1,6 +1,6 @@
 module MyFifa
   class Cost < Base
-    self.table_name = 'my_fifa_costs'
+    default_scope { order(id: :asc)}
 
     belongs_to :player
 
@@ -14,9 +14,9 @@ module MyFifa
     ######################
       include ActionView::Helpers::NumberHelper
 
-      def fee
+      def total_fee
         transfer_fee = ""
-        transfer_fee += number_to_currency(self.price) if self.price.present?
+        transfer_fee += number_to_currency(self.fee) if self.fee.present?
 
         if self.player_id.present?
           transfer_fee += " + " unless transfer_fee.blank?

@@ -1,10 +1,9 @@
 = form_for(@player, as: :player, remote: true, html: { class: 'ui large fluid form' }) do |f|
-  .ui.raised.teal.segment
-    / Information Section
-    = render 'my_fifa/players/fields/info_form', f: f
+  / Information Section
+  = render 'my_fifa/players/fields/info_form', f: f
 
-    / Transfer Section
-    = render 'my_fifa/players/fields/transfer_form', f: f
+  / Transfer Section
+  = render 'my_fifa/players/fields/transfer_form', f: f
 
   = f.submit 'Save Player', class: 'ui primary button'
   = link_to 'Back', @player, class: 'ui basic button'

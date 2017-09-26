@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       }
       member {
         post 'set_status'
+        post 'sign_new_contract'
         post 'exit'
         post 'rejoin'
         get 'get_ovr'
