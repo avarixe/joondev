@@ -18,10 +18,6 @@ module MyFifa
     ########################
       validates :start_date,       presence: { message: "Start Date cannot be blank." }
       validates :end_date,         presence: { message: "End Date cannot be blank." }
-      validates :start_club_worth, presence: { message: "Club Worth (Start of Season) cannot be blank." }
-      validates :transfer_budget,  presence: { message: "Transfer Budget cannot be blank." }
-      validates :wage_budget,      presence: { message: "Wage Budget cannot be blank." }
-      validates :captain_id,       presence: { message: "The Team must have a Captain for the Season." }
 
     ######################
     #  CALLBACK METHODS  #

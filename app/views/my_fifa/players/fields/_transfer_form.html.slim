@@ -2,22 +2,6 @@
   .ui.dividing.header #{@player.id.nil? ? 'Initial' : 'Current'} Contract Information
   = f.fields_for :contracts, @player.current_contract do |contract|
     .ui.stackable.grid
-      .equal.width.row
-        .column
-          div[class="required field #{'disabled' if @player.id.present?}" no-empty]
-            = contract.label :start_date, 'Contract Starts'
-            .ui.left.icon.input
-              i.calendar.icon
-              = contract.text_field :start_date, data: { flatpickr: true}
-        .column
-          div[class="required field #{'disabled' if @player.id.present?}" no-empty]
-            = contract.fields_for :terms, contract.object.terms.last do |term|
-              = term.label :end_date, 'Contract Ends'
-              .ui.left.icon.input
-                i.calendar.outline.icon
-                = term.text_field :end_date, data: { flatpickr: true }
-        .column
-
       - unless @player.youth?
         .ui.horizontal.divider Transfer Details
 
@@ -77,6 +61,21 @@
         .ui.horizontal.divider Terms of Contract
 
         = contract.fields_for :terms, contract.object.terms.first do |term|
+          .equal.width.row
+            .column
+              div[class="required field #{'disabled' if @player.id.present?}" no-empty]
+                = contract.label :start_date, 'Contract Starts'
+                .ui.left.icon.input
+                  i.calendar.icon
+                  = contract.text_field :start_date, data: { flatpickr: true}
+            .column
+              div[class="required field #{'disabled' if @player.id.present?}" no-empty]
+                = term.label :end_date, 'Contract Ends'
+                .ui.left.icon.input
+                  i.calendar.outline.icon
+                  = term.text_field :end_date, data: { flatpickr: true }
+            .column
+
           .equal.width.row
             .column
               .field.required[no-empty]

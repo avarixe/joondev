@@ -35,7 +35,14 @@ module MyFifa
     ######################
     #  CALLBACK METHODS  #
     ######################
+      after_create :create_first_season
 
+      def create_first_season
+        self.seasons.create(
+          start_date: self.current_date,
+          end_date:   self.current_date + 1.year
+        )
+      end
 
     #####################
     #  MUTATOR METHODS  #
@@ -43,7 +50,15 @@ module MyFifa
 
     ######################
     #  ACCESSOR METHODS  #
-    ###################### 
+    ######################
+      def playable?
+        self.players.count >= 11
+      end
+
+      def current_season
+        self.seasons.last
+      end
+
       def competition_options(delimiter)
         competitions.join(delimiter) rescue ''
       end

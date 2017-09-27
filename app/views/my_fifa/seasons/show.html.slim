@@ -7,7 +7,7 @@
     .equal.width.row
       .column
         .ui.header
-          = number_to_currency(@season.start_club_worth)
+          = number_to_currency(@season.start_club_worth) || 'N/A'
           .sub.header Club Worth (Start of Season)
       .column
         .ui.header
@@ -16,7 +16,7 @@
     .equal.width.row
       .column
         .ui.header
-          = number_to_currency(@season.transfer_budget)
+          = number_to_currency(@season.transfer_budget) || 'N/A'
           .sub.header Transfer Budget
       .column
         .ui.header
@@ -25,5 +25,5 @@
     .equal.width.row
       .column
         .ui.header
-          = @season.captain.name
+          = @season.captain.name rescue 'N/A'
           .sub.header Captain

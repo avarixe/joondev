@@ -4,6 +4,7 @@ module MyFifa
   class MatchesController < ApplicationController
     before_action :set_match, only: [:show, :edit, :update, :destroy]
     before_action :set_current_team
+    before_action :team_is_playable?
 
     # GET /players
     def index

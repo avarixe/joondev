@@ -2,7 +2,7 @@
   = link_to('Edit', edit_my_fifa_player_path(@player), class: 'ui orange button') if @player.active?
   = link_to 'Back', my_fifa_players_path, class: 'ui basic button'
 
-.ui.pointing.secondary.menu[data-menu="tabs"]
+.ui.stackable.pointing.secondary.mini.menu[data-menu="tabs"]
   div[class="item #{'active' unless @player.active?}" data-tab="info"] Information
   div[class="item #{'active' if @player.active?}" data-tab="manage"] Manage
   .item[data-tab="analytics"] Analytics

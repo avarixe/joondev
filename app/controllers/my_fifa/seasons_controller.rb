@@ -16,28 +16,9 @@ module MyFifa
       @title = @season.title
     end
 
-    # GET /players/new
-    def new
-      @title = "New Season"
-      @season = @team.seasons.new(start_date: @team.current_date, end_date: @team.current_date + 1.year)
-    end
-
     # GET /players/1/edit
     def edit
       @title = @season.title
-    end
-
-    # POST /players
-    def create
-      @season = Season.new(season_params)
-
-      if @team.seasons << @season
-        redirect_to @season
-      else
-        respond_to do |format|
-          format.js { render 'shared/errors', locals: { object: @season } }
-        end
-      end
     end
 
     # PATCH/PUT /players/1

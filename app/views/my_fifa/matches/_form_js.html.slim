@@ -5,12 +5,12 @@ javascript:
     // Click fields functionality
     $('.click-form').each(function(){ toggleClickForm($(this)); });
       
-    $('html').on('click', 'a[data-action="add sub"]',     function(){ addRecord(this); });
-    $('html').on('click', 'a[data-action="remove"]',      function(){ removeRecord(this); });
-    $('html').on('click', 'a[data-action="injury"]',      function(){ toggleInjury(this); });
-    $('html').on('click', 'a[data-action="yellow card"]', function(){ addBooking(this, 1); });
-    $('html').on('click', 'a[data-action="red card"]',    function(){ addBooking(this, 3); });
-    $('html').on('click', 'a[data-action="clear card"]',  function(){ clearBooking(this); });
+    $('.pusher').on('click', 'a[data-action="add sub"]',     function(){ addRecord(this); });
+    $('.pusher').on('click', 'a[data-action="remove"]',      function(){ removeRecord(this); });
+    $('.pusher').on('click', 'a[data-action="injury"]',      function(){ toggleInjury(this); });
+    $('.pusher').on('click', 'a[data-action="yellow card"]', function(){ addBooking(this, 1); });
+    $('.pusher').on('click', 'a[data-action="red card"]',    function(){ addBooking(this, 3); });
+    $('.pusher').on('click', 'a[data-action="clear card"]',  function(){ clearBooking(this); });
 
     // By default, highest rating gets MOTM
     highest_rating = $('input.rating').map(function(){

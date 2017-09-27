@@ -4,6 +4,7 @@ module MyFifa
   class SquadsController < ApplicationController
     before_action :set_squad, only: [:show, :update, :info]
     before_action :set_current_team
+    before_action :team_is_playable?
 
     # GET /players
     def index

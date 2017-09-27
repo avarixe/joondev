@@ -74,6 +74,7 @@ module MyFifa
     ######################
       after_commit :set_records_match_data
       after_save :update_current_date
+      after_save :create_new_season
 
       def set_records_match_data
         self.player_records.each do |record|
@@ -89,6 +90,16 @@ module MyFifa
       def update_current_date
         if self.date_played > self.team.current_date
           self.team.update_column(:current_date, self.date_played)
+        end
+      end
+
+      def create_new_season
+        current_season = self.team.current_season
+        if self.date_played > current_season.end_date
+          new_season = current_season.dup
+          new_season.start_date = current_season.end_date
+          new_season.end_date = current_season.end_date + 1.year
+          new_season.save
         end
       end
     

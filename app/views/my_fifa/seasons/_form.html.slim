@@ -17,7 +17,7 @@
               = f.text_field :end_date, data: { flatpickr: true }
       .equal.width.row
         .column
-          .required.field[no-empty]
+          .field
             = f.label :start_club_worth, 'Club Worth (Start of Season)'
             .ui.left.icon.input
               i.money.icon
@@ -30,20 +30,20 @@
               = f.number_field :end_club_worth
       .equal.width.row
         .column
-          .required.field[no-empty]
+          .field
             = f.label :transfer_budget, 'Transfer Budget'
             .ui.left.icon.input
               i.money.icon
               = f.number_field :transfer_budget
         .column
-          .required.field[no-empty]
+          .field
             = f.label :wage_budget, 'Wage Budget'
             .ui.left.icon.input
               i.money.icon
               = f.number_field :wage_budget
       .equal.width.row
         .column
-          .required.field[no-empty]
+          .field
             = f.label :captain_id, 'Captain'
             .ui.left.icon.input
               i.money.icon

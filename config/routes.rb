@@ -29,7 +29,7 @@ Rails.application.routes.draw do
       }
     end
     resources :matches
-    resources :seasons
+    resources :seasons, except: [:new, :create]
     resources :squads, except: [:edit, :destroy] do
       member {
         get 'info'
