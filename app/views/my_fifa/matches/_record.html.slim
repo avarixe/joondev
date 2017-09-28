@@ -15,9 +15,6 @@ tr[data-id=record.player_id]
     = content_tag(:i, nil, class: 'yellow square icon') if [1,4].include?(record.booking)
     = content_tag(:i, nil, class: 'red square icon') if [3,4].include?(record.booking)
   td.center.aligned[no-link]
-    = responsive_cell_label 'OVR'
-    = record.ovr
-  td.center.aligned[no-link]
     = responsive_cell_label 'Rating'
     = record.rating
   td.center.aligned[no-link]

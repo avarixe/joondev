@@ -9,8 +9,6 @@ html
     meta[name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"]
     meta[name="turbolinks-cache-control" content="no-cache"]
     = favicon_link_tag 'favicon.ico'
-    style
-      = yield :module_css
   body[class="#{controller_name} #{action_name}"]
     - unless current_user # Login/Registration Pages
       .ui.middle.aligned.center.aligned.grid

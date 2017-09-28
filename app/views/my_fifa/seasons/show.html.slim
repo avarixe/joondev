@@ -1,9 +1,9 @@
 
 - content_for :page_links do
   = link_to 'Edit', edit_my_fifa_season_path(@season), class: 'ui orange button'
-  = link_to 'Back', my_fifa_seasons_path, class: 'ui basic button'
+  = link_to 'View All Seasons', my_fifa_seasons_path, class: 'ui basic button'
 
-.ui.stackable.pointing.secondary.mini.menu[data-menu="tabs"]
+.ui.pointing.secondary.tiny.menu[data-menu="tabs"]
   div[class="item #{'active' unless @season.current?}" data-tab="info"] Information
   div[class="item #{'active' if @season.current?}" data-tab="players"] Players
   / .item[data-tab="analytics"] Analytics
@@ -38,31 +38,32 @@ div[class="ui basic tab segment #{'active' unless @season.current?}" data-tab="i
 
 div[class="ui basic tab segment #{'active' if @season.current?}" data-tab="players"]
   .ui.raised.blue.segment
-    table.ui.definition.very.compact.mini.table
+    table.ui.definition.selectable.very.compact.mini.table[data-link="/my_fifa/players/"]
       thead
-        tr
+        tr.center.aligned
           th Player
-          th.center.aligned Position
-          th.center.aligned Jersey No.
-          th.center.aligned OVR
-          th.center.aligned Value
-          th.center.aligned Age
+          th Position
+          th Jersey No.
+          th OVR
+          th Value
+          th Age
       tbody
         - @season.player_seasons.each do |player_season|
-          tr
-            td = player_season.player.name 
-            td.center.aligned 
+          tr.center.aligned[data-id=player_season.id]
+            td
+              = player_season.player.name 
+            td[no-link]
               = responsive_cell_label 'Position'
               = player_season.player.pos
-            td.center.aligned
+            td[no-link]
               = responsive_cell_label 'Jersey No.'
-              = player_season.jersey_no
-            td.center.aligned
+              = semantic_bip player_season, :jersey_no
+            td[no-link]
               = responsive_cell_label 'OVR'
-              = player_season.ovr
-            td.center.aligned
+              = semantic_bip player_season, :ovr
+            td[no-link]
               = responsive_cell_label 'Value'
-              = player_season.value
-            td.center.aligned
+              = semantic_bip player_season, :value, display_as: :formatted_value
+            td[no-link]
               = responsive_cell_label 'Age'
               = player_season.age

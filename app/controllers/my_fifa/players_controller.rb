@@ -7,14 +7,14 @@ module MyFifa
 
     # GET /players
     def index
-      @players = @team.sorted_players.includes(:matches)
-      @inactive_players = @team.players.inactive.includes(:matches).sorted
+      @players = @team.sorted_players.includes(:player_seasons)
+      @inactive_players = @team.players.inactive.includes(:player_seasons).sorted
       @all_players = @players+@inactive_players
       @title = "Players"
     end
 
     def show
-      @player = Player.includes(records: [:match]).find(params[:id])
+      @player = Player.includes(records: [:match], contracts: [:terms]).includes(:injuries, :loans, :player_seasons, :seasons).find(params[:id])
       @title = @player.name
 
       @stats = [

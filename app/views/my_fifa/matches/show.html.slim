@@ -1,7 +1,7 @@
 - content_for :page_links do
   = link_to 'Edit', edit_my_fifa_match_path(@match), class: 'ui orange button'
   = link_to 'Save Stats', my_fifa_match_path(@match, format: :xlsx), class: 'ui primary button'
-  = link_to 'Back', my_fifa_matches_path, class: 'ui basic button'
+  = link_to 'Match Archive', my_fifa_matches_path, class: 'ui basic button'
 
 .ui.olive.raised.segment
   h2.ui.center.aligned.dividing.icon.header
@@ -18,9 +18,8 @@
   table.ui.table[data-link="/my_fifa/players/"]
     thead
       tr
-        th
+        th.two.wide
         th.six.wide Name
-        th.center.aligned OVR
         th.center.aligned Rating
         th.center.aligned Goals
         th.center.aligned Assists

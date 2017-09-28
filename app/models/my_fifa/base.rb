@@ -2,7 +2,7 @@ module MyFifa
   class Base < ActiveRecord::Base
     self.abstract_class = true
 
-    include Helper
+    include ApplicationHelper
 
     def set_current_date(team, date)
       if date.present? && team.current_date < date

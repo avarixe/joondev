@@ -2,9 +2,7 @@ javascript:
   var highest_rating;
 
   $(function(){
-    // Click fields functionality
-    $('.click-form').each(function(){ toggleClickForm($(this)); });
-      
+    $('.pusher').on('click', '[data-clickfield] a[data-clickaction]', function(){ toggleClickForm(this); });
     $('.pusher').on('click', 'a[data-action="add sub"]',     function(){ addRecord(this); });
     $('.pusher').on('click', 'a[data-action="remove"]',      function(){ removeRecord(this); });
     $('.pusher').on('click', 'a[data-action="injury"]',      function(){ toggleInjury(this); });
@@ -15,10 +13,10 @@ javascript:
     // By default, highest rating gets MOTM
     highest_rating = $('input.rating').map(function(){
       return this.value;
-    }).get().sort().pop();
+    }).get().sort().pop() || 0;
 
     $('table').on('input', '.rating', function(){
-      if (this.value > highest_rating){
+      if (parseFloat(this.value) > parseFloat(highest_rating)){
         highest_rating = this.value;
         setMOTM($('.ui.ribbon.pos', $(this).closest('tr')));
       }
@@ -26,15 +24,6 @@ javascript:
   
     // Clicking a ribbon label sets MOTM
     $('table').on('click', '.ui.ribbon.pos', function(){ setMOTM(this); });
-  
-    // Selecting a Player loads OVR
-    $('table').on('change', 'select[id$="player_id"]', function(){
-      var this_ = $(this);
-      if (this_.val())
-        $.get("/my_fifa/players/"+$(this_).val()+"/get_ovr", function(data){
-          $('.ovr', this_.closest('tr')).val(data);
-        });
-    });
   
     // Squad auto populates players and positions
     $('select[id$="squad_id"]').change(function(){
@@ -78,15 +67,23 @@ javascript:
   });
   
   function toggleClickForm(target){
-    $(target).click(function(){
-      var value = parseInt($(target).val(), 10);
-      $(this).val(isNaN(value) ? 1 : value+1);
-    });
-    $(target).contextmenu(function(event){
-      event.preventDefault();
-      var value = parseInt($(target).val(), 10);
-      $(this).val((isNaN(value) || value == 1 || value == 0) ? null : value-1);
-    });
+    var inputField = $(target).closest('[data-clickfield]').find('input');
+    var currentValue = parseInt(inputField.val());
+
+    var newValue = null;
+    switch($(target).data('clickaction')){
+      case 'add':
+        newValue = isNaN(currentValue) ? 1 : currentValue+1;
+        break;
+      case 'sub':
+        if (currentValue > 1)
+          newValue = currentValue - 1;
+    }
+
+    inputField.val(newValue);
+    $('.or', $(target).closest('[data-clickfield]')).attr('data-text', newValue || 0);
+
+    console.log(inputField.val());
   }
   
   function addRecord(target){
@@ -102,11 +99,16 @@ javascript:
         .replace(/(\[player_records_attributes\])\[(\d+)\]/g, '$1[$2][sub_record_attributes]')
         .replace(/(_player_records_attributes)_(\d+)/g, '$1_$2_sub_record_attributes'));
 
+    $(target).closest('.item')
+      .addClass('disabled')
+      .siblings('[data-action="remove"]').addClass('disabled');
+
     // Set Substitute behavior
     $('a[data-action!="clear card"]', record).removeClass('disabled');
     $('a[data-action="clear card"]', record).addClass('disabled');
     $('.pos .level.icon', record).last().css('visibility', 'hidden');
     $('.ui.ribbon.label', record).removeClass('yellow');
+    $('[data-clickfield] .or', record).attr('data-text', 0);
     setInjury($('a[data-action="injury"]', record), 0);
 
     // Remove Error classes
@@ -117,15 +119,7 @@ javascript:
     });
 
     // Append new row to table
-    $(target).closest('.item')
-      .addClass('disabled')
-      .siblings('[data-action="remove"]').addClass('disabled');
     $(target).closest('tr').after(record);
-
-    // Activate jQuery event listeners
-    $('.click-form', record).each(function(){
-      toggleClickForm($(this));
-    });
 
     // Substitute actions menu was copied weirdly. Hack fix
     $('.teal.dropdown > .fluid.menu')

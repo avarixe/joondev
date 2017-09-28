@@ -9,11 +9,8 @@ module MyFifa
     def update
       respond_to do |format|
         format.json {
-          if @player_season.update(player_season_params)
-            render json: @player_season
-          else
-            render :nothing => true
-          end
+          @player_season.update(player_season_params)
+          respond_with_bip(@player_season)
         }
       end
     end
@@ -25,7 +22,7 @@ module MyFifa
       end
       
       def player_season_params
-        params[:player_season].permit!
+        params[:my_fifa_player_season].permit!
       end
   end
 end

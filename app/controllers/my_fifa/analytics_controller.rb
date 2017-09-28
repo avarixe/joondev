@@ -31,11 +31,10 @@ module MyFifa
         }
 
         if params[:season].present?
-          start_date = Date.new(params[:season].to_i, 7, 1)
-          end_date = Date.new(params[:season].to_i+1, 6, 30)
+          season = Season.find(params[:season])
 
           query[:strings] << 'date_played BETWEEN ? AND ?'
-          query[:args] += [start_date, end_date]
+          query[:args] += [season.start_date, season.end_date]
         end
 
         if params[:competition].present?

@@ -1,8 +1,8 @@
 - content_for :page_links do
   = link_to('Edit', edit_my_fifa_player_path(@player), class: 'ui orange button') if @player.active?
-  = link_to 'Back', my_fifa_players_path, class: 'ui basic button'
+  = link_to 'Player List', my_fifa_players_path, class: 'ui basic button'
 
-.ui.stackable.pointing.secondary.mini.menu[data-menu="tabs"]
+.ui.pointing.secondary.tiny.menu[data-menu="tabs"]
   div[class="item #{'active' unless @player.active?}" data-tab="info"] Information
   div[class="item #{'active' if @player.active?}" data-tab="manage"] Manage
   .item[data-tab="analytics"] Analytics

@@ -1,5 +1,6 @@
 css:
   .ui.dropdown .menu > a.item.disabled { display: none }
+  .ui.buttons .or[data-text]:before   { color: dodgerblue }
 
 = form_for(@match, as: :match, remote: true, html: { class: 'ui small fluid form' }) do |f|
   = f.hidden_field :team_id
@@ -15,12 +16,11 @@ css:
           { include_blank: 'Squad' },                                       \
           { class: 'fluid dropdown' }
 
-    table.ui.very.compact.table
+    table.ui.basic.very.compact.table
       thead
         tr
-          th.one.wide
+          th.two.wide
           th.five.wide Player
-          th.center.aligned OVR
           th.center.aligned Rating
           th.center.aligned Goals
           th.center.aligned Assists

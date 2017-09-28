@@ -35,9 +35,14 @@
           i.pie.chart.icon
           |  Statistics 
         .divider
-        = link_to(my_fifa_seasons_path, class: 'item') do
-          i.calendar.icon
-          |  View Seasons 
+        - if @team.present?
+          = link_to(@team.current_season, class: 'item') do
+            i.calendar.icon
+            |  View Current Season
+        - else
+          = link_to(my_fifa_seasons_path, class: 'item') do
+            i.calendar.icon
+            |  View Seasons
     .ui.up.pointing.dropdown.item
       |  Match 
       i.dropdown.icon
@@ -46,7 +51,7 @@
         .divider
         = link_to(my_fifa_matches_path, class: 'item') do
           i.archive.icon
-          |  Archive 
+          |  Match Archive 
         = link_to(new_my_fifa_match_path, class: 'item') do
           i.soccer.icon
           |  New Match 

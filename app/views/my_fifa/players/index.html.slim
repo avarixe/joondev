@@ -18,10 +18,10 @@ table.ui.basic.definition.sortable.selectable.compact.small.table[data-link="/my
         td
           = content_tag(:i, nil, class: 'red attention icon') if !player.active
           = player.name
-        td[class="#{'disabled' if !player.active}" data-sort=player.pos]
+        td[class="#{'disabled' if !player.active?}" data-sort=player.pos]
           = responsive_cell_label 'Positions'
           = player.pos
-        td[class="#{'disabled' if !player.active}" data-sort=player.current_ovr]
+        td[class="#{'disabled' if !player.active?}" data-sort=player.current_ovr]
           = responsive_cell_label 'OVR'
           = player.current_ovr
 

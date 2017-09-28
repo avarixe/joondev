@@ -1,7 +1,5 @@
 module MyFifa
   class ApplicationController < ::ApplicationController
-    helper Helper
-    include Helper
 
     private
           

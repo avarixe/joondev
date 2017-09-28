@@ -19,18 +19,26 @@ tr[data-id=f.object.id]
         {class: 'player_id players fluid dropdown'}
   td
     .field[no-empty]
-      = responsive_cell_label 'OVR'
-      = f.number_field :ovr, class: 'ovr', min: 0, tabindex: 500
-  td
-    .field[no-empty]
       = responsive_cell_label 'Rating'
       = f.number_field :rating, class: 'rating', step: 0.01, min: 0, tabindex: 1000
   td
     = responsive_cell_label 'Goals'
-    = f.number_field :goals, class: 'goals click-form', min: 0, readonly: true
+    .ui.buttons[data-clickfield]
+      a.ui.icon.button[data-clickaction='add']
+        i.plus.icon
+      .or[data-text=(f.object.goals || 0)]
+      = f.hidden_field :goals, class: 'goals'
+      a.ui.icon.button[data-clickaction='sub']
+        i.minus.icon
   td
     = responsive_cell_label 'Assists'
-    = f.number_field :assists, class: 'assists click-form', min: 0, readonly: true
+    .ui.buttons[data-clickfield]
+      a.ui.icon.button[data-clickaction='add']
+        i.plus.icon
+      .or[data-text=(f.object.goals || 0)]
+      = f.hidden_field :assists, class: 'assists'
+      a.ui.icon.button[data-clickaction='sub']
+        i.minus.icon
   td
     .ui.left.pointing.dropdown.circular.teal.icon.button
       i.settings.icon

@@ -1,10 +1,11 @@
-window.App ||= {}
-
-App.init = ->
+$(document).on "turbolinks:load", ->
   # JoonDEV sidebar
   $('div.sidebar').sidebar(transition: 'overlay').sidebar('attach events', '.toggle.button').sidebar 'hide'
 
   $('.best_in_place').best_in_place()
+  $('.best_in_place').bind 'ajax:error', (evt, data, status, xhr) ->
+    alert 'Invalid Value Entered.'
+
 
   $('.menu[data-menu="tabs"] .item').tab({
       onLoad: ->
@@ -54,6 +55,3 @@ App.init = ->
         else
           window.location = _link + _rowId
     return
-
-$(document).on "turbolinks:load", ->
-  App.init()
