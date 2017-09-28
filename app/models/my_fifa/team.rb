@@ -3,11 +3,11 @@ module MyFifa
     default_scope { order(id: :asc)}
 
     belongs_to :user
-    has_many :seasons
-    has_many :players
-    has_many :squads
-    has_many :matches
-    has_many :player_records
+    has_many :seasons, dependent: :destroy
+    has_many :players, dependent: :destroy
+    has_many :squads,  dependent: :delete_all
+    has_many :matches, dependent: :delete_all
+    has_many :player_records, dependent: :delete_all
     
     serialize :competitions, Array
 
@@ -38,10 +38,16 @@ module MyFifa
       after_create :create_first_season
 
       def create_first_season
-        self.seasons.create(
+        new_player_seasons = []
+        
+        new_player_seasons << self.seasons.build(
           start_date: self.current_date,
           end_date:   self.current_date + 1.year
         )
+        
+        PlayerSeason.transaction do
+          new_player_seasons.map(&:save)
+        end
       end
 
     #####################

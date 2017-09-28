@@ -30,6 +30,7 @@ Rails.application.routes.draw do
     end
     resources :matches
     resources :seasons, except: [:new, :create]
+    resources :player_seasons, only: [:update]
     resources :squads, except: [:edit, :destroy] do
       member {
         get 'info'

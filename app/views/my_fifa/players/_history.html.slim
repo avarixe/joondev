@@ -30,24 +30,24 @@
           th Release Clause
       tbody
         - @player.contracts.each do |contract|
-          - contract.terms.each do |terms|
+          - contract.terms.each do |term|
             tr
               td
                 = responsive_cell_label 'Date Signed'
-                = time_to_s terms.start_date
+                = time_to_s term.start_date
               td
                 = responsive_cell_label 'Wage'
-                = number_to_currency terms.wage
+                = number_to_fee term.wage
               td
                 = responsive_cell_label 'Bonus'
-                - if terms.signing_bonus.present?
-                  = "#{number_to_currency(terms.signing_bonus)}" + \
-                    (" (+#{number_to_currency(terms.stat_bonus)} if #{terms.num_stats} #{terms.stat_type})" if terms.stat_bonus.present?)
+                - if term.signing_bonus.present?
+                  = "#{number_to_fee(term.signing_bonus, '')}" + \
+                    (" (+#{number_to_fee(term.stat_bonus, '', "%n%u")} if #{term.num_stats} #{term.stat_type})" if term.stat_bonus.present?)
                 - else
                   | N/A
               td
                 = responsive_cell_label 'Release Clause'
-                = number_to_currency(terms.release_clause) || 'N/A'
+                = number_to_fee term.release_clause
 
     .ui.orange.dividing.header Loans
     table.ui.basic.small.very.compact.table[width="100%"]
@@ -86,9 +86,10 @@
                 content_tag(:i, nil, class: "green sign in icon")
             td
               = responsive_cell_label 'Origin'
-              = @player.youth? && i == 0 ?                           \
-                'YOUTH ACADEMY' :                                    \
-                contract.origin + (contract.loan? ? "(LOAN)" : "")
+              - if @player.youth && i == 0
+                = 'YOUTH ACADEMY'
+              - elsif contract.origin.present?
+                = contract.origin + (contract.loan? ? "(LOAN)" : "")
             td
               = responsive_cell_label 'Date'
               = time_to_s(contract.start_date)

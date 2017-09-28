@@ -20,4 +20,13 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  fee:
+    unit:
+      one: ''
+      other: ''
+    thousand:
+      one: 'K'
+      other: 'K'
+    million:
+      one: 'M'
+      other: 'M'

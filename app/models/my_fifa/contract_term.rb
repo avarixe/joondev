@@ -2,7 +2,7 @@ module MyFifa
   class ContractTerm < Base
     default_scope { order(id: :asc)}
 
-    belongs_to :contract
+    belongs_to :contract, inverse_of: :terms
 
     ########################
     #  VALIDATION METHODS  #

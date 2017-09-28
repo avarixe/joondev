@@ -1,6 +1,6 @@
 module MyFifa
   class Contract < PlayerEvent
-    has_many :terms, class_name: 'ContractTerm'
+    has_many :terms, class_name: 'ContractTerm', inverse_of: :contract, dependent: :delete_all
     accepts_nested_attributes_for :terms
     has_one :transfer_cost, -> { where dir: 'in' }, foreign_key: :event_id, class_name: 'Cost'
     accepts_nested_attributes_for :transfer_cost

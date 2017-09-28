@@ -6,8 +6,8 @@ module MyFifa
     belongs_to :match
     belongs_to :player
     
-    belongs_to :record, class_name: 'PlayerRecord'
-    has_one :sub_record, class_name: 'PlayerRecord', foreign_key: :record_id
+    belongs_to :record, class_name: 'PlayerRecord', inverse_of: :sub_record
+    has_one :sub_record, class_name: 'PlayerRecord', foreign_key: :record_id, inverse_of: :record
     accepts_nested_attributes_for :sub_record, allow_destroy: true, reject_if: :invalid_record?
 
     scope :with_player, -> {

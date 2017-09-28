@@ -9,12 +9,6 @@
         = fields_for :contracts, @player.contracts.new.init do |f|
           .equal.width.row
             .column
-              .required.field[no-empty]
-                = f.label :start_date, 'Contract Starts'
-                .ui.left.icon.input
-                  i.calendar.icon
-                  = f.text_field :start_date, value: @team.current_date, data: { flatpickr: true}
-            .column
               .field
                 = f.label :origin
                 = f.text_field :origin
@@ -30,6 +24,7 @@
                     .ui.radio.checkbox
                       = f.radio_button :loan, true
                       = f.label :loan_true, 'Yes'
+            .column
           = f.fields_for :transfer_cost do |cf|
             .equal.width.row
               .column
@@ -55,11 +50,25 @@
           = f.fields_for :terms, f.object.terms.first do |term|
             .equal.width.row
               .column
-                .field
+                .required.field[no-empty]
+                  = f.label :start_date, 'Contract Starts'
+                  .ui.left.icon.input
+                    i.calendar.icon
+                    = f.text_field :start_date, value: @team.current_date, data: { flatpickr: true}
+              .column
+                .required.field[no-empty]
+                  = term.label :end_date, 'Contract Ends'
+                  .ui.left.icon.input
+                    i.calendar.icon
+                    = term.text_field :end_date, value: @team.current_date + 1.year, data: { flatpickr: true}
+              .column
+            .equal.width.row
+              .column
+                .required.field[no-empty]
                   = term.label :wage
                   .ui.left.icon.input
                     i.money.icon
-                    = term.number_field :wage
+                    = term.number_field :wage, value: @player.current_wage
               .column
                 .field
                   = term.label :signing_bonus, 'Signing Bonus'
@@ -87,9 +96,5 @@
                 .field
                   = term.label :stat_type, 'Type of Requirement', style: 'visibility:hidden'
                   = term.select :stat_type, ['Goals', 'Assists', 'Clean Sheets'], {include_blank: true}, {class: 'fluid dropdown'}
-
-
-
-
         .six.wide.column
           = submit_tag 'SIGN NEW CONTRACT', class: "ui green submit button"

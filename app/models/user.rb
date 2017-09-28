@@ -76,7 +76,6 @@ class User < ActiveRecord::Base
       competitions: [ 'Default Competition' ])
     formation = self.create_default_formation(
       user_id: self.id,
-      title: 'Default',
       layout: '4-2-3-1',
       pos_1:  'GK',
       pos_2:  'LB',

@@ -41,6 +41,8 @@ gem 'flatpickr_rails'
 gem 'tzinfo-data'
 gem 'chartkick'
 
+gem 'best_in_place'
+
 gem 'jquery-inputmask-rails', github: 'knapo/jquery-inputmask-rails'
 gem 'momentjs-rails'
 

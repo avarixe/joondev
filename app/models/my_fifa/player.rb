@@ -3,14 +3,17 @@ module MyFifa
     default_scope { sorted.order(id: :asc) }
 
     belongs_to :team
-    has_many :records, class_name: 'PlayerRecord'
+    has_many :records, class_name: 'PlayerRecord', inverse_of: :player
     has_many :matches, through: :records
 
-    has_many :contracts
+    has_many :player_seasons
+    has_many :seasons, through: :player_seasons
+
+    has_many :contracts, dependent: :destroy
     accepts_nested_attributes_for :contracts
 
-    has_many :injuries
-    has_many :loans
+    has_many :injuries, dependent: :delete_all
+    has_many :loans, dependent: :delete_all
 
     serialize :sec_pos, Array
 
@@ -76,9 +79,10 @@ module MyFifa
     ########################
       validates :name,          presence: { message: "Name can't be blank." }
       validates :nationality,   presence: { message: "Nationality can't be blank." }
-      validates :year_of_birth, presence: { message: "Year of Birth can't be blank." }
       validates :pos,           presence: { message: "Position can't be blank." }
+      validates :start_age,     presence: { message: "Age can't be blank." }
       validates :start_ovr,     presence: { message: "Start OVR Rating can't be blank." }
+      validates :start_value,   presence: { message: "Initial Value can't be blank." }
       validate :no_transfer_if_youth?
 
       def no_transfer_if_youth?
@@ -98,6 +102,17 @@ module MyFifa
     ######################
     #  CALLBACK METHODS  #
     ######################
+      after_create :create_player_season
+      
+      def create_player_season
+        self.team.current_season.player_seasons.create(
+          player_id: self.id,
+          jersey_no: self.id,
+          ovr:       self.start_ovr,
+          value:     self.start_value,
+          age:       self.start_age
+        )
+      end
 
     #####################
     #  MUTATOR METHODS  #
@@ -133,10 +148,6 @@ module MyFifa
         names.length == 1 ? self.name : "#{names.first[0]}. #{names.drop(1).join(' ')}"
       end
 
-      def current_ovr
-        self.records.last.ovr rescue self.start_ovr
-      end
-
       def date_joined
         contracts.first.start_date
       end
@@ -144,6 +155,26 @@ module MyFifa
       def get_sec_pos
         positions = sec_pos.reject(&:blank?).join(", ")
         positions.blank? ? nil : positions
+      end
+
+      def current_ovr
+        self.player_seasons.last.ovr rescue self.start_ovr
+      end
+
+      def current_value
+        self.player_seasons.last.value rescue self.start_value
+      end
+
+      def current_wage
+        self.current_contract.terms.last.wage
+      end
+
+      def current_jersey_no
+        self.player_sessions.last.jersey_no rescue nil
+      end
+
+      def current_age
+        self.player_seasons.last.age rescue self.start_age
       end
 
       def current_contract

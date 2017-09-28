@@ -2,7 +2,7 @@ module MyFifa
   class Cost < Base
     default_scope { order(id: :asc)}
 
-    belongs_to :player
+    belongs_to :contract
 
 
     #####################
@@ -16,7 +16,7 @@ module MyFifa
 
       def total_fee
         transfer_fee = ""
-        transfer_fee += number_to_currency(self.fee) if self.fee.present?
+        transfer_fee += number_to_fee(self.fee) if self.fee.present?
 
         if self.player_id.present?
           transfer_fee += " + " unless transfer_fee.blank?

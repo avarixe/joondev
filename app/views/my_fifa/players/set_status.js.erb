@@ -1,5 +1,18 @@
-<%= render "my_fifa/players/manage/#{params[:type]}" %>
-
 // Output the correct message
-$('.ui.modal span.player-name').text('<%= @player.name %>');
-$('.ui.modal[data-type="<%= params[:type] %>"]').modal('show');
+$('body').append(
+  '<div id="response" class="ui basic tiny modal">' +
+    '<div class="ui icon header">' +
+      '<i class="<%= @icon %> icon"></i>' +
+      '<%= @message %>' +
+    '</div>' +
+  '</div>'
+);
+
+
+$('.ui.modal#response')
+  .modal({
+    onHide: function(){
+      window.location.reload();
+    }
+  })
+  .modal('show');

@@ -15,7 +15,7 @@ table.ui.basic.definition.selectable.compact.small.table[data-link="/my_fifa/for
             label
         td
           = responsive_cell_label 'Title'
-          = "#{formation.title} (#{formation.layout})"
+          = formation.title
         td
           = responsive_cell_label 'Positions'
           = formation.positions.join(", ")
@@ -29,7 +29,7 @@ javascript:
         $.ajax({
           type: 'POST',
           url: '/my_fifa/formations/'+this_.value+'/set_active',
-          beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', '<%= form_authenticity_token %>') },
+          beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', '#{form_authenticity_token}') },
         });
       }
     })

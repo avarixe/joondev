@@ -19,7 +19,7 @@ module MyFifa
     # GET /players/new
     def new
       @title = "New Formation"
-      @formation = Formation.new(layout: '4-3-3')
+      @formation = Formation.new(layout: '4-2-3-1')
       render :form
     end
 

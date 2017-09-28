@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170926050921) do
+ActiveRecord::Schema.define(version: 20170927183640) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,26 +96,35 @@ ActiveRecord::Schema.define(version: 20170926050921) do
     t.integer "assists"
     t.string  "pos",       limit: 10
     t.boolean "cs"
-    t.integer "ovr"
     t.integer "record_id"
     t.boolean "injured",              default: false
     t.integer "booking",              default: 0
   end
 
+  create_table "my_fifa_player_seasons", force: :cascade do |t|
+    t.integer "season_id"
+    t.integer "player_id"
+    t.integer "jersey_no"
+    t.integer "value"
+    t.integer "ovr"
+    t.integer "age",       default: 0
+  end
+
   create_table "my_fifa_players", force: :cascade do |t|
     t.integer  "team_id"
-    t.string   "name",                          null: false
-    t.string   "pos",                           null: false
+    t.string   "name",                        null: false
+    t.string   "pos",                         null: false
     t.string   "sec_pos"
-    t.boolean  "active",        default: true
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-    t.integer  "start_ovr",     default: 0
+    t.boolean  "active",      default: true
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.integer  "start_ovr",   default: 0
     t.string   "nationality"
-    t.integer  "year_of_birth"
-    t.boolean  "youth",         default: false
+    t.boolean  "youth",       default: false
     t.text     "notes"
-    t.string   "status",        default: ""
+    t.string   "status",      default: ""
+    t.integer  "start_value", default: 0
+    t.integer  "start_age",   default: 0
   end
 
   create_table "my_fifa_seasons", force: :cascade do |t|

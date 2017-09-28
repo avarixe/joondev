@@ -33,5 +33,7 @@
 //= require inputmask.numeric.extensions
 //= require inputmask.regex.extensions
 
+//= require best_in_place
+
 //= require turbolinks
 //= require global

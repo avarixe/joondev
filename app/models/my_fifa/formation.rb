@@ -38,7 +38,6 @@ module MyFifa
     ########################
     #  VALIDATION METHODS  #
     ########################
-      validates :title, presence: { message: 'Title cannot be blank.' }
       validate :all_positions_labeled?
 
       def all_positions_labeled?
@@ -50,7 +49,14 @@ module MyFifa
     ######################
     #  CALLBACK METHODS  #
     ######################
-
+      after_create :set_title
+      
+      def set_title
+        num_layouts = Formation.where(user_id: self.user_id, layout: self.layout).count
+        self.title = self.layout
+        self.title += " (#{num_layouts})" if num_layouts > 0
+        self.save
+      end
 
     #####################
     #  MUTATOR METHODS  #

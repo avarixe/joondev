@@ -1,11 +1,6 @@
 .ui.dividing.header Statistics 
 .ui.stackable.grid
-  .four.columns.centered.row
-    .aligned.column
-      .ui.grey.statistic
-        .label Start OVR
-        .value
-          = @player.start_ovr
+  .two.columns.centered.row
     .aligned.column
       .ui.green.statistic
         .label
@@ -13,6 +8,13 @@
           |  OVR
         .value
           = @player.current_ovr
+    .aligned.column
+      .ui.grey.statistic
+        .label
+          = @player.active ? 'Current' : 'Last'
+          |  Value
+        .value
+          = number_to_fee @player.current_value
   .five.columns.centered.row
     - @stats.each do |stat|
       .aligned.column

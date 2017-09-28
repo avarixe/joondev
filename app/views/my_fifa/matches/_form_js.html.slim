@@ -91,7 +91,7 @@ javascript:
   
   function addRecord(target){
     // Generate new Record table row
-    var record = $('<tr data-sub />');
+    var record = $('<tr data-sub class="transition hidden" />');
     var id = moment().valueOf();
     if ($('input[id$="pos"]', $(target).closest('tr')).attr('id').indexOf('sub_record') > 0)
       record.append($(target).closest('tr').html()
@@ -105,34 +105,23 @@ javascript:
     // Set Substitute behavior
     $('a[data-action!="clear card"]', record).removeClass('disabled');
     $('a[data-action="clear card"]', record).addClass('disabled');
+    $('.pos .level.icon', record).last().css('visibility', 'hidden');
     $('.ui.ribbon.label', record).removeClass('yellow');
     setInjury($('a[data-action="injury"]', record), 0);
 
     // Remove Error classes
     $('.error', record).removeClass('error');
 
-    // Copy POS
-    var pos = $(target).closest('tr').find('.pos');
-    $('.pos > span', record).text(pos.text())
-    $('.pos .level.icon', record).last().css('visibility', 'hidden');
-    $('.pos', record)
-      .append('<i class="level up green icon"></i>')
-      .prev()
-        .val(pos.prev().val());
-
     $.each($('input,select', record), function(){
       $(this).val($(this).data('default'));
     });
 
-    // Add indicators original Player has been SUBBED
-    $('.pos', $(target).closest('tr'))
-      .append('<i class="level down red icon"></i>');
+    // Append new row to table
     $(target).closest('.item')
       .addClass('disabled')
       .siblings('[data-action="remove"]').addClass('disabled');
-    // Append new row to table
     $(target).closest('tr').after(record);
-  
+
     // Activate jQuery event listeners
     $('.click-form', record).each(function(){
       toggleClickForm($(this));
@@ -143,24 +132,37 @@ javascript:
       .removeClass('transition visible animating slide down out')
       .attr('style', '');
     $('.ui.dropdown', record).dropdown().dropdown('clear');
+
+    $(record).transition({
+      animation: 'slide down',
+      onComplete: function(){
+        $('.pos', $(target).closest('tr'))
+          .append('<i class="level down red icon"></i>');
+
+        $('.pos', record)
+          .append('<i class="level up green icon"></i>');
+      }
+    });
   }
 
   function removeRecord(target){
     var tr = $(target).closest('tr');
     var parentTr = tr.prev();
 
-    if (tr.data('id')){
-      $('input[id$="_destroy"]', tr).val(1);
-      $(tr).css('display', 'none');
-    }
-    else
-      tr.remove();
-
-    $('.ribbon .level.icon', parentTr).last().remove();
-    $('a[data-action="add sub"]', parentTr).removeClass('disabled');
-    console.log(parentTr);
-    if (parentTr.is('[data-sub]'))
-      $('a[data-action="remove"]', parentTr).removeClass('disabled');
+    tr.transition({
+      animation: 'slide down',
+      onComplete: function(){
+        if (tr.data('id'))
+          $('input[id$="_destroy"]', tr).val(1);
+        else
+          tr.remove();
+          
+        $('.ribbon .level.icon', parentTr).last().remove();
+        $('a[data-action="add sub"]', parentTr).removeClass('disabled');
+        if (parentTr.is('[data-sub]'))
+          $('a[data-action="remove"]', parentTr).removeClass('disabled');
+      }
+    });
   }
   
   function toggleInjury(target){

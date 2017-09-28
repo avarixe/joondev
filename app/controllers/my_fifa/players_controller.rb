@@ -64,10 +64,22 @@ module MyFifa
       date = params[:date] || @team.current_date
 
       case params[:type]
-      when 'injury', 'recover'
+      when 'injury'
         @player.toggle_injury(date, params[:notes])
-      when 'loan', 'return'
+        @icon = 'pink first aid'
+        @message = "#{@player.name} is injured."
+      when 'recover'
+        @player.toggle_injury(date, params[:notes])
+        @icon = 'green first aid'
+        @message = "#{@player.name} is no longer injured."
+      when 'loan'
         @player.toggle_loan(date, params[:notes])
+        @icon = 'orange plane'
+        @message = "#{@player.name} has been loaned out#{ " to #{params[:notes]}"}."
+      when 'return'
+        @player.toggle_loan(date, params[:notes])
+        @icon = 'green plane'
+        @message = "#{@player.name} has returned to the club."
       end
 
       respond_to do |format|
@@ -78,6 +90,7 @@ module MyFifa
     def sign_new_contract
       @contract = @player.current_contract
       @term = @contract.terms.build(params[:term].permit!)
+      @term.start_date = @team.current_date
 
       respond_to do |format|
         format.js { 

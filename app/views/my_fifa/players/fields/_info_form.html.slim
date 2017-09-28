@@ -2,34 +2,36 @@
   .ui.dividing.header Player Information
   .ui.stackable.grid
     .equal.width.row
-      .column
-        .required.field[no-empty]
+      .column.required.field[no-empty]
           = f.label :name
           = f.text_field :name
-      .column
-        .required.field[no-empty]
+      .column.required.field[no-empty]
           = f.label :nationality
           = f.text_field :nationality
-      .column
-        .required.field[no-empty]
-          = f.label :year_of_birth, 'Year of Birth'
-          = f.text_field :year_of_birth, data: { inputmask: "'mask': '9999'" }
     .equal.width.row
-      .column
-        .required.field[no-empty]
+      .column.required.field[no-empty]
           = f.label :pos, 'Position'
           = f.select :pos,                                            \
             options_for_select(MyFifa::Player::POSITIONS, @player.pos), \
             { prompt: true },                                           \
             { class: 'fluid dropdown' }
-      .column
-        .field
+      .column.field
           = f.label :sec_pos, 'Secondary Position(s)'
           = f.select :sec_pos,                                            \
             options_for_select(MyFifa::Player::POSITIONS, @player.sec_pos), \
             {},                                                             \
             { multiple: true, class: 'fluid multiple dropdown' }
-      .column
-        .required.field[no-empty]
+    .equal.width.row
+      .column.required.field[no-empty]
           = f.label :start_ovr, 'Start OVR Rating'
-          = f.text_field :start_ovr
+          = f.number_field :start_ovr
+            .column
+      .column.required.field[no-empty]
+          = f.label :start_value, 'Initial Value'
+          .ui.left.icon.input
+            i.money.icon
+            = f.number_field :start_value
+      - if @player.id.nil?
+        .column.required.field[no-empty]
+            = f.label :start_age, 'Age'
+            = f.number_field :start_age

@@ -4,6 +4,8 @@ App.init = ->
   # JoonDEV sidebar
   $('div.sidebar').sidebar(transition: 'overlay').sidebar('attach events', '.toggle.button').sidebar 'hide'
 
+  $('.best_in_place').best_in_place()
+
   $('.menu[data-menu="tabs"] .item').tab({
       onLoad: ->
         Chartkick.eachChart (chart) ->

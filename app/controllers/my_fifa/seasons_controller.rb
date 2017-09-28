@@ -2,7 +2,7 @@ require_dependency "my_fifa/application_controller"
 
 module MyFifa
   class SeasonsController < ApplicationController
-    before_action :set_season, only: [:show, :edit, :update]
+    before_action :set_season, only: [:edit, :update]
     before_action :set_current_team
 
     # GET /players
@@ -13,6 +13,7 @@ module MyFifa
 
     # GET /players/1
     def show
+      @season = Season.includes(player_seasons: [:player]).find(params[:id])
       @title = @season.title
     end
 
