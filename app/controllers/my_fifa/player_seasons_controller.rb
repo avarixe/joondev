@@ -10,6 +10,7 @@ module MyFifa
       respond_to do |format|
         format.json {
           @player_season.update(player_season_params)
+          puts @player_season.errors.full_messages
           respond_with_bip(@player_season)
         }
       end

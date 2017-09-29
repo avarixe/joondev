@@ -72,8 +72,7 @@ class User < ActiveRecord::Base
     team = self.create_default_team(
       user_id: self.id,
       team_name: 'Default Team',
-      current_date: Time.now.beginning_of_year + 6.months,
-      competitions: [ 'Default Competition' ])
+      current_date: Time.now.beginning_of_year + 6.months)
     formation = self.create_default_formation(
       user_id: self.id,
       layout: '4-2-3-1',
