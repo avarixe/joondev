@@ -3,7 +3,7 @@ require_dependency "my_fifa/application_controller"
 module MyFifa
   class PlayersController < ApplicationController
     before_action :set_current_team
-    before_action :set_player, only: [:edit, :update, :set_status, :sign_new_contract, :exit, :rejoin, :get_ovr]
+    before_action :set_player, only: [:edit, :update, :set_status, :sign_new_contract, :exit, :rejoin]
 
     # GET /players
     def index
@@ -129,10 +129,6 @@ module MyFifa
           format.js { render 'shared/errors', locals: { object: @contract } }
         end
       end
-    end
-
-    def get_ovr
-      render json: @player.current_ovr.to_json
     end
 
     private

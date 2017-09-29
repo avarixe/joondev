@@ -36,10 +36,10 @@
               .column
                 .field
                   = cf.label :player_id, 'Traded Player'
-                  = cf.select :player_id,                                                   \
-                    grouped_options_for_select(@team.grouped_players, cf.object.player_id), \
-                    { include_blank: true },                                                \
-                    { class: 'players fluid dropdown'}
+                  = cf.select :player_id,
+                    grouped_options_for_select(@team.grouped_players, cf.object.player_id),
+                    { include_blank: true },
+                    { class: 'grouped search fluid dropdown'}
               .column
                 .field
                   = cf.label :notes
@@ -68,7 +68,7 @@
                   = term.label :wage
                   .ui.left.icon.input
                     i.money.icon
-                    = term.number_field :wage, value: @player.current_wage
+                    = term.number_field :wage, value: @player.wage
               .column
                 .field
                   = term.label :signing_bonus, 'Signing Bonus'

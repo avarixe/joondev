@@ -31,24 +31,26 @@
           th Release Clause
       tbody
         - @player.contracts.each do |contract|
+          - puts contract.terms.count
           - contract.terms.each do |term|
-            tr
-              td
-                = responsive_cell_label 'Date Signed'
-                = time_to_s term.start_date
-              td
-                = responsive_cell_label 'Wage'
-                = number_to_fee term.wage
-              td
-                = responsive_cell_label 'Bonus'
-                - if term.signing_bonus.present?
-                  = "#{number_to_fee(term.signing_bonus, '')}" + \
-                    (" (+#{number_to_fee(term.stat_bonus, '', "%n%u")} if #{term.num_stats} #{term.stat_type})" if term.stat_bonus.present?)
-                - else
-                  | N/A
-              td
-                = responsive_cell_label 'Release Clause'
-                = number_to_fee term.release_clause
+            - if term.id.present?
+              tr
+                td
+                  = responsive_cell_label 'Date Signed'
+                  = time_to_s term.start_date
+                td
+                  = responsive_cell_label 'Wage'
+                  = number_to_fee term.wage
+                td
+                  = responsive_cell_label 'Bonus'
+                  - if term.signing_bonus.present?
+                    = "#{number_to_fee(term.signing_bonus, '')}" + \
+                      (" (+#{number_to_fee(term.stat_bonus, '', "%n%u")} if #{term.num_stats} #{term.stat_type})" if term.stat_bonus.present?)
+                  - else
+                    | N/A
+                td
+                  = responsive_cell_label 'Release Clause'
+                  = number_to_fee term.release_clause
 
     - if @player.loans.any?
       .ui.orange.dividing.header Loans
@@ -117,7 +119,7 @@
                 = time_to_s(contract.end_date)
               td
                 = responsive_cell_label 'Transfer Fee'
-                = contract.exit_cost.fee
+                = contract.exit_cost.total_fee
 
             - if (contract.exit_cost.notes.present? rescue false)
               tr

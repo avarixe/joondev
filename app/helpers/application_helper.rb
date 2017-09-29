@@ -14,12 +14,13 @@ module ApplicationHelper
   end
 
   def number_to_fee(val, placeholder="N/A", format="$%n%u")
-    number_to_human(val, units: :fee, format: format, precision: 2) || placeholder
+    number_to_human(val, units: :fee, format: format) || placeholder
   end
 
   def semantic_bip(object, attribute, options={})
     best_in_place object, attribute, 
       class: 'ui form', 
+      inner_class: 'ui fluid input',
       display_as: options[:display_as],
       activator: "[data-id=#{object.id}] [data-attr=#{attribute}]"
   end

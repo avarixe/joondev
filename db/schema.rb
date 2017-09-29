@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170928223159) do
+ActiveRecord::Schema.define(version: 20170929200818) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,17 +94,18 @@ ActiveRecord::Schema.define(version: 20170928223159) do
     t.float   "rating"
     t.integer "goals"
     t.integer "assists"
-    t.string  "pos",       limit: 10
+    t.string  "pos",          limit: 10
     t.boolean "cs"
     t.integer "record_id"
-    t.boolean "injured",              default: false
-    t.integer "booking",              default: 0
+    t.boolean "injured",                 default: false
+    t.integer "yellow_cards",            default: 0
+    t.integer "red_cards",               default: 0
   end
 
   create_table "my_fifa_player_seasons", force: :cascade do |t|
     t.integer "season_id"
     t.integer "player_id"
-    t.integer "jersey_no"
+    t.integer "kit_no"
     t.integer "value"
     t.integer "ovr"
     t.integer "age",       default: 0

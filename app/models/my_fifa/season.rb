@@ -36,10 +36,10 @@ module MyFifa
         self.team.sorted_players.each do |player|
           self.player_seasons.create(
             player_id: player.id,
-            jersey_no: player.current_jersey_no,
-            ovr:       player.current_ovr,
-            value:     player.current_value,
-            age:       player.current_age + 1
+            kit_no:    player.kit_no,
+            ovr:       player.ovr,
+            value:     player.value,
+            age:       player.age + 1
           )
         end
       end

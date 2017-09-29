@@ -21,7 +21,6 @@ module MyFifa
         (1..11).each do |n|
           self.player_records.build(
             pos: formation.public_send("pos_#{n}"),
-            rating: 6
           )
         end
       end

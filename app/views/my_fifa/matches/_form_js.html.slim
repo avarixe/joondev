@@ -3,16 +3,18 @@ javascript:
 
   $(function(){
     $('#match_opponent, #match_competition').dropdown({
+      placeholder: false,
       allowAdditions: true,
       hideAdditions: false,
     });
   
     $('.pusher').on('click', '[data-clickfield] a[data-clickaction]', function(){ toggleClickForm(this); });
+    $('.pusher').on('click', 'a[data-action]',               function(){ $(this).removeClass('active selected'); });
     $('.pusher').on('click', 'a[data-action="add sub"]',     function(){ addRecord(this); });
     $('.pusher').on('click', 'a[data-action="remove"]',      function(){ removeRecord(this); });
     $('.pusher').on('click', 'a[data-action="injury"]',      function(){ toggleInjury(this); });
-    $('.pusher').on('click', 'a[data-action="yellow card"]', function(){ addBooking(this, 1); });
-    $('.pusher').on('click', 'a[data-action="red card"]',    function(){ addBooking(this, 3); });
+    $('.pusher').on('click', 'a[data-action="yellow card"]', function(){ addYellowCard(this); });
+    $('.pusher').on('click', 'a[data-action="red card"]',    function(){ addRedCard(this); });
     $('.pusher').on('click', 'a[data-action="clear card"]',  function(){ clearBooking(this); });
 
     // By default, highest rating gets MOTM
@@ -106,12 +108,12 @@ javascript:
         .replace(/(_player_records_attributes)_(\d+)/g, '$1_$2_sub_record_attributes'));
 
     $(target).closest('.item')
-      .addClass('disabled')
-      .siblings('[data-action="remove"]').addClass('disabled');
+      .addClass('hidden')
+      .siblings('[data-action="remove"]').addClass('hidden');
 
     // Set Substitute behavior
-    $('a[data-action!="clear card"]', record).removeClass('disabled');
-    $('a[data-action="clear card"]', record).addClass('disabled');
+    clearBooking($('a[data-action="clear card"]', record));
+    $('a[data-action="remove"]', record).removeClass('hidden');
     $('.pos .level.icon', record).last().css('visibility', 'hidden');
     $('.ui.ribbon.label', record).removeClass('yellow');
     $('[data-clickfield] .or', record).attr('data-text', 0);
@@ -158,9 +160,9 @@ javascript:
           tr.remove();
           
         $('.ribbon .level.icon', parentTr).last().remove();
-        $('a[data-action="add sub"]', parentTr).removeClass('disabled');
+        $('a[data-action="add sub"]', parentTr).removeClass('hidden');
         if (parentTr.is('[data-sub]'))
-          $('a[data-action="remove"]', parentTr).removeClass('disabled');
+          $('a[data-action="remove"]', parentTr).removeClass('hidden');
       }
     });
   }
@@ -177,17 +179,33 @@ javascript:
       $('.icon', $(target)).removeClass('green');
   }
 
-  function addBooking(target, increment){
-    var bookingField = $('a[data-action="yellow card"] input', $(target).closest('.menu'));
-    bookingField.val(parseInt(bookingField.val()) + increment);
-    if (bookingField.val() > 1)
-      $('a[data-action*="card"]', $(target).closest('.menu')).toggleClass('disabled');
+  function addYellowCard(target){
+    var yellowCardField = $(target).find('input');
+    yellowCardField.val(parseInt(yellowCardField.val()) + 1);
+    $(target).find('.floating.label').text(yellowCardField.val());
+    $('a[data-action="clear card"]', $(target).closest('.menu')).removeClass('disabled');
+
+    if (yellowCardField.val() > 1)
+      addRedCard($(target).closest('.menu').find('a[data-action="red card"]'));
+  }
+
+  function addRedCard(target){
+    var redCardField = $(target).find('input');
+    redCardField.val(1);
+    $(target).find('.floating.label').text('1');
+    $('a[data-action="clear card"]', $(target).closest('.menu')).removeClass('disabled');
+
+    $('a[data-action="yellow card"]', $(target).closest('.menu')).addClass('disabled');
+    $(target).closest('a[data-action="red card"]').addClass('disabled');
   }
 
   function clearBooking(target){
-    var bookingField = $('a[data-action="yellow card"] input', $(target).closest('.menu'));
-    bookingField.val(0);
-    $('a[data-action*="card"]', $(target).closest('.menu')).toggleClass('disabled');
+    $('a[data-action="yellow card"] input', $(target).closest('.menu')).val(0);
+    $('a[data-action="red card"] input', $(target).closest('.menu')).val(0);
+
+    $('a[data-action="yellow card"], a[data-action="red card"]', $(target).closest('.menu')).removeClass('disabled');
+    $('.floating.label', $(target).closest('.menu')).text('0');
+    $(target).closest('a[data-action="clear card"]').addClass('disabled');
   }
 
   function setMOTM(target){

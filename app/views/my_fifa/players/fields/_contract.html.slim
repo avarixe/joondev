@@ -1,4 +1,4 @@
-- if (current_contract = @player.current_contract.terms.last rescue nil)
+- if @player.active? && (current_contract = @player.current_contract.terms.last rescue nil)
   .ui.dividing.header Current Contract
 
   .ui.stackable.grid

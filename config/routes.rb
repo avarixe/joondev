@@ -20,7 +20,6 @@ Rails.application.routes.draw do
         post 'sign_new_contract'
         post 'exit'
         post 'rejoin'
-        get 'get_ovr'
       }
     end
     resources :teams do

@@ -16,7 +16,7 @@ $(document).on "turbolinks:load", ->
     });
 
   # Dropdown menus
-  $('select.dropdown:not(.search), .ui.dropdown:not(.search)').dropdown({
+  $('select.dropdown:not(.addable), .ui.dropdown:not(.addable)').dropdown({
     placeholder: false
   });
     
@@ -27,7 +27,7 @@ $(document).on "turbolinks:load", ->
       $(this).find('select > option').each ->
         $menu.append '<div class="item" data-value="">' + @innerHTML + '</div>'
       $(this).find('optgroup').each ->
-        $menu.append '<div class="header">' + @label + '</div><div class="divider"></div>'
+        $menu.append '<div class="ui horizontal divider">' + @label + '</div>'
         $(this).children().each ->
           $menu.append '<div class="item" data-value="' + @value + '">' + @innerHTML + '</div>'
       $(this).find('.menu').html $menu.html()

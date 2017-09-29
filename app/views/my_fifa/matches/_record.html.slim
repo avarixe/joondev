@@ -2,7 +2,7 @@
 
 tr[data-id=record.player_id]
   td[no-link]
-    div[class="ui #{'yellow' if record.player_id == @match.motm_id} ribbon label"]
+    div[class="ui pos #{'yellow' if record.player_id == @match.motm_id} ribbon label"]
       = record.pos
       - num_sub.times do |i|
         i.green.level.up.icon[style="visibility:#{i == num_sub-1 ? 'visible' : 'hidden'}"]
@@ -12,8 +12,10 @@ tr[data-id=record.player_id]
     = record.player.name
     = content_tag(:i, nil, class: 'soccer icon') if record.player_id == @match.motm_id
     = content_tag(:i, nil, class: 'first aid icon') if record.injured
-    = content_tag(:i, nil, class: 'yellow square icon') if [1,4].include?(record.booking)
-    = content_tag(:i, nil, class: 'red square icon') if [3,4].include?(record.booking)
+    - if record.yellow_cards > 0
+      .ui.yellow.label.booking = record.yellow_cards
+    - if record.red_cards > 0
+      .ui.red.label.booking = record.red_cards
   td.center.aligned[no-link]
     = responsive_cell_label 'Rating'
     = record.rating

@@ -7,14 +7,14 @@
           = @player.active ? 'Current' : 'Last'
           |  OVR
         .value
-          = @player.current_ovr
+          = @player.ovr
     .aligned.column
       .ui.grey.statistic
         .label
           = @player.active ? 'Current' : 'Last'
           |  Value
         .value
-          = number_to_fee @player.current_value
+          = number_to_fee @player.value
   .five.columns.centered.row
     - @stats.each do |stat|
       .aligned.column

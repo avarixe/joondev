@@ -13,15 +13,15 @@ tr[data-id=f.object.id]
   td
     .field[no-empty]
       = responsive_cell_label 'Player'
-      = f.select :player_id,                                              \
-        grouped_options_for_select(@grouped_players, f.object.player_id), \
-        {include_blank: true},                                            \
-        {class: 'player_id players fluid dropdown'}
+      = f.select :player_id,
+        grouped_options_for_select(@grouped_players, f.object.player_id),
+        {include_blank: true},
+        {class: 'player_id grouped search fluid dropdown', tabindex: 100 }
   td
     .field[no-empty]
       = responsive_cell_label 'Rating'
-      = f.number_field :rating, class: 'rating', step: 0.1, min: 0, max: 10, tabindex: 1000, data: { default: 6 }
-  td
+      = f.number_field :rating, class: 'rating', step: 0.1, min: 0, max: 10, tabindex: 1000
+  td.center.aligned
     = responsive_cell_label 'Goals'
     .ui.buttons[data-clickfield]
       a.ui.icon.button[data-clickaction='add']
@@ -30,7 +30,7 @@ tr[data-id=f.object.id]
       = f.hidden_field :goals, class: 'goals'
       a.ui.icon.button[data-clickaction='sub']
         i.minus.icon
-  td
+  td.center.aligned
     = responsive_cell_label 'Assists'
     .ui.buttons[data-clickfield]
       a.ui.icon.button[data-clickaction='add']
@@ -39,30 +39,37 @@ tr[data-id=f.object.id]
       = f.hidden_field :assists, class: 'assists'
       a.ui.icon.button[data-clickaction='sub']
         i.minus.icon
-  td
+  td.center.aligned
     .ui.left.pointing.dropdown.circular.teal.icon.button
       i.settings.icon
       .fluid.menu
-        a[data-action="add sub" class="#{'disabled' if f.object.sub_record.present?} item"]
+        a[data-action="add sub" class="#{f.object.sub_record.present? ? 'hidden' : 'visible'} item"]
           i.level.down.red.icon
           | Substitute
         a.item[data-action="injury"]
           i.first.aid.icon
           span Injured
           = f.hidden_field :injured, data: { default: false }
-        a[data-action="yellow card" class="#{'disabled' if f.object.booking > 1} item"]
-          i.yellow.square.icon
-          | Yellow Card
-          = f.hidden_field :booking, data: { default: 0}
-        a[data-action="red card" class="#{'disabled' if f.object.booking > 1} item"]
-          i.red.square.icon
-          | Red Card
-        a[data-action="clear card" class="#{'disabled' if f.object.booking < 2} item"]
-          i.green.minus.square.icon
-          | Clear Bookings
-        a[data-action="remove" class="#{'disabled' unless player_is_sub} item"]
+        a[data-action="remove" class="#{player_is_sub ? 'visible' : 'hidden'} item"]
           i.remove.icon
           | Remove
+        .header 
+          i.clone.icon
+          | Bookings
+        .divider
+        a[data-action="yellow card" class="#{'disabled' if f.object.red_cards > 0} item"]
+          | Yellow Card
+          = f.hidden_field :yellow_cards, data: { default: 0 }
+          .floating.ui.yellow.label.booking
+            = f.object.yellow_cards
+        a[data-action="red card" class="#{'disabled' if f.object.red_cards > 0} item"]
+          | Red Card
+          = f.hidden_field :red_cards, data: { default: 0 }
+          .floating.ui.red.label.booking
+            = f.object.red_cards
+        a[data-action="clear card" class="#{'disabled' if f.object.yellow_cards == 0 && f.object.red_cards == 0} item"]
+          i.green.minus.square.icon
+          | Clear Bookings
 
 - if (sub_record = f.object.sub_record).present?
   = f.fields_for :sub_record do |sub_f|

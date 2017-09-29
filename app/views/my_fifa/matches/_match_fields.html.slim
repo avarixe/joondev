@@ -4,13 +4,13 @@
       .six.wide.column.required.field[no-empty]
         = f.label :competition, 'Competition'
         = f.select :competition,
-          options_for_select(@team.current_season.competitions, @match.competition),
-          {}, {class: 'fluid search dropdown', tabindex: 1}
+          options_for_select(@team.current_season.competitions.sort, @match.competition),
+          {include_blank: true}, {class: 'fluid addable search dropdown', tabindex: 1}
       .six.wide.column.required.field[no-empty]
           = f.label :opponent, 'Opponent Team'
           = f.select :opponent,
-            options_for_select(@team.teams_played, @match.opponent),
-            {}, {class: 'fluid search dropdown', tabindex: 2}
+            options_for_select(@team.teams_played.sort, @match.opponent),
+            {include_blank: true}, {class: 'fluid addable search dropdown', tabindex: 2}
     .four.column.stackable.centered.row
       .six.wide.column.required.field[no-empty]
         = f.label :date_played, 'Date Played'

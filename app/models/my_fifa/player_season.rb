@@ -5,10 +5,10 @@ module MyFifa
     belongs_to :season
     belongs_to :player
     
-    validates :jersey_no, numericality: { greater_than_or_equal_to: 0 }
-    validates :age,       numericality: { greater_than_or_equal_to: 0 }
-    validates :ovr,       numericality: { greater_than_or_equal_to: 0 }
-    validates :value,     numericality: { greater_than_or_equal_to: 0 }
+    validates :kit_no, numericality: { greater_than_or_equal_to: 0 }
+    validates :age,    numericality: { greater_than_or_equal_to: 0 }
+    validates :ovr,    numericality: { greater_than_or_equal_to: 0 }
+    validates :value,  numericality: { greater_than_or_equal_to: 0 }
 
     def formatted_value
       number_to_fee self.value

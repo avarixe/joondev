@@ -84,7 +84,7 @@ div[class="ui raised pink segment #{'hidden' if @player.loaned_out?}"]
         .sub.header
           span[class="ui #{@player.loaned_out? ? 'orange' : 'green'} mini statistic"]
             span.value[data-label="loan status"]
-              = @player.loaned_out? ?                                                                              \
+              = @player.loaned_out? ? \
                 "ON LOAN #{ "AT #{@player.loans.last.destination}" if @player.loans.last.destination.present?} " : \
                 "AT #{@team.team_name}"
     .ui.content[data-label="update loan"]
@@ -122,7 +122,7 @@ div[class="ui raised red segment #{'hidden' if !@player.active || @player.loaned
               div[class="field #{'disabled' if @player.current_contract.loan?}"]
                 .ui.left.icon.input
                   i.handshake.icon
-                  = f.object.loan? ?                         \
+                  = f.object.loan? ? \
                     f.text_field(:destination, value: f.object.origin) : \
                     f.text_field(:destination, placeholder: 'Destination')
             .column
@@ -135,10 +135,10 @@ div[class="ui raised red segment #{'hidden' if !@player.active || @player.loaned
                     = cf.number_field :fee, placeholder: 'Transfer Fee'
               .column
                 div[class="field #{'disabled' if f.object.loan?}"]
-                  = cf.select :player_id,                                                   \
-                    grouped_options_for_select(@team.grouped_players, cf.object.player_id), \
-                    { include_blank: 'Traded Player' },                                     \
-                    { class: 'players fluid dropdown'}
+                  = cf.select :player_id,
+                    grouped_options_for_select(@team.grouped_players, cf.object.player_id),
+                    { include_blank: 'Traded Player' },
+                    { class: 'grouped search fluid dropdown'}
               .column
                 div[class="field #{'disabled' if f.object.loan?}"]
                   .ui.icon.input

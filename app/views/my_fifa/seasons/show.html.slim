@@ -38,12 +38,12 @@ div[class="ui basic tab segment #{'active' unless @season.current?}" data-tab="i
 
 div[class="ui basic tab segment #{'active' if @season.current?}" data-tab="players"]
   .ui.raised.blue.segment
-    table.ui.definition.selectable.very.compact.mini.table[data-link="/my_fifa/players/"]
+    table.ui.definition.selectable.very.compact.small.table[data-link="/my_fifa/players/"]
       thead
         tr.center.aligned
           th.six.wide Player
           th.two.wide Position
-          th.two.wide Jersey No.
+          th.two.wide Kit No.
           th.two.wide OVR
           th.two.wide Value
           th.two.wide Age
@@ -51,19 +51,28 @@ div[class="ui basic tab segment #{'active' if @season.current?}" data-tab="playe
         - @season.player_seasons.each do |player_season|
           tr.center.aligned[data-id=player_season.id]
             td
+              = content_tag(:i, nil, class: 'red attention icon') if !player_season.player.active
               = player_season.player.name 
             td[no-link]
               = responsive_cell_label 'Position'
               = player_season.player.pos
-            td[no-link data-attr="jersey_no"]
-              = responsive_cell_label 'Jersey No.'
-              = semantic_bip player_season, :jersey_no
+            td[no-link data-attr="kit_no" data-sort=player_season.kit_no]
+              = responsive_cell_label 'Kit No.'
+              = semantic_bip player_season, :kit_no
             td[no-link data-attr="ovr"]
               = responsive_cell_label 'OVR'
               = semantic_bip player_season, :ovr
-            td[no-link data-attr="value"]
+            td[no-link data-attr="value" data-sort=player_season.value]
               = responsive_cell_label 'Value'
               = semantic_bip player_season, :value, display_as: :formatted_value
             td[no-link data-attr="age"]
               = responsive_cell_label 'Age'
               = semantic_bip player_season, :age
+
+javascript:
+  $(function(){
+    $('table').DataTable({
+      order: [],
+      bPaginate: false
+    });
+  })

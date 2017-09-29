@@ -69,7 +69,7 @@ module MyFifa
       end
 
       def set_squad_form
-        @grouped_players = @team.grouped_players(abbrev: true)
+        @grouped_players = @team.grouped_players#(abbrev: true)
         render :form
       end
 

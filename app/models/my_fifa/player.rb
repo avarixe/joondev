@@ -107,7 +107,7 @@ module MyFifa
       def create_player_season
         self.team.current_season.player_seasons.create(
           player_id: self.id,
-          jersey_no: self.id,
+          kit_no:    self.id,
           ovr:       self.start_ovr,
           value:     self.start_value,
           age:       self.start_age
@@ -157,23 +157,23 @@ module MyFifa
         positions.blank? ? nil : positions
       end
 
-      def current_ovr
+      def ovr
         self.player_seasons.last.ovr rescue self.start_ovr
       end
 
-      def current_value
+      def value
         self.player_seasons.last.value rescue self.start_value
       end
 
-      def current_wage
+      def wage
         self.current_contract.terms.last.wage
       end
 
-      def current_jersey_no
-        self.player_sessions.last.jersey_no rescue nil
+      def kit_no
+        self.player_sessions.last.kit_no rescue nil
       end
 
-      def current_age
+      def age
         self.player_seasons.last.age rescue self.start_age
       end
 

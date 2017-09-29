@@ -1,6 +1,9 @@
 css:
-  .ui.dropdown .menu > a.item.disabled { display: none }
   .ui.buttons .or[data-text]:before   { color: dodgerblue }
+  .pos.ui.label > i.icon { margin: 0em 0.25em 0em 0.25em }
+  a[data-action*="card"] .floating.label { z-index: 1000 }
+  a.disabled[data-action*="card"] { color: #e5e5e5 !important; opacity: 1.0 !important; }
+  .ui.floating.booking.label { padding: 0.6em; margin: 0 0 0 -2.2em !important; top: 0.45em !important }
 
 = form_for(@match, as: :match, remote: true, html: { class: 'ui small fluid form' }) do |f|
   = f.hidden_field :team_id
@@ -11,9 +14,9 @@ css:
   .ui.olive.raised.segment
     - if @match.id.blank?
       .field
-        = f.select :squad_id,                                               \
-          options_for_select(@team.squads.map{ |s| [s.squad_name, s.id] }), \
-          { include_blank: 'Squad' },                                       \
+        = f.select :squad_id,
+          options_for_select(@team.squads.map{ |s| [s.squad_name, s.id] }),
+          { include_blank: 'Squad' },
           { class: 'fluid dropdown' }
 
     table.ui.basic.very.compact.table

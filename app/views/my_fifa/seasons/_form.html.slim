@@ -50,6 +50,6 @@
               = f.select :captain_id,                                                   \
                 grouped_options_for_select(@team.grouped_players, f.object.captain_id), \
                 { include_blank: true },                                                \
-                { class: 'fluid dropdown' }
+                { class: 'grouped search fluid dropdown' }
   = f.submit 'Save Season', class: 'ui primary button'
   = link_to 'Back', @season, class: 'ui basic button'

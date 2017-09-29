@@ -38,6 +38,15 @@ module MyFifa
           end
         end
       end
+      
+    ######################
+    #  CALLBACK METHODS  #
+    ######################
+      after_create :set_term_start_date
+      
+      def set_term_start_date
+        self.terms.last.update_column(:start_date, self.start_date)
+      end
 
 
     #####################
@@ -45,7 +54,7 @@ module MyFifa
     #####################
       def build_new_term
         self.terms.any? ?
-          self.terms.build(terms.last.attributes) :
+          self.terms.build(terms.last.attributes.except('id')) :
           self.terms.build
       end
 

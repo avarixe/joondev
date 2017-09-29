@@ -8,7 +8,10 @@ body > .ui.link.inverted.menu .item:hover {
   background-color: teal;
 }
 
-.dropdown.players .header { color: red !important; }
+.grouped.dropdown .divider {
+  border-top: none !important;
+  color: crimson;
+}
 
 /* Responsive Labels */
 .ui.label.responsive { display: none; }
@@ -20,7 +23,9 @@ body > .ui.link.inverted.menu .item:hover {
 .ui.left.menu { padding-top: 3em; }
 .ui.main { margin-top: 5em !important; }
 .pusher { overflow-y:auto !important; }
-.ui.segment.hidden { display: none; }
+.ui.segment.hidden, .ui.dropdown .menu > a.hidden.item { 
+  display: none;
+}
 
 /* Supplementary to DirtyForms */
 .dirty, .dirty:hover, .dirty:active, .dirty:focus { border-color: red; }
