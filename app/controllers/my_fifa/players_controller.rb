@@ -63,6 +63,8 @@ module MyFifa
     def set_status
       date = params[:date] || @team.current_date
 
+      @team.update_column(:current_date, date) if @team.current_date < date
+
       case params[:type]
       when 'injury'
         @player.toggle_injury(date, params[:notes])

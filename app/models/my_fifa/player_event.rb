@@ -7,6 +7,6 @@ module MyFifa
     ######################
     #  CALLBACK METHODS  #
     ######################
-      after_save -> { set_current_date(player.team, end_date || start_date) }
+      after_save -> { set_current_date(player.team, start_date) }
   end
 end
