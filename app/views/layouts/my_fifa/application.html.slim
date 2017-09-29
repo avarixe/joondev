@@ -10,15 +10,20 @@
       i.dropdown.icon
       .menu
         = link_to(my_fifa_teams_path, class: 'item') do
-          i.world.icon
+          i.trophy.icon
           |  Manage Teams 
         = link_to(my_fifa_formations_path, class: 'item') do
-          i.dashboard.icon
-          |  Manage Formations 
+          i.grid.layout.icon
+          |  Manage Formations
         .divider
-        = link_to('#', class: 'item') do
-          i.trophy.icon
-          |  Career Overview 
+        - if @team.present?
+          = link_to(@team.current_season, class: 'item') do
+            i.calendar.icon
+            |  View Current Season
+        - else
+          = link_to(my_fifa_seasons_path, class: 'item') do
+            i.calendar.icon
+            |  View Seasons
     .ui.up.pointing.dropdown.item
       |  TEAM 
       i.dropdown.icon
@@ -32,19 +37,10 @@
           i.add.user.icon
           |  Sign New Player
         = link_to(players_my_fifa_analytics_path, class: 'item') do
-          i.pie.chart.icon
-          |  Statistics 
-        .divider
-        - if @team.present?
-          = link_to(@team.current_season, class: 'item') do
-            i.calendar.icon
-            |  View Current Season
-        - else
-          = link_to(my_fifa_seasons_path, class: 'item') do
-            i.calendar.icon
-            |  View Seasons
+          i.bar.chart.icon
+          | Statistics 
     .ui.up.pointing.dropdown.item
-      |  Match 
+      |  MATCH 
       i.dropdown.icon
       .menu
         .header  Matches

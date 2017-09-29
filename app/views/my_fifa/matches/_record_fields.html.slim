@@ -20,7 +20,7 @@ tr[data-id=f.object.id]
   td
     .field[no-empty]
       = responsive_cell_label 'Rating'
-      = f.number_field :rating, class: 'rating', step: 0.01, min: 0, tabindex: 1000
+      = f.number_field :rating, class: 'rating', step: 0.1, min: 0, max: 10, tabindex: 1000, data: { default: 6 }
   td
     = responsive_cell_label 'Goals'
     .ui.buttons[data-clickfield]

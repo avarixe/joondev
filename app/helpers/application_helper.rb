@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include ActionView::Helpers::NumberHelper
 
   def time_to_s(time, string="%b %e, %Y")
     time.present? ? time.strftime(string) : nil
@@ -17,6 +18,9 @@ module ApplicationHelper
   end
 
   def semantic_bip(object, attribute, options={})
-    best_in_place object, attribute, class: 'ui form', display_as: options[:display_as]
+    best_in_place object, attribute, 
+      class: 'ui form', 
+      display_as: options[:display_as],
+      activator: "[data-id=#{object.id}] [data-attr=#{attribute}]"
   end
 end

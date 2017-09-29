@@ -23,59 +23,59 @@ div[class="ui raised pink segment #{'hidden' if @player.loaned_out?}"]
           .column
             = submit_tag "LOG AS#{ ' NOT' if @player.injured? } INJURED", class: "ui #{@player.injured? ? 'green' : 'pink'} submit fluid button"
 
-/ SIGN NEW CONTRACT section
-.ui.raise.blue.segment
-  .ui.dividing.header
-    i.blue.write.icon
-    .content Sign New Contract
-  .ui.content[data-label="new contract"]
-    = form_for(@player, as: :player, method: :post, remote: true, url: { action: :sign_new_contract }, html: { class: 'ui large fluid form' }) do
-      .ui.stackable.grid
-        = fields_for :term, @player.current_contract.build_new_term do |f|
-          .equal.width.row
-            .column
-              .ui.left.icon.fluid.input
-                i.calendar.icon
-                = f.text_field :start_date, value: @team.current_date, data: { flatpickr: true }
-            .column
-              .ui.left.icon.fluid.input
-                i.calendar.icon
-                = f.text_field :end_date, value: @player.current_contract.end_date, placeholder: 'Contract Expires', data: { flatpickr: true }
-            .column
-          .equal.width.row
-            .column
-              .field
-                .ui.left.icon.input
-                  i.money.icon
-                  = f.number_field :wage, placeholder: 'Wage'
-            .column
-              .field
-                .ui.left.icon.input
-                  i.money.icon
-                  = f.number_field :signing_bonus, placeholder: 'Signing Bonus'
-            .column
-              .field
-                .ui.left.icon.input
-                  i.money.icon
-                  = f.number_field :release_clause, placeholder: 'Release Clause'
-          .equal.width.row
-            .column
-              .field
-                .ui.left.icon.input
-                  i.money.icon
-                  = f.number_field :stat_bonus, placeholder: 'Bonus'
-            .column
-              .field
-                = f.number_field :num_stats, placeholder: 'Requirement'
-            .column
-              .field
-                = f.select :stat_type, ['Goals', 'Assists', 'Clean Sheets'], {include_blank: 'Type of Requirement'}, {class: 'fluid dropdown'}
-          .six.wide.column
-            = submit_tag 'SIGN NEW CONTRACT', class: "ui blue submit fluid button"
-
-
-/ LOAN section
 - unless @player.current_contract.loan?
+
+  / SIGN NEW CONTRACT section
+  .ui.raise.blue.segment
+    .ui.dividing.header
+      i.blue.write.icon
+      .content Sign New Contract
+    .ui.content[data-label="new contract"]
+      = form_for(@player, as: :player, method: :post, remote: true, url: { action: :sign_new_contract }, html: { class: 'ui large fluid form' }) do
+        .ui.stackable.grid
+          = fields_for :term, @player.current_contract.build_new_term do |f|
+            .equal.width.row
+              .column
+                .ui.left.icon.fluid.input
+                  i.calendar.icon
+                  = f.text_field :start_date, value: @team.current_date, data: { flatpickr: true }
+              .column
+                .ui.left.icon.fluid.input
+                  i.calendar.icon
+                  = f.text_field :end_date, value: @player.current_contract.end_date, placeholder: 'Contract Expires', data: { flatpickr: true }
+              .column
+            .equal.width.row
+              .column
+                .field
+                  .ui.left.icon.input
+                    i.money.icon
+                    = f.number_field :wage, placeholder: 'Wage'
+              .column
+                .field
+                  .ui.left.icon.input
+                    i.money.icon
+                    = f.number_field :signing_bonus, placeholder: 'Signing Bonus'
+              .column
+                .field
+                  .ui.left.icon.input
+                    i.money.icon
+                    = f.number_field :release_clause, placeholder: 'Release Clause'
+            .equal.width.row
+              .column
+                .field
+                  .ui.left.icon.input
+                    i.money.icon
+                    = f.number_field :stat_bonus, placeholder: 'Bonus'
+              .column
+                .field
+                  = f.number_field :num_stats, placeholder: 'Requirement'
+              .column
+                .field
+                  = f.select :stat_type, ['Goals', 'Assists', 'Clean Sheets'], {include_blank: 'Type of Req.'}, {class: 'fluid dropdown'}
+            .six.wide.column
+              = submit_tag 'SIGN NEW CONTRACT', class: "ui blue submit fluid button"
+
+  / LOAN section
   div[class="ui raised orange segment #{'hidden' unless @player.active}"]
     .ui.dividing.header
       i.orange.plane.icon

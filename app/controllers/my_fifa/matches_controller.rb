@@ -35,7 +35,7 @@ module MyFifa
     # GET /players/1
     def show         
       respond_to do |format|
-        @records = @match.player_records.includes(:player)
+        @records = @match.player_records.includes(:player, :sub_record)
 
         format.html {
           @title = @match.home ?
@@ -74,7 +74,6 @@ module MyFifa
     # GET /players/new
     def new
       @title = "New Match"
-      last_played = @team.matches.last.date_played unless @team.matches.empty?
       @match = Match.new(date_played: @team.current_date)
 
       @match.build_records(current_user.default_formation)

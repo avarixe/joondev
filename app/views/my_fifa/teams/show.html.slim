@@ -1,7 +1,3 @@
 - content_for :page_links do
   = link_to 'Edit', edit_my_fifa_team_path(@team), class: 'ui orange button'
   = link_to 'View All Teams', my_fifa_teams_path, class: 'ui basic button'
-
-.ui.teal.raised.segment
-  .ui.dividing.header Competitions
-  = @team.competitions.map{ |c| "<u><b>#{c}</b></u>" }.join(', ').html_safe

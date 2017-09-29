@@ -5,7 +5,7 @@ table.ui.basic.definition.selectable.compact.small.table[data-link="/my_fifa/tea
   thead
     th Active
     th Name
-    th.ten.wide Competitions
+    th Current Season
   tbody
     - current_user.teams.each do |team|
       tr [data-id=team.id]
@@ -15,8 +15,8 @@ table.ui.basic.definition.selectable.compact.small.table[data-link="/my_fifa/tea
             label
         td = team.team_name
         td
-          = responsive_cell_label 'Competitions'
-          = team.competition_options(', ')
+          = responsive_cell_label 'Current Season'
+          = team.current_season.title
 
 javascript:
   $(function(){

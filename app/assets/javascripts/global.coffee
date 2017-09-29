@@ -16,7 +16,7 @@ $(document).on "turbolinks:load", ->
     });
 
   # Dropdown menus
-  $('select.dropdown, .ui.dropdown').dropdown({
+  $('select.dropdown:not(.search), .ui.dropdown:not(.search)').dropdown({
     placeholder: false
   });
     

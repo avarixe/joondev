@@ -9,18 +9,17 @@ module MyFifa
     has_many :matches, dependent: :delete_all
     has_many :player_records, dependent: :delete_all
     
-    serialize :competitions, Array
+    serialize :teams_played, Array
 
     ############################
     #  INITIALIZATION METHODS  #
     ############################
     
-
     ########################
     #  ASSIGNMENT METHODS  #
     ########################
-      def competitions=(val)
-        write_attribute :competitions, (val.is_a?(Array) ? val : val.split("\n").map(&:strip))
+      def teams_played=(val)
+        write_attribute :teams_played, (val.is_a?(Array) ? val : val.split("\n").map(&:strip))
       end
 
     ########################
@@ -28,9 +27,6 @@ module MyFifa
     ########################
       validates :team_name, presence: { message: "Team Name can't be blank." }
       validates :current_date, presence: { message: "Start Date can't be blank." }
-      validates_each :competitions do |record, attr, value|
-        record.errors.add(:competitions, "Please supply at least one Competition.") if value.empty?
-      end
 
     ######################
     #  CALLBACK METHODS  #
@@ -63,24 +59,6 @@ module MyFifa
 
       def current_season
         self.seasons.last
-      end
-
-      def competition_options(delimiter)
-        competitions.join(delimiter) rescue ''
-      end
-
-      def recorded_seasons
-        return [] if matches.empty?
-
-        start_year = matches.first.date_played.strftime('%Y').to_i
-        start_year -= 1 if matches.first.date_played < Date.new(start_year, 7, 1)
-        
-        latest_year = matches.last.date_played.strftime('%Y').to_i
-        latest_year -= 1 if matches.last.date_played < Date.new(latest_year, 7, 1)
-        
-        (start_year..latest_year).each.map do |i|
-          ["#{i} - #{i+1}", i]
-        end
       end
       
       def recorded_competitions

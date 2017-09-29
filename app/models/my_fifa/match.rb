@@ -20,7 +20,8 @@ module MyFifa
       def build_records(formation)
         (1..11).each do |n|
           self.player_records.build(
-            pos: formation.public_send("pos_#{n}")
+            pos: formation.public_send("pos_#{n}"),
+            rating: 6
           )
         end
       end
@@ -75,6 +76,7 @@ module MyFifa
       after_commit :set_records_match_data
       after_save :update_current_date
       after_save :create_new_season
+      after_save :save_external_match_data
 
       def set_records_match_data
         self.player_records.each do |record|
@@ -100,6 +102,19 @@ module MyFifa
           new_season.start_date = current_season.end_date
           new_season.end_date = current_season.end_date + 1.year
           new_season.save
+        end
+      end
+    
+      def save_external_match_data
+        season = self.team.current_season
+        unless season.competitions.include? self.competition
+          season.competitions << self.competition
+          season.save
+        end
+        
+        unless self.team.teams_played.include? self.opponent
+          self.team.teams_played << self.opponent
+          self.team.save
         end
       end
     

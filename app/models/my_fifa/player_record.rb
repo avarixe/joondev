@@ -37,7 +37,6 @@ module MyFifa
     ########################
       validate :player_selected?
       validate :rating_selected?, if: -> { player_id.present? }
-      validate :ovr_selected?,    if: -> { player_id.present? }
 
       def invalid_record?(attribute)
         attribute[:pos].blank?
@@ -45,7 +44,6 @@ module MyFifa
 
       def player_selected?() errors.add(:player_id, "No Player has been assigned as #{pos}") if player_id.blank? end
       def rating_selected?() errors.add(:rating, "#{player.name}: Rating cannot be blank.") if rating.blank? end
-      def ovr_selected?()    errors.add(:ovr, "#{player.name}: OVR cannot be blank.") if ovr.blank? end
 
     ######################
     #  CALLBACK METHODS  #

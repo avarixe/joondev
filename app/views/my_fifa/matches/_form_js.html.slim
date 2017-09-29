@@ -2,6 +2,11 @@ javascript:
   var highest_rating;
 
   $(function(){
+    $('#match_opponent, #match_competition').dropdown({
+      allowAdditions: true,
+      hideAdditions: false,
+    });
+  
     $('.pusher').on('click', '[data-clickfield] a[data-clickaction]', function(){ toggleClickForm(this); });
     $('.pusher').on('click', 'a[data-action="add sub"]',     function(){ addRecord(this); });
     $('.pusher').on('click', 'a[data-action="remove"]',      function(){ removeRecord(this); });
@@ -16,6 +21,7 @@ javascript:
     }).get().sort().pop() || 0;
 
     $('table').on('input', '.rating', function(){
+      console.log(this.value);
       if (parseFloat(this.value) > parseFloat(highest_rating)){
         highest_rating = this.value;
         setMOTM($('.ui.ribbon.pos', $(this).closest('tr')));
@@ -173,9 +179,7 @@ javascript:
 
   function addBooking(target, increment){
     var bookingField = $('a[data-action="yellow card"] input', $(target).closest('.menu'));
-    console.log(bookingField.val())
     bookingField.val(parseInt(bookingField.val()) + increment);
-    console.log(bookingField.val())
     if (bookingField.val() > 1)
       $('a[data-action*="card"]', $(target).closest('.menu')).toggleClass('disabled');
   }

@@ -5,15 +5,24 @@ module MyFifa
     belongs_to :season
     belongs_to :player
     
-    validates_numericality_of :jersey_no
-    validates_numericality_of :age
-    validates_numericality_of :ovr
-    validates_numericality_of :value
-
-    include ActionView::Helpers::NumberHelper
+    validates :jersey_no, numericality: { greater_than_or_equal_to: 0 }
+    validates :age,       numericality: { greater_than_or_equal_to: 0 }
+    validates :ovr,       numericality: { greater_than_or_equal_to: 0 }
+    validates :value,     numericality: { greater_than_or_equal_to: 0 }
 
     def formatted_value
       number_to_fee self.value
+    end
+    
+    def value=(val)
+      case val
+      when /^(\d+(\.\d+)?)[Kk]$/
+        write_attribute :value, $1.to_f * 1000
+      when /^(\d+(\.\d+)?)[Mm]$/
+        write_attribute :value, $1.to_f * 1000000
+      else
+        write_attribute :value, val
+      end
     end
   end
 end

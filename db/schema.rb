@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170927183640) do
+ActiveRecord::Schema.define(version: 20170928223159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -136,6 +136,7 @@ ActiveRecord::Schema.define(version: 20170927183640) do
     t.integer "end_club_worth"
     t.integer "transfer_budget"
     t.integer "wage_budget"
+    t.text    "competitions"
   end
 
   create_table "my_fifa_squads", force: :cascade do |t|
@@ -160,8 +161,8 @@ ActiveRecord::Schema.define(version: 20170927183640) do
     t.string   "team_name"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
-    t.text     "competitions"
     t.date     "current_date"
+    t.text     "teams_played"
   end
 
   create_table "users", force: :cascade do |t|

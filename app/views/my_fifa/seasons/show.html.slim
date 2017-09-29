@@ -41,12 +41,12 @@ div[class="ui basic tab segment #{'active' if @season.current?}" data-tab="playe
     table.ui.definition.selectable.very.compact.mini.table[data-link="/my_fifa/players/"]
       thead
         tr.center.aligned
-          th Player
-          th Position
-          th Jersey No.
-          th OVR
-          th Value
-          th Age
+          th.six.wide Player
+          th.two.wide Position
+          th.two.wide Jersey No.
+          th.two.wide OVR
+          th.two.wide Value
+          th.two.wide Age
       tbody
         - @season.player_seasons.each do |player_season|
           tr.center.aligned[data-id=player_season.id]
@@ -55,15 +55,15 @@ div[class="ui basic tab segment #{'active' if @season.current?}" data-tab="playe
             td[no-link]
               = responsive_cell_label 'Position'
               = player_season.player.pos
-            td[no-link]
+            td[no-link data-attr="jersey_no"]
               = responsive_cell_label 'Jersey No.'
               = semantic_bip player_season, :jersey_no
-            td[no-link]
+            td[no-link data-attr="ovr"]
               = responsive_cell_label 'OVR'
               = semantic_bip player_season, :ovr
-            td[no-link]
+            td[no-link data-attr="value"]
               = responsive_cell_label 'Value'
               = semantic_bip player_season, :value, display_as: :formatted_value
-            td[no-link]
+            td[no-link data-attr="age"]
               = responsive_cell_label 'Age'
-              = player_season.age
+              = semantic_bip player_season, :age
