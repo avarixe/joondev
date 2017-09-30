@@ -45,7 +45,7 @@ javascript:
             $('td:first-child input', tr)
               .attr('data-default', data.positions[i])
               .val(data.positions[i]);
-            $('td:first-child .ribbon', tr).text(data.positions[i]);
+            $('td:first-child .ribbon span', tr).text(data.positions[i]);
           });
         });
         $('#update-squad-btn').attr('disabled', false);

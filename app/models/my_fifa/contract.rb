@@ -30,11 +30,13 @@ module MyFifa
           elsif transfer_cost.player_id.present?
             errors.add(:base, "A player cannot be traded for a Loaned player.")            
           end
-        elsif origin.blank?
-          if [transfer_cost.fee, transfer_cost.player_id].any?(&:present?)
-            errors.add(:base, "A player cannot have a Transfer Cost without an Origin.")
-          elsif ([exit_cost.fee, exit_cost.player_id].any?(&:present?) rescue false)
+        elsif ([exit_cost.fee, exit_cost.player_id].any?(&:present?) rescue false)
+          if destination.blank?
             errors.add(:base, "A player cannot have a Transfer Cost without a Destination.")            
+          end
+        elsif [transfer_cost.fee, transfer_cost.player_id].any?(&:present?)
+          if origin.blank?
+            errors.add(:base, "A player cannot have a Transfer Cost without an Origin.")
           end
         end
       end
