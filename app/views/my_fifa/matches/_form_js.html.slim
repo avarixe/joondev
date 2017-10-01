@@ -12,7 +12,6 @@ javascript:
     $('.pusher').on('click', 'a[data-action]',               function(){ $(this).removeClass('active selected'); });
     $('.pusher').on('click', 'a[data-action="add sub"]',     function(){ addRecord(this); });
     $('.pusher').on('click', 'a[data-action="remove"]',      function(){ removeRecord(this); });
-    $('.pusher').on('click', 'a[data-action="injury"]',      function(){ toggleInjury(this); });
     $('.pusher').on('click', 'a[data-action="yellow card"]', function(){ addYellowCard(this); });
     $('.pusher').on('click', 'a[data-action="red card"]',    function(){ addRedCard(this); });
     $('.pusher').on('click', 'a[data-action="clear card"]',  function(){ clearBooking(this); });
@@ -117,7 +116,6 @@ javascript:
     $('.pos .level.icon', record).last().css('visibility', 'hidden');
     $('.ui.ribbon.label', record).removeClass('yellow');
     $('[data-clickfield] .or', record).attr('data-text', 0);
-    setInjury($('a[data-action="injury"]', record), 0);
 
     // Remove Error classes
     $('.error', record).removeClass('error');
@@ -165,18 +163,6 @@ javascript:
           $('a[data-action="remove"]', parentTr).removeClass('hidden');
       }
     });
-  }
-  
-  function toggleInjury(target){
-    setInjury(target, $('input', $(target)).val() ^ true);
-  }
-
-  function setInjury(target, value){
-    $('input', $(target)).val(value);
-    $('span', $(target)).text(value ? 'Not Injured' : 'Injured');
-    value ?
-      $('.icon', $(target)).addClass('green') :
-      $('.icon', $(target)).removeClass('green');
   }
 
   function addYellowCard(target){

@@ -11,7 +11,7 @@ tr[data-id=record.player_id]
   td.selectable
     = record.player.name
     = content_tag(:i, nil, class: 'soccer icon') if record.player_id == @match.motm_id
-    = content_tag(:i, nil, class: 'first aid icon') if record.injured
+    = content_tag(:i, nil, class: 'first aid icon') if record.injury.present?
     - if record.yellow_cards > 0
       .ui.yellow.label.booking = record.yellow_cards
     - if record.red_cards > 0

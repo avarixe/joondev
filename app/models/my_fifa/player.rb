@@ -118,6 +118,7 @@ module MyFifa
     #  MUTATOR METHODS  #
     #####################
       def toggle_injury(date, notes)
+        puts "==================== in toggle_injury"
         if injured?
           self.update_column(:status, '')
           injuries.last.update(end_date: date)
@@ -129,7 +130,7 @@ module MyFifa
 
       def toggle_loan(date, destination)
         if loaned_out?
-          self.update_column(:status, '')          
+          self.update_column(:status, '')
           loans.last.update(end_date: date)
         else
           # end any injury event

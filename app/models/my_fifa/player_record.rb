@@ -60,8 +60,8 @@ module MyFifa
       end
 
       def create_event_if_injured
-        if self.injured && !self.player.injured?
-          self.player.toggle_injury(self.team.current_date)
+        if self.injury.present? && !self.player.injured?
+          self.player.toggle_injury(self.team.current_date, self.injury)
         end
       end
 

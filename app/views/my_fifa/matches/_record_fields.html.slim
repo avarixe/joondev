@@ -46,10 +46,9 @@ tr[data-id=f.object.id]
         a[data-action="add sub" class="#{f.object.sub_record.present? ? 'hidden' : 'visible'} item"]
           i.level.down.red.icon
           | Substitute
-        a.item[data-action="injury"]
+        .ui.left.icon.input
           i.first.aid.icon
-          span Injured
-          = f.hidden_field :injured, data: { default: false }
+          = f.text_field :injury, placeholder: 'Injury', data: { default: '' }
         a[data-action="remove" class="#{player_is_sub ? 'visible' : 'hidden'} item"]
           i.remove.icon
           | Remove
