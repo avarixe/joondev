@@ -61,7 +61,7 @@ module MyFifa
     end
 
     def set_status
-      date = params[:date] || @team.current_date
+      date = Date.strptime(params[:date]) || @team.current_date
 
       @team.update_column(:current_date, date) if @team.current_date < date
 
