@@ -41,6 +41,9 @@ module MyFifa
           @title = @match.home ?
             "#{@team.team_name} v #{@match.opponent}" :
             "#{@match.opponent} v #{@team.team_name}"
+          @score = @match.home ? 
+            "#{@match.score_f} - #{@match.score_a}" : 
+            "#{@match.score_a} - #{@match.score_f}"
         }
         format.xlsx {
           # Prepare Copy Table
