@@ -23,15 +23,16 @@ module MyFifa
     scope :with_stats, -> (match_ids) {
       relevant_records = " records.player_id = my_fifa_players.id"
       relevant_records += " AND records.match_id IN (#{match_ids.join(', ')})" if match_ids.any?
-      joins("LEFT JOIN my_fifa_player_records AS records ON #{relevant_records}").group('my_fifa_players.id')
-        .select([
-          'my_fifa_players.*',
-          "COUNT(records) as gp",
-          "AVG(records.rating) as rating",
-          "SUM(CASE WHEN records.goals IS NOT NULL THEN records.goals ELSE 0 END) as goals",
-          "SUM(CASE WHEN records.assists IS NOT NULL THEN records.assists ELSE 0 END) as assists",
-          "SUM(CASE WHEN records.cs = TRUE THEN 1 ELSE 0 END) as cs",
-        ].join(', '))
+      joins("LEFT JOIN my_fifa_player_records AS records ON #{relevant_records}")
+      .group('my_fifa_players.id')
+      .select([
+        'my_fifa_players.*',
+        "COUNT(records) as gp",
+        "AVG(records.rating) as rating",
+        "SUM(CASE WHEN records.goals IS NOT NULL THEN records.goals ELSE 0 END) as goals",
+        "SUM(CASE WHEN records.assists IS NOT NULL THEN records.assists ELSE 0 END) as assists",
+        "SUM(CASE WHEN records.cs = TRUE THEN 1 ELSE 0 END) as cs",
+      ].join(', '))
     }
 
     scope :sorted, -> {
@@ -191,6 +192,6 @@ module MyFifa
       def num_motm()    records.select{ |r| r.motm? }.count end
       def num_goals()   records.map(&:goals).compact.inject(0, :+) end
       def num_assists() records.map(&:assists).compact.inject(0, :+) end
-      def num_cs()      records.where(cs: 1).count end
+      def num_cs()      records.map(&:cs_to_i).compact.inject(0, :+) end
   end
 end

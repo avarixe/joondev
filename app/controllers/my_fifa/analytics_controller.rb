@@ -13,7 +13,7 @@ module MyFifa
           @records = @team.player_records
           filter_records
 
-          @players = Player.with_stats(@matches.map(&:id))
+          @players = Player.includes(:records).with_stats(@matches.map(&:id))
             .where(id: @records.map(&:player_id).uniq)
 
           render json: {

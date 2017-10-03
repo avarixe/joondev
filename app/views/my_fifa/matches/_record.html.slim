@@ -1,14 +1,14 @@
 - sub_record = record.sub_record
 
 tr[data-id=record.player_id]
-  td[no-link]
+  td
     div[class="ui pos #{'yellow' if record.player_id == @match.motm_id} ribbon label"]
       = record.pos
       - num_sub.times do |i|
         i.green.level.up.icon[style="visibility:#{i == num_sub-1 ? 'visible' : 'hidden'}"]
       - if sub_record.present?
         i.red.level.down.icon
-  td.selectable
+  td
     = record.player.name
     = content_tag(:i, nil, class: 'soccer icon') if record.player_id == @match.motm_id
     = content_tag(:i, nil, class: 'first aid icon') if record.injury.present?
@@ -16,14 +16,19 @@ tr[data-id=record.player_id]
       .ui.yellow.label.booking = record.yellow_cards
     - if record.red_cards > 0
       .ui.red.label.booking = record.red_cards
-  td.center.aligned[no-link]
+  td.center.aligned
     = responsive_cell_label 'Rating'
-    = record.rating
-  td.center.aligned[no-link]
-    = responsive_cell_label 'Goals'
-    = record.goals || 0
-  td.center.aligned[no-link]
-    = responsive_cell_label 'Assists'
-    = record.assists || 0
+    .ui.circular.label[style="background-color:#{record.rating_color}"]
+      = record.rating
+  td.center.aligned
+    - if record.goals.to_i > 0
+      = responsive_cell_label 'Goals'
+      .ui.circular.label[style="background-color:skyblue"]
+        = record.goals
+  td.center.aligned
+    - if record.assists.to_i > 0
+      = responsive_cell_label 'Assists'
+      .ui.circular.label[style="background-color:skyblue"]
+        = record.assists
 
 = render('record', record: sub_record, num_sub: num_sub+1) if sub_record.present?

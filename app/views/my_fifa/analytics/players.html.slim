@@ -30,12 +30,18 @@ javascript:
     $('#season, #competition').change(function(){ table.ajax.reload() });
 
     table = $('table').DataTable({
-      order: [[3, "desc"]],
+      order: [[3, 'desc']],
       ajax: {
         url: '/my_fifa/analytics/players',
         data: function(d){
           d.season = $('select#season').val();
           d.competition = $('select#competition').val();
+        },
+        dataSrc: function(json){
+          $.each(json.data, function(i, data){
+            json.data[i].rank = data.gp * data.rating + 3 * data.goals + data.assists + data.cs;
+          });
+          return json.data;
         }
       },
       processing: true,
@@ -43,7 +49,7 @@ javascript:
         { data: 'name' },
         { data: 'pos' },
         { data: 'gp' },
-        { data: 'rating', render: $.fn.dataTable.render.number(',', '.', '2') },
+        { data: { _: 'rating', sort: 'rank' }, render: $.fn.dataTable.render.number(',', '.', '2') },
         { data: 'goals' },
         { data: 'assists' },
         { data: 'cs' },
