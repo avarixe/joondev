@@ -5,7 +5,9 @@ html
       = @title || 'JoonDEV'
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = javascript_include_tag params[:controller], 'data-turbolinks-track' => true
     = csrf_meta_tags
+    = javascript_tag "var AUTH_TOKEN = '#{form_authenticity_token}';" if protect_against_forgery?
     meta[name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"]
     meta[name="turbolinks-cache-control" content="no-cache"]
     = favicon_link_tag 'favicon.ico'

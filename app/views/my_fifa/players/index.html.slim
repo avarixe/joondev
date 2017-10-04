@@ -7,7 +7,7 @@
     .header
       = "#{@team.team_name} does not have enough Players!"
 
-table.ui.basic.definition.sortable.selectable.compact.small.table[data-link="/my_fifa/players/" width="100%"]
+table.ui.basic.sortable.definition.selectable.compact.small.table[data-link="/my_fifa/players/" width="100%"]
   thead
     tr.center.aligned
       - ['Name', 'Position', 'OVR'].each do |header|
@@ -24,10 +24,3 @@ table.ui.basic.definition.sortable.selectable.compact.small.table[data-link="/my
         td[class="#{'disabled' if !player.active?}" data-sort=player.ovr]
           = responsive_cell_label 'OVR'
           = player.ovr
-
-javascript:
-  $(function(){
-    $('table').DataTable({
-      order: [],
-    });
-  })
