@@ -27,8 +27,7 @@ organizePositions = ->
     rowElem = $('<div class="' + rowClass + '"></div>')
     j = 0
     while j < rows[i].length
-      $('#positions-container .field[data-no=' + rows[i][j] + ']').appendTo rowElem
-      j++
+      $('#positions-container .field[data-no=' + rows[i][j++] + ']').appendTo rowElem
     # Add row to stackable grid
     $('.ui.stackable.grid').prepend rowElem
     i++
@@ -36,8 +35,17 @@ organizePositions = ->
   return
 
 $(document).on "turbolinks:load", ->
+  $('body.formations.index .ui.checkbox').checkbox
+    uncheckable: false
+    onChecked: ->
+      this_ = this
+      $.ajax
+        type: 'POST'
+        url: '/my_fifa/formations/' + this_.value + '/set_active'
+        beforeSend: (xhr) -> xhr.setRequestHeader 'X-CSRF-Token', AUTH_TOKEN
+      return
+  
   organizePositions()
-  $(this).change ->
-    organizePositions()
-    return
+  $(this).change -> organizePositions()
+
   return
