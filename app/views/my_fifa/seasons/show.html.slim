@@ -68,3 +68,11 @@ div[class="ui basic tab segment #{'active' if @season.current?}" data-tab="playe
             td[no-link data-attr="age"]
               = responsive_cell_label 'Age'
               = semantic_bip player_season, :age
+
+javascript:
+  $(function(){
+    $('table').DataTable({
+      order: [],
+      bPaginate: false
+    });
+  })

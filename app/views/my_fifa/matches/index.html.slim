@@ -6,3 +6,31 @@ table.ui.basic.sortable.definition.selectable.compact.small.table[data-link="/my
     tr
       - ['Opponent Team', 'Competition', 'Score', 'MOTM', 'Date Played'].each do |header|
         th = header
+
+javascript:
+  $(function(){
+    $('table').DataTable({
+      processing: true,      
+      ajax: '/my_fifa/matches',
+      order: [[4, 'desc']],
+      columns: [
+        { data: 'opponent' },
+        { data: 'competition' },
+        { data: 'score', searchable: false, sortable: false },
+        { data: 'motm' },
+        { data: { _: 'date_played', sort: 'timestamp' }, searchable: false },
+      ],
+      createdRow: function(nRow, aData){
+        $.each(['Competition', 'Score', 'MOTM', 'Date Played'], function(i, label){
+          $('td:nth-child('+(i+2)+')', $(nRow)).prepend(labeledData(label, ''));
+        });
+        $(nRow)
+          .data('id', aData.id)
+          .addClass(aData.result);
+      }
+    });    
+  });
+
+  function labeledData(label, data){
+    return "<div class=\"ui responsive basic right pointing label\">"+label+"</div>"+data;
+  }

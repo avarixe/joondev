@@ -19,3 +19,18 @@ table.ui.basic.definition.selectable.compact.small.table[data-link="/my_fifa/for
         td
           = responsive_cell_label 'Positions'
           = formation.positions.join(", ")
+
+javascript:
+  $(function(){
+    $('.ui.checkbox').checkbox({
+      uncheckable: false,
+      onChecked: function(){
+        var this_ = this;
+        $.ajax({
+          type: 'POST',
+          url: '/my_fifa/formations/'+this_.value+'/set_active',
+          beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', '#{form_authenticity_token}') },
+        });
+      }
+    })
+  })
