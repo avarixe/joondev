@@ -6,16 +6,11 @@ $(document).on "turbolinks:load", ->
   $('.best_in_place').bind 'ajax:error', (evt, data, status, xhr) ->
     alert 'Invalid Value Entered.'
 
+
   $('.menu[data-menu="tabs"] .item').tab({
       onLoad: ->
         Chartkick.eachChart (chart) ->
-          chartContainer = $(chart.element).closest(".chart.container")
-          chart = arguments[0].chart
-          chart.series[0].options.lineWidth = 1.5
-          chart.series[0].options.point.events = click: (e) ->
-            if (chartContainer.data('link'))
-              window.open chartContainer.data('link') + chartContainer.data('ids')[e.point.index]
-            return
+          chart.redraw()
           return
         return
     });
