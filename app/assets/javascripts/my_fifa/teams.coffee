@@ -5,7 +5,9 @@ $(document).on "turbolinks:load", ->
       this_ = this
       $.ajax
         type: 'POST'
-        url: '/my_fifa/teams/' + this_.value + '/set_active'
-        beforeSend: (xhr) -> xhr.setRequestHeader 'X-CSRF-Token', AUTH_TOKEN
+        url: '/my_fifa/formations/' + this_.value + '/set_active'
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader 'X-CSRF-Token', AUTH_TOKEN
+          return
       return
   return

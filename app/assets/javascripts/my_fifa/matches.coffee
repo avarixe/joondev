@@ -30,7 +30,9 @@ $(document).on "turbolinks:load", ->
         'Score'
         'MOTM'
         'Date Played'
-      ], (i, label) -> $('td:nth-child(' + (i + 2) + ')', $(nRow)).prepend labeledData(label, '')
+      ], (i, label) ->
+        $('td:nth-child(' + (i + 2) + ')', $(nRow)).prepend labeledData(label, '')
+        return
       $(nRow).data('id', aData.id).addClass aData.result
       return
 
@@ -79,7 +81,8 @@ $(document).on "turbolinks:load", ->
       # Remove Error classes
       $('.error', record).removeClass 'error'
   
-      $.each $('input,select', record), -> $(this).val $(this).data('default')
+      $.each $('input,select', record), ->
+        $(this).val $(this).data('default')
   
       # Append new row to table
       $(target).closest('tr').after record
@@ -95,6 +98,7 @@ $(document).on "turbolinks:load", ->
         onComplete: ->
           $('.pos', $(target).closest('tr')).append '<i class="level down red icon"></i>'
           $('.pos', record).append '<i class="level up green icon"></i>'
+  
       return
   
     removeRecord = (target) ->
@@ -201,12 +205,14 @@ $(document).on "turbolinks:load", ->
       squadParams = {}
       i = 0
       while i < 11
-        squadParams['player_id_' + (i+1)] = $('.player_id', $(rows[i])).dropdown('get value')
+        squadParams['player_id_' + i + 1] = $('.player_id', $(rows[i])).dropdown('get value')
         i++
       $.ajax
         url: '/my_fifa/squads/' + squadId
         type: 'PUT'
-        beforeSend: (xhr) -> xhr.setRequestHeader 'X-CSRF-Token', AUTH_TOKEN
+        beforeSend: (xhr) ->
+          xhr.setRequestHeader 'X-CSRF-Token', AUTH_TOKEN
+          return
         data:
           squad: squadParams
           page: 'match'
