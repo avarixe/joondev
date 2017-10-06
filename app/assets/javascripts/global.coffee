@@ -7,13 +7,15 @@ $(document).on "turbolinks:load", ->
     alert 'Invalid Value Entered.'
 
 
-  $('.menu[data-menu="tabs"] .item').tab({
+  $('.menu[data-menu="tabs"] .item').tab
       onLoad: ->
         Chartkick.eachChart (chart) ->
-          chart.redraw()
-          return
-        return
-    });
+          chart = arguments[0].chart
+          chart.series[0].options.lineWidth = 1.5
+          chart.series[0].options.point.events = click: (e) -> 
+            chartContainer = $(e.target).closest('.chart.container')
+            if chartContainer.data('link')
+              window.open chartContainer.data('link').replace('{id}', chartContainer.data('ids')[e.point.index])
 
   # Dropdown menus
   $('select.dropdown:not(.addable), .ui.dropdown:not(.addable)').dropdown({

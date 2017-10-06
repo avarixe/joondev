@@ -31,7 +31,6 @@
           th Release Clause
       tbody
         - @player.contracts.each do |contract|
-          - puts contract.terms.count
           - contract.terms.each do |term|
             - if term.id.present?
               tr
@@ -43,11 +42,7 @@
                   = number_to_fee term.wage
                 td
                   = responsive_cell_label 'Bonus'
-                  - if term.signing_bonus.present?
-                    = "#{number_to_fee(term.signing_bonus, '')}" + \
-                      (" (+#{number_to_fee(term.stat_bonus, '', "%n%u")} if #{term.num_stats} #{term.stat_type})" if term.stat_bonus.present?)
-                  - else
-                    | N/A
+                  = term.signing_bonus.present? ? term.bonuses : 'N/A'
                 td
                   = responsive_cell_label 'Release Clause'
                   = number_to_fee term.release_clause

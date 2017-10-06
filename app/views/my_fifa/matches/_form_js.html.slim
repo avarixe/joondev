@@ -64,7 +64,7 @@ javascript:
       $.ajax({
         url: '/my_fifa/squads/'+squadId,
         type: 'PUT',
-        beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', '#{form_authenticity_token}')},
+        beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', AUTH_TOKEN)},
         data: { 
           squad: squadParams,
           page:  'match',

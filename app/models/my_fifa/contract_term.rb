@@ -24,5 +24,17 @@ module MyFifa
       def update_contract_end_date
         contract.update_column(:end_date, self.end_date)
       end
+
+    ######################
+    #  ACCESSOR METHODS  #
+    ######################
+      def bonuses
+        bonuses = number_to_fee(self.signing_bonus, '')
+        if self.stat_bonus.present?
+          bonuses += " (+#{number_to_fee(term.stat_bonus, '', "%n%u")} if #{term.num_stats} #{term.stat_type})"
+        end
+        return bonuses
+      end
+
   end
 end
