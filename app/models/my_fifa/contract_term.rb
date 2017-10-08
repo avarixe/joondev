@@ -31,7 +31,7 @@ module MyFifa
       def bonuses
         bonuses = number_to_fee(self.signing_bonus, '')
         if self.stat_bonus.present?
-          bonuses += " (+#{number_to_fee(term.stat_bonus, '', "%n%u")} if #{term.num_stats} #{term.stat_type})"
+          bonuses += " (+#{number_to_fee(self.stat_bonus, '', "%n%u")} if #{self.num_stats} #{self.stat_type})"
         end
         return bonuses
       end
