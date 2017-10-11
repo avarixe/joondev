@@ -4,13 +4,29 @@ module MyFifa
   class PlayersController < ApplicationController
     before_action :set_current_team
     before_action :set_player, only: [:edit, :update, :set_status, :sign_new_contract, :exit, :rejoin]
+    include PlayerAnalytics
 
     # GET /players
     def index
-      @players = @team.sorted_players.includes(:player_seasons)
-      @inactive_players = @team.players.inactive.includes(:player_seasons).sorted
-      @all_players = @players+@inactive_players
-      @title = "Players"
+      respond_to do |format|
+        format.html {
+          @players = @team.sorted_players.includes(:player_seasons)
+          @inactive_players = @team.players.inactive.includes(:player_seasons).sorted
+          @all_players = @players+@inactive_players
+          @title = "Players"
+        }
+        format.json {
+          @records = @team.player_records
+          filter_records
+
+          @players = Player.includes(:records).with_stats(@matches.map(&:id))
+            .where(id: @records.map(&:player_id).uniq)
+
+          render json: {
+            data: @players
+          }.to_json
+        }
+      end
     end
 
     def show

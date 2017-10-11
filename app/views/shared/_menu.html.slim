@@ -3,11 +3,33 @@
     i.soccer.icon
     | MyFIFA Manager
   .menu
-    = link_to 'Teams',          my_fifa_teams_path,             class: 'item'
-    = link_to 'Formations',     my_fifa_formations_path,        class: 'item'
-    = link_to 'Seasons',        my_fifa_seasons_path,           class: 'item'
-    = link_to 'Players',        my_fifa_players_path,           class: 'item'
-    = link_to 'Squads',         my_fifa_squads_path,            class: 'item'
-    = link_to 'Analytics',      players_my_fifa_analytics_path, class: 'item'
-    = link_to 'Match Archives', my_fifa_matches_path,           class: 'item'
-    = link_to 'Play a Match',   new_my_fifa_match_path,         class: 'item'
+    = link_to(my_fifa_teams_path, class: 'item') do
+      i.trophy.icon
+      | Teams
+    = link_to(my_fifa_formations_path, class: 'item') do
+      i.grid.layout.icon
+      | Formations
+    = link_to(my_fifa_seasons_path, class: 'item') do
+      i.calendar.icon
+      | Seasons
+    .item
+      i.address.book.icon
+      | Players
+      .menu
+        = link_to 'Players List', my_fifa_players_path, class: 'item'
+        .item
+          = form_tag search_my_fifa_players_path do
+            .ui.left.icon.inverted.transparent.action.fluid.input
+              i.inverted.search.icon
+              = text_field_tag :player, nil, placeholder: 'Search for Player'
+              .ui.black.icon.button
+                = submit_tag 'Search'
+    = link_to(my_fifa_squads_path, class: 'item') do
+      i.users.icon
+      | Squads
+    = link_to(my_fifa_matches_path, class: 'item') do
+      i.archive.icon
+      | Matches Archive
+    = link_to(new_my_fifa_match_path, class: 'item') do
+      i.soccer.icon
+      | Play a Match

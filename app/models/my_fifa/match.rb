@@ -134,10 +134,14 @@ module MyFifa
         "#{self.score_f} - #{self.score_a}"
       end
           
+      def win?()  self.score_gf > self.score_ga end
+      def draw?() self.score_gf == self.score_ga end
+      def loss?() self.score_gf < self.score_ga end
+
       def result
-        if self.score_gf > self.score_ga
+        if win?
           'positive'
-        elsif self.score_gf == self.score_ga
+        elsif draw?
           'warning'
         else
           'negative'

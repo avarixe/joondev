@@ -4,74 +4,22 @@
   = link_to 'View All Seasons', my_fifa_seasons_path, class: 'ui basic button'
 
 .ui.pointing.secondary.tiny.menu[data-menu="tabs"]
-  div[class="item #{'active' unless @season.current?}" data-tab="info"] Information
-  div[class="item #{'active' if @season.current?}" data-tab="players"] Players
-  / .item[data-tab="analytics"] Analytics
-  / .item[data-tab="history"] History
+  .item[class="#{'active' unless @season.current?}" data-tab="info"] Information
+  .item[class="#{'active' if @season.current?}" data-tab="players"] Players
+  .item[data-tab="team"] Team Analytics
 
-div[class="ui basic tab segment #{'active' unless @season.current?}" data-tab="info"]
-  .ui.raised.teal.segment
-    .ui.stackable.grid
-      .equal.width.row
-        .column
-          .ui.header
-            = number_to_fee @season.start_club_worth
-            .sub.header Club Worth (Start of Season)
-        .column
-          .ui.header
-            = number_to_fee @season.end_club_worth
-            .sub.header Club Worth (End of Season)
-      .equal.width.row
-        .column
-          .ui.header
-            = number_to_fee @season.transfer_budget
-            .sub.header Transfer Budget
-        .column
-          .ui.header
-            = number_to_fee @season.wage_budget
-            .sub.header Wage Budget
-      .equal.width.row
-        .column
-          .ui.header
-            = @season.captain.name rescue 'N/A'
-            .sub.header Captain
+.ui.basic.tab.segment[class="#{'active' unless @season.current?}" data-tab="info"]
+  = render 'info'
 
-div[class="ui basic tab segment #{'active' if @season.current?}" data-tab="players"]
-  .ui.raised.blue.segment
-    table.ui.definition.selectable.very.compact.small.table[data-link="/my_fifa/players/"]
-      thead
-        tr.center.aligned
-          th.six.wide Player
-          th.two.wide Position
-          th.two.wide Kit No.
-          th.two.wide OVR
-          th.two.wide Value
-          th.two.wide Age
-      tbody
-        - @season.player_seasons.each do |player_season|
-          tr.center.aligned[data-id=player_season.id]
-            td
-              = content_tag(:i, nil, class: 'red attention icon') if !player_season.player.active
-              = player_season.player.name 
-            td[no-link]
-              = responsive_cell_label 'Position'
-              = player_season.player.pos
-            td[no-link data-attr="kit_no" data-sort=player_season.kit_no]
-              = responsive_cell_label 'Kit No.'
-              = semantic_bip player_season, :kit_no
-            td[no-link data-attr="ovr"]
-              = responsive_cell_label 'OVR'
-              = semantic_bip player_season, :ovr
-            td[no-link data-attr="value" data-sort=player_season.value]
-              = responsive_cell_label 'Value'
-              = semantic_bip player_season, :value, display_as: :formatted_value
-            td[no-link data-attr="age"]
-              = responsive_cell_label 'Age'
-              = semantic_bip player_season, :age
+.ui.basic.tab.segment[class="#{'active' if @season.current?}" data-tab="players"]
+  = render 'players'
+
+.ui.basic.tab.segment[data-tab="team"]
+  = render 'team'
 
 javascript:
   $(function(){
-    $('table').DataTable({
+    $('table#players').DataTable({
       order: [],
       bPaginate: false
     });

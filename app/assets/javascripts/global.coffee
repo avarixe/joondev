@@ -11,14 +11,15 @@ $(document).on "turbolinks:load", ->
       onLoad: ->
         Chartkick.eachChart (chart) ->
           chart = arguments[0].chart
-          chart.series[0].options.lineWidth = 1.5
-          chart.series[0].options.point.events = click: (e) -> 
-            chartContainer = $(e.target).closest('.chart.container')
-            if chartContainer.data('link')
-              window.open chartContainer.data('link').replace('{id}', chartContainer.data('ids')[e.point.index])
+          $.each chart.series, (i) ->
+            chart.series[i].options.lineWidth = 1.5
+            chart.series[i].options.point.events = click: (e) -> 
+              chartContainer = $(e.target).closest('.chart.container')
+              if chartContainer.data('link')
+                window.open chartContainer.data('link').replace('{id}', chartContainer.data('ids')[i][e.point.index])
 
   # Dropdown menus
-  $('select.dropdown:not(.addable), .ui.dropdown:not(.addable)').dropdown({
+  $('select.dropdown:not(.custom), .ui.dropdown:not(.custom)').dropdown({
     placeholder: false
   });
     

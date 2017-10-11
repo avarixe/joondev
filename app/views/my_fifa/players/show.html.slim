@@ -3,24 +3,24 @@
   = link_to 'Player List', my_fifa_players_path, class: 'ui basic button'
 
 .ui.pointing.secondary.tiny.menu[data-menu="tabs"]
-  div[class="item #{'active' unless @player.active?}" data-tab="info"] Information
-  div[class="item #{'active' if @player.active?}" data-tab="manage"] Manage
+  .item[class="#{'active' unless @player.active?}" data-tab="info"] Information
+  .item[class="#{'active' if @player.active?}" data-tab="manage"] Manage
   .item[data-tab="analytics"] Analytics
   .item[data-tab="history"] History
 
-div[class="ui basic tab segment #{'active' unless @player.active?}" data-tab="info"]
+.ui.basic.tab.segment[class="#{'active' unless @player.active?}" data-tab="info"]
   .ui.raised.teal.segment
-    = render 'my_fifa/players/fields/info'
-    = render 'my_fifa/players/fields/stats'
-    = render 'my_fifa/players/fields/contract'
+    = render 'my_fifa/players/tabs/info'
+    = render 'my_fifa/players/tabs/stats'
+    = render 'my_fifa/players/tabs/contract'
 
-div[class="ui basic tab segment #{'active' if @player.active?}" data-tab="manage"]
+.ui.basic.tab.segment[class="#{'active' if @player.active?}" data-tab="manage"]
   = render @player.active ?          \
    'my_fifa/players/manage/active' : \
    'my_fifa/players/manage/inactive'
 
 .ui.basic.tab.segment[data-tab="analytics"]
   .ui.raised.olive.segment
-    = render 'my_fifa/players/fields/analytics'
+    = render 'my_fifa/players/tabs/analytics'
 
-= render 'history'
+= render 'my_fifa/players/tabs/history'

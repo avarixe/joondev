@@ -1,0 +1,24 @@
+.ui.dividing.header Positions Played
+= pie_chart @player.records.group_by(&:pos).map{ |pos, records| [pos, records.count] },
+  library: { \
+    tooltip: { pointFormat: 'Games Played: <b>{point.y}</b>' } }
+
+
+.chart.container[data-link="/my_fifa/seasons/{id}" data-ids=[@player.player_seasons.map(&:season_id).unshift('')]]
+  .ui.dividing.header Player Valuation
+  = column_chart [[time_to_s(@player.date_joined, '%Y'), @player.start_value]] + @player.player_seasons.map{ |ps| [ps.season.title, ps.value] },
+    library: { \
+      tooltip: { pointFormat: 'Value: <b>${point.y}</b>' } }
+
+
+.chart.container[data-link="/my_fifa/matches/{id}" data-ids=[@player.records.map(&:match_id), @player.records.where(record_id: nil).map(&:match_id)]]
+  .ui.dividing.header Match Performances
+  = line_chart [ \
+      { name: 'All Matches', data: @player.records.map{ |r| [ r.match.date_played.strftime('%F'), r.rating ] } },
+      { name: 'Starting Matches', data: @player.records.where(record_id: nil).map{ |r| [ r.match.date_played.strftime('%F'), r.rating ] } } \
+    ],
+    colors: ['#7cb5ec', '#b5ec7c'],
+    min: 5, max: 10,
+    library: { \
+      chart: { zoomType: 'x' },
+      tooltip: { pointFormat: 'Rating: <b>{point.y}</b>' } }

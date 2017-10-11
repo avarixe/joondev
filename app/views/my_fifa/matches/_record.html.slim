@@ -2,7 +2,7 @@
 
 tr[data-id=record.player_id]
   td
-    div[class="ui pos #{'yellow' if record.player_id == @match.motm_id} ribbon label"]
+    .ui.pos.ribbon.label[class="#{'yellow' if record.player_id == @match.motm_id}"]
       = record.pos
       - num_sub.times do |i|
         i.green.level.up.icon[style="visibility:#{i == num_sub-1 ? 'visible' : 'hidden'}"]

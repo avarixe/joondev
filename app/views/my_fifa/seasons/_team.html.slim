@@ -1,0 +1,42 @@
+.ui.raised.olive.segment
+  .ui.dividing.header Team Statistics
+  
+  = pie_chart({ \
+      "Wins"   => @matches.select(&:win?).count,
+      "Draws"  => @matches.select(&:draw?).count,
+      "Losses" => @matches.select(&:loss?).count,
+    },
+    colors: ['#7cb5ec', '#b5ec7c', '#ec7cb5'],
+    library: { tooltip: '' })
+  
+  table#stats.ui.definition.center.aligned.table
+    thead
+      tr
+        th Competition
+        th GP
+        th W
+        th D
+        th L
+        th GF
+        th GA
+        th CS
+    tbody
+      - @matches.group_by(&:competition).each do |competition, matches|
+        tr
+          td.left.aligned = competition
+          td = matches.count
+          td = matches.select(&:win?).count
+          td = matches.select(&:draw?).count
+          td = matches.select(&:loss?).count
+          td = matches.map(&:score_gf).sum
+          td = matches.map(&:score_ga).sum
+          td = matches.select{ |m| m.score_ga == 0 }.count
+      tr.warning
+        td.left.aligned All
+        td = @matches.count
+        td = @matches.select(&:win?).count
+        td = @matches.select(&:draw?).count
+        td = @matches.select(&:loss?).count
+        td = @matches.map(&:score_gf).sum
+        td = @matches.map(&:score_ga).sum
+        td = @matches.select{ |m| m.score_ga == 0 }.count

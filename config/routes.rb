@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   namespace :my_fifa do
     resources :players, except: [:destroy] do
       collection {
+        post 'search'
         post 'update_json'
         post 'import_csv'
       }
@@ -38,11 +39,6 @@ Rails.application.routes.draw do
     resources :formations, except: [:destroy] do
       member {
         post 'set_active'
-      }
-    end
-    resources :analytics, only: [:index] do
-      collection {
-        get 'players'
       }
     end
   end

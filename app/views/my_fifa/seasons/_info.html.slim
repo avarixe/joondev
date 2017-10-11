@@ -1,0 +1,25 @@
+.ui.raised.teal.segment
+  .ui.stackable.grid
+    .equal.width.row
+      .column
+        .ui.header
+          = number_to_fee @season.start_club_worth
+          .sub.header Club Worth (Start of Season)
+      .column
+        .ui.header
+          = number_to_fee @season.end_club_worth
+          .sub.header Club Worth (End of Season)
+    .equal.width.row
+      .column
+        .ui.header
+          = number_to_fee @season.transfer_budget
+          .sub.header Transfer Budget
+      .column
+        .ui.header
+          = number_to_fee @season.wage_budget
+          .sub.header Wage Budget
+    .equal.width.row
+      .column
+        .ui.header
+          = @season.captain.name rescue 'N/A'
+          .sub.header Captain

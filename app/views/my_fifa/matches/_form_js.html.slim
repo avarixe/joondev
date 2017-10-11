@@ -22,7 +22,6 @@ javascript:
     }).get().sort().pop() || 0;
 
     $('table').on('input', '.rating', function(){
-      console.log(this.value);
       if (parseFloat(this.value) > parseFloat(highest_rating)){
         highest_rating = this.value;
         setMOTM($('.ui.ribbon.pos', $(this).closest('tr')));
@@ -31,7 +30,7 @@ javascript:
   
     // Clicking a ribbon label sets MOTM
     $('table').on('click', '.ui.ribbon.pos', function(){ setMOTM(this); });
-  
+
     // Squad auto populates players and positions
     $('select[id$="squad_id"]').change(function(){
       if ($(this).val()){
@@ -89,8 +88,6 @@ javascript:
 
     inputField.val(newValue);
     $('.or', $(target).closest('[data-clickfield]')).attr('data-text', newValue || 0);
-
-    console.log(inputField.val());
   }
   
   function addRecord(target){

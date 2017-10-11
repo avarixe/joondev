@@ -7,27 +7,64 @@
     .header
       = "#{@team.team_name} does not have enough Players!"
 
-table.ui.basic.definition.sortable.selectable.compact.small.table[data-link="/my_fifa/players/" width="100%"]
-  thead
-    tr.center.aligned
-      - ['Name', 'Position', 'OVR'].each do |header|
-        th = header
-  tbody
-    - @all_players.each do |player|
-      tr.center.aligned[data-id=player.id]
-        td
-          = content_tag(:i, nil, class: 'red attention icon') if !player.active
-          = player.name
-        td[class="#{'disabled' if !player.active?}" data-sort=player.pos]
-          = responsive_cell_label 'Positions'
-          = player.pos
-        td[class="#{'disabled' if !player.active?}" data-sort=player.ovr]
-          = responsive_cell_label 'OVR'
-          = player.ovr
+.ui.pointing.secondary.tiny.menu[data-menu="tabs"]
+  .item.active[data-tab="list"] Player List
+  .item[data-tab="analytics"] Analytics
+
+.ui.active.basic.tab.segment[data-tab="list"]
+  = render 'my_fifa/players/index_tabs/list'
+
+.ui.basic.tab.segment[data-tab="analytics"]
+  = render 'my_fifa/players/index_tabs/analytics'
+
 
 javascript:
+  var analyticsTable;
+
+  function labeledData(label, data){
+    return "<div class=\"ui responsive basic right pointing label\">"+label+"</div>"+data;
+  }
+
   $(function(){
-    $('table').DataTable({
+    $('table#list').DataTable({
       order: [],
     });
-  })
+
+    $('#season, #competition').change(function(){ analyticsTable.ajax.reload() });
+
+    analyticsTable = $('table#analytics').DataTable({
+      order: [[3, 'desc']],
+      ajax: {
+        url: '/my_fifa/players',
+        data: function(d){
+          d.season = $('select#season').val();
+          d.competition = $('select#competition').val();
+        },
+        dataSrc: function(json){
+          $.each(json.data, function(i, data){
+            json.data[i].rank = data.gp * data.rating + 3 * data.goals + data.assists + data.cs;
+          });
+          return json.data;
+        }
+      },
+      processing: true,
+      columns: [
+        { data: 'name' },
+        { data: 'pos' },
+        { data: 'gp' },
+        { data: { _: 'rating', sort: 'rank' }, render: $.fn.dataTable.render.number(',', '.', '2') },
+        { data: 'goals' },
+        { data: 'assists' },
+        { data: 'cs' },
+      ],
+      createdRow: function(nRow, aData){
+        $.each(['Position', 'GP', 'Rating', 'Goals', 'Assists', 'CS'], function(i, label){
+          $('td:nth-child('+(i+2)+')', $(nRow)).prepend(labeledData(label, ''));
+        });
+        if (!aData.active){
+          $('td:first-child', $(nRow)).prepend('<i class="red attention icon"></i>');
+          $(nRow).addClass('disabled')
+        }
+      }
+    });
+  });

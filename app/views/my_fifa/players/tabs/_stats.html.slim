@@ -18,7 +18,7 @@
   .five.columns.centered.row
     - @stats.each do |stat|
       .aligned.column
-        div[class="ui #{stat[:color]} statistic"]
+        .ui.statistic[class=stat[:color]]
           .value
             = @player.public_send(stat[:type])
           .label

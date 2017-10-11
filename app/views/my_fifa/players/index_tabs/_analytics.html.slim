@@ -1,0 +1,24 @@
+.ui.raised.teal.segment
+  .ui.dividing.header
+    i.search.icon
+    | Filter Analytics
+
+  .ui.form
+    .equal.width.fields
+      .field
+        = label_tag :season
+        = select_tag :season,
+          options_for_select(@team.seasons.map{ |season| [season.title, season.id] }),
+          include_blank: true,
+          class: 'fluid dropdown'
+      .field
+        = label_tag :competition
+        = select_tag :competition,
+          options_for_select(@team.recorded_competitions, params[:competition]),
+          include_blank: true,
+          class: 'fluid dropdown'
+
+table#analytics.ui.basic.sortable.definition.selectable.compact.small.table[width="100%"]
+  thead
+    - ['Name', 'Position', 'GP', 'Rating', 'Goals', 'Assists', 'CS'].each do |header|
+      th = header

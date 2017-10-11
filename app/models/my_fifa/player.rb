@@ -74,6 +74,10 @@ module MyFifa
     ########################
     #  ASSIGNMENT METHODS  #
     ########################
+      def sec_pos=(val)
+        pos_array = val.reject(&:blank?)
+        update_column :sec_pos, pos_array
+      end
 
     ########################
     #  VALIDATION METHODS  #
@@ -155,7 +159,7 @@ module MyFifa
       end
 
       def get_sec_pos
-        positions = sec_pos.reject(&:blank?).join(", ")
+        positions = sec_pos.join(", ")
         positions.blank? ? nil : positions
       end
 

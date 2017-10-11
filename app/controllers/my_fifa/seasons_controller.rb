@@ -15,6 +15,7 @@ module MyFifa
     def show
       @season = Season.includes(player_seasons: [:player]).find(params[:id])
       @title = @season.title
+      @matches = @team.matches.where(date_played: @season.start_date..@season.end_date)
     end
 
     # GET /players/1/edit

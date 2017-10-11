@@ -3,7 +3,7 @@ tr[data-id=f.object.id]
     = f.hidden_field(:_destroy) if player_is_sub
     = f.hidden_field(:record_id) if player_is_sub
     = f.hidden_field :pos, data: { default: f.object.pos }
-    div[class="pos ui ribbon #{'yellow' if f.object.id.present? && f.object.player_id == @match.motm_id} label"]
+    .pos.ui.ribbon.label[class="#{'yellow' if f.object.id.present? && f.object.player_id == @match.motm_id}"]
       span
         = f.object.pos
       - num_sub.times do |i|

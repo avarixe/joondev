@@ -1,5 +1,5 @@
 / HEALTH section
-div[class="ui raised pink segment #{'hidden' if @player.loaned_out?}"]
+.ui.raised.pink.segment[class="#{'hidden' if @player.loaned_out?}"]
   .ui.dividing.header
     i.pink.first.aid.icon
     .content
@@ -19,7 +19,8 @@ div[class="ui raised pink segment #{'hidden' if @player.loaned_out?}"]
               i.calendar.icon
               = text_field_tag :date, @team.current_date, data: { flatpickr: true }
           .column
-            = text_field_tag :notes, nil, placeholder: 'Type of Injury'
+            .field[class="#{'disabled' if @player.injured?}"]
+              = text_field_tag :notes, nil, placeholder: 'Type of Injury'
           .column
             = submit_tag "LOG AS#{ ' NOT' if @player.injured? } INJURED", class: "ui #{@player.injured? ? 'green' : 'pink'} submit fluid button"
 
@@ -76,7 +77,7 @@ div[class="ui raised pink segment #{'hidden' if @player.loaned_out?}"]
               = submit_tag 'SIGN NEW CONTRACT', class: "ui blue submit fluid button"
 
   / LOAN section
-  div[class="ui raised orange segment #{'hidden' unless @player.active}"]
+  .ui.raised.orange.segment[class="#{'hidden' unless @player.active}"]
     .ui.dividing.header
       i.orange.plane.icon
       .content
@@ -97,14 +98,14 @@ div[class="ui raised pink segment #{'hidden' if @player.loaned_out?}"]
                 i.calendar.icon
                 = text_field_tag :date, @team.current_date, data: { flatpickr: true }
             .column
-              div[class="ui left icon fluid input #{'disabled' if @player.loaned_out?}"]
+              .ui.left.icon.fluid.input[class="#{'disabled' if @player.loaned_out?}"]
                 i.handshake.icon
                 = text_field_tag :notes, '', placeholder: 'Destination'
             .column
               = submit_tag (@player.loaned_out? ? 'RETURN TO CLUB' : 'LOAN OUT' ), class: "ui #{@player.loaned_out? ? 'green' : 'orange'} submit fluid button"
 
 / EXIT section
-div[class="ui raised red segment #{'hidden' if !@player.active || @player.loaned_out?}"]
+.ui.raised.red.segment[class="#{'hidden' if !@player.active || @player.loaned_out?}"]
   .ui.dividing.header
     i.red.sign.out.icon
     | Exit Club
@@ -119,7 +120,7 @@ div[class="ui raised red segment #{'hidden' if !@player.active || @player.loaned
                   i.calendar.icon
                   = f.text_field :end_date, value: @team.current_date, placeholder: 'Exit Date', data: { flatpickr: true}
             .column
-              div[class="field #{'disabled' if @player.current_contract.loan?}"]
+              .field[class="#{'disabled' if @player.current_contract.loan?}"]
                 .ui.left.icon.input
                   i.handshake.icon
                   = f.object.loan? ? \
@@ -129,18 +130,18 @@ div[class="ui raised red segment #{'hidden' if !@player.active || @player.loaned
           = f.fields_for :exit_cost, f.object.build_exit_cost do |cf|
             .equal.width.row
               .column
-                div[class="field #{'disabled' if f.object.loan?}"]
+                .field[class="#{'disabled' if f.object.loan?}"]
                   .ui.left.icon.input
                     i.money.icon
                     = cf.number_field :fee, placeholder: 'Transfer Fee'
               .column
-                div[class="field #{'disabled' if f.object.loan?}"]
+                .field[class="#{'disabled' if f.object.loan?}"]
                   = cf.select :player_id,
                     grouped_options_for_select(@team.grouped_players, cf.object.player_id),
                     { include_blank: 'Traded Player' },
                     { class: 'grouped search fluid dropdown'}
               .column
-                div[class="field #{'disabled' if f.object.loan?}"]
+                .field[class="#{'disabled' if f.object.loan?}"]
                   .ui.icon.input
                     i.percent.icon
                     = cf.number_field :add_on_clause, value: nil, placeholder: 'Add-On Clause'

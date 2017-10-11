@@ -13,7 +13,7 @@
           .column
             .field
               label Loaned Player?
-              div[class="inline fields #{'disabled' if @player.id.present?}"]
+              .inline.fields[class="#{'disabled' if @player.id.present?}"]
                 .field
                   .ui.radio.checkbox
                     = contract.radio_button :loan, false
@@ -25,7 +25,7 @@
           .column
             .field
               label Youth Academy Graduate?
-              div[class="inline fields #{'disabled' if @player.id.present?}"]
+              .inline.fields[class="#{'disabled' if @player.id.present?}"]
                 .field
                   .ui.radio.checkbox
                     = f.radio_button :youth, false
@@ -63,13 +63,13 @@
         = contract.fields_for :terms, contract.object.terms.first do |term|
           .equal.width.row
             .column
-              div[class="required field #{'disabled' if @player.id.present?}" no-empty]
+              .required.field[class="#{'disabled' if @player.id.present?}" no-empty]
                 = contract.label :start_date, 'Contract Starts'
                 .ui.left.icon.input
                   i.calendar.icon
                   = contract.text_field :start_date, data: { flatpickr: true}
             .column
-              div[class="required field #{'disabled' if @player.id.present?}" no-empty]
+              .required.field[class="#{'disabled' if @player.id.present?}" no-empty]
                 = term.label :end_date, 'Contract Ends'
                 .ui.left.icon.input
                   i.calendar.outline.icon

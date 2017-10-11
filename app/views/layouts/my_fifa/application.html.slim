@@ -32,13 +32,14 @@
         .divider
         = link_to(my_fifa_players_path, class: 'item') do
           i.address.book.icon
-          |  Player List 
+          |  Player List
         = link_to(new_my_fifa_player_path, class: 'item') do
           i.add.user.icon
           |  Sign New Player
-        = link_to(players_my_fifa_analytics_path, class: 'item') do
-          i.bar.chart.icon
-          | Statistics 
+        .divider
+        = link_to(my_fifa_squads_path, class: 'item') do
+          i.users.icon
+          |  Manage Squads 
     .ui.up.pointing.dropdown.item
       |  MATCH 
       i.dropdown.icon
@@ -51,10 +52,6 @@
         = link_to(new_my_fifa_match_path, class: 'item') do
           i.soccer.icon
           |  New Match 
-        .divider
-        = link_to(my_fifa_squads_path, class: 'item') do
-          i.users.icon
-          |  Manage Squads 
   h2.ui.violet.dividing.header = @title
   
 = render file: 'layouts/application'
