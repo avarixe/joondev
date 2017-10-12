@@ -6,7 +6,6 @@ $(document).on "turbolinks:load", ->
   $('.best_in_place').bind 'ajax:error', (evt, data, status, xhr) ->
     alert 'Invalid Value Entered.'
 
-
   $('.menu[data-menu="tabs"] .item').tab
       onLoad: ->
         Chartkick.eachChart (chart) ->
@@ -22,7 +21,7 @@ $(document).on "turbolinks:load", ->
   $('select.dropdown:not(.custom), .ui.dropdown:not(.custom)').dropdown({
     placeholder: false
   });
-    
+
   # Dropdown menu support for grouped selects
   $('.ui.dropdown').has('optgroup').each ->
       $menu = undefined

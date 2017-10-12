@@ -29,6 +29,23 @@ module MyFifa
       end
     end
 
+    def search
+      if params[:player].blank?
+        redirect_to action: :index
+      else
+        results = Player.unscoped{
+          @team.players.where(team_id: @team.id)
+            .where('LOWER(name) LIKE ?', "%#{params[:player].downcase}%")
+            .order('active DESC')
+        }
+        if results.any?
+          redirect_to results.first
+        else
+          redirect_to action: :index
+        end
+      end
+    end
+
     def show
       @player = Player.includes(records: [:match], contracts: [:terms]).includes(:injuries, :loans, :player_seasons, :seasons).find(params[:id])
       @title = @player.name

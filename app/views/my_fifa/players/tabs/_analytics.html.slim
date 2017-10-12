@@ -15,7 +15,7 @@
   .ui.dividing.header Match Performances
   = line_chart [ \
       { name: 'All Matches', data: @player.records.map{ |r| [ r.match.date_played.strftime('%F'), r.rating ] } },
-      { name: 'Starting Matches', data: @player.records.where(record_id: nil).map{ |r| [ r.match.date_played.strftime('%F'), r.rating ] } } \
+      { name: 'Starting Matches', data: @player.records.select{ |r| r.record_id.nil? }.map{ |r| [ r.match.date_played.strftime('%F'), r.rating ] } } \
     ],
     colors: ['#7cb5ec', '#b5ec7c'],
     min: 5, max: 10,

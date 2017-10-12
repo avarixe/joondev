@@ -24,11 +24,12 @@ html
         .right.menu
           = link_to content_tag(:i, nil, class: 'edit icon'), edit_user_registration_path, class: 'item', title: 'Manage Account'
           = link_to content_tag(:i, nil, class: 'sign out icon'), destroy_user_session_path, method: :delete, class: 'item', title: 'Sign Out'
-      .ui.left.massive.vertical.sidebar.inverted.menu
-        = render 'shared/menu'
+      = render 'shared/menu'
+
       .pusher
         .ui.main.text.container
           = yield :system_header
+
           - if content_for? :page_links
             .ui.text.fluid.menu = yield :page_links
           = yield

@@ -21,7 +21,7 @@ body > .ui.link.inverted.menu .item:hover {
 
 /* Supplementary to Semantic UI */
 .ui.left.menu { padding-top: 3em; }
-.ui.main { margin-top: 5em !important; }
+.ui.main { margin-top: 5em !important; margin-bottom: 2em !important; }
 .pusher { overflow-y:auto !important; }
 .ui.segment.hidden, .ui.dropdown .menu > a.hidden.item { 
   display: none;
