@@ -65,8 +65,14 @@ module MyFifa
         (1..11).map{ |n| self.send("player_id_#{n}") }
       end
       
+      def players
+        Player.unscoped { 
+          Player.find(player_ids.compact).sort_by{ |player| player_ids.index(player.id) }
+        }
+      end
+      
       def player_names
-        Player.find(player_ids.compact).map(&:name).join(', ')
+        players.map(&:name).join(', ')
       end 
   end
 end

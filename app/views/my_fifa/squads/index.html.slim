@@ -1,12 +1,18 @@
 - content_for :page_links do
   = link_to 'New Squad', new_my_fifa_squad_path, class: 'ui basic primary button'
 
-table.ui.basic.definition.selectable.compact.small.table[data-link="/my_fifa/squads/" width="100%"]
+table.ui.basic.definition.compact.small.unstackable.table[data-link="/my_fifa/squads/" width="100%"]
   thead
     th Name
     th.ten.wide Players
   tbody
     - @squads.each do |squad|
       tr[data-id=squad.id]
-        td = squad.squad_name
-        td = squad.player_names
+        td.center.aligned.selectable = squad.squad_name
+        td[no-link]
+          table.ui.selectable.unstackable.table[data-link="/my_fifa/players/" width="100%"]
+            - squad.players.each_with_index do |player, i|
+              tr[data-id=player.id]
+                td
+                  b = squad.formation.public_send("pos_#{i+1}")
+                td = player.name

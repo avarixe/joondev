@@ -1,4 +1,5 @@
 .four.wide.column.field[no-empty]
+  = responsive_cell_label @formation.public_send("pos_#{no}")
   = f.select "player_id_#{no}",
     grouped_options_for_select(@grouped_players, @squad.public_send("player_id_#{no}")),
     {prompt: @formation.public_send("pos_#{no}") },

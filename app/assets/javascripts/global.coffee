@@ -47,9 +47,9 @@ $(document).on "turbolinks:load", ->
   $('[data-inputmask]').inputmask()
 
   # Tables with links are clickable
-  $('html').on 'click', 'table tbody tr', (evt) ->
-    if (_link = $(this).closest('table').data('link')) and 
-      (_rowId = $(this).data('id')) and 
+  $('html').on 'click', 'table tr', (evt) ->
+    if (_link = $(evt.target).closest('table').data('link')) and 
+      (_rowId = $(evt.target).closest('tr').data('id')) and 
       !$(evt.target).is('.button, i') and
       !$(evt.target).closest('td').is('[no-link]')
         if evt.ctrlKey or evt.metaKey
