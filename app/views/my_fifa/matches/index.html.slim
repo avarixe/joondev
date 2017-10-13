@@ -1,7 +1,7 @@
 - content_for :page_links do
   = link_to 'New Match', new_my_fifa_match_path, class: 'ui basic primary button'
 
-table.ui.basic.sortable.definition.selectable.compact.small.table[data-link="/my_fifa/matches/" width="100%"]
+table.ui.basic.sortable.definition.selectable.unstackable.compact.small.table[data-link="/my_fifa/matches/" width="100%"]
   thead
     tr
       - ['Opponent Team', 'Competition', 'Score', 'MOTM', 'Date Played'].each do |header|
@@ -21,16 +21,9 @@ javascript:
         { data: { _: 'date_played', sort: 'timestamp' }, searchable: false },
       ],
       createdRow: function(nRow, aData){
-        $.each(['Competition', 'Score', 'MOTM', 'Date Played'], function(i, label){
-          $('td:nth-child('+(i+2)+')', $(nRow)).prepend(labeledData(label, ''));
-        });
         $(nRow)
           .data('id', aData.id)
           .addClass(aData.result);
       }
     });    
   });
-
-  function labeledData(label, data){
-    return "<div class=\"ui responsive basic right pointing label\">"+label+"</div>"+data;
-  }

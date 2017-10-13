@@ -17,17 +17,14 @@ tr[data-id=record.player_id]
     - if record.red_cards > 0
       .ui.red.label.booking = record.red_cards
   td.center.aligned
-    = responsive_cell_label 'Rating'
     .ui.circular.label[style="background-color:#{record.rating_color}"]
       = record.rating
   td.center.aligned
     - if record.goals.to_i > 0
-      = responsive_cell_label 'Goals'
       .ui.circular.label[style="background-color:skyblue"]
         = record.goals
   td.center.aligned
     - if record.assists.to_i > 0
-      = responsive_cell_label 'Assists'
       .ui.circular.label[style="background-color:skyblue"]
         = record.assists
 

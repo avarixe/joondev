@@ -12,17 +12,14 @@ tr[data-id=f.object.id]
         i.red.level.down.icon
   td
     .field[no-empty]
-      = responsive_cell_label 'Player'
       = f.select :player_id,
         grouped_options_for_select(@grouped_players, f.object.player_id),
         {include_blank: true},
         {class: 'player_id grouped search fluid dropdown', tabindex: 100 }
   td
     .field[no-empty]
-      = responsive_cell_label 'Rating'
       = f.number_field :rating, class: 'rating', step: 0.1, min: 0, max: 10, tabindex: 1000
   td.center.aligned
-    = responsive_cell_label 'Goals'
     .ui.buttons[data-clickfield]
       a.ui.icon.button[data-clickaction='add']
         i.plus.icon
@@ -31,7 +28,6 @@ tr[data-id=f.object.id]
       a.ui.icon.button[data-clickaction='sub']
         i.minus.icon
   td.center.aligned
-    = responsive_cell_label 'Assists'
     .ui.buttons[data-clickfield]
       a.ui.icon.button[data-clickaction='add']
         i.plus.icon

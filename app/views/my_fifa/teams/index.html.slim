@@ -1,7 +1,7 @@
 - content_for :page_links do
   = link_to 'New Team', new_my_fifa_team_path, class: 'ui basic primary button'
 
-table.ui.basic.definition.selectable.compact.small.table[data-link="/my_fifa/teams/" width="100%"]
+table.ui.basic.definition.selectable.unstackable.compact.small.table[data-link="/my_fifa/teams/" width="100%"]
   thead
     th Active
     th Name
@@ -14,9 +14,7 @@ table.ui.basic.definition.selectable.compact.small.table[data-link="/my_fifa/tea
             = radio_button_tag :set_current_team, team.id, current_user.team_id == team.id
             label
         td = team.team_name
-        td
-          = responsive_cell_label 'Current Season'
-          = team.current_season.title
+        td = team.current_season.title
 
 javascript:
   $(function(){

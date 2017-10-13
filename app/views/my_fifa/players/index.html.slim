@@ -21,10 +21,6 @@
 javascript:
   var analyticsTable;
 
-  function labeledData(label, data){
-    return "<div class=\"ui responsive basic right pointing label\">"+label+"</div>"+data;
-  }
-
   $(function(){
     $('table#list').DataTable({
       order: [],
@@ -58,9 +54,6 @@ javascript:
         { data: 'cs' },
       ],
       createdRow: function(nRow, aData){
-        $.each(['Position', 'GP', 'Rating', 'Goals', 'Assists', 'CS'], function(i, label){
-          $('td:nth-child('+(i+2)+')', $(nRow)).prepend(labeledData(label, ''));
-        });
         if (!aData.active){
           $('td:first-child', $(nRow)).prepend('<i class="red attention icon"></i>');
           $(nRow).addClass('disabled')

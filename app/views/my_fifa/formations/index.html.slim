@@ -1,24 +1,21 @@
 - content_for :page_links do
   = link_to 'New Formation', new_my_fifa_formation_path, class: 'ui basic primary button'
 
-table.ui.basic.definition.selectable.compact.small.table[data-link="/my_fifa/formations/" width="100%"]
-  thead
-    th Active
-    th Title
-    th.ten.wide Positions
-  tbody
-    - @formations.each do |formation|
-      tr[data-id=formation.id]
-        td.center.aligned[no-link]
-          .ui.fitted.slider.checkbox
-            = radio_button_tag :set_formation, formation.id, current_user.formation_id == formation.id
-            label
-        td
-          = responsive_cell_label 'Title'
-          = formation.title
-        td
-          = responsive_cell_label 'Positions'
-          = formation.positions.join(", ")
+.table-container
+  table.ui.basic.definition.selectable.unstackable.compact.small.table[data-link="/my_fifa/formations/" width="100%"]
+    thead
+      th Active
+      th Title
+      th.ten.wide Positions
+    tbody
+      - @formations.each do |formation|
+        tr[data-id=formation.id]
+          td.center.aligned[no-link]
+            .ui.fitted.slider.checkbox
+              = radio_button_tag :set_formation, formation.id, current_user.formation_id == formation.id
+              label
+          td = formation.title
+          td = formation.positions.join(", ")
 
 javascript:
   $(function(){

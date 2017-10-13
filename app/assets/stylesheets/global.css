@@ -13,6 +13,9 @@ body > .ui.link.inverted.menu .item:hover {
   color: crimson;
 }
 
+.table-container { padding: 1rem; }
+.row.dt-table > .column, .table-container { overflow-x: auto; }
+
 /* Responsive Labels */
 .ui.label.responsive { display: none; }
 @media only screen and (max-width: 767px){
@@ -27,8 +30,11 @@ body > .ui.link.inverted.menu .item:hover {
   display: none;
 }
 
-/* Supplementary to DirtyForms */
-.dirty, .dirty:hover, .dirty:active, .dirty:focus { border-color: red; }
+/* Supplementary to DataTables */
+.dataTables_wrapper > .grid > .row > .right.aligned.nine.wide.column  { 
+  padding: 0;
+  overflow-x: auto;
+}
 
 /* Supplementary to Flatpickr */
 .flatpickr-wrapper { width: 100%; }

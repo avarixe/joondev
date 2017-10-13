@@ -1,19 +1,14 @@
-table.ui.basic.definition.selectable.compact.small.table[data-link="/my_fifa/seasons/" width="100%"]
-  thead
-    th Season
-    th Club Worth (Start of Season)
-    th Transfer Budget
-    th Wage Budget
-  tbody
-    - @seasons.each do |season|
-      tr[data-id=season.id]
-        td = season.title
-        td
-          = responsive_cell_label 'Club Worth (Start of Season)'
-          = number_to_fee season.start_club_worth
-        td
-          = responsive_cell_label 'Transfer Budget'
-          = number_to_fee season.transfer_budget
-        td
-          = responsive_cell_label 'Wage Budget'
-          = number_to_fee season.wage_budget
+.table-container
+  table.ui.basic.definition.selectable.unstackable.compact.small.table[data-link="/my_fifa/seasons/" width="100%"]
+    thead
+      th Season
+      th Club Worth (Start of Season)
+      th Transfer Budget
+      th Wage Budget
+    tbody
+      - @seasons.each do |season|
+        tr[data-id=season.id]
+          td = season.title
+          td = number_to_fee season.start_club_worth
+          td = number_to_fee season.transfer_budget
+          td = number_to_fee season.wage_budget

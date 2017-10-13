@@ -1,4 +1,4 @@
-table#list.ui.basic.definition.sortable.selectable.compact.small.table[data-link="/my_fifa/players/" width="100%"]
+table#list.ui.basic.definition.sortable.selectable.unstackable.compact.small.table[data-link="/my_fifa/players/" width="100%"]
   thead
     tr.center.aligned
       - ['Name', 'Position', '2nd POS', 'OVR'].each do |header|
@@ -12,11 +12,8 @@ table#list.ui.basic.definition.sortable.selectable.compact.small.table[data-link
           = content_tag(:i, nil, class: 'pink first aid icon') if player.injured?
           = content_tag(:i, nil, class: 'orange plane icon') if player.loaned_out?
         td[class="#{'disabled' if !player.active?}" data-sort=player.pos]
-          = responsive_cell_label 'Positions'
           = player.pos
         td[class="#{'disabled' if !player.active?}"]
-          = responsive_cell_label 'Secondary Position(s)'
           = player.get_sec_pos
         td[class="#{'disabled' if !player.active?}" data-sort=player.ovr]
-          = responsive_cell_label 'OVR'
           = player.ovr
