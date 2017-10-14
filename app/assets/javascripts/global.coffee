@@ -2,6 +2,11 @@ $(document).on "turbolinks:load", ->
   # JoonDEV sidebar
   $('div.sidebar').sidebar(transition: 'overlay').sidebar('attach events', '.toggle.button').sidebar 'hide'
 
+  Mousetrap.bind 'alt+j', -> 
+    $('div.sidebar').sidebar 'toggle'
+    # $('div.sidebar a:first').focus
+    return
+
   $('.best_in_place').best_in_place()
   $('.best_in_place').bind 'ajax:error', (evt, data, status, xhr) ->
     alert 'Invalid Value Entered.'
@@ -37,7 +42,7 @@ $(document).on "turbolinks:load", ->
   $('html').on 'click', '.message .close', ->
     $(this).closest('.message').transition 'fade'
     return
-    
+
   $('[data-flatpickr]').flatpickr({
     altInput: true,
     altFormat: "M j, Y"

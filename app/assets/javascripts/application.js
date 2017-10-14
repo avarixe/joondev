@@ -17,6 +17,7 @@
 
 //= require jquery-ui
 //= require jquery_ujs
+//= require mousetrap.min
 
 //= require turbolinks
 //= require flatpickr
