@@ -27,11 +27,12 @@ css:
     - @season.competitions.each_with_index do |competition, i|
       .item[class="#{'active' if i == 0 }" data-tab="competition_#{competition.id}"] = competition.title
 
-  - @season.competitions.each_with_index do |competition, i|
-    .ui.basic.tab.segment[class="#{'active' if i == 0 }" data-tab="competition_#{competition.id}"]
-      - case competition.type
-      - when 'MyFifa::League'
-        = render 'my_fifa/competitions/league', league: competition.becomes(MyFifa::League)
+  - if @season.competitions.any?
+    - @season.competitions.each_with_index do |competition, i|
+      .ui.basic.tab.segment[class="#{'active' if i == 0 }" data-tab="competition_#{competition.id}"]
+        - case competition.type
+        - when 'MyFifa::League'
+          = render 'my_fifa/competitions/league', league: competition.becomes(MyFifa::League)
 
 javascript:
   $(function(){

@@ -106,10 +106,10 @@ module MyFifa
     
       def save_external_match_data
         season = self.team.current_season
-        unless season.competitions.include? self.competition
-          season.competitions << self.competition
-          season.save
-        end
+        # unless season.competitions.include? self.competition
+        #   season.competitions << self.competition
+        #   season.save
+        # end
         
         unless self.team.teams_played.include? self.opponent
           self.team.teams_played << self.opponent
