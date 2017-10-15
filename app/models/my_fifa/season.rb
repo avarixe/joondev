@@ -5,10 +5,10 @@ module MyFifa
     belongs_to :team
     belongs_to :captain, class_name: 'Player'
 
+    has_many :competitions
+
     has_many :player_seasons, dependent: :delete_all
     has_many :players, through: :player_seasons
-
-    serialize :competitions, Array
 
     ############################
     #  INITIALIZATION METHODS  #
@@ -17,9 +17,6 @@ module MyFifa
     ########################
     #  ASSIGNMENT METHODS  #
     ########################
-      def competitions=(val)
-        write_attribute :competitions, (val.is_a?(Array) ? val : val.split("\n").map(&:strip))
-      end
 
     ########################
     #  VALIDATION METHODS  #
@@ -59,8 +56,8 @@ module MyFifa
         "#{start_date.strftime('%Y')} - #{end_date.strftime('%Y')} Season"
       end
       
-      def competition_options(delimiter)
-        competitions.join(delimiter) rescue ''
+      def competition_options
+        self.competitions.map(&:title)
       end
   end
 end

@@ -1,12 +1,16 @@
+css:
+  .ui.vertical.text.menu > .header.dividing.item { border-bottom: 1px solid #333 }
 
 - content_for :page_links do
   = link_to 'Edit', edit_my_fifa_season_path(@season), class: 'ui orange button'
+  = link_to 'Add Competition', new_my_fifa_competition_path, class: 'ui blue button'
   = link_to 'View All Seasons', my_fifa_seasons_path, class: 'ui basic button'
 
 .ui.pointing.secondary.tiny.menu[data-menu="tabs"]
   .item[class="#{'active' unless @season.current?}" data-tab="info"] Information
   .item[class="#{'active' if @season.current?}" data-tab="players"] Players
-  .item[data-tab="team"] Team Analytics
+  .item[data-tab="team"] Analytics
+  .item[data-tab="competitions"] Competitions
 
 .ui.basic.tab.segment[class="#{'active' unless @season.current?}" data-tab="info"]
   = render 'info'
@@ -17,10 +21,29 @@
 .ui.basic.tab.segment[data-tab="team"]
   = render 'team'
 
+.ui.basic.tab.segment[data-tab="competitions"]
+  .ui.vertical.text.menu[data-menu="tabs"]
+    .header.dividing.item Competition
+    - @season.competitions.each_with_index do |competition, i|
+      .item[class="#{'active' if i == 0 }" data-tab="competition_#{competition.id}"] = competition.title
+
+  - @season.competitions.each_with_index do |competition, i|
+    .ui.basic.tab.segment[class="#{'active' if i == 0 }" data-tab="competition_#{competition.id}"]
+      - case competition.type
+      - when 'MyFifa::League'
+        = render 'my_fifa/competitions/league', league: competition.becomes(MyFifa::League)
+
 javascript:
   $(function(){
     $('table#players').DataTable({
       order: [],
       bPaginate: false
+    });
+
+    $('table[data-league]').DataTable({
+      order: [[7, 'desc'], [0, 'asc']],
+      bFilter: false,
+      bPaginate: false,
+      bInfo: false
     });
   })

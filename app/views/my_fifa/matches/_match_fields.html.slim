@@ -4,8 +4,8 @@
       .six.wide.column.required.field[no-empty]
         = f.label :competition, 'Competition'
         = f.select :competition,
-          options_for_select(@team.current_season.competitions.sort, @match.competition),
-          {include_blank: true}, {class: 'fluid custom search dropdown', tabindex: 1}
+          options_for_select(@team.current_season.competition_options.sort, @match.competition),
+          {include_blank: true}, {class: 'fluid dropdown', tabindex: 1}
       .six.wide.column.required.field[no-empty]
           = f.label :opponent, 'Opponent Team'
           = f.select :opponent,

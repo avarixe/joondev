@@ -4,6 +4,7 @@ module MyFifa
 
     belongs_to :user
     has_many :seasons, dependent: :destroy
+    has_many :competitions, dependent: :destroy
     has_many :players, dependent: :destroy
     has_many :squads,  dependent: :delete_all
     has_many :matches, dependent: :delete_all

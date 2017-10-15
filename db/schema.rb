@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171001000607) do
+ActiveRecord::Schema.define(version: 20171015020152) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,16 @@ ActiveRecord::Schema.define(version: 20171001000607) do
     t.string   "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "my_fifa_competitions", force: :cascade do |t|
+    t.string  "type"
+    t.integer "team_id"
+    t.integer "season_id"
+    t.string  "title"
+    t.string  "champion"
+    t.integer "num_teams",           default: 20
+    t.integer "matches_per_fixture", default: 2
   end
 
   create_table "my_fifa_contract_terms", force: :cascade do |t|
@@ -60,6 +70,15 @@ ActiveRecord::Schema.define(version: 20171001000607) do
     t.string   "pos_11"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "my_fifa_league_results", force: :cascade do |t|
+    t.integer "league_id"
+    t.string  "team_name"
+    t.integer "wins",          default: 0
+    t.integer "draws",         default: 0
+    t.integer "goals_for",     default: 0
+    t.integer "goals_against", default: 0
   end
 
   create_table "my_fifa_matches", force: :cascade do |t|
@@ -137,7 +156,6 @@ ActiveRecord::Schema.define(version: 20171001000607) do
     t.integer "end_club_worth"
     t.integer "transfer_budget"
     t.integer "wage_budget"
-    t.text    "competitions"
   end
 
   create_table "my_fifa_squads", force: :cascade do |t|

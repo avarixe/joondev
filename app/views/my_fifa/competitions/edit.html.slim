@@ -1,0 +1,40 @@
+css:
+  tbody input { min-width: 5em; }
+
+= form_for(@competition, url: { controller: 'my_fifa/competitions', action: 'update' }, as: :competition, html: { class: 'ui small fluid form' }) do |f|
+
+  .table-container
+    table.ui.unstackable.very.compact.small.table[width="100%"]
+      thead
+        tr.center.aligned
+          th
+          th Team
+          th W
+          th D
+          th GF
+          th GA
+      tbody
+        - @competition.results.each_with_index do |result, i|
+          = f.fields_for :results, result do |result_fields|
+            tr.center.aligned
+              td = i + 1
+              td.input
+                = result_fields.select :team_name,
+                  options_for_select(@team.teams_played.sort, result_fields.object.team_name),
+                  {include_blank: true}, {class: 'custom search dropdown', tabindex: 1}
+              td.input = result_fields.number_field :wins, tabindex: 2
+              td.input = result_fields.number_field :draws, tabindex: 3
+              td.input = result_fields.number_field :goals_for, tabindex: 4
+              td.input = result_fields.number_field :goals_against, tabindex: 5
+
+  = f.submit "Update #{@competition.title}", class: 'ui primary button'
+  = link_to 'Back', :back, class: 'ui basic button'
+
+javascript:
+  $(function(){
+    $('.custom.search.dropdown').dropdown({
+      placeholder: false,
+      allowAdditions: true,
+      hideAdditions: false,
+    });
+  });

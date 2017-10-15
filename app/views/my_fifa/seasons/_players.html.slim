@@ -14,13 +14,8 @@
           td
             = content_tag(:i, nil, class: 'red attention icon') if !player_season.player.active
             = player_season.player.name 
-          td[no-link]
-            = player_season.player.pos
-          td[no-link data-attr="kit_no" data-sort=player_season.kit_no]
-            = semantic_bip player_season, :kit_no
-          td[no-link data-attr="ovr"]
-            = semantic_bip player_season, :ovr
-          td[no-link data-attr="value" data-sort=player_season.value]
-            = semantic_bip player_season, :value, display_as: :formatted_value
-          td[no-link data-attr="age"]
-            = semantic_bip player_season, :age
+          td[no-link] = player_season.player.pos
+          td[no-link data-attr="kit_no"] = semantic_bip player_season, :kit_no
+          td[no-link data-attr="ovr"] = semantic_bip player_season, :ovr
+          td[no-link data-attr="value" data-sort=player_season.value] = semantic_bip player_season, :value, display_as: :formatted_value
+          td[no-link data-attr="age"] = semantic_bip player_season, :age

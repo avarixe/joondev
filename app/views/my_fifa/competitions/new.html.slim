@@ -1,0 +1,35 @@
+= form_for(@competition, as: :competition, remote: true, html: { class: 'ui small fluid form' }) do |f|
+  = f.hidden_field :team_id
+  = f.hidden_field :type
+
+  .ui.teal.raised.segment
+    .ui.stackable.grid
+      .equal.width.row
+        .column.required.field[no-empty]
+          = f.label :title, 'Competition'
+          = f.text_field :title
+        .column.required.field
+          label Type
+          .inline.fields
+            .field
+              .ui.radio.checkbox
+                = f.radio_button :type, 'MyFifa::League'
+                = f.label :type_myfifaleague, 'League'
+            .field
+              .ui.radio.checkbox
+                = f.radio_button :type, 'MyFifa::Cup'
+                = f.label :type_myfifacup, 'Cup'
+            .field
+              .ui.radio.checkbox
+                = f.radio_button :type, 'MyFifa::Tournament'
+                = f.label :type_myfifatournament, 'Tournament'
+      .equal.width.row
+        .column.required.field[no-empty]
+          = f.label :num_teams, 'Number of Teams'
+          = f.number_field :num_teams
+        .column.required.field[no-empty]
+          = f.label :matches_per_fixture, 'Matches per Fixture'
+          = f.number_field :matches_per_fixture
+
+  = f.submit 'Add Competition', class: 'ui primary button'
+  = link_to 'Back', :back, class: 'ui basic button'
