@@ -66,13 +66,13 @@
                 .field
                   .ui.left.icon.input
                     i.money.icon
-                    = f.number_field :stat_bonus, placeholder: 'Bonus'
+                    = f.number_field :stat_bonus, placeholder: 'Performance Bonus'
               .column
                 .field
                   = f.number_field :num_stats, placeholder: 'Requirement'
               .column
                 .field
-                  = f.select :stat_type, ['Goals', 'Assists', 'Clean Sheets'], {include_blank: 'Type of Req.'}, {class: 'fluid dropdown'}
+                  = f.select :stat_type, ['Appearances', 'Goals', 'Assists', 'Clean Sheets'], {include_blank: 'Type of Req.'}, {class: 'fluid dropdown'}
             .six.wide.column
               = submit_tag 'SIGN NEW CONTRACT', class: "ui blue submit fluid button"
 
