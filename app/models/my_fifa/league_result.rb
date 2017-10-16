@@ -10,7 +10,7 @@ module MyFifa
     #  ACCESSOR METHODS  #
     ######################
       def losses
-        (self.league.num_teams - 1) * self.league.matches_per_fixture
+        (self.league.num_teams - 1) * self.league.matches_per_fixture - self.wins - self.draws
       end
 
       def goal_diff
