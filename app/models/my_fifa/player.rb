@@ -76,7 +76,7 @@ module MyFifa
     ########################
       def sec_pos=(val)
         pos_array = val.reject(&:blank?)
-        update_column :sec_pos, pos_array
+        write_attribute :sec_pos, pos_array
       end
 
     ########################
