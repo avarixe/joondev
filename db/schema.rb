@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171015020152) do
+ActiveRecord::Schema.define(version: 20171016185220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,8 +28,10 @@ ActiveRecord::Schema.define(version: 20171015020152) do
     t.integer "season_id"
     t.string  "title"
     t.string  "champion"
-    t.integer "num_teams",           default: 20
-    t.integer "matches_per_fixture", default: 2
+    t.integer "num_teams",              default: 20
+    t.integer "matches_per_fixture",    default: 2
+    t.integer "num_groups"
+    t.integer "num_advances_per_group"
   end
 
   create_table "my_fifa_contract_terms", force: :cascade do |t|
@@ -53,6 +55,16 @@ ActiveRecord::Schema.define(version: 20171015020152) do
     t.integer "add_on_clause", default: 0
   end
 
+  create_table "my_fifa_fixtures", force: :cascade do |t|
+    t.integer "competition_id"
+    t.integer "home_fixture_id"
+    t.integer "away_fixture_id"
+    t.string  "home_team"
+    t.string  "away_team"
+    t.string  "home_score"
+    t.string  "away_score"
+  end
+
   create_table "my_fifa_formations", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "title"
@@ -72,13 +84,14 @@ ActiveRecord::Schema.define(version: 20171015020152) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "my_fifa_league_results", force: :cascade do |t|
-    t.integer "league_id"
+  create_table "my_fifa_group_results", force: :cascade do |t|
+    t.integer "competition_id"
     t.string  "team_name"
-    t.integer "wins",          default: 0
-    t.integer "draws",         default: 0
-    t.integer "goals_for",     default: 0
-    t.integer "goals_against", default: 0
+    t.integer "wins",           default: 0
+    t.integer "draws",          default: 0
+    t.integer "goals_for",      default: 0
+    t.integer "goals_against",  default: 0
+    t.string  "group"
   end
 
   create_table "my_fifa_matches", force: :cascade do |t|

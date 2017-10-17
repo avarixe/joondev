@@ -3,7 +3,7 @@ $('.error.message').remove();
 $('.error').removeClass('error');
 
 // Highlight invalid fields
-$('.field[no-empty]').each(function(){
+$('.field[no-empty]:not(.disabled)').each(function(){
   if (!$('input,select', $(this)).val())
     $(this).addClass('error');
 });

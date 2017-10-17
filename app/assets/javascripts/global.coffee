@@ -39,9 +39,10 @@ $(document).on "turbolinks:load", ->
           $menu.append '<div class="item" data-value="' + @value + '">' + @innerHTML + '</div>'
       $(this).find('.menu').html $menu.html()
 
-  $('html').on 'click', '.message .close', ->
-    $(this).closest('.message').transition 'fade'
-    return
+  $('html').on 'click', '.message .close', -> 
+    $(this).closest('.message').transition 
+      animation: 'fade'
+      onComplete: -> $(this).closest('.message').remove()
 
   $('[data-flatpickr]').flatpickr({
     altInput: true,

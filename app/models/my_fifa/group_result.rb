@@ -1,6 +1,6 @@
 module MyFifa
-  class LeagueResult < Base
-    belongs_to :league, inverse_of: :results
+  class GroupResult < Base
+    belongs_to :competition, inverse_of: :results
 
     #####################
     #  MUTATOR METHODS  #
@@ -10,7 +10,11 @@ module MyFifa
     #  ACCESSOR METHODS  #
     ######################
       def losses
-        (self.league.num_teams - 1) * self.league.matches_per_fixture - self.wins - self.draws
+        if self.group.present?
+          0
+        else
+          (self.competition.num_teams - 1) * self.competition.matches_per_fixture - self.wins - self.draws
+        end
       end
 
       def goal_diff

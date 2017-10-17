@@ -10,26 +10,55 @@
           = f.text_field :title
         .column.required.field
           label Type
-          .inline.fields
+          .inline.three.fields
             .field
               .ui.radio.checkbox
-                = f.radio_button :type, 'MyFifa::League'
+                = f.radio_button :type, 'MyFifa::League', data: { type: 'League' }
                 = f.label :type_myfifaleague, 'League'
             .field
               .ui.radio.checkbox
-                = f.radio_button :type, 'MyFifa::Cup'
+                = f.radio_button :type, 'MyFifa::Cup', data: { type: 'Cup' }
                 = f.label :type_myfifacup, 'Cup'
             .field
               .ui.radio.checkbox
-                = f.radio_button :type, 'MyFifa::Tournament'
+                = f.radio_button :type, 'MyFifa::Tournament', data: { type: 'Tournament' }
                 = f.label :type_myfifatournament, 'Tournament'
+
       .equal.width.row
         .column.required.field[no-empty]
           = f.label :num_teams, 'Number of Teams'
           = f.number_field :num_teams
-        .column.required.field[no-empty]
-          = f.label :matches_per_fixture, 'Matches per Fixture'
-          = f.number_field :matches_per_fixture
+        .column.required.field
+          label Matches per Fixture
+          .inline.two.fields
+            .field
+              .ui.radio.checkbox
+                = f.radio_button :matches_per_fixture, 1
+                = f.label :matches_per_fixture_1, 1
+            .field
+              .ui.radio.checkbox
+                = f.radio_button :matches_per_fixture, 2
+                = f.label :matches_per_fixture_2, 2
+
+      .equal.width.row
+        .column.disabled.required.field[no-empty field-trigger="type"]
+          = f.label :num_groups, 'Number of Groups'
+          = f.number_field :num_groups
+        .column.disabled.required.field[no-empty field-trigger="type"]
+          = f.label :num_advances_per_group, 'Teams Advancing from Group'
+          = f.number_field :num_advances_per_group
 
   = f.submit 'Add Competition', class: 'ui primary button'
   = link_to 'Back', :back, class: 'ui basic button'
+
+javascript:
+  $(function(){
+    $(':radio[data-type]').change(function(){
+      if ($(this).data('type') == 'Tournament')
+        $('[field-trigger="type"]').removeClass('disabled');
+      else {
+        $('[field-trigger="type"]').addClass('disabled');
+        $('[field-trigger="type"] input').val('');
+      }
+    });
+  })
