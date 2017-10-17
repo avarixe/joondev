@@ -20,20 +20,19 @@ css:
           { include_blank: 'Squad' },
           { class: 'fluid dropdown' }
 
-    .table-container
-      table.ui.basic.very.compact.unstackable.table
-        thead
-          tr
-            th.two.wide
-            th.five.wide Player
-            th.center.aligned Rating
-            th.center.aligned Goals
-            th.center.aligned Assists
-            th.center.aligned
-        tbody
-          - @match.player_records.each do |record|
-            = f.fields_for :player_records, record do |r|
-              = render 'record_fields', f: r, num_sub: 0, player_is_sub: false
+    table.ui.basic.small.very.compact.table
+      thead
+        tr
+          th.two.wide
+          th.five.wide Player
+          th.center.aligned Rating
+          th.center.aligned Goals
+          th.center.aligned Assists
+          th.center.aligned
+      tbody
+        - @match.player_records.each do |record|
+          = f.fields_for :player_records, record do |r|
+            = render 'record_fields', f: r, num_sub: 0, player_is_sub: false
 
   .ui.horizontal.divider
 

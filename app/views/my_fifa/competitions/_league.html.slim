@@ -1,25 +1,23 @@
-.ui.raised.segment
-  = link_to "Edit #{league.title}", edit_my_fifa_competition_path(league), class: 'ui positive button'
-
-  table.ui.unstackable.very.compact.small.table[data-league width="100%"]
-    thead
+.ui.horizontal.divider League Table
+table.ui.unstackable.very.compact.small.table[data-league width="100%"]
+  thead
+    tr.center.aligned
+      th Team
+      th W
+      th D
+      th L
+      th GF
+      th GA
+      th GD
+      th PT
+  tbody
+    - competition.results.each do |result|
       tr.center.aligned
-        th Team
-        th W
-        th D
-        th L
-        th GF
-        th GA
-        th GD
-        th PT
-    tbody
-      - league.results.each do |result|
-        tr.center.aligned
-          td = result.team_name
-          td = result.wins
-          td = result.draws
-          td = result.losses
-          td = result.goals_for
-          td = result.goals_against
-          td = result.goal_diff
-          td = result.points
+        td = result.team_name
+        td = result.wins
+        td = result.draws
+        td = result.losses
+        td = result.goals_for
+        td = result.goals_against
+        td = result.goal_diff
+        td = result.points

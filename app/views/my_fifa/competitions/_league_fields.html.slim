@@ -13,10 +13,7 @@
         = f.fields_for :results, result do |result_fields|
           tr.center.aligned
             td = i + 1
-            td.input
-              = result_fields.select :team_name,
-                options_for_select(@team.teams_played.sort, result_fields.object.team_name),
-                {include_blank: true}, {class: 'custom search dropdown', tabindex: 1}
+            td.input.six.wide = result_fields.text_field :team_name, list: 'teams'
             td.input = result_fields.number_field :wins, tabindex: 2
             td.input = result_fields.number_field :draws, tabindex: 3
             td.input = result_fields.number_field :goals_for, tabindex: 4

@@ -13,14 +13,10 @@
         = f.fields_for :fixtures, fixture do |ff|
           tr
             td.five.wide.input 
-              = ff.select :home_team,
-                options_for_select(@team.teams_played.sort, ff.object.home_team),
-                { include_blank: true}, {class: 'custom search fluid dropdown'}
+              = ff.text_field :home_team, list: 'teams'
             td.three.wide.input
               = ff.text_field :home_score, value: ff.object.home_score.join(", ")
             td.three.wide.input
               = ff.text_field :away_score, value: ff.object.away_score.join(", ")
             td.five.wide.input 
-              = ff.select :away_team,
-                options_for_select(@team.teams_played.sort, ff.object.away_team),
-                { include_blank: true}, {class: 'custom search fluid dropdown'}
+              = ff.text_field :away_team, list: 'teams'

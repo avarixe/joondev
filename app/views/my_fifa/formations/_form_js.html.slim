@@ -41,5 +41,8 @@ javascript:
       $('.ui.stackable.grid').prepend(rowElem);
     }
     
-    $('.ui.stackable.grid').transition('pulse');
+    $('.ui.stackable.grid').transition({
+      animation: 'pulse',
+      queue: false,
+    });
   }

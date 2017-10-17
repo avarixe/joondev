@@ -1,6 +1,5 @@
 = form_for(@competition, as: :competition, remote: true, html: { class: 'ui small fluid form' }) do |f|
-  = f.hidden_field :team_id
-  = f.hidden_field :type
+  = f.hidden_field :season_id
 
   .ui.teal.raised.segment
     .ui.stackable.grid

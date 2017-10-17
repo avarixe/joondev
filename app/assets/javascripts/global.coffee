@@ -52,6 +52,13 @@ $(document).on "turbolinks:load", ->
   # Input Masks
   $('[data-inputmask]').inputmask()
 
+  # Custom Accordion Functionality
+  $('.accordion .title').off 'click'
+  $('.accordion .title').on 'click', ->
+    $(this).toggleClass("active")
+      .next(".content").transition "slide down"
+    return
+
   # Tables with links are clickable
   $('html').on 'click', 'table tr', (evt) ->
     if (_link = $(evt.target).closest('table').data('link')) and 

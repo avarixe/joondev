@@ -33,5 +33,13 @@ module MyFifa
           self.fixtures.create
         end
       end
+      
+    ######################
+    #  ACCESSOR METHODS  #
+    ######################
+      def rounds
+        super(self.num_groups * self.num_advances_per_group)
+      end
+
   end
 end

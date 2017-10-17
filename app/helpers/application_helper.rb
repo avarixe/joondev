@@ -19,6 +19,12 @@ module ApplicationHelper
         display_as: options[:display_as],
         activator: "[data-id=#{object.id}] [data-attr=#{attribute}]"
     end
+    
+    def datalist_tag(id, options)
+      content_tag(:datalist, "", id: id) do
+        options.map{ |option| content_tag(:option, "", value: option) }.reduce(:+)
+      end
+    end
 
   ##################
   #  MATH HELPERS  #

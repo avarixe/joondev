@@ -2,19 +2,27 @@ module MyFifa
   class GroupResult < Base
     belongs_to :competition, inverse_of: :results
 
-    #####################
-    #  MUTATOR METHODS  #
-    #####################
+    ######################
+    #  CALLBACK METHODS  #
+    ######################
+      after_save :save_team_name
+      
+      def save_team_name
+        team = self.competition.team
+        unless team.teams_played.include? self.team_name || self.team_name == team.team_name
+          team.teams_played << self.team_name
+          team.save
+        end
+      end
 
     ######################
     #  ACCESSOR METHODS  #
     ######################
       def losses
-        if self.group.present?
-          0
-        else
-          (self.competition.num_teams - 1) * self.competition.matches_per_fixture - self.wins - self.draws
-        end
+        num_fixtures = self.group.present? ?
+          self.competition.num_teams / self.competition.num_groups - 1 :
+          self.competition.num_teams - 1
+        num_fixtures * self.competition.matches_per_fixture - self.wins - self.draws
       end
 
       def goal_diff

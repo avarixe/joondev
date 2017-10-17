@@ -1,26 +1,52 @@
-.ui.raised.segment
-  = link_to "Edit #{tournament.title}", edit_my_fifa_competition_path(cup), class: 'ui positive button'
-
-  - tournament.results.group_by(&:group).each do |group, results|
-    table.ui.unstackable.very.compact.small.table[data-league width="100%"]
-      thead
-        tr.center.aligned
-          th Team
-          th W
-          th D
-          th L
-          th GF
-          th GA
-          th GD
-          th PT
-      tbody
-        - results.each do |result|
+.ui.horizontal.divider Group Stage
+.ui.fluid.accordion
+  - competition.results.group_by(&:group).each do |group, results|
+    .title
+      i.dropdown.icon
+      = "Group #{group}"
+    .content.transition.hidden
+      table.ui.unstackable.very.compact.small.table[data-league width="100%"]
+        thead
           tr.center.aligned
-            td = result.team_name
-            td = result.wins
-            td = result.draws
-            td = result.losses
-            td = result.goals_for
-            td = result.goals_against
-            td = result.goal_diff
-            td = result.points
+            th Team
+            th W
+            th D
+            th L
+            th GF
+            th GA
+            th GD
+            th PT
+        tbody
+          - results.each do |result|
+            tr.center.aligned
+              td = result.team_name
+              td = result.wins
+              td = result.draws
+              td = result.losses
+              td = result.goals_for
+              td = result.goals_against
+              td = result.goal_diff
+              td = result.points
+
+  .ui.horizontal.divider Elimination Rounds
+  .ui.fluid.accordion
+    - competition.rounds.reverse_each do |round|
+      .title
+        i.dropdown.icon
+        = round[:name]
+      .content.transition.hidden
+        table.ui.very.compact.small.table
+          thead.center.aligned
+            tr
+              th Home Team
+              th Score
+              th Away Team
+          tbody
+            - round[:fixtures].each do |fixture|
+              tr.center.aligned
+                td.six.wide = fixture.home_team
+                td.four.wide
+                  - fixture.home_score.zip(fixture.away_score).each do |score|
+                    = "#{score.first} - #{score.last}<br>".html_safe
+                td.six.wide = fixture.away_team
+  

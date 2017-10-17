@@ -1,0 +1,14 @@
+- content_for :page_links
+  = link_to "Add Competition", new_my_fifa_competition_path(season: @season.id), class: 'ui primary button'
+  = link_to "View Season", @season, class: 'ui basic button'
+
+.ui.vertical.text.menu[data-menu="tabs"]
+  - @season.competitions.each_with_index do |competition, i|
+    .item[class="#{'active' if i == 0 }" data-tab="competition_#{competition.id}"] = competition.title
+
+- if @season.competitions.any?
+  - @season.competitions.each_with_index do |competition, i|
+    .ui.basic.tab.segment[class="#{'active' if i == 0 }" data-tab="competition_#{competition.id}"]
+      .ui.raised.teal.segment
+        = link_to "Edit #{competition.title}", edit_my_fifa_competition_path(competition), class: 'ui orange button'
+        = render competition.type.gsub(/MyFifa::/, '').downcase, competition: competition

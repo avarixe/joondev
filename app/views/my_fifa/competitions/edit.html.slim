@@ -2,15 +2,12 @@ css:
   tbody input { min-width: 5em; }
 
 = form_for(@competition, url: { controller: 'my_fifa/competitions', action: 'update' }, as: :competition, html: { class: 'ui small fluid form' }) do |f|
+  = datalist_tag :teams, @team.teams_played.sort.unshift(@team.team_name)
 
-  - case @competition.type
-  - when 'MyFifa::League'
-    = render "league_fields", f: f
-  - when 'MyFifa::Cup'
-    = render "cup_fields", f: f
+  = render "#{@competition.type.gsub(/MyFifa::/, "").downcase}_fields", f: f
 
   = f.submit "Update #{@competition.title}", class: 'ui primary button'
-  = link_to 'Back', :back, class: 'ui basic button'
+  = link_to 'Back', my_fifa_competition_path(@competition.season), class: 'ui basic button'
 
 javascript:
   $(function(){

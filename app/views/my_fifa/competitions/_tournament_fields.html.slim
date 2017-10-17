@@ -1,0 +1,46 @@
+.ui.dividing.header Group Stage
+- @competition.results.group_by(&:group).each do |group, results|
+  .table-container
+    .ui.horizontal.divider = "Group #{group}"
+    table.ui.unstackable.very.compact.small.table[width="100%"]
+      thead
+        tr.center.aligned
+          th
+          th Team
+          th W
+          th D
+          th GF
+          th GA
+      tbody
+        - results.each_with_index do |result, i|
+          = f.fields_for :results, result do |result_fields|
+            tr.center.aligned
+              td = i + 1
+              td.input.six.wide = result_fields.text_field :team_name, list: 'teams'
+              td.input = result_fields.number_field :wins, tabindex: 2
+              td.input = result_fields.number_field :draws, tabindex: 3
+              td.input = result_fields.number_field :goals_for, tabindex: 4
+              td.input = result_fields.number_field :goals_against, tabindex: 5
+
+- @competition.rounds.reverse_each do |round|
+  .ui.dividing.header = round[:name]
+
+  table.ui.very.compact.small.table
+    thead.center.aligned
+      tr
+        th Home Team
+        th[colspan=2] Score
+        th Away Team
+        th 
+    tbody
+      - round[:fixtures].each do |fixture|
+        = f.fields_for :fixtures, fixture do |ff|
+          tr
+            td.five.wide.input 
+              = ff.text_field :home_team, list: 'teams'
+            td.three.wide.input
+              = ff.text_field :home_score, value: ff.object.home_score.join(", ")
+            td.three.wide.input
+              = ff.text_field :away_score, value: ff.object.away_score.join(", ")
+            td.five.wide.input 
+              = ff.text_field :away_team, list: 'teams'

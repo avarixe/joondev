@@ -5,8 +5,16 @@ module MyFifa
     before_action :set_competition, only: [:edit, :update]
     before_action :set_current_team
 
+    def show
+      @season = Season.includes(:competitions).find(params[:id])
+      @title = "#{@season.title} - Competitions"
+    end
+
     def new
-      @competition = @team.competitions.new
+      redirect_to :back if params[:season].blank?
+      
+      @season = Season.find(params[:season])
+      @competition = @season.competitions.new
       @title = 'New Competition'
     end
 
@@ -19,8 +27,8 @@ module MyFifa
     def create
       @competition = Competition.new(competition_params)
 
-      if @team.current_season.competitions << @competition
-        redirect_to @competition.season, notice: 'Competition was successfully created.'
+      if @team.competitions << @competition
+        redirect_to my_fifa_competition_path(@competition.season), notice: 'Competition was successfully created.'
       else
         respond_to do |format|
           format.js { render 'shared/errors', locals: { object: @competition } }
@@ -30,7 +38,7 @@ module MyFifa
 
     def update
       @competition.update(competition_params)
-      redirect_to @competition.season, notice: "#{@competition.title} was successfully updated."
+      redirect_to my_fifa_competition_path(@competition.season), notice: "#{@competition.title} was successfully updated."
     end
 
     private
