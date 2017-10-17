@@ -33,6 +33,8 @@ css:
         - case competition.type
         - when 'MyFifa::League'
           = render 'my_fifa/competitions/league', league: competition.becomes(MyFifa::League)
+        - when 'MyFifa::Cup'
+          = render 'my_fifa/competitions/cup', cup: competition.becomes(MyFifa::Cup)
 
 javascript:
   $(function(){

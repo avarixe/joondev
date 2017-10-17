@@ -12,7 +12,6 @@ module MyFifa
         end
       end
     
-    
     ######################
     #  CALLBACK METHODS  #
     ######################
@@ -23,5 +22,27 @@ module MyFifa
           self.fixtures.create
         end
       end
+
+    ######################
+    #  ACCESSOR METHODS  #
+    ######################
+
+      def rounds
+        num_rounds = 1
+        cup_fixtures = self.fixtures.to_a
+        fixture_rounds = []
+        until 1 << num_rounds > self.num_teams
+          num_fixtures = 1 << num_rounds
+
+          fixture_rounds << {
+            name: ROUND_NAMES[num_fixtures] || "Round of #{num_fixtures}",
+            fixtures: cup_fixtures.pop(1 << fixture_rounds.length)
+          }
+          num_rounds += 1
+        end
+
+        return fixture_rounds
+      end
+
   end
 end

@@ -1,0 +1,17 @@
+.ui.raised.segment
+  = link_to "Edit #{cup.title}", edit_my_fifa_competition_path(cup), class: 'ui positive button'
+
+  - cup.rounds.reverse_each do |round|
+    .ui.dividing.header = round[:name]
+
+    table.ui.very.compact.small.table
+      tbody
+        - round[:fixtures].each do |fixture|
+          - next if fixture.home_team.blank? || fixture.away_team.blank?
+          tr.center.aligned
+            td.six.wide = fixture.home_team
+            td.four.wide
+              - fixture.home_score.zip(fixture.away_score).each do |score|
+                = "#{score.first} - #{score.last}<br>".html_safe
+            td.six.wide = fixture.away_team
+

@@ -14,7 +14,7 @@ body > .ui.link.inverted.menu .item:hover {
 }
 
 .table-container { padding: 1rem; }
-.row.dt-table > .column, .table-container { overflow-x: auto; }
+.row.dt-table > .column, .table-container { overflow-x: auto; overflow-y: visible;}
 
 /* Responsive Labels */
 .ui.label.responsive { display: none; }

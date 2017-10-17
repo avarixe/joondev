@@ -10,6 +10,12 @@ module MyFifa
     has_many :fixtures
     accepts_nested_attributes_for :fixtures
 
+    ROUND_NAMES = {
+      2 => 'Final',
+      4 => 'Semi Finals',
+      8 => 'Quarter Finals',
+    }
+
     ########################
     #  VALIDATION METHODS  #
     ########################

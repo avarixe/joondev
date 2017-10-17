@@ -1,0 +1,26 @@
+.ui.raised.segment
+  = link_to "Edit #{tournament.title}", edit_my_fifa_competition_path(cup), class: 'ui positive button'
+
+  - tournament.results.group_by(&:group).each do |group, results|
+    table.ui.unstackable.very.compact.small.table[data-league width="100%"]
+      thead
+        tr.center.aligned
+          th Team
+          th W
+          th D
+          th L
+          th GF
+          th GA
+          th GD
+          th PT
+      tbody
+        - results.each do |result|
+          tr.center.aligned
+            td = result.team_name
+            td = result.wins
+            td = result.draws
+            td = result.losses
+            td = result.goals_for
+            td = result.goals_against
+            td = result.goal_diff
+            td = result.points
