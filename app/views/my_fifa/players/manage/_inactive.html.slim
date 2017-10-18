@@ -95,6 +95,6 @@
               .column
                 .field
                   = term.label :stat_type, 'Type of Requirement', style: 'visibility:hidden'
-                  = term.select :stat_type, ['Goals', 'Assists', 'Clean Sheets'], {include_blank: true}, {class: 'fluid dropdown'}
+                  = term.select :stat_type, MyFifa::Player::BONUS_STAT_TYPES, {include_blank: true}, {class: 'fluid dropdown'}
         .six.wide.column
           = submit_tag 'SIGN NEW CONTRACT', class: "ui green submit button"

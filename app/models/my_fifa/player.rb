@@ -63,6 +63,13 @@ module MyFifa
       'ST'
     ]
 
+    BONUS_STAT_TYPES = [
+      'Appearances',
+      'Goals',
+      'Assists',
+      'Clean Sheets'
+    ]
+
     ############################
     #  INITIALIZATION METHODS  #
     ############################
