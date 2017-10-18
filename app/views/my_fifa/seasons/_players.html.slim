@@ -10,7 +10,7 @@
         th.two.wide Age
     tbody
       - @season.player_seasons.each do |player_season|
-        tr.center.aligned[data-id=player_season.id]
+        tr.center.aligned[data-id=player_season.player_id]
           td
             = content_tag(:i, nil, class: 'red attention icon') if !player_season.player.active
             = player_season.player.name 
