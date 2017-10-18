@@ -29,7 +29,7 @@ module MyFifa
     private
     
       def save_team_name(my_team, team_name)
-        unless team_name.blank? || my_team.teams_played.include? team_name || my_team.team_name == team_name
+        unless team_name.blank? || my_team.teams_played.include?(team_name) || my_team.team_name == team_name
           my_team.teams_played << team_name
           my_team.save
         end
