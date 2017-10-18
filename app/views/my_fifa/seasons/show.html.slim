@@ -23,7 +23,7 @@ css:
 javascript:
   $(function(){
     $('table#players').DataTable({
-      order: [],
+      order: [[1, 'asc'], [4, 'desc']],
       bPaginate: false
     });
   })

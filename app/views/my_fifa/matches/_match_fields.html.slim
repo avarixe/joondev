@@ -3,8 +3,9 @@
     .four.column.stackable.centered.row
       .six.wide.column.required.field[no-empty]
         = f.label :competition, 'Competition'
-        = f.text_field :competition,list: 'competitions', tabindex: 1
-        = datalist_tag :competitions, @team.current_season.competition_options.sort
+        = f.select :competition, 
+          options_for_select(@team.current_season.competition_options.sort, @match.competition),
+          { include_blank: true }, { class: 'ui fluid dropdown'}
       .six.wide.column.required.field[no-empty]
         = f.label :opponent, 'Opponent Team'
         = f.text_field :opponent, list: 'teams', tabindex: 2

@@ -1,3 +1,6 @@
+- content_for :page_links do
+  = button_to "Start New Season", my_fifa_seasons_path, data: { confirm: "Start New Season?" }, class: "ui primary button"
+
 .table-container
   table.ui.basic.definition.selectable.unstackable.compact.small.table[data-link="/my_fifa/seasons/" width="100%"]
     thead

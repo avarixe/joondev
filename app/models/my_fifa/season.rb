@@ -27,23 +27,29 @@ module MyFifa
     ######################
     #  CALLBACK METHODS  #
     ######################
-      after_create :create_player_seasons
-      
-      def create_player_seasons
-        self.team.sorted_players.each do |player|
-          self.player_seasons.create(
-            player_id: player.id,
-            kit_no:    player.kit_no,
-            ovr:       player.ovr,
-            value:     player.value,
-            age:       player.age + 1
-          )
-        end
-      end
 
     #####################
     #  MUTATOR METHODS  #
     #####################
+      def build_next_season
+        new_season = self.dup
+        new_season.start_date       = self.end_date
+        new_season.end_date         = self.end_date + 1.year
+        new_season.start_club_worth = self.end_club_worth
+        new_season.end_club_worth   = nil
+        new_season.save
+
+        self.player_seasons.includes(:player).each do |player_season|
+          if player_season.player.active?
+            new_player_season = player_season.dup
+            new_player_season.season_id = new_season.id
+            new_player_season.age += 1
+            new_player_season.save
+          end
+        end
+
+        return new_season
+      end
 
     ######################
     #  ACCESSOR METHODS  #

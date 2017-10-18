@@ -143,7 +143,7 @@ module MyFifa
 
       if @contract.update(params[:contract].permit!)
         @player.update_column(:active, false)
-        redirect_to action: :index, notice: "#{@player.name} has left #{@team.team_name}"
+        redirect_to my_fifa_players_path, notice: "#{@player.name} has left #{@team.team_name}"
       else
         respond_to do |format|
           format.js { render 'shared/errors', locals: { object: @contract } }

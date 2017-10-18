@@ -23,6 +23,11 @@ module MyFifa
       @title = @season.title
     end
 
+    def create
+      @season = @team.current_season.build_next_season
+      redirect_to @season
+    end
+
     # PATCH/PUT /players/1
     def update
       if @season.update(season_params)
