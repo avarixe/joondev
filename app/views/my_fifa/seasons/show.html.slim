@@ -7,14 +7,14 @@ css:
   = link_to 'View All Seasons', my_fifa_seasons_path, class: 'ui basic button'
 
 .ui.pointing.secondary.tiny.menu[data-menu="tabs"]
-  .item[class="#{'active' unless @season.current?}" data-tab="info"] Information
-  .item[class="#{'active' if @season.current?}" data-tab="players"] Players
+  .active.item[data-tab="info"] Information
+  .item[data-tab="players"] Players
   .item[data-tab="team"] Analytics
 
-.ui.basic.tab.segment[class="#{'active' unless @season.current?}" data-tab="info"]
+.ui.basic.active.tab.segment[data-tab="info"]
   = render 'info'
 
-.ui.basic.tab.segment[class="#{'active' if @season.current?}" data-tab="players"]
+.ui.basic.tab.segment[data-tab="players"]
   = render 'players'
 
 .ui.basic.tab.segment[data-tab="team"]

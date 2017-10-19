@@ -58,8 +58,12 @@ module MyFifa
         self.end_date > self.team.current_date
       end
     
+      def yearspan
+        "#{self.start_date.strftime('%Y')} - #{self.end_date.strftime('%Y')}"
+      end
+
       def title
-        "#{start_date.strftime('%Y')} - #{end_date.strftime('%Y')} Season"
+        "#{self.yearspan} Season"
       end
       
       def competition_options

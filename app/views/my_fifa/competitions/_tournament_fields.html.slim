@@ -1,5 +1,5 @@
 .ui.dividing.header Group Stage
-- @competition.results.group_by(&:group).each do |group, results|
+- @competition.results.group_by(&:group).each_with_index do |(group, results), i|
   .table-container
     .ui.horizontal.divider = "Group #{group}"
     table.ui.unstackable.very.compact.small.table[width="100%"]
@@ -12,15 +12,15 @@
           th GF
           th GA
       tbody
-        - results.each_with_index do |result, i|
+        - results.each_with_index do |result, j|
           = f.fields_for :results, result do |result_fields|
             tr.center.aligned
-              td = i + 1
-              td.input.six.wide = result_fields.text_field :team_name, list: 'teams'
-              td.input = result_fields.number_field :wins, tabindex: 2
-              td.input = result_fields.number_field :draws, tabindex: 3
-              td.input = result_fields.number_field :goals_for, tabindex: 4
-              td.input = result_fields.number_field :goals_against, tabindex: 5
+              td = j + 1
+              td.input.six.wide = result_fields.text_field :team_name, list: 'teams', tabindex: (i+1)*10 + 1
+              td.input = result_fields.number_field :wins,          tabindex: (i+1)*10 + 2
+              td.input = result_fields.number_field :draws,         tabindex: (i+1)*10 + 3
+              td.input = result_fields.number_field :goals_for,     tabindex: (i+1)*10 + 4
+              td.input = result_fields.number_field :goals_against, tabindex: (i+1)*10 + 5
 
 - @competition.rounds.reverse_each do |round|
   .ui.dividing.header = round[:name]

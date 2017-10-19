@@ -1,10 +1,10 @@
 .ui.horizontal.divider Group Stage
 .ui.fluid.accordion
   - competition.results.group_by(&:group).each do |group, results|
-    .title
+    .active.title
       i.dropdown.icon
       = "Group #{group}"
-    .content.transition.hidden
+    .content.transition.visible
       table.ui.unstackable.very.compact.small.table[data-league width="100%"]
         thead
           tr.center.aligned
@@ -31,10 +31,10 @@
   .ui.horizontal.divider Elimination Rounds
   .ui.fluid.accordion
     - competition.rounds.reverse_each do |round|
-      .title
+      .active.title
         i.dropdown.icon
         = round[:name]
-      .content.transition.hidden
+      .content.transition.visible
         table.ui.very.compact.small.table
           thead.center.aligned
             tr
