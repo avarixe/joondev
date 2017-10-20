@@ -17,7 +17,7 @@ module ApplicationHelper
         class: 'ui form', 
         inner_class: 'ui fluid input',
         display_as: options[:display_as],
-        activator: "[data-id=#{object.id}] [data-attr=#{attribute}]"
+        activator: "[bip-id=#{object.id}] [bip-attr=#{attribute}]"
     end
     
     def datalist_tag(id, options)

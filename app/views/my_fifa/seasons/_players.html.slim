@@ -10,12 +10,12 @@
         th.two.wide Age
     tbody
       - @season.player_seasons.each do |player_season|
-        tr.center.aligned[data-id=player_season.player_id]
+        tr.center.aligned[data-id=player_season.player_id bip-id=player_season.id]
           td
             = content_tag(:i, nil, class: 'red attention icon') if !player_season.player.active
             = player_season.player.name 
           td[no-link data-sort=MyFifa::Player::POSITIONS.index(player_season.player.pos)] = player_season.player.pos
-          td[no-link data-attr="kit_no"] = semantic_bip player_season, :kit_no
-          td[no-link data-attr="ovr"] = semantic_bip player_season, :ovr
-          td[no-link data-attr="value" data-sort=player_season.value] = semantic_bip player_season, :value, display_as: :formatted_value
-          td[no-link data-attr="age"] = semantic_bip player_season, :age
+          td[no-link bip-attr="kit_no"] = semantic_bip player_season, :kit_no
+          td[no-link bip-attr="ovr"] = semantic_bip player_season, :ovr
+          td[no-link bip-attr="value" data-sort=player_season.value] = semantic_bip player_season, :value, display_as: :formatted_value
+          td[no-link bip-attr="age"] = semantic_bip player_season, :age
