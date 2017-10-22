@@ -10,8 +10,8 @@ default: &default
   pool: 5
   timeout: 5000
   host: localhost
-  username: <%= ENV['POSTGRES_USERNAME'] %>
-  password: <%= ENV['POSTGRES_PASSWORD'] %>
+  username: <%= ENV['db_username'] %>
+  password: <%= ENV['db_password'] %>
 
 test:
   <<: *default
