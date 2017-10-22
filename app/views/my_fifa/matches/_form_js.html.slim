@@ -1,7 +1,9 @@
 javascript:
-  var highest_rating;
+  var highest_rating, positions;
 
   $(function(){
+    updatePositionOptions();
+
     $('#match_opponent').dropdown({
       placeholder: false,
       allowAdditions: true,
@@ -15,6 +17,7 @@ javascript:
     $('.pusher').on('click', 'a[data-action="yellow card"]', function(){ addYellowCard(this); });
     $('.pusher').on('click', 'a[data-action="red card"]',    function(){ addRedCard(this); });
     $('.pusher').on('click', 'a[data-action="clear card"]',  function(){ clearBooking(this); });
+    $('.pusher').on('input', '#pos_change',                  function(){ changePosition(this); });
 
     // By default, highest rating gets MOTM
     highest_rating = $('input.rating').map(function(){
@@ -40,6 +43,7 @@ javascript:
             $('select[id$="player_id"]', tr).dropdown('set selected', player_id);
 
             // Update Position labels
+            updatePositionOptions();
             $('td:first-child input', tr)
               .attr('data-default', data.positions[i])
               .val(data.positions[i]);
@@ -72,6 +76,23 @@ javascript:
     });
   });
   
+  function updatePositionOptions(){
+    positions = $('table tr:not([data-sub]) .pos > span').map(function(){
+      return $(this).text();
+    }).toArray();
+  }
+
+  function changePosition(target){
+    if (positions.indexOf(target.value) >= 0){
+      var trPos = $('.pos', $(target).closest('tr'));
+      $('span', trPos).text(target.value);
+      trPos.prev()
+        .attr('data-default', target.value)
+        .val(target.value);
+      $(target).val('');
+    }
+  }
+
   function toggleClickForm(target){
     var inputField = $(target).closest('[data-clickfield]').find('input');
     var currentValue = parseInt(inputField.val());
@@ -123,18 +144,14 @@ javascript:
 
     // Append new row to table
     $(target).closest('tr').after(record);
+    $('.pos', $(target).closest('tr')).append('<i class="level down red icon"></i>');
+    $('.pos', record).append('<i class="level up green icon"></i>');
 
     // Substitute actions menu was copied weirdly. Hack fix
     $('.teal.dropdown > .fluid.menu')
       .removeClass('transition visible animating slide down out')
       .attr('style', '');
     $('.ui.dropdown', record).dropdown().dropdown('clear');
-
-    $('.pos', $(target).closest('tr'))
-      .append('<i class="level down red icon"></i>');
-
-    $('.pos', record)
-      .append('<i class="level up green icon"></i>');
   }
 
   function removeRecord(target){

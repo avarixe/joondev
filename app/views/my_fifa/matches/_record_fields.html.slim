@@ -39,30 +39,33 @@ tr[data-id=f.object.id]
     .ui.left.pointing.dropdown.circular.teal.icon.button
       i.settings.icon
       .fluid.menu
-        a[data-action="add sub" class="#{f.object.sub_record.present? ? 'hidden' : 'visible'} item"]
+        a.item[data-action="add sub" class="#{f.object.sub_record.present? ? 'hidden' : 'visible'}"]
           i.level.down.red.icon
           | Substitute
-        a[data-action="remove" class="#{player_is_sub ? 'visible' : 'hidden'} item"]
+        a.item[data-action="remove" class="#{player_is_sub ? 'visible' : 'hidden'}"]
           i.remove.icon
           | Remove
         .ui.left.icon.input
-          i.first.aid.icon
+          i.green.grid.layout.icon
+          = text_field_tag :pos_change, nil, placeholder: 'POS Change', list: 'positions', data: { default: '' }
+        .ui.left.icon.input
+          i.pink.first.aid.icon
           = f.text_field :injury, placeholder: 'Injury', data: { default: '' }
         .header 
           i.clone.icon
           | Bookings
         .divider
-        a[data-action="yellow card" class="#{'disabled' if f.object.red_cards > 0} item"]
+        a.item[data-action="yellow card" class="#{'disabled' if f.object.red_cards > 0}"]
           | Yellow Card
           = f.hidden_field :yellow_cards, data: { default: 0 }
           .floating.ui.yellow.label.booking
             = f.object.yellow_cards
-        a[data-action="red card" class="#{'disabled' if f.object.red_cards > 0} item"]
+        a.item[data-action="red card" class="#{'disabled' if f.object.red_cards > 0}"]
           | Red Card
           = f.hidden_field :red_cards, data: { default: 0 }
           .floating.ui.red.label.booking
             = f.object.red_cards
-        a[data-action="clear card" class="#{'disabled' if f.object.yellow_cards == 0 && f.object.red_cards == 0} item"]
+        a.item[data-action="clear card" class="#{'disabled' if f.object.yellow_cards == 0 && f.object.red_cards == 0}"]
           i.green.minus.square.icon
           | Clear Bookings
 
