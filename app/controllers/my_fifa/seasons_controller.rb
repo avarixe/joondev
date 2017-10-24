@@ -41,6 +41,15 @@ module MyFifa
       end
     end
 
+    def competitions
+      competitions = params[:season].present? ?
+        Season.find(params[:season]).competition_options :
+        @team.recorded_competitions
+      render json: competitions.sort.map{ |comp| 
+        { value: comp, name: comp }
+      }.unshift({ value: '', name: 'All Competitions' }).to_json
+    end
+
     private
       # Use callbacks to share common setup or constraints between actions.
       def set_season

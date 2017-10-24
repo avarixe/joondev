@@ -4,7 +4,7 @@ module MyFifa
   class PlayersController < ApplicationController
     before_action :set_current_team
     before_action :set_player, only: [:edit, :update, :set_status, :sign_new_contract, :exit, :rejoin]
-    include PlayerAnalytics
+    include MatchAnalytics
 
     # GET /players
     def index

@@ -19,16 +19,14 @@
 
 
 javascript:
-  var analyticsTable;
-
   $(function(){
     $('table#list').DataTable({
       order: [],
     });
 
-    $('#season, #competition').change(function(){ analyticsTable.ajax.reload() });
+    $('#season, #competition').change(function(){ filterTable.ajax.reload() });
 
-    analyticsTable = $('table#analytics').DataTable({
+    filterTable = $('table#analytics').DataTable({
       order: [[3, 'desc']],
       ajax: {
         url: '/my_fifa/players',

@@ -29,7 +29,11 @@ Rails.application.routes.draw do
       }
     end
     resources :matches
-    resources :seasons, except: [:new]
+    resources :seasons, except: [:new] do
+      collection {
+        get 'competitions'
+      }
+    end
 
     resources :competitions
 

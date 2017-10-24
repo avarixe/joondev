@@ -5,6 +5,7 @@ module MyFifa
     before_action :set_match, only: [:show, :edit, :update, :destroy]
     before_action :set_current_team
     before_action :team_is_playable?
+    include MatchAnalytics
 
     # GET /players
     def index
@@ -14,6 +15,7 @@ module MyFifa
         }
         format.json {
           @matches = @team.matches
+          filter_matches
           render json: {
             data: @matches.with_motm.reverse.map{ |match|
               {

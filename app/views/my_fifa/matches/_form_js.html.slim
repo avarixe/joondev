@@ -59,7 +59,7 @@ javascript:
       evt.preventDefault();
   
       var squadId = $('select[id$="squad_id"]').val();
-      var rows = $('table tbody tr');
+      var rows = $('table tbody tr:not([data-sub])');
       var squadParams = {};
       for(var i=0; i < 11; i++)
         squadParams['player_id_'+(i+1)] = $('.player_id', $(rows[i])).dropdown('get value');

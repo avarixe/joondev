@@ -1,6 +1,6 @@
 module MyFifa
-  module PlayerAnalytics
-    def filter_records
+  module MatchAnalytics
+    def filter_matches
       query = {
         strings: [],
         args: []
@@ -18,12 +18,13 @@ module MyFifa
         query[:args] << params[:competition]
       end
 
-      if query[:strings].any?
-        @matches = Match.where(query[:strings].join(' AND '), *query[:args])
-        @records = @records.where(match_id: @matches.map(&:id))
-      else
-        @matches = []
-      end
+      @matches = query[:strings].any? ?
+        Match.where(query[:strings].join(' AND '), *query[:args]) : Match.all
+    end
+
+    def filter_records
+      filter_matches
+      @records = @records.where(match_id: @matches.map(&:id))
     end
   end
 end

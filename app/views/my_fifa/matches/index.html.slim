@@ -1,6 +1,8 @@
 - content_for :page_links do
   = link_to 'New Match', new_my_fifa_match_path, class: 'ui basic primary button'
 
+= render 'my_fifa/shared/filter_matches'
+
 table.ui.basic.sortable.definition.selectable.unstackable.compact.small.table[data-link="/my_fifa/matches/" width="100%"]
   thead
     tr
@@ -9,9 +11,15 @@ table.ui.basic.sortable.definition.selectable.unstackable.compact.small.table[da
 
 javascript:
   $(function(){
-    $('table').DataTable({
-      processing: true,      
-      ajax: '/my_fifa/matches',
+    filterTable = $('table').DataTable({
+      processing: true,
+      ajax: {
+        url: '/my_fifa/matches',
+        data: function(d){
+          d.season = $('select#season').val();
+          d.competition = $('select#competition').val();
+        }
+      },
       order: [[4, 'desc']],
       columns: [
         { data: 'opponent' },
