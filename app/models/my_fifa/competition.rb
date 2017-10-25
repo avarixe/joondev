@@ -1,5 +1,12 @@
 module MyFifa
   class Competition < Base
+    default_scope { 
+      order(
+        "CASE WHEN type = '#{League.sti_name}' THEN 1 WHEN type = '#{Cup.sti_name}' THEN 2 ELSE 3 END",
+        id: :asc
+      )
+    }
+
     belongs_to :team
     belongs_to :season
     includes ApplicationHelper

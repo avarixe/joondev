@@ -54,20 +54,19 @@ module MyFifa
     ######################
     #  ACCESSOR METHODS  #
     ######################
-      def current?
-        self.end_date > self.team.current_date
-      end
-    
-      def yearspan
-        "#{self.start_date.strftime('%Y')} - #{self.end_date.strftime('%Y')}"
-      end
+      def current?() self.end_date > self.team.current_date end
 
-      def title
-        "#{self.yearspan} Season"
-      end
-      
-      def competition_options
-        self.competitions.map(&:title)
-      end
+      def yearspan() "#{self.start_date.strftime('%Y')} - #{self.end_date.strftime('%Y')}" end
+      def title() "#{self.yearspan} Season" end
+
+      def competition_options() self.competitions.map(&:title) end
+      def matches() team.matches.where(date_played: self.start_date..self.end_date) end
+
+      # def top_ranked()      top_player(:arr_rank, self.players.to_a) end
+      # def top_goalscorer()  top_player(:arr_num_goals, self.players.to_a) end
+      # def top_playmaker()   top_player(:arr_num_assists, self.players.to_a) end
+      # def top_goalkeeper()  top_player(:arr_rank, self.players.where(pos: 'GK').to_a) end
+      # def top_under_21()    top_player(:arr_rank, self.players.includes(:player_seasons).select{ |player| player.age < 21 }) end
+      # def top_new_arrival() top_player(:arr_rank, self.players.includes(:contracts).select{ |player| self.start_date <= player.date_joined && player.date_joined <= self.end_date }) end
   end
 end

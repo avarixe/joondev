@@ -1,24 +1,47 @@
-.ui.dividing.header Positions Played
-= pie_chart @player.records.group_by(&:pos).map{ |pos, records| [pos, records.count] },
-  library: { \
-    tooltip: { pointFormat: 'Games Played: <b>{point.y}</b>' } }
-
-
-.chart.container[data-link="/my_fifa/seasons/{id}" data-ids=[@player.player_seasons.map(&:season_id).unshift('')]]
-  .ui.dividing.header Player Valuation
-  = column_chart [[time_to_s(@player.date_joined, '%Y'), @player.start_value]] + @player.player_seasons.map{ |ps| [ps.season.title, ps.value] },
+.ui.raised.olive.segment
+  .ui.dividing.header Positions Played
+  = pie_chart @player.records.group_by(&:pos).map{ |pos, records| [pos, records.count] },
     library: { \
-      tooltip: { pointFormat: 'Value: <b>${point.y}</b>' } }
+      tooltip: { pointFormat: 'Games Played: <b>{point.y}</b>' } }
 
 
-.chart.container[data-link="/my_fifa/matches/{id}" data-ids=[@player.records.map(&:match_id), @player.records.where(record_id: nil).map(&:match_id)]]
+  .chart.container[data-link="/my_fifa/seasons/{id}" data-ids=[@player.player_seasons.map(&:season_id).unshift('')]]
+    .ui.dividing.header Player Valuation
+    = column_chart [[time_to_s(@player.date_joined, '%Y'), @player.start_value]] + @player.player_seasons.map{ |ps| [ps.season.title, ps.value] },
+      library: { \
+        tooltip: { pointFormat: 'Value: <b>${point.y}</b>' } }
+
+.ui.raised.yellow.segment
   .ui.dividing.header Match Performances
-  = line_chart [ \
-      { name: 'All Matches', data: @player.records.map{ |r| [ r.match.date_played.strftime('%F'), r.rating ] } },
-      { name: 'Starting Matches', data: @player.records.select{ |r| r.record_id.nil? }.map{ |r| [ r.match.date_played.strftime('%F'), r.rating ] } } \
-    ],
-    colors: ['#7cb5ec', '#b5ec7c'],
-    min: 5, max: 10,
-    library: { \
-      chart: { zoomType: 'x' },
-      tooltip: { pointFormat: 'Rating: <b>{point.y}</b>' } }
+  table.ui.basic.small.very.compact.unstackable.selectable.table#records[width="100%" data-link="/my_fifa/matches/"]
+    thead
+      tr
+        th Date Played
+        th Opponent Team
+        th Position
+        th.center.aligned Rating
+        th.center.aligned Goals
+        th.center.aligned Assists
+    tbody
+      - @player.records.each do |record|
+        tr[data-id=record.match_id]
+          td[data-order=time_to_s(record.match.date_played, '%s')]
+            = time_to_s record.match.date_played
+          td = record.match.opponent
+          td
+            = record.pos
+            - if record.record_id.present?
+              i.green.level.up.icon
+            - if record.sub_record.present?
+              i.red.level.down.icon
+            - if record.motm?
+              i.soccer.icon
+            - if record.injury.present?
+              i.pink.first.aid.icon
+            - if record.yellow_cards > 0
+              .ui.yellow.label.booking = record.yellow_cards
+            - if record.red_cards > 0
+              .ui.red.label.booking = record.red_cards
+          td.center.aligned[style="background-color:#{record.rating_color}"] = record.rating
+          td.center.aligned = record.goals
+          td.center.aligned = record.assists

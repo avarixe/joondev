@@ -6,7 +6,8 @@
       .equal.width.row
         .column.required.field[no-empty]
           = f.label :title, 'Competition'
-          = f.text_field :title
+          = f.text_field :title, list: 'competitions'
+          = datalist_tag :competitions, @team.recorded_competitions
         .column.required.field
           label Type
           .inline.three.fields
@@ -27,7 +28,7 @@
         .column.required.field[no-empty]
           = f.label :num_teams, 'Number of Teams'
           = f.number_field :num_teams
-        .column.required.field
+        .column.disabled.required.field[field-trigger="competition[type]" data-trigger-value='["League", "Tournament"]']
           label Matches per Fixture
           .inline.two.fields
             .field
@@ -40,10 +41,10 @@
                 = f.label :matches_per_fixture_2, 2
 
       .equal.width.row
-        .column.disabled.required.field[no-empty field-trigger="type"]
+        .column.disabled.required.field[no-empty field-trigger="competition[type]" data-trigger-value='["Tournament"]']
           = f.label :num_groups, 'Number of Groups'
           = f.number_field :num_groups
-        .column.disabled.required.field[no-empty field-trigger="type"]
+        .column.disabled.required.field[no-empty field-trigger="competition[type]" data-trigger-value='["Tournament"]']
           = f.label :num_advances_per_group, 'Teams Advancing from Group'
           = f.number_field :num_advances_per_group
 
@@ -53,11 +54,21 @@
 javascript:
   $(function(){
     $(':radio[data-type]').change(function(){
-      if ($(this).data('type') == 'Tournament')
-        $('[field-trigger="type"]').removeClass('disabled');
-      else {
-        $('[field-trigger="type"]').addClass('disabled');
-        $('[field-trigger="type"] input').val('');
-      }
+      var triggerName = $(this).attr('name');
+      var triggerValue = $(this).data('type');
+
+      console.log(triggerName);
+      console.log(triggerValue);
+
+      $('[field-trigger="'+triggerName+'"]').each(function(){
+        console.log($(this).data("trigger-value"));
+
+        if ($(this).data("trigger-value").indexOf(triggerValue) < 0){
+          $(this).addClass('disabled');
+          $(this).find('input').val('');
+        } else{
+          $(this).removeClass('disabled');
+        }
+      })
     });
   })

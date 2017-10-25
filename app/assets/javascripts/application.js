@@ -36,5 +36,4 @@
 
 //= require best_in_place
 
-//= require turbolinks
 //= require global

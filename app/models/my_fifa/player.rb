@@ -27,11 +27,11 @@ module MyFifa
       .group('my_fifa_players.id')
       .select([
         'my_fifa_players.*',
-        "COUNT(records) as gp",
-        "AVG(records.rating) as rating",
-        "SUM(CASE WHEN records.goals IS NOT NULL THEN records.goals ELSE 0 END) as goals",
-        "SUM(CASE WHEN records.assists IS NOT NULL THEN records.assists ELSE 0 END) as assists",
-        "SUM(CASE WHEN records.cs = TRUE THEN 1 ELSE 0 END) as cs",
+        "COUNT(records) AS gp",
+        "AVG(records.rating) AS rating",
+        "SUM(CASE WHEN records.goals IS NOT NULL THEN records.goals ELSE 0 END) AS goals",
+        "SUM(CASE WHEN records.assists IS NOT NULL THEN records.assists ELSE 0 END) AS assists",
+        "SUM(CASE WHEN records.cs = TRUE THEN 1 ELSE 0 END) AS cs",
       ].join(', '))
     }
 
@@ -170,39 +170,25 @@ module MyFifa
         positions.blank? ? nil : positions
       end
 
-      def ovr
-        self.player_seasons.last.ovr rescue self.start_ovr
-      end
-
-      def value
-        self.player_seasons.last.value rescue self.start_value
-      end
-
-      def wage
-        self.current_contract.terms.last.wage
-      end
-
-      def kit_no
-        self.player_sessions.last.kit_no rescue nil
-      end
-
-      def age
-        self.player_seasons.last.age rescue self.start_age
-      end
-
-      def current_contract
-        self.contracts.last
-      end
+      # CURRENT INFO
+      def current_contract() self.contracts.last end
+      def ovr()    self.player_seasons.last.ovr rescue self.start_ovr end
+      def value()  self.player_seasons.last.value rescue self.start_value end
+      def wage()   self.current_contract.terms.last.wage end
+      def kit_no() self.player_sessions.last.kit_no rescue nil end
+      def age()    self.player_seasons.last.age rescue self.start_age end
 
       # STATUS
       def injured?()    status == 'injured' end
       def loaned_out?() status == 'loan' end
 
       # STATISTICS
+      def rank()        self.gp + 10*self.rating + self.goals * 3 + self.assists rescue 0 end
       def num_games()   records.count end
       def num_motm()    records.select{ |r| r.motm? }.count end
-      def num_goals()   records.map(&:goals).compact.inject(0, :+) end
-      def num_assists() records.map(&:assists).compact.inject(0, :+) end
-      def num_cs()      records.map(&:cs_to_i).compact.inject(0, :+) end
+      def num_goals()   records.map(&:goals).map(&:to_i).sum end
+      def num_assists() records.map(&:assists).map(&:to_i).sum end
+      def num_cs()      records.map(&:cs_to_i).sum end
+
   end
 end

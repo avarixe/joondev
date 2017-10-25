@@ -14,7 +14,7 @@
       .field
         = label_tag :competition
         = select_tag :competition,
-          options_for_select(@team.recorded_competitions.sort, params[:competition]),
+          options_for_select(@team.recorded_competitions, params[:competition]),
           include_blank: 'All Competitions',
           class: 'fluid dropdown'
 
@@ -24,7 +24,6 @@ javascript:
 
     $('select#season').change(function(){
       $.get("/my_fifa/seasons/competitions?season="+$(this).dropdown('get value'), function(data){
-        console.log(data);
         $('select#competition').dropdown('change values', data)
       });
     })

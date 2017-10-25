@@ -10,7 +10,7 @@ css:
 .ui.pointing.secondary.tiny.menu[data-menu="tabs"]
   .active.item[data-tab="info"] Information
   .item[data-tab="players"] Players
-  .item[data-tab="team"] Analytics
+  .item[data-tab="analytics"] Analytics
   .item[data-tab="competitions"] Competitions
 
 .ui.basic.active.tab.segment[data-tab="info"]
@@ -19,8 +19,8 @@ css:
 .ui.basic.tab.segment[data-tab="players"]
   = render 'players'
 
-.ui.basic.tab.segment[data-tab="team"]
-  = render 'team'
+.ui.basic.tab.segment[data-tab="analytics"]
+  = render 'analytics'
 
 .ui.basic.tab.segment[data-tab="competitions"]
   .ui.vertical.text.menu[data-menu="tabs"]

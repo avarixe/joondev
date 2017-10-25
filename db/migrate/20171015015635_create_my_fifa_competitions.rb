@@ -8,8 +8,8 @@ class CreateMyFifaCompetitions < ActiveRecord::Migration
       t.string :title
       t.string :champion
 
-      t.integer :num_teams, default: 20
-      t.integer :matches_per_fixture, default: 2
+      t.integer :num_teams, default: 16
+      t.integer :matches_per_fixture, default: 1
     end
 
     remove_column :my_fifa_seasons, :competitions, :text

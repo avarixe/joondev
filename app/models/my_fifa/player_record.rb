@@ -14,7 +14,7 @@ module MyFifa
       joins('LEFT JOIN my_fifa_players ON my_fifa_player_records.player_id = my_fifa_players.id')
         .select([
           'my_fifa_player_records.*',
-          'my_fifa_players.name as player_name'
+          'my_fifa_players.name AS player_name'
         ].join(', ') )
     }
 
@@ -38,10 +38,25 @@ module MyFifa
       10.0 => '#00FF00',
     }
 
-    ############################
-    #  INITIALIZATION METHODS  #
-    ############################
-    
+    ###################
+    #  CLASS METHODS  #
+    ###################
+
+      # Calculates sums using ActiveRecord (efficient for single Player view)
+      def self.num_goals()   self.where.not(goals: nil).select(:goals).map(&:goals).sum end
+      def self.num_assists() self.where.not(assists: nil).select(:assists).map(&:assists).sum end
+      def self.num_cs()      self.select(:cs).map(&:cs_to_i).sum end
+
+      # Calculates sums from given array of Records
+      def self.arr_num_goals(arr)   arr.map(&:goals).compact.sum end
+      def self.arr_num_assists(arr) arr.map(&:assists).compact.sum end
+      def self.arr_rank(arr)
+        arr.length + 
+        10*(arr.map(&:rating).sum / arr.length.to_f) + 
+        3*self.arr_num_goals(arr) +
+        self.arr_num_assists(arr)
+      end
+
 
     ########################
     #  ASSIGNMENT METHODS  #
@@ -107,12 +122,11 @@ module MyFifa
         player_id == self.match.motm_id
       end
       
-      def cs_to_i
-        self.cs ? 1 : 0
-      end
-      
       def rating_color
         RATING_COLORS[(self.rating * 2.0).round / 2.0]
       end
+
+      # ANALYTICS HELPERS
+      def cs_to_i() self.cs ? 1 : 0 end
   end
 end

@@ -8,16 +8,23 @@
 
   .ui.raised.green.segment
     .ui.mobile.reversed.stackable.grid
-
       / Generate format based on Formation
       - @formation.layout_to_a.each do |row|
-        div class=[ row.length % 2 == 0 ? 'four' : 'five', "columns centered row"]
+        .columns.centered.row[class="#{row.length % 2 == 0 ? 'four' : 'five'}"]
           - row.each do |pos|
-            = render 'player_field', f: f, no: pos
+            .four.wide.column.field[no-empty]
+              = f.select "player_id_#{pos}",
+                grouped_options_for_select(@grouped_players, @squad.public_send("player_id_#{pos}")),
+                {prompt: @formation.public_send("pos_#{pos}") },
+                {class: 'small fluid grouped search dropdown'}
 
       / GK row
       .three.columns.centered.row
-        = render 'player_field', f: f, no: 1
+        .four.wide.column.field[no-empty]
+          = f.select "player_id_1",
+            grouped_options_for_select(@grouped_players, @squad.player_id_1),
+            {prompt: @formation.pos_1 },
+            {class: 'small fluid grouped search dropdown'}
 
   = f.submit 'Save Squad', class: 'ui primary button'
   = link_to 'Back', my_fifa_squads_path, class: 'ui basic button'

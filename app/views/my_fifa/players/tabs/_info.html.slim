@@ -1,25 +1,81 @@
-.ui.dividing.header Player Information 
-.ui.stackable.grid
-  .equal.width.row
-    .column
+.ui.raised.teal.segment
+  .ui.dividing.header Player Information 
+  .ui.stackable.grid
+    .equal.width.row
+      .column
+        .ui.header
+          = @player.pos
+          .sub.header Position
+      .column
+        .ui.header
+          = @player.nationality
+          .sub.header Nationality
+      .column
+        .ui.header
+          = @player.age
+          .sub.header Current Age
+    - if @player.youth?
+      .six.wide.column
+        .ui.header
+          | Class of 
+          = @player.date_joined.strftime('%Y')
+          .sub.header Youth Academy Graduate
+    .ten.wide.column
       .ui.header
-        = @player.pos
-        .sub.header Position
-    .column
-      .ui.header
-        = @player.nationality
-        .sub.header Nationality
-    .column
-      .ui.header
-        = @player.age
-        .sub.header Current Age
-  - if @player.youth?
-    .six.wide.column
-      .ui.header
-        | Class of 
-        = @player.date_joined.strftime('%Y')
-        .sub.header Youth Academy Graduate
-  .ten.wide.column
-    .ui.header
-      = @player.get_sec_pos || 'N/A'
-      .sub.header Secondary Position(s)
+        = @player.get_sec_pos || 'N/A'
+        .sub.header Secondary Position(s)
+
+  .ui.dividing.header Statistics 
+  .ui.stackable.grid
+    .two.columns.centered.row
+      .aligned.column
+        .ui.green.statistic
+          .label
+            = @player.active ? 'Current' : 'Last'
+            |  OVR
+          .value
+            = @player.ovr
+      .aligned.column
+        .ui.grey.statistic
+          .label
+            = @player.active ? 'Current' : 'Last'
+            |  Value
+          .value
+            = number_to_fee @player.value
+    .five.columns.centered.row
+      - @stats.each do |stat|
+        .aligned.column
+          .ui.statistic[class=stat[:color]]
+            .value
+              = @player.public_send(stat[:type])
+            .label
+              = stat[:label]
+
+  - if @player.active? && (current_contract = @player.current_contract.terms.last rescue nil)
+    .ui.dividing.header Current Contract
+
+    .ui.stackable.grid
+      .equal.width.row
+        .column
+          .ui.header
+            = number_to_fee current_contract.wage
+            .sub.header Wage
+        .column
+          .ui.header
+            = number_to_fee current_contract.release_clause
+            .sub.header Release Clause
+      .equal.width.row
+        .column
+          .ui.header
+            = number_to_fee current_contract.signing_bonus
+            .sub.header Signing Bonus
+        .column
+          .ui.header
+            - if current_contract.stat_bonus.present?
+              = [ number_to_fee(current_contract.stat_bonus),
+                '/',
+                current_contract.num_stats,
+                current_contract.stat_type ].join(' ')
+            - else
+              | N/A
+            .sub.header Performance Bonus

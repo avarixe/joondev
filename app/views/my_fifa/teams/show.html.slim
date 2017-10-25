@@ -26,7 +26,7 @@
         th GA
         th CS
     tbody
-      - @team.matches.group_by(&:competition).each do |competition, matches|
+      - @team.matches.sort_by(&:competition).group_by(&:competition).each do |competition, matches|
         tr
           td.left.aligned = competition
           td = matches.count

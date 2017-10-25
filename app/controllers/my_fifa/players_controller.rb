@@ -47,9 +47,8 @@ module MyFifa
     end
 
     def show
-      @player = Player.includes(records: [:match], contracts: [:terms]).includes(:injuries, :loans, :player_seasons, :seasons).find(params[:id])
+      @player = Player.includes(records: [:match, :sub_record], contracts: [:terms, :transfer_cost, :exit_cost], injuries: [], loans: [], player_seasons: [:season]).find(params[:id])
       @title = @player.name
-
       @stats = [
         { type: :num_games,   label: 'Games Played',     color: 'blue'   },
         { type: :num_motm,    label: 'Man of the Match', color: 'yellow' },

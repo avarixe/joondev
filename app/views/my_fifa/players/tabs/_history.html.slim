@@ -1,92 +1,91 @@
-.ui.basic.tab.segment[data-tab="history"]
-  .ui.raised.segment
-    - if @player.injuries.any?
-      .ui.pink.dividing.header Injuries
-      .table-container
-        table.ui.basic.very.compact.unstackable.table
-          thead
+.ui.raised.segment
+  - if @player.injuries.any?
+    .ui.pink.dividing.header Injuries
+    .table-container
+      table.ui.basic.very.compact.unstackable.table
+        thead
+          tr
+            th Type of Injury
+            th Date Injured
+            th Date Recovered
+        tbody
+          - @player.injuries.each do |injury|
             tr
-              th Type of Injury
-              th Date Injured
-              th Date Recovered
-          tbody
-            - @player.injuries.each do |injury|
-              tr
-                td = injury.notes
-                td = time_to_s injury.start_date
-                td= time_to_s injury.end_date
+              td = injury.notes
+              td = time_to_s injury.start_date
+              td= time_to_s injury.end_date
 
-    .ui.blue.dividing.header Contracts
+  .ui.blue.dividing.header Contracts
+  .table-container
+    table.ui.basic.small.very.compact.unstackable.table[width="100%"]
+      thead
+        tr
+          th Date Signed
+          th Wage
+          th Bonus
+          th Release Clause
+      tbody
+        - @player.contracts.each do |contract|
+          - contract.terms.each do |term|
+            - if term.id.present?
+              tr
+                td = time_to_s term.start_date
+                td = number_to_fee term.wage
+                td = term.signing_bonus.present? ? term.bonuses : 'N/A'
+                td = number_to_fee term.release_clause
+
+  - if @player.loans.any?
+    .ui.orange.dividing.header Loans
     .table-container
       table.ui.basic.small.very.compact.unstackable.table[width="100%"]
         thead
           tr
-            th Date Signed
-            th Wage
-            th Bonus
-            th Release Clause
+            th Destination
+            th Loan Date
+            th Return Date
         tbody
-          - @player.contracts.each do |contract|
-            - contract.terms.each do |term|
-              - if term.id.present?
-                tr
-                  td = time_to_s term.start_date
-                  td = number_to_fee term.wage
-                  td = term.signing_bonus.present? ? term.bonuses : 'N/A'
-                  td = number_to_fee term.release_clause
-
-    - if @player.loans.any?
-      .ui.orange.dividing.header Loans
-      .table-container
-        table.ui.basic.small.very.compact.unstackable.table[width="100%"]
-          thead
+          - @player.loans.each do |loan|
             tr
-              th Destination
-              th Loan Date
-              th Return Date
-          tbody
-            - @player.loans.each do |loan|
-              tr
-                td = loan.notes
-                td = time_to_s loan.start_date
-                td = time_to_s loan.end_date
+              td = loan.notes
+              td = time_to_s loan.start_date
+              td = time_to_s loan.end_date
 
-    .ui.red.dividing.header Transfers
-    .table-container
-      table.ui.basic.small.very.compact.unstackable.table[width="100%"]
-        thead
-          tr
-            th
-            th Origin
-            th Date
-            th Transfer Fee
-        tbody
-          - @player.contracts.each_with_index do |contract, i|
-            - if contract.transfer_cost.id.present?
+  .ui.red.dividing.header Transfers
+  .table-container
+    table.ui.basic.small.very.compact.unstackable.table[width="100%"]
+      thead
+        tr
+          th
+          th Origin
+          th Date
+          th Transfer Fee
+      tbody
+        - @player.contracts.each_with_index do |contract, i|
+          - if contract.transfer_cost.id.present?
+            tr
+              td.center.aligned[rowspan=(contract.transfer_cost.notes.present? ? 2 : 1)]
+                = @player.youth? && i == 0 ?                             \
+                  content_tag(:i, nil, class: "green university icon") : \
+                  content_tag(:i, nil, class: "green sign in icon")
+              td
+                - if @player.youth && i == 0
+                  = 'YOUTH ACADEMY'
+                - elsif contract.origin.present?
+                  = contract.origin + (contract.loan? ? "(LOAN)" : "")
+              td = time_to_s(contract.start_date)
+              td = contract.transfer_cost.total_fee
+            - if contract.transfer_cost.notes.present?
               tr
-                td.center.aligned[rowspan=(contract.transfer_cost.notes.present? ? 2 : 1)]
-                  = @player.youth? && i == 0 ?                             \
-                    content_tag(:i, nil, class: "green university icon") : \
-                    content_tag(:i, nil, class: "green sign in icon")
-                td
-                  - if @player.youth && i == 0
-                    = 'YOUTH ACADEMY'
-                  - elsif contract.origin.present?
-                    = contract.origin + (contract.loan? ? "(LOAN)" : "")
-                td = time_to_s(contract.start_date)
-                td = contract.transfer_cost.total_fee
-              - if contract.transfer_cost.notes.present?
-                tr
-                  td[colspan=3] = contract.transfer_cost.notes
-  
-            - if contract.exit_cost.id.present?
+                td[colspan=3] = contract.transfer_cost.notes
+
+          - if contract.exit_cost.id.present?
+            tr
+              td.center.aligned[rowspan=(contract.exit_cost.notes.present? ? 2 : 1)]
+                i.red.sign.out.icon
+              td = contract.destination.present? ? contract.destination : 'N/A'
+              td = time_to_s(contract.end_date)
+              td = contract.exit_cost.total_fee
+
+            - if (contract.exit_cost.notes.present? rescue false)
               tr
-                td.center.aligned[rowspan=(contract.exit_cost.notes.present? ? 2 : 1)]
-                  i.red.sign.out.icon
-                td = contract.destination.present? ? contract.destination : 'N/A'
-                td = time_to_s(contract.end_date)
-                td = contract.exit_cost.total_fee
-  
-              - if (contract.exit_cost.notes.present? rescue false)
-                tr
-                  td[colspan=3] = contract.exit_cost.notes
+                td[colspan=3] = contract.exit_cost.notes

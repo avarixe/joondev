@@ -2,25 +2,32 @@
   = link_to('Edit', edit_my_fifa_player_path(@player), class: 'ui orange button') if @player.active?
   = link_to 'Player List', my_fifa_players_path, class: 'ui basic button'
 
+css:
+  #records i.icon { margin: 0 0.25em 0 0.25em !important }
+  #records .booking.label { margin: 0 .14285714em 0 .14285714em !important; padding: 0.6em; }
+
 .ui.pointing.secondary.tiny.menu[data-menu="tabs"]
   .active.item[data-tab="info"] Information
-  .item[data-tab="manage"] Manage
   .item[data-tab="analytics"] Analytics
+  .item[data-tab="manage"] Manage
   .item[data-tab="history"] History
 
 .ui.basic.active.tab.segment[data-tab="info"]
-  .ui.raised.teal.segment
-    = render 'my_fifa/players/tabs/info'
-    = render 'my_fifa/players/tabs/stats'
-    = render 'my_fifa/players/tabs/contract'
-
-.ui.basic.tab.segment[data-tab="manage"]
-  = render @player.active ?          \
-   'my_fifa/players/manage/active' : \
-   'my_fifa/players/manage/inactive'
-
+  = render 'my_fifa/players/tabs/info'
 .ui.basic.tab.segment[data-tab="analytics"]
-  .ui.raised.olive.segment
-    = render 'my_fifa/players/tabs/analytics'
+  = render 'my_fifa/players/tabs/analytics'
+.ui.basic.tab.segment[data-tab="manage"]
+  = render "my_fifa/players/manage/#{@player.active ? 'active' : 'inactive'}"
+.ui.basic.tab.segment[data-tab="history"]
+  = render 'my_fifa/players/tabs/history'
 
-= render 'my_fifa/players/tabs/history'
+javascript:
+  $(function(){
+    $('#records').DataTable({
+      bPaginate: false,
+      bInfo: false,
+      columnDefs: [
+        { targets: [3, 4, 5], searchable: false, sortable: false },
+      ]
+    })
+  })

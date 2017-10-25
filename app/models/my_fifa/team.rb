@@ -63,7 +63,7 @@ module MyFifa
       end
       
       def recorded_competitions
-        matches.map(&:competition).uniq
+        self.competitions.map(&:title).uniq
       end
       
       def sorted_players(no_injured = false)

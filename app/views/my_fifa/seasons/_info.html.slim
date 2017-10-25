@@ -1,4 +1,5 @@
 .ui.raised.teal.segment
+  h2.ui.teal.header Logistics
   .ui.stackable.grid
     .equal.width.row
       .column
@@ -23,3 +24,34 @@
         .ui.header
           = @season.captain.name rescue 'N/A'
           .sub.header Captain
+
+.ui.raised.orange.segment
+  h2.ui.orange.header Individual Club Accolades
+  .ui.stackable.grid
+    .equal.width.row
+      .column
+        .ui.header
+          = @accolades[:top_rank].name
+          .sub.header Player of the Year
+      .column
+        .ui.header
+          = @accolades[:top_goalscorer].name
+          .sub.header Top Goal Scorer
+    .equal.width.row
+      .column
+        .ui.header
+          = @accolades[:top_playmaker].name
+          .sub.header Top Playmaker
+      .column
+        .ui.header
+          = @accolades[:top_goalkeeper].name
+          .sub.header Top Goalkeeper
+    .equal.width.row
+      .column
+        .ui.header
+          = @accolades[:top_new_arrival].name
+          .sub.header Top New Arrival
+      .column
+        .ui.header
+          = @accolades[:top_under_21].name
+          .sub.header Top Under-21 Player
