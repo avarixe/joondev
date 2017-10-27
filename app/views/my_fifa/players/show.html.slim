@@ -6,20 +6,14 @@ css:
   #records i.icon { margin: 0 0.25em 0 0.25em !important }
   #records .booking.label { margin: 0 .14285714em 0 .14285714em !important; padding: 0.6em; }
 
-.ui.pointing.secondary.tiny.menu[data-menu="tabs"]
-  .active.item[data-tab="info"] Information
-  .item[data-tab="analytics"] Analytics
-  .item[data-tab="manage"] Manage
-  .item[data-tab="history"] History
-
-.ui.basic.active.tab.segment[data-tab="info"]
-  = render 'my_fifa/players/tabs/info'
-.ui.basic.tab.segment[data-tab="analytics"]
-  = render 'my_fifa/players/tabs/analytics'
-.ui.basic.tab.segment[data-tab="manage"]
-  = render "my_fifa/players/manage/#{@player.active ? 'active' : 'inactive'}"
-.ui.basic.tab.segment[data-tab="history"]
-  = render 'my_fifa/players/tabs/history'
+.ui.stackable.grid
+  .equal.width.columns.row
+    .column
+      = render 'my_fifa/players/tabs/info'
+      = render "my_fifa/players/manage/#{@player.active ? 'active' : 'inactive'}"
+      = render 'my_fifa/players/tabs/history'
+    .column
+      = render 'my_fifa/players/tabs/analytics'
 
 javascript:
   $(function(){

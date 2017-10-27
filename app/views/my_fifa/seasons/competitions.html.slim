@@ -1,0 +1,51 @@
+- content_for :page_links do
+  = link_to "Add Competition", new_my_fifa_competition_path(season: @season.id), class: 'ui basic primary button'
+
+.ui.vertical.text.menu[data-menu="tabs"]
+  - @season.competitions.each_with_index do |competition, i|
+    .item[class="#{'active' if i == 0 }" data-tab="competition_#{competition.id}"] = competition.title
+
+- @season.competitions.each_with_index do |competition, i|
+  .ui.basic.tab.segment[class="#{'active' if i == 0 }" data-tab="competition_#{competition.id}"]
+    = link_to "Edit #{competition.title}", edit_my_fifa_competition_path(competition), class: 'ui orange button'
+
+    .ui.raised.teal.segment
+      .ui.stackable.grid
+        .equal.width.columns.row
+          .column
+            = render "my_fifa/competitions/#{competition.type.gsub(/MyFifa::/, '').downcase}", competition: competition
+          .column
+            .ui.horizontal.divider Matches
+            table#matches.ui.basic.definition.unstackable.compact.small.table[width="100%"]
+              thead
+                tr
+                  th Opponent Team
+                  th Score
+                  th MOTM
+                  th Date Played
+              tbody
+                - competition.matches.each do |match|
+                  tr[class=match.result]
+                    td = match.opponent
+                    td = match.score
+                    td = match.motm.name
+                    td = time_to_s match.date_played
+
+
+
+javascript:
+  $(function(){
+    $('table[data-league]').DataTable({
+      order: [[7, 'desc'], [0, 'asc']],
+      bFilter: false,
+      bPaginate: false,
+      bInfo: false
+    });
+
+    $('.menu[data-menu="tabs"] .item').tab({
+      onLoad: function(){
+        console.log("in onLoad")
+        $(this).find('#matches-container').append($('table').detach());
+      }
+    })
+  })

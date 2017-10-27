@@ -24,7 +24,8 @@ body > .ui.link.inverted.menu .item:hover {
 
 /* Supplementary to Semantic UI */
 .ui.left.menu { padding-top: 3em; }
-.ui.main { margin-top: 5em !important; margin-bottom: 2em !important; }
+.ui.main { margin-top: 5em !important; margin-bottom: 2em !important; width: 95%; }
+.ui.main > .grid { margin-bottom: 0 }
 .pusher { overflow-y:auto !important; }
 .ui.segment.hidden, .ui.dropdown .menu > a.hidden.item { 
   display: none;
@@ -34,10 +35,6 @@ body > .ui.link.inverted.menu .item:hover {
 }
 
 /* Supplementary to DataTables */
-.dataTables_wrapper > .grid > .row > .right.aligned.nine.wide.column  { 
-  padding: 0;
-  overflow-x: auto;
-}
 
 /* Supplementary to Flatpickr */
 .flatpickr-wrapper { width: 100%; }

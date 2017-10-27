@@ -1,0 +1,5 @@
+table.ajax.reload(function(){
+  $.getJSON("/my_fifa/matches/<%= @match.id %>", function(data){
+    replaceViewContainer("Match View", data);
+  });
+});

@@ -31,6 +31,9 @@ Rails.application.routes.draw do
     resources :matches
     resources :seasons, except: [:new] do
       collection {
+        get 'competitions_json'
+      }
+      member {
         get 'competitions'
       }
     end

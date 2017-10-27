@@ -5,6 +5,7 @@ html
       = @title || 'JoonDEV'
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = yield :page_js
     = csrf_meta_tags
     meta[name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"]
     meta[name="turbolinks-cache-control" content="no-cache"]
@@ -26,7 +27,7 @@ html
           = link_to content_tag(:i, nil, class: 'sign out icon'), destroy_user_session_path, method: :delete, class: 'item', title: 'Sign Out'
       = render 'shared/menu'
       .pusher
-        .ui.main.text.container
+        .ui.main.container
           = yield :system_header
           - if content_for? :page_links
             .ui.text.fluid.menu

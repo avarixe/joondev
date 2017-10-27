@@ -125,7 +125,7 @@ module MyFifa
         if win?
           'positive'
         elsif draw?
-          'warning'
+          ''
         else
           'negative'
         end

@@ -19,12 +19,14 @@ module MyFifa
           @records = @team.player_records
           filter_records
 
-          @players = Player.includes(:records).with_stats(@matches.map(&:id))
+          @players = Player.includes(:records, :player_seasons).with_stats(@matches.map(&:id))
             .where(id: @records.map(&:player_id).uniq)
+
+          @players = @players.where(active: true) if str_to_bool(params[:active_only])
 
           render json: {
             data: @players
-          }.to_json
+          }.to_json(methods: [:ovr])
         }
       end
     end

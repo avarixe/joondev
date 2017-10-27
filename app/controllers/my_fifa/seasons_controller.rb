@@ -31,6 +31,11 @@ module MyFifa
       }
     end
 
+    def competitions
+      @season = Season.includes(competitions: [:results, :fixtures]).find(params[:id])
+      @title = "#{@season.title} - Competitions"
+    end
+
     # GET /players/1/edit
     def edit
       @title = @season.title
@@ -54,7 +59,7 @@ module MyFifa
       end
     end
 
-    def competitions
+    def competitions_json
       competitions = params[:season].present? ?
         Season.find(params[:season]).competition_options :
         @team.recorded_competitions

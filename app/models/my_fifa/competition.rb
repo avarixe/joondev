@@ -55,7 +55,10 @@ module MyFifa
     ######################
     #  ACCESSOR METHODS  #
     ######################
-    
+      def matches
+        self.season.matches.where(competition: self.title)
+      end
+
       def rounds(num_participants)
         num_rounds = 1
         cup_fixtures = self.fixtures.to_a

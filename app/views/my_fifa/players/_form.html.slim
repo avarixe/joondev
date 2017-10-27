@@ -3,7 +3,8 @@
   = render 'my_fifa/players/tabs/info_fields', f: f
 
   / Transfer Section
-  = render 'my_fifa/players/tabs/transfer_fields', f: f
+  - if @player.id.nil?
+    = render 'my_fifa/players/tabs/transfer_fields', f: f
 
   = f.submit 'Save Player', class: 'ui primary button'
   = link_to 'Back', @player, class: 'ui basic button'

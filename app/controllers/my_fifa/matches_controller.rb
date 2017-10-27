@@ -38,14 +38,16 @@ module MyFifa
     def show         
       respond_to do |format|
         @records = @match.player_records.includes(:player, :sub_record)
+        @title = @match.home ?
+          "#{@team.team_name} v #{@match.opponent}" :
+          "#{@match.opponent} v #{@team.team_name}"
+        @score = @match.home ? 
+          "#{@match.score_f} - #{@match.score_a}" : 
+          "#{@match.score_a} - #{@match.score_f}"
 
-        format.html {
-          @title = @match.home ?
-            "#{@team.team_name} v #{@match.opponent}" :
-            "#{@match.opponent} v #{@team.team_name}"
-          @score = @match.home ? 
-            "#{@match.score_f} - #{@match.score_a}" : 
-            "#{@match.score_a} - #{@match.score_f}"
+        format.html
+        format.json {
+          render json: render_to_string(template: "/my_fifa/matches/show.html", layout: false).to_json
         }
         format.xlsx {
           # Prepare Copy Table
@@ -83,35 +85,49 @@ module MyFifa
 
       @match.build_records(current_user.default_formation)
       @grouped_players = @team.grouped_players(no_injured: true)
+
+      respond_to do |format|
+        format.html
+        format.json {
+          render json: render_to_string(template: "/my_fifa/matches/_form.html", layout: false).to_json
+        }
+      end
     end
 
     # GET /players/1/edit
     def edit
       @title = "Edit Match"
       @grouped_players = @team.grouped_players
+
+      respond_to do |format|
+        format.html
+        format.json {
+          render json: render_to_string(template: "/my_fifa/matches/_form.html", layout: false).to_json
+        }
+      end
     end
 
     # POST /players
     def create
       @match = Match.new(match_params)
 
-      if @team.matches << @match
-        redirect_to @match, notice: 'Match was successfully created.'
-      else
-        respond_to do |format|
-          format.js { render 'shared/errors', locals: { object: @match } }
-        end
+      respond_to do |format|
+        format.js {
+          unless @team.matches << @match
+            render 'shared/errors', locals: { object: @match }
+          end
+        }
       end
     end
 
     # PATCH/PUT /players/1
     def update
-      if @match.update(match_params)
-        redirect_to @match, notice: 'Match was successfully updated.'
-      else
-        respond_to do |format|
-          format.js { render 'shared/errors', locals: { object: @match } }
-        end
+      respond_to do |format|
+        format.js {
+          unless @match.update(match_params)
+            render 'shared/errors', locals: { object: @match }
+          end
+        }
       end
     end
 

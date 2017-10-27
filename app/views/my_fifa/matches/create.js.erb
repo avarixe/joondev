@@ -1,0 +1,11 @@
+table.ajax.reload(function(){
+  var id = "<%= @match.id %>";
+  if (currentView != id){
+    $("table tbody tr.warning").removeClass("warning");
+    $(this).addClass("warning");
+    $.getJSON("/my_fifa/matches/"+id, function(data){
+      currentView = id;
+      replaceViewContainer("Match View", data);
+    });
+  }
+});

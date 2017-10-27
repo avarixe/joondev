@@ -29,7 +29,7 @@ module ApplicationHelper
   ##################
   #  MATH HELPERS  #
   ##################
-  
+
     def sum(arr)
       arr.inject(0){ |sum, x| sum + x.to_f }
     end
@@ -42,5 +42,13 @@ module ApplicationHelper
         return true if n == valid_num
       end
       return false
+    end
+
+  ##################
+  #  MISC HELPERS  #
+  ##################
+
+    def str_to_bool(string)
+      string == "true"
     end
 end

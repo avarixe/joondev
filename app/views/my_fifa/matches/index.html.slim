@@ -1,17 +1,117 @@
+css:
+  .dt-table > .column {
+    max-height: 55em;
+    overflow-y: auto;
+  }
+  .ui.selectable.table tbody tr.positive.warning:hover {
+    background: #fff4e4 !important;
+    color: #493107 !important;
+  }
+
 - content_for :page_links do
-  = link_to 'New Match', new_my_fifa_match_path, class: 'ui basic primary button'
+  /= link_to 'New Match', new_my_fifa_match_path, class: 'ui basic primary button'
+  a.ui.primary.button#new_match New Match
 
-= render 'my_fifa/shared/filter_matches'
+- content_for :modal_container do
+  = render 'my_fifa/squads/responsive_modals'
 
-table.ui.basic.sortable.definition.selectable.unstackable.compact.small.table[data-link="/my_fifa/matches/" width="100%"]
-  thead
-    tr
-      - ['Opponent Team', 'Competition', 'Score', 'MOTM', 'Date Played'].each do |header|
-        th = header
+- content_for :page_js do
+  = javascript_include_tag "matches"
+
+.ui.stackable.grid
+  .equal.width.columns.row
+    .column
+      .ui.horizontal.divider Filter Matches
+
+      .ui.form
+        .equal.width.unstackable.fields
+          .field
+            = label_tag :season
+            = select_tag :season,
+              options_for_select(@team.seasons.map{ |season| [season.title, season.id] }),
+              include_blank: 'All Seasons',
+              class: 'fluid dropdown'
+          .field
+            = label_tag :competition
+            = select_tag :competition,
+              options_for_select(@team.recorded_competitions, params[:competition]),
+              include_blank: 'All Competitions',
+              class: 'fluid dropdown'
+
+      table#matches.ui.basic.sortable.definition.selectable.unstackable.compact.small.table[width="100%"]
+        thead
+          tr
+            th Opponent Team
+            th Competition
+            th Score
+            th MOTM
+            th Date Played
+    .column
+      .ui.horizontal.divider Match View
+      #view-container.transition.visible
 
 javascript:
+  var currentView = "";
+
+  function replaceViewContainer(title, html, callback){
+    callback = callback || function(){};
+    $('#view-container').transition({
+      animation: "scale",
+      onComplete: function(){
+        $('#view-container')
+          .empty()
+          .append(html)
+          .prev().text(title);
+        $('#view-container').transition({
+          animation: "scale",
+          onComplete: callback()
+        });
+      }
+    })
+  }
+
   $(function(){
-    filterTable = $('table').DataTable({
+    $('select#season, select#competition').change(function(){ table.ajax.reload() });
+    $('select#season').change(function(){
+      $.getJSON("/my_fifa/seasons/competitions_json?season="+$(this).dropdown('get value'), function(data){
+        $('select#competition').dropdown('change values', data)
+      });
+    });
+
+    $('#new_match').click(function(){
+      if (currentView != "new match")
+        $.getJSON("/my_fifa/matches/new", function(data){
+          $("table tbody tr.warning").removeClass("warning");
+          currentView = "new match"
+          replaceViewContainer("New Match", data, function(){
+            initializeMatchForm();
+          });
+        });
+    });
+
+    $(".pusher").on("click", "#edit-match", function(){
+      var id = $(this).data("id");
+      $.getJSON("/my_fifa/matches/"+id+"/edit", function(data){
+        replaceViewContainer("Edit Match", data, function(){
+          initializeMatchForm();
+        })
+      });
+    });
+
+    $(".pusher").on("click", "table#matches tbody tr", function(){
+      var id = $(this).data("id");
+      if (currentView != id){
+        $("table tbody tr.warning").removeClass("warning");
+        $(this).addClass("warning");
+        $.getJSON("/my_fifa/matches/"+id, function(data){
+          currentView = id;
+          replaceViewContainer("Match View", data);
+        });
+      }
+    });
+
+    table = $('table#matches').DataTable({
+      bPaginate: false,
       processing: true,
       ajax: {
         url: '/my_fifa/matches',

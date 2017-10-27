@@ -5,8 +5,10 @@
   = link_to 'New Match', new_my_fifa_match_path, class: 'ui basic primary button'
 
 css:
-  i.icon { margin: 0 0.25em 0 0.25em !important }
+  table#records i.icon { margin: 0 0.25em 0 0.25em !important }
   .booking.label { margin: 0 .14285714em 0 .14285714em !important; padding: 0.6em; }
+
+a.ui.orange.button#edit-match[data-id=@match.id] Edit
 
 .ui.olive.raised.segment
   h2.ui.center.aligned.dividing.icon.header
@@ -20,7 +22,7 @@ css:
       = @score
 
 .ui.teal.raised.segment.table-container
-  table.ui.selectable.unstackable.table[data-link="/my_fifa/players/"]
+  table#records.ui.selectable.unstackable.table[data-link="/my_fifa/players/"]
     thead
       tr
         th.two.wide

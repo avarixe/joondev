@@ -1,3 +1,6 @@
+css:
+  table#analytics td:nth-child(5) { border-left: 1px solid rgba(34, 36, 38, 0.15) }
+
 - content_for :page_links do
   = link_to 'Sign New Player', new_my_fifa_player_path, class: 'ui basic primary button'
 
@@ -7,35 +10,72 @@
     .header
       = "#{@team.team_name} does not have enough Players!"
 
-.ui.pointing.secondary.tiny.menu[data-menu="tabs"]
-  .item.active[data-tab="list"] Player List
-  .item[data-tab="analytics"] Analytics
+.ui.horizontal.divider Filter Players
 
-.ui.active.basic.tab.segment[data-tab="list"]
-  = render 'my_fifa/players/index_tabs/list'
+.ui.form
+  .equal.width.fields
+    .field
+      = label_tag :season
+      = select_tag :season,
+        options_for_select(@team.seasons.map{ |season| [season.title, season.id] }),
+        include_blank: 'All Seasons',
+        class: 'fluid dropdown'
+    .field
+      = label_tag :competition
+      = select_tag :competition,
+        options_for_select(@team.recorded_competitions, params[:competition]),
+        include_blank: 'All Competitions',
+        class: 'fluid dropdown'
+    .field
+      = label_tag :active_only, 'Active Players Only'
+      .ui.fitted.slider.checkbox
+        = check_box_tag :active_only, 1, true
+        label
 
-.ui.basic.tab.segment[data-tab="analytics"]
-  = render 'my_fifa/players/index_tabs/analytics'
-
+table#analytics.ui.basic.sortable.definition.selectable.unstackable.compact.small.table[data-link="/my_fifa/players/" target-blank width="100%"]
+  thead
+    tr
+      th
+      th.center.aligned[colspan=3] Information
+      th.center.aligned[colspan=5] Statistics
+    tr
+      th Name
+      th Position
+      th 2nd POS
+      th OVR
+      th GP
+      th Rating
+      th Goals
+      th Assists
+      th CS
 
 javascript:
+  var playerPositions = #{raw MyFifa::Player::POSITIONS};
+
   $(function(){
-    $('table#list').DataTable({
-      order: [],
+    $('.ui.checkbox').checkbox({
+      onChange: function(){ table.ajax.reload(); }
     });
 
-    $('#season, #competition').change(function(){ filterTable.ajax.reload() });
+    $('select#season, select#competition').change(function(){ table.ajax.reload() });
+    $('select#season').change(function(){
+      $.get("/my_fifa/seasons/competitions_json?season="+$(this).dropdown('get value'), function(data){
+        $('select#competition').dropdown('change values', data)
+      });
+    })
 
-    filterTable = $('table#analytics').DataTable({
-      order: [[3, 'desc']],
+    table = $('table#analytics').DataTable({
+      order: [[1, 'asc'], [3, 'desc']],
       ajax: {
         url: '/my_fifa/players',
         data: function(d){
           d.season = $('select#season').val();
           d.competition = $('select#competition').val();
+          d.active_only = $('#active_only').prop('checked');
         },
         dataSrc: function(json){
           $.each(json.data, function(i, data){
+            json.data[i].pos_idx = playerPositions.indexOf(json.data[i].pos);
             json.data[i].rank = data.gp + 10 * data.rating + 3 * data.goals + data.assists;
           });
           return json.data;
@@ -44,7 +84,9 @@ javascript:
       processing: true,
       columns: [
         { data: 'name' },
-        { data: 'pos' },
+        { data: { _: 'pos', sort: 'pos_idx' }, type: 'num' },
+        { data: 'sec_pos' },
+        { data: 'ovr' },
         { data: 'gp' },
         { data: { _: 'rating', sort: 'rank' }, render: $.fn.dataTable.render.number(',', '.', '2') },
         { data: 'goals' },
@@ -52,10 +94,15 @@ javascript:
         { data: 'cs' },
       ],
       createdRow: function(nRow, aData){
+        $(nRow).data('id', aData.id);
         if (!aData.active){
           $('td:first-child', $(nRow)).prepend('<i class="red attention icon"></i>');
           $(nRow).addClass('disabled')
         }
+        if (aData.status == "injured")
+          $('td:first-child', $(nRow)).append('<i class="pink first aid icon"></i>');
+        if (aData.status == "loan")
+          $('td:first-child', $(nRow)).append('<i class="orange plane icon"></i>');
       }
     });
   });

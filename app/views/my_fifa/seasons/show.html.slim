@@ -3,50 +3,27 @@ css:
 
 - content_for :page_links do
   = link_to 'Edit', edit_my_fifa_season_path(@season), class: 'ui orange button'
-  = link_to "Add Competition", new_my_fifa_competition_path(season: @season.id), class: 'ui basic primary button'
-  /= link_to 'View Competitions', my_fifa_competition_path(@season), class: 'ui blue button'
+  - if @season.competitions.any?
+    = link_to 'View Competitions', competitions_my_fifa_season_path(@season), class: 'ui blue button'
   = link_to 'View All Seasons', my_fifa_seasons_path, class: 'ui basic button'
 
-.ui.pointing.secondary.tiny.menu[data-menu="tabs"]
-  .active.item[data-tab="info"] Information
-  .item[data-tab="players"] Players
-  .item[data-tab="analytics"] Analytics
-  .item[data-tab="competitions"] Competitions
-
-.ui.basic.active.tab.segment[data-tab="info"]
-  = render 'info'
-
-.ui.basic.tab.segment[data-tab="players"]
-  = render 'players'
-
-.ui.basic.tab.segment[data-tab="analytics"]
-  = render 'analytics'
-
-.ui.basic.tab.segment[data-tab="competitions"]
-  .ui.vertical.text.menu[data-menu="tabs"]
-    - @season.competitions.each_with_index do |competition, i|
-      .item[class="#{'active' if i == 0 }" data-tab="competition_#{competition.id}"] = competition.title
-
-  - if @season.competitions.any?
-    - @season.competitions.each_with_index do |competition, i|
-      .ui.basic.tab.segment[class="#{'active' if i == 0 }" data-tab="competition_#{competition.id}"]
-        .ui.raised.teal.segment
-          = link_to "Edit #{competition.title}", edit_my_fifa_competition_path(competition), class: 'ui orange button'
-          = render "my_fifa/competitions/#{competition.type.gsub(/MyFifa::/, '').downcase}", competition: competition
-
+.ui.stackable.grid
+  .equal.width.columns.row
+    .column
+      = render 'info'
+      = render 'analytics'
+    .column
+      = render 'players'
 
 javascript:
   $(function(){
+    Chartkick.eachChart(function(chart){
+      chart.redraw();
+    })
+
     $('table#players').DataTable({
       order: [[1, 'asc'], [4, 'desc']],
       bPaginate: false
-    });
-
-    $('table[data-league]').DataTable({
-      order: [[7, 'desc'], [0, 'asc']],
-      bFilter: false,
-      bPaginate: false,
-      bInfo: false
     });
   })
 
