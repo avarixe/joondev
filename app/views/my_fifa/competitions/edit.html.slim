@@ -7,7 +7,7 @@ css:
   = render "#{@competition.type.gsub(/MyFifa::/, "").downcase}_fields", f: f
 
   = f.submit "Update #{@competition.title}", class: 'ui primary button'
-  = link_to 'Back', my_fifa_competition_path(@competition.season), class: 'ui basic button'
+  = link_to 'Back', competitions_my_fifa_season_path(@competition.season), class: 'ui basic button'
 
 javascript:
   $(function(){

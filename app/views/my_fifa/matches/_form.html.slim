@@ -4,15 +4,54 @@ css:
   a[data-action*="card"] .floating.label { z-index: 1000 }
   a.disabled[data-action*="card"] { color: #e5e5e5 !important; opacity: 1.0 !important; }
   .ui.floating.booking.label { padding: 0.6em; margin: 0 0 0 -2.2em !important; top: 0.45em !important }
-  input.rating { min-width: 70px; }  
+  input.rating { min-width: 4em; }
+  .player_id { min-width: 12em !important; }
 
 = form_for(@match, as: :match, remote: true, html: { class: 'ui small fluid form' }) do |f|
   = f.hidden_field :team_id
   = f.hidden_field :motm_id
 
-  = render 'match_fields', f: f
+  - if @match.id.present?
+    a.ui.basic.button#view-match View Match
 
-  .ui.olive.raised.segment
+  .ui.teal.raised.segment
+    .ui.grid
+      .equal.width.columns.row
+        .column.required.field[no-empty]
+          = f.label :competition, 'Competition'
+          = f.select :competition, 
+            options_for_select(@team.current_season.competition_options, @match.competition),
+            { include_blank: true }, { class: 'ui fluid dropdown'}
+        .column.required.field[no-empty]
+          = f.label :opponent, 'Opponent Team'
+          = f.text_field :opponent, list: 'teams', tabindex: 2
+          = datalist_tag :teams, @team.teams_played.sort
+      .equal.width.columns.row
+        .column.required.field[no-empty]
+          = f.label :date_played, 'Date Played'
+          = f.text_field :date_played, data: { flatpickr: true }
+        .column.required.field[no-empty]
+          label Home or Away
+          .inline.two.fields
+            .field
+              .ui.radio.checkbox
+                = f.radio_button :home, true
+                = f.label :home_true, 'Home'
+            .field
+              .ui.radio.checkbox
+                = f.radio_button :home, false 
+                = f.label :home_false, 'Away'
+      .three.column.centered.row
+        .six.wide.column.field[no-empty]
+          = f.text_field :score_f, data: { inputmask: "'mask': '9{+}[ (9{+})]', 'greedy': false" }
+        .ui.four.wide.center.aligned.column
+          label GF - GA
+        .six.wide.column.field[no-empty]
+          = f.text_field :score_a, data: { inputmask: "'mask': '9{+}[ (9{+})]', 'greedy': false" }
+
+  .ui.green.raised.segment
+    .ui.green.header Player Performances
+
     - if @match.id.blank?
       .field
         = f.select :squad_id,
@@ -20,19 +59,31 @@ css:
           { include_blank: 'Squad' },
           { class: 'fluid dropdown' }
 
-    table.ui.basic.small.very.compact.table[width="100%"]
+    table#players.ui.basic.small.unstackable.very.compact.table[width="100%"]
       thead
         tr
-          th.two.wide
-          th.five.wide Player
+          th
+          th Player
           th.center.aligned Rating
-          th.center.aligned Goals
-          th.center.aligned Assists
-          th.center.aligned
       tbody
         - @match.player_records.each do |record|
-          = f.fields_for :player_records, record do |r|
-            = render 'record_fields', f: r, num_sub: 0, player_is_sub: false
+          = f.fields_for :player_records, record do |record_fields|
+            = render 'record_fields', f: record_fields, num_sub: 0, player_is_sub: false
+
+  .ui.orange.raised.segment
+    .ui.orange.header Match Log
+
+    a.ui.orange.button#new-log New Event
+
+    table#logs.ui.basic.small.definition.unstackable.very.compact.table[width="100%"]
+      thead
+        tr
+          th.four.wide Minute
+          th.eleven.wide
+          th.one.wide
+      tbody
+        = f.fields_for :logs, @match.logs.unshift(MyFifa::MatchLog.new) do |log_fields|
+          = render "log_fields", f: log_fields
 
   .ui.horizontal.divider
 

@@ -16,7 +16,7 @@
             = render "my_fifa/competitions/#{competition.type.gsub(/MyFifa::/, '').downcase}", competition: competition
           .column
             .ui.horizontal.divider Matches
-            table#matches.ui.basic.definition.unstackable.compact.small.table[width="100%"]
+            table#matches.ui.basic.definition.selectable.unstackable.compact.small.table[data-link="/my_fifa/matches#" width="100%" target-blank]
               thead
                 tr
                   th Opponent Team
@@ -25,7 +25,7 @@
                   th Date Played
               tbody
                 - competition.matches.each do |match|
-                  tr[class=match.result]
+                  tr[class=match.result data-id=match.id]
                     td = match.opponent
                     td = match.score
                     td = match.motm.name

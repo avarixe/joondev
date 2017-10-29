@@ -1,6 +1,6 @@
 class CreateCmskClasses < ActiveRecord::Migration
   def change
-    Cmsk::Base.connection.create_table :cmsk_teams do |t|
+    create_table :cmsk_teams do |t|
       t.belongs_to :user
       t.string :team_name
       t.string :competitions
@@ -8,7 +8,7 @@ class CreateCmskClasses < ActiveRecord::Migration
       t.timestamps null: false
     end
     
-    Cmsk::Base.connection.create_table :cmsk_players do |t|
+    create_table :cmsk_players do |t|
       t.belongs_to :team
       t.string :name, null: false
       t.string :pos, null: false
@@ -18,7 +18,7 @@ class CreateCmskClasses < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    Cmsk::Base.connection.create_table :cmsk_games do |t|
+    create_table :cmsk_games do |t|
       t.belongs_to :team
       t.string :opponent, null: false
       t.string :competition, null: false
@@ -29,7 +29,7 @@ class CreateCmskClasses < ActiveRecord::Migration
       t.date :date_played
     end
     
-    Cmsk::Base.connection.create_table :cmsk_player_records do |t|
+    create_table :cmsk_player_records do |t|
       t.belongs_to :team
       t.belongs_to :game
       t.belongs_to :player
@@ -39,7 +39,7 @@ class CreateCmskClasses < ActiveRecord::Migration
       t.integer :assists
     end
 
-    Cmsk::Base.connection.create_table :cmsk_squads do |t|
+    create_table :cmsk_squads do |t|
       t.belongs_to :team
       t.string :squad_name, null: false
       

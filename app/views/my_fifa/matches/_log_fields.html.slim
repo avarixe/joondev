@@ -1,0 +1,20 @@
+tr[data-id=f.object.id class="#{"template hidden transition" if f.object.event.blank?}"]
+  td
+    = f.hidden_field :_destroy
+    = f.hidden_field :player1_id, class: "player1_id"
+    = f.hidden_field :player2_id, class: "player2_id"
+    = f.hidden_field :minute,     class: "minute"
+    = f.hidden_field :event,      class: "event"
+    = f.hidden_field :notes,      class: "notes"
+    span
+      = f.object.minute.to_s + '"'
+  td
+    - if f.object.event.present?
+      i.icon[class=f.object.icon]
+      = f.object.message
+  td
+    .ui.buttons
+      a.ui.icon.button#edit-log
+        i.edit.icon
+      a.ui.negative.icon.button#remove-log
+        i.remove.icon

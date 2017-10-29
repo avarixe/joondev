@@ -35,45 +35,18 @@ module MyFifa
     end
 
     # GET /players/1
-    def show         
-      respond_to do |format|
-        @records = @match.player_records.includes(:player, :sub_record)
-        @title = @match.home ?
-          "#{@team.team_name} v #{@match.opponent}" :
-          "#{@match.opponent} v #{@team.team_name}"
-        @score = @match.home ? 
-          "#{@match.score_f} - #{@match.score_a}" : 
-          "#{@match.score_a} - #{@match.score_f}"
+    def show
+      @records = @match.player_records.includes(:player, :sub_record)
+      @title = @match.home ?
+        "#{@team.team_name} v #{@match.opponent}" :
+        "#{@match.opponent} v #{@team.team_name}"
+      @score = @match.home ? 
+        "#{@match.score_f} - #{@match.score_a}" : 
+        "#{@match.score_a} - #{@match.score_f}"
 
-        format.html
+      respond_to do |format|
         format.json {
           render json: render_to_string(template: "/my_fifa/matches/show.html", layout: false).to_json
-        }
-        format.xlsx {
-          # Prepare Copy Table
-          @data = { 
-            ratings: [],
-            goals: [],
-            assists: []
-          }
-
-          all_records = @match.all_records
-          player_ids = all_records.map(&:player_id)
-          @team.sorted_players.each do |player|
-            played = player_ids.include?(player.id)
-
-            if played
-              record = all_records.find_by(player_id: player.id)
-
-              @data[:ratings] << record.rating
-              @data[:goals]   << record.goals
-              @data[:assists] << record.assists
-            else
-              @data[:ratings] << nil
-              @data[:goals]   << nil
-              @data[:assists] << nil
-            end
-          end
         }
       end
     end
@@ -87,7 +60,6 @@ module MyFifa
       @grouped_players = @team.grouped_players(no_injured: true)
 
       respond_to do |format|
-        format.html
         format.json {
           render json: render_to_string(template: "/my_fifa/matches/_form.html", layout: false).to_json
         }
@@ -100,7 +72,6 @@ module MyFifa
       @grouped_players = @team.grouped_players
 
       respond_to do |format|
-        format.html
         format.json {
           render json: render_to_string(template: "/my_fifa/matches/_form.html", layout: false).to_json
         }
@@ -137,10 +108,19 @@ module MyFifa
       redirect_to matches_url, notice: 'Match was successfully destroyed.'
     end
 
+    def check_log
+      log = MatchLog.new(params[:log].permit!)
+      if log.valid?
+        render json: log.to_json(methods: [:icon, :message])
+      else
+        render json: nil
+      end
+    end
+
     private
       # Use callbacks to share common setup or constraints between actions.
       def set_match
-        @match = Match.with_motm.find(params[:id])
+        @match = Match.includes(player_records: [:sub_record], logs: [:player1, :player2]).with_motm.find(params[:id])
       end
 
       # Only allow a trusted parameter "white list" through.

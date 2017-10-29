@@ -28,7 +28,11 @@ Rails.application.routes.draw do
         post 'set_active'
       }
     end
-    resources :matches
+    resources :matches do
+      collection {
+        post 'check_log'
+      }
+    end
     resources :seasons, except: [:new] do
       collection {
         get 'competitions_json'

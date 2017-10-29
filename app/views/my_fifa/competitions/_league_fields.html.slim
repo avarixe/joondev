@@ -13,8 +13,8 @@
         = f.fields_for :results, result do |result_fields|
           tr.center.aligned
             td = i + 1
-            td.input.six.wide = result_fields.text_field :team_name, list: 'teams'
-            td.input = result_fields.number_field :wins, tabindex: 2
-            td.input = result_fields.number_field :draws, tabindex: 3
-            td.input = result_fields.number_field :goals_for, tabindex: 4
-            td.input = result_fields.number_field :goals_against, tabindex: 5
+            td.input.six.wide = result_fields.text_field :team_name, tabindex: 1, list: 'teams'
+            td.input = result_fields.number_field :wins,             tabindex: 2
+            td.input = result_fields.number_field :draws,            tabindex: 3
+            td.input = result_fields.number_field :goals_for,        tabindex: 4
+            td.input = result_fields.number_field :goals_against,    tabindex: 5

@@ -1,10 +1,15 @@
-function initializeMatchForm(){
-  updatePositionOptions();
+function updateLocationHash(hash){
+  baseUrl = window.location.href.split('#')[0];
+  window.location.replace(baseUrl + "#" + hash)
+}
 
+function initializeMatchForm(){
   $('#view-container [data-flatpickr]').flatpickr({
     altInput: true,
     altFormat: "M j, Y"
   });
+
+  $('#view-container [data-inputmask]').inputmask()
 
   $('#view-container').find('select.dropdown:not(.custom), .ui.dropdown:not(.custom)').dropdown({
     placeholder: false
@@ -15,30 +20,6 @@ function initializeMatchForm(){
     allowAdditions: true,
     hideAdditions: false,
   });
-
-  // Dropdown menu support for grouped selects
-  $('.ui.dropdown').has('optgroup').each(function(){
-    var menu = $('<div/>').addClass('menu');
-    $(this).find('select > option').each(function(){
-      menu.append('<div class="item" data-value="">' + this.innerHTML + '</div>');
-    });
-    $(this).find('optgroup').each(function(){
-      menu.append('<div class="ui horizontal divider">' + this.label + '</div>');
-      $(this).children().each(function(){
-        menu.append('<div class="item" data-value="' + this.value + '">' + this.innerHTML + '</div>')
-      });
-    });
-    $(this).find('.menu').html(menu.html());
-  });
-
-  $('.pusher').on('click', '[data-clickfield] a[data-clickaction]', function(){ toggleClickForm(this); });
-  $('.pusher').on('click', 'a[data-action]',               function(){ $(this).removeClass('active selected'); });
-  $('.pusher').on('click', 'a[data-action="add sub"]',     function(){ addRecord(this); });
-  $('.pusher').on('click', 'a[data-action="remove"]',      function(){ removeRecord(this); });
-  $('.pusher').on('click', 'a[data-action="yellow card"]', function(){ addYellowCard(this); });
-  $('.pusher').on('click', 'a[data-action="red card"]',    function(){ addRedCard(this); });
-  $('.pusher').on('click', 'a[data-action="clear card"]',  function(){ clearBooking(this); });
-  $('.pusher').on('input', '#pos_change',                  function(){ changePosition(this); });
 
   // By default, highest rating gets MOTM
   highest_rating = $('input.rating').map(function(){
@@ -60,20 +41,12 @@ function initializeMatchForm(){
   $('#update-squad-btn').click(function(evt){ updateSquad(evt) });
 }
 
-function updatePositionOptions(){
-  positions = $('#view-container table tr:not([data-sub]) .pos > span').map(function(){
-    return $(this).text();
-  }).toArray();
-}
-
-function changePosition(target){
-  if (positions.indexOf(target.value) >= 0){
-    var trPos = $('.pos', $(target).closest('tr'));
-    $('span', trPos).text(target.value);
-    trPos.prev()
-      .attr('data-default', target.value)
-      .val(target.value);
-    $(target).val('');
+function setMOTM(target){
+  var playerId = $(target).closest('tr').find("select.player_id").val();
+  if (playerId){
+    $('#match_motm_id').val(playerId);
+    $('.ui.ribbon.pos').removeClass('yellow');
+    $(target).addClass('yellow');        
   }
 }
 
@@ -83,10 +56,9 @@ function loadSquadPlayers(target){
     $.get("/my_fifa/squads/"+$(target).val()+"/info", function(data){
       $.each(data.player_ids, function(i, player_id){
         var tr = $('#match_player_records_attributes_'+i+'_pos').closest('tr');
-        $('select[id$="player_id"]', tr).dropdown('set selected', player_id);
+        $('select[id$="player_id"]', tr).val(player_id);
 
         // Update Position labels
-        updatePositionOptions();
         $('td:first-child input', tr)
           .attr('data-default', data.positions[i])
           .val(data.positions[i]);
@@ -105,7 +77,7 @@ function updateSquad(evt){
   var rows = $('#view-container table tbody tr:not([data-sub])');
   var squadParams = {};
   for(var i=0; i < 11; i++)
-    squadParams['player_id_'+(i+1)] = $('.player_id', $(rows[i])).dropdown('get value');
+    squadParams['player_id_'+(i+1)] = $('.player_id', $(rows[i])).val();
 
   $.ajax({
     url: '/my_fifa/squads/'+squadId,
@@ -118,47 +90,27 @@ function updateSquad(evt){
   });
 }
 
-function toggleClickForm(target){
-  var inputField = $(target).closest('[data-clickfield]').find('input');
-  var currentValue = parseInt(inputField.val());
-
-  var newValue = null;
-  switch($(target).data('clickaction')){
-    case 'add':
-      newValue = isNaN(currentValue) ? 1 : currentValue+1;
-      break;
-    case 'sub':
-      if (currentValue > 1)
-        newValue = currentValue - 1;
-  }
-
-  inputField.val(newValue);
-  $('.or', $(target).closest('[data-clickfield]')).attr('data-text', newValue || 0);
-}
-
+// target is the table row from which to clone
 function addRecord(target){
   // Generate new Record table row
   var record = $('<tr data-sub />');
   var id = moment().valueOf();
-  if ($('input[id$="pos"]', $(target).closest('tr')).attr('id').indexOf('sub_record') > 0)
-    record.append($(target).closest('tr').html()
-      .replace(/(\[sub_record_attributes\])/g, '$1[sub_record_attributes]')
-      .replace(/(_sub_record_attributes)/g, '$1_sub_record_attributes'));
+  if (target.is("[data-sub]"))
+    record.append(
+      target.html()
+        .replace(/(\[sub_record_attributes\])/g, '$1[sub_record_attributes]')
+        .replace(/(_sub_record_attributes)/g, '$1_sub_record_attributes')
+    );
   else // Parent is not a Substitute
-    record.append($(target).closest('tr').html()
-      .replace(/(\[player_records_attributes\])\[(\d+)\]/g, '$1[$2][sub_record_attributes]')
-      .replace(/(_player_records_attributes)_(\d+)/g, '$1_$2_sub_record_attributes'));
-
-  $(target).closest('.item')
-    .addClass('hidden')
-    .siblings('[data-action="remove"]').addClass('hidden');
+    record.append(
+      target.html()
+        .replace(/(\[player_records_attributes\])\[(\d+)\]/g, '$1[$2][sub_record_attributes]')
+        .replace(/(_player_records_attributes)_(\d+)/g, '$1_$2_sub_record_attributes')
+    );
 
   // Set Substitute behavior
-  clearBooking($('a[data-action="clear card"]', record));
-  $('a[data-action="remove"]', record).removeClass('hidden');
   $('.pos .level.icon', record).last().css('visibility', 'hidden');
   $('.ui.ribbon.label', record).removeClass('yellow');
-  $('[data-clickfield] .or', record).attr('data-text', 0);
 
   // Remove Error classes
   $('.error', record).removeClass('error');
@@ -168,71 +120,177 @@ function addRecord(target){
   });
 
   // Append new row to table
-  $(target).closest('tr').after(record);
-  $('.pos', $(target).closest('tr')).append('<i class="level down red icon"></i>');
+  target.after(record);
+  target.find(".pos").append('<i class="level down red icon"></i>');
   $('.pos', record).append('<i class="level up green icon"></i>');
 
-  // Substitute actions menu was copied weirdly. Hack fix
-  $('#view-container .teal.dropdown > .fluid.menu')
-    .removeClass('transition visible animating slide down out')
-    .attr('style', '');
-  $('.ui.dropdown', record).dropdown().dropdown('clear');
+  return $(record);
 }
 
 function removeRecord(target){
-  var tr = $(target).closest('tr');
-  var parentTr = tr.prev();
+  var parentTr = target.prev();
 
-  tr.transition({
+  target.transition({
     animation: 'slide down',
     onComplete: function(){
-      if (tr.data('id'))
-        $('input[id$="_destroy"]', tr).val(1);
-      else
-        tr.remove();
-        
       $('.ribbon .level.icon', parentTr).last().remove();
-      $('a[data-action="add sub"]', parentTr).removeClass('hidden');
-      if (parentTr.is('[data-sub]'))
-        $('a[data-action="remove"]', parentTr).removeClass('hidden');
+      if (target.data('id'))
+        $('input[id$="_destroy"]', target).val(1);
+      else
+        target.remove();
     }
   });
 }
 
-function addYellowCard(target){
-  var yellowCardField = $(target).find('input');
-  yellowCardField.val(parseInt(yellowCardField.val()) + 1);
-  $(target).find('.floating.label').text(yellowCardField.val());
-  $('a[data-action="clear card"]', $(target).closest('.menu')).removeClass('disabled');
-
-  if (yellowCardField.val() > 1)
-    addRedCard($(target).closest('.menu').find('a[data-action="red card"]'));
+function changePosition(target, position){
+  var trPos = target.find('.pos');
+  $('span', trPos).text(position);
+  trPos.prev()
+    .attr('data-default', position)
+    .val(position);
 }
 
-function addRedCard(target){
-  var redCardField = $(target).find('input');
-  redCardField.val(1);
-  $(target).find('.floating.label').text('1');
-  $('a[data-action="clear card"]', $(target).closest('.menu')).removeClass('disabled');
+function replaceViewContainer(title, html, callback){
+  callback = callback || function(){};
+  $('#view-container').transition({
+    animation: "scale",
+    onComplete: function(){
+      $("#new-match").toggleClass("disabled", window.location.hash == "#new");
 
-  $('a[data-action="yellow card"]', $(target).closest('.menu')).addClass('disabled');
-  $(target).closest('a[data-action="red card"]').addClass('disabled');
+      $('#view-container')
+        .empty()
+        .append(html)
+        .prev().text(title);
+      $('#view-container').transition({
+        animation: "scale",
+        onComplete: callback()
+      });
+    }
+  })
 }
 
-function clearBooking(target){
-  $('a[data-action="yellow card"] input', $(target).closest('.menu')).val(0);
-  $('a[data-action="red card"] input', $(target).closest('.menu')).val(0);
-
-  $('a[data-action="yellow card"], a[data-action="red card"]', $(target).closest('.menu')).removeClass('disabled');
-  $('.floating.label', $(target).closest('.menu')).text('0');
-  $(target).closest('a[data-action="clear card"]').addClass('disabled');
+function newMatchForm(){
+  $.getJSON("/my_fifa/matches/new", function(data){
+    $("table tbody tr.warning").removeClass("warning");
+    updateLocationHash("new");
+    replaceViewContainer("New Match", data, function(){
+      initializeMatchForm();
+    });
+  });
 }
 
-function setMOTM(target){
-  var playerId = $('.player_id', $(target).closest('tr')).dropdown('get value');
-  if (playerId){
-    $('#match_motm_id').val(playerId);
-    $('.ui.ribbon.pos').removeClass('yellow');
-    $(target).addClass('yellow');        
-  }
+function matchLogForm(target){
+  $("#log-modal").modal({
+    duration: 300,
+    onShow: function(){
+      var playerOptions = "<option></option>";
+      $("table#players .player_id").each(function(){
+        var playerId = $(this).val() || 0;
+        if (playerId.length > 0)
+          playerOptions += "<option value=\"" + playerId + "\">" + $(this).find("option:selected").text() + "</option>";
+      });
+
+      var positionOptions = "<option></option>";
+      $("table#players .pos.ribbon.label > span").each(function(){
+        positionOptions += "<option value=\"" + this.innerHTML + "\">" + this.innerHTML + "</option>";
+      })
+
+      $("#log-modal select.player_id").each(function(){ $(this).html(playerOptions) });
+      $("#log-modal select#position").each(function(){  $(this).html(positionOptions) });
+
+      // Populate form with existing attributes
+      if (target){
+        var event = target.find(".event").val();
+
+        $("#log-modal #log_event_"+event).trigger("click");
+        $("#log-modal input[name=\"log_event\"]").prop("disabled", true);
+
+        $("#log-modal #player").val(target.find(".player1_id").val()).prop("disabled", true);
+        $("#log-modal #log_minute").val(target.find(".minute").val());
+        $("#log-modal").find("#sub_player, #assisted_by").val(target.find(".player2_id").val());
+        $("#log-modal").find("#position, #log_injury").val(target.find(".notes").val());
+        if (event == "Booking")
+          $("#log-modal #log_booking_"+target.find(".notes").val().replace(/\s/g, "_")).trigger("click");
+      }
+    },
+    onApprove: function(){ // validate Match Event. If valid, update Match Log
+      var event = $("#log-modal :radio:checked[name=\"log_event\"]").val() || "";
+      var logData = {
+        player1_id: $("#log-modal select.player_id").val(),
+        event: event,
+        minute: $("#log_minute").val(),
+      };
+      switch(event){
+        case "Substitution":
+          logData["player2_id"] = $("#log-modal #sub_player").val();
+          logData["notes"] = $("#log-modal #position").val();
+          break;
+        case "Goal":
+          logData["player2_id"] = $("#log-modal #assisted_by").val();
+          break;
+        case "Booking":
+          logData["notes"] = $("#log-modal :radio:checked[name=\"log_booking\"]").val() || "";
+          break;
+        case "Injury":
+          logData["notes"] = $("#log-modal #log_injury").val()
+      }
+
+      $.ajax({
+        url: "/my_fifa/matches/check_log",
+        type: "POST",
+        beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', AUTH_TOKEN)},
+        data: { log: logData }
+      }).then(function(data){
+        if (data){
+
+          if (target){ // Existing Event
+            var playerId = target.find(".player2_id").val();
+
+            target.find("td:first-child > span").text(data.minute+'"');
+            target.find("td:nth-child(2)").html("<i class=\"" + data.icon + " icon\"></i>" + data.message)
+            $.each(["player1_id", "player2_id", "minute", "notes", "event"], function(i, attr){
+              target.find("."+attr).val(data[attr]);
+            })
+
+            if (event == "Substitution"){
+              var subbed = $("table#players select.player_id option:selected[value=\""+playerId+"\"]").closest("tr");
+              subbed.find("select.player_id").val(data.player2_id);
+              changePosition(subbed, data.notes);
+            }
+          } else { // New Event
+            var id = moment().valueOf();
+            var row = $("<tr/>").append(
+              $("#view-container table#logs tr.template").html()
+                .replace(/match_logs_attributes_0/g, "match_logs_attributes_"+id)
+                .replace(/match\[logs_attributes\]\[0\]/g, "match[logs_attributes]["+id+"]")
+            );
+
+            row.removeClass("template hidden transition");
+            row.find("td:first-child > span").text(data.minute+'"');
+            row.find("td:nth-child(2)").html("<i class=\"" + data.icon + " icon\"></i>" + data.message)
+            $.each(["player1_id", "player2_id", "minute", "notes", "event"], function(i, attr){
+              row.find("."+attr).val(data[attr]);
+            })
+            $("#view-container table#logs tbody").append(row);
+
+            if (event == "Substitution"){
+              var subbed = $("table#players select.player_id option:selected[value="+data.player1_id+"]").closest("tr");
+              var subRow = addRecord(subbed);
+              changePosition(subRow, data.notes);
+              subRow.find(".player_id").val(data.player2_id);
+            }
+          }
+          return true;
+        } else
+          alert("Invalid Match Event!")
+          return false;
+      });
+    },
+    onHide: function(){
+      $('#log-modal .transition.visible').transition("slide down");
+      $('#log-modal').find('input:not(:radio),select').prop("disabled", false).val("");
+      $('#log-modal :radio').prop("disabled", false).prop("checked", false);
+      $("#log-modal").modal("destroy");
+    },
+  }).modal('show');
 }

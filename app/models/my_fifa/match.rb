@@ -3,9 +3,11 @@ module MyFifa
     default_scope { order(id: :asc)}
 
     belongs_to :team
-    has_many :player_records, -> { where record_id: nil }
+    has_many :player_records, -> { where(record_id: nil) }
     has_many :all_records, class_name: 'PlayerRecord'
-    accepts_nested_attributes_for :player_records, reject_if: :invalid_record?
+    accepts_nested_attributes_for :player_records, allow_destroy: true, reject_if: :invalid_record?
+    has_many :logs, class_name: "MatchLog"
+    accepts_nested_attributes_for :logs, allow_destroy: true, reject_if: :invalid_log?
     has_many :players, through: :player_records
 
     belongs_to :motm, class_name: 'Player'
@@ -69,6 +71,10 @@ module MyFifa
         attributed['pos'].blank?
       end
 
+      def invalid_log?(attributed)
+        ['event', 'player1_id', 'minute'].any?{ |att| attributed[att].blank? }
+      end
+
     ######################
     #  CALLBACK METHODS  #
     ######################
@@ -77,12 +83,19 @@ module MyFifa
       after_save :save_external_match_data
 
       def set_records_match_data
+        match_logs = self.logs.group_by(&:event)
+
         self.player_records.each do |record|
           record.update_columns(
-            team_id: self.team_id,
-            cs:      self.score_ga == 0,
+            team_id:      self.team_id,
+            cs:           self.score_ga == 0,
+            goals:        match_logs["Goal"].count{ |log| log.player1_id == record.player_id },
+            assists:      match_logs["Goal"].count{ |log| log.player2_id == record.player_id },
+            yellow_cards: match_logs["Booking"].count{ |log| log.player1_id == record.player_id && log.notes == "Yellow Card" },
+            red_cards:    match_logs["Booking"].count{ |log| log.player1_id == record.player_id && log.notes == "Red Card" },
+            injury:       (match_logs["Injury"].find{ |log| log.player1_id == record.player_id }.notes rescue nil)
           )
-
+          record.create_event_if_injured
           record.set_sub_match_data
         end
       end

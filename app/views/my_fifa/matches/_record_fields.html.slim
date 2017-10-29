@@ -1,4 +1,4 @@
-tr[data-id=f.object.id]
+tr[data-id=f.object.id data-sub=player_is_sub]
   td
     = f.hidden_field(:_destroy) if player_is_sub
     = f.hidden_field(:record_id) if player_is_sub
@@ -10,64 +10,15 @@ tr[data-id=f.object.id]
         i.green.level.up.icon[style="visibility:#{ i == num_sub-1 ? 'visible' : 'hidden'}"]
       - if f.object.sub_record.present?
         i.red.level.down.icon
-  td[title="Player"]
+  td.ui.tiny.form[title="Player"]
     .field[no-empty]
       = f.select :player_id,
         grouped_options_for_select(@grouped_players, f.object.player_id),
         {include_blank: true},
-        {class: 'player_id grouped search fluid dropdown', tabindex: 100 }
-  td[title="Rating"]
+        {class: 'player_id', tabindex: 100 }
+  td.ui.tiny.form[title="Rating"]
     .field[no-empty]
       = f.number_field :rating, class: 'rating', step: 0.1, min: 0, max: 10, tabindex: 1000
-  td.center.aligned[title="Goals"]
-    .ui.buttons[data-clickfield]
-      a.ui.icon.button[data-clickaction='add']
-        i.plus.icon
-      .or[data-text=(f.object.goals || 0)]
-      = f.hidden_field :goals, class: 'goals'
-      a.ui.icon.button[data-clickaction='sub']
-        i.minus.icon
-  td.center.aligned[title="Assists"]
-    .ui.buttons[data-clickfield]
-      a.ui.icon.button[data-clickaction='add']
-        i.plus.icon
-      .or[data-text=(f.object.goals || 0)]
-      = f.hidden_field :assists, class: 'assists'
-      a.ui.icon.button[data-clickaction='sub']
-        i.minus.icon
-  td.center.aligned
-    .ui.left.pointing.dropdown.circular.teal.icon.button
-      i.settings.icon
-      .fluid.menu
-        a.item[data-action="add sub" class="#{f.object.sub_record.present? ? 'hidden' : 'visible'}"]
-          i.level.down.red.icon
-          | Substitute
-        a.item[data-action="remove" class="#{player_is_sub ? 'visible' : 'hidden'}"]
-          i.remove.icon
-          | Remove
-        .ui.left.icon.input
-          i.green.grid.layout.icon
-          = text_field_tag :pos_change, nil, placeholder: 'POS Change', list: 'positions', data: { default: '' }
-        .ui.left.icon.input
-          i.pink.first.aid.icon
-          = f.text_field :injury, placeholder: 'Injury', data: { default: '' }
-        .header 
-          i.clone.icon
-          | Bookings
-        .divider
-        a.item[data-action="yellow card" class="#{'disabled' if f.object.red_cards > 0}"]
-          | Yellow Card
-          = f.hidden_field :yellow_cards, data: { default: 0 }
-          .floating.ui.yellow.label.booking
-            = f.object.yellow_cards
-        a.item[data-action="red card" class="#{'disabled' if f.object.red_cards > 0}"]
-          | Red Card
-          = f.hidden_field :red_cards, data: { default: 0 }
-          .floating.ui.red.label.booking
-            = f.object.red_cards
-        a.item[data-action="clear card" class="#{'disabled' if f.object.yellow_cards == 0 && f.object.red_cards == 0}"]
-          i.green.minus.square.icon
-          | Clear Bookings
 
 - if (sub_record = f.object.sub_record).present?
   = f.fields_for :sub_record do |sub_f|

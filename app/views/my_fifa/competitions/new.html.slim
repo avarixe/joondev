@@ -57,12 +57,7 @@ javascript:
       var triggerName = $(this).attr('name');
       var triggerValue = $(this).data('type');
 
-      console.log(triggerName);
-      console.log(triggerValue);
-
       $('[field-trigger="'+triggerName+'"]').each(function(){
-        console.log($(this).data("trigger-value"));
-
         if ($(this).data("trigger-value").indexOf(triggerValue) < 0){
           $(this).addClass('disabled');
           $(this).find('input').val('');

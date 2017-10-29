@@ -1,16 +1,10 @@
-- content_for :page_links do
-  = link_to 'Edit', edit_my_fifa_match_path(@match), class: 'ui orange button'
-  / = link_to 'Save Stats', my_fifa_match_path(@match, format: :xlsx), class: 'ui positive button'
-  = link_to 'Match Archive', my_fifa_matches_path, class: 'ui basic button'
-  = link_to 'New Match', new_my_fifa_match_path, class: 'ui basic primary button'
-
 css:
   table#records i.icon { margin: 0 0.25em 0 0.25em !important }
   .booking.label { margin: 0 .14285714em 0 .14285714em !important; padding: 0.6em; }
 
-a.ui.orange.button#edit-match[data-id=@match.id] Edit
+a.ui.orange.button#edit-match[data-id=@match.id] Edit Match
 
-.ui.olive.raised.segment
+.ui.teal.raised.segment
   h2.ui.center.aligned.dividing.icon.header
     i.trophy.icon
     = @match.competition
@@ -21,8 +15,10 @@ a.ui.orange.button#edit-match[data-id=@match.id] Edit
     .ui.center.aligned.sub.header
       = @score
 
-.ui.teal.raised.segment.table-container
-  table#records.ui.selectable.unstackable.table[data-link="/my_fifa/players/"]
+.ui.green.raised.segment.table-container
+  .ui.green.header Player Performances
+
+  table#records.ui.selectable.unstackable.small.very.compact.table[data-link="/my_fifa/players/"]
     thead
       tr
         th.two.wide
@@ -33,3 +29,20 @@ a.ui.orange.button#edit-match[data-id=@match.id] Edit
     tbody
       - @records.each do |record|
         = render 'record', record: record, num_sub: 0
+
+- if @match.logs.any?
+  .ui.orange.raised.segment
+    .ui.orange.header Match Log
+
+    table#records.ui.definition.unstackable.small.very.compact.table
+      thead
+        tr
+          th.four.wide Minute
+          th.twelve.wide
+      tbody
+        - @match.logs.each do |log|
+          tr
+            td = log.minute.to_s + '"'
+            td
+              i.icon[class=log.icon] 
+              = log.message

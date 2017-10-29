@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171016185220) do
+ActiveRecord::Schema.define(version: 20171027224406) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,8 +28,8 @@ ActiveRecord::Schema.define(version: 20171016185220) do
     t.integer "season_id"
     t.string  "title"
     t.string  "champion"
-    t.integer "num_teams",              default: 20
-    t.integer "matches_per_fixture",    default: 2
+    t.integer "num_teams",              default: 16
+    t.integer "matches_per_fixture",    default: 1
     t.integer "num_groups"
     t.integer "num_advances_per_group"
   end
@@ -92,6 +92,15 @@ ActiveRecord::Schema.define(version: 20171016185220) do
     t.integer "goals_for",      default: 0
     t.integer "goals_against",  default: 0
     t.string  "group"
+  end
+
+  create_table "my_fifa_match_logs", force: :cascade do |t|
+    t.integer "match_id"
+    t.string  "event"
+    t.integer "minute"
+    t.integer "player1_id"
+    t.integer "player2_id"
+    t.text    "notes"
   end
 
   create_table "my_fifa_matches", force: :cascade do |t|

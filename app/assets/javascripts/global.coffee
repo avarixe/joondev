@@ -1,4 +1,5 @@
 $(document).on "turbolinks:load", ->
+
   # JoonDEV sidebar
   $('div.sidebar').sidebar(transition: 'overlay').sidebar('attach events', '.toggle.button').sidebar 'hide'
 

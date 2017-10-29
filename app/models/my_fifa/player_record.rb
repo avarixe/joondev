@@ -80,7 +80,6 @@ module MyFifa
     #  CALLBACK METHODS  #
     ######################
       after_create :set_match_id
-      after_save :create_event_if_injured
 
       def set_match_id
         update_columns(
@@ -97,12 +96,8 @@ module MyFifa
       end
 
       def set_sub_match_data
-        if self.sub_record.present?
-          self.sub_record.update_columns(
-            team_id: self.team_id,
-            cs:      self.cs,
-          )
-
+        if self.sub_record.present? && !self.sub_record.destroyed?
+          self.sub_record.update_columns(team_id: self.team_id, cs: self.cs)
           self.sub_record.set_sub_match_data
         end
       end
