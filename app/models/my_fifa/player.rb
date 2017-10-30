@@ -130,10 +130,9 @@ module MyFifa
     #  MUTATOR METHODS  #
     #####################
       def toggle_injury(date, notes)
-        puts "==================== in toggle_injury"
         if injured?
-          self.update_column(:status, '')
-          injuries.last.update(end_date: date)
+          self.update_column(:status, "") unless date.nil?
+          injuries.last.update(end_date: date, notes: notes)
         else
           self.update_column(:status, 'injured')
           injuries.create(start_date: date, notes: notes)
@@ -177,6 +176,7 @@ module MyFifa
       def wage()   self.current_contract.terms.last.wage end
       def kit_no() self.player_sessions.last.kit_no rescue nil end
       def age()    self.player_seasons.last.age rescue self.start_age end
+      def injury() self.injuries.last.notes end
 
       # STATUS
       def injured?()    status == 'injured' end

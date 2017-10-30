@@ -95,9 +95,12 @@ module MyFifa
     end
 
     def set_status
-      date = Date.strptime(params[:date]) || @team.current_date
-
-      @team.update_column(:current_date, date) if @team.current_date < date
+      if params[:date].blank? && params[:type] != "recover"
+        status 500
+      elsif params[:date].present?
+        date = Date.strptime(params[:date]) || @team.current_date
+        @team.update_column(:current_date, date) if @team.current_date < date
+      end
 
       case params[:type]
       when 'injury'
@@ -106,8 +109,13 @@ module MyFifa
         @message = "#{@player.name} is injured."
       when 'recover'
         @player.toggle_injury(date, params[:notes])
-        @icon = 'green first aid'
-        @message = "#{@player.name} is no longer injured."
+        if @player.injured?
+          @icon = 'pink first aid'
+          @message = "#{@player.name} Injury Status has been updated."
+        else
+          @icon = 'green first aid'
+          @message = "#{@player.name} is no longer injured."
+        end
       when 'loan'
         @player.toggle_loan(date, params[:notes])
         @icon = 'orange plane'

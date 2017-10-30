@@ -1,6 +1,3 @@
-css:
-  .ui.vertical.text.menu > .header.dividing.item { border-bottom: 1px solid #333 }
-
 - content_for :page_links do
   = link_to 'Edit', edit_my_fifa_season_path(@season), class: 'ui orange button'
   - if @season.competitions.any?
@@ -11,16 +8,14 @@ css:
   .equal.width.columns.row
     .column
       = render 'info'
+    .column
       = render 'analytics'
+  .equal.width.columns.row
     .column
       = render 'players'
 
 javascript:
   $(function(){
-    Chartkick.eachChart(function(chart){
-      chart.redraw();
-    })
-
     $('table#players').DataTable({
       order: [[1, 'asc'], [4, 'desc']],
       bPaginate: false

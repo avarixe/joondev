@@ -23,7 +23,7 @@ module MyFifa
       @competition = Competition.new(competition_params)
 
       if @team.competitions << @competition
-        redirect_to @competition.season, notice: 'Competition was successfully created.'
+        redirect_to competitions_my_fifa_season_path(@competition.season_id), notice: 'Competition was successfully created.'
       else
         respond_to do |format|
           format.js { render 'shared/errors', locals: { object: @competition } }
@@ -33,7 +33,7 @@ module MyFifa
 
     def update
       @competition.update(competition_params)
-      redirect_to @competition.season, notice: "#{@competition.title} was successfully updated."
+      redirect_to competitions_my_fifa_season_path(@competition.season_id), notice: "#{@competition.title} was successfully updated."
     end
 
     private

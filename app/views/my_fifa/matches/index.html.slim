@@ -9,7 +9,7 @@ css:
   }
 
 - content_for :page_links do
-  a.ui.primary.button#new-match New Match
+  a.ui.primary.basic.button#new-match New Match
 
 - content_for :modal_container do
   = render 'my_fifa/squads/responsive_modals'
@@ -104,13 +104,6 @@ css:
                     i.red.square.icon
                     | Red Card
       .hidden.transition[data-event="Injury"]
-        .equal.width.inline.fields
-          .field
-            = label_tag :log_injury, "Type of Injury"
-            .ui.fluid.left.icon.input
-              i.pink.first.aid.icon
-              = text_field_tag :log_injury
-          .field
   .actions
     a.ui.ok.orange.button Save Match Event
     a.ui.basic.cancel.button Back
@@ -236,15 +229,22 @@ javascript:
         });
       })
 
-      $(".pusher").on("click", "table#matches tbody tr", function(){
+      $(".pusher").on("click", "table#matches tbody tr", function(evt){
         var id = $(this).data("id");
         if (window.location.hash != "#"+id){
-          $("table tbody tr.warning").removeClass("warning");
-          $(this).addClass("warning");
-          $.getJSON("/my_fifa/matches/"+id, function(data){
-            updateLocationHash(id);
-            replaceViewContainer("Match View", data);
-          });
+          if (evt.ctrlKey || evt.metaKey)
+            window.open("/my_fifa/matches#"+id);
+          else {
+            if (window.location.hash == "#new" && !confirm("View Match #"+id+"? Unsaved Match will be lost."))
+              return;
+
+            $("table tbody tr.warning").removeClass("warning");
+            $(this).addClass("warning");
+            $.getJSON("/my_fifa/matches/"+id, function(data){
+              updateLocationHash(id);
+              replaceViewContainer("Match View", data);
+            });
+          }
         }
       });
   });

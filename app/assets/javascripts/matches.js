@@ -208,7 +208,7 @@ function matchLogForm(target){
         $("#log-modal #player").val(target.find(".player1_id").val()).prop("disabled", true);
         $("#log-modal #log_minute").val(target.find(".minute").val());
         $("#log-modal").find("#sub_player, #assisted_by").val(target.find(".player2_id").val());
-        $("#log-modal").find("#position, #log_injury").val(target.find(".notes").val());
+        $("#log-modal #position").val(target.find(".notes").val());
         if (event == "Booking")
           $("#log-modal #log_booking_"+target.find(".notes").val().replace(/\s/g, "_")).trigger("click");
       }
@@ -231,8 +231,6 @@ function matchLogForm(target){
         case "Booking":
           logData["notes"] = $("#log-modal :radio:checked[name=\"log_booking\"]").val() || "";
           break;
-        case "Injury":
-          logData["notes"] = $("#log-modal #log_injury").val()
       }
 
       $.ajax({

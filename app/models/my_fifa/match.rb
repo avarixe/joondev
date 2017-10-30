@@ -84,19 +84,25 @@ module MyFifa
 
       def set_records_match_data
         match_logs = self.logs.group_by(&:event)
+        ["Goal", "Booking", "Injury"].each do |event|
+          match_logs[event] ||= []
+        end
 
         self.player_records.each do |record|
-          record.update_columns(
-            team_id:      self.team_id,
-            cs:           self.score_ga == 0,
-            goals:        match_logs["Goal"].count{ |log| log.player1_id == record.player_id },
-            assists:      match_logs["Goal"].count{ |log| log.player2_id == record.player_id },
-            yellow_cards: match_logs["Booking"].count{ |log| log.player1_id == record.player_id && log.notes == "Yellow Card" },
-            red_cards:    match_logs["Booking"].count{ |log| log.player1_id == record.player_id && log.notes == "Red Card" },
-            injury:       (match_logs["Injury"].find{ |log| log.player1_id == record.player_id }.notes rescue nil)
-          )
-          record.create_event_if_injured
-          record.set_sub_match_data
+          current_record = record
+          until current_record.nil? || current_record.destroyed?
+            current_record.update_columns(
+              team_id:      self.team_id,
+              cs:           self.score_ga == 0,
+              goals:        match_logs["Goal"].count{ |log| log.player1_id == record.player_id },
+              assists:      match_logs["Goal"].count{ |log| log.player2_id == record.player_id },
+              yellow_cards: match_logs["Booking"].count{ |log| log.player1_id == record.player_id && log.notes == "Yellow Card" },
+              red_cards:    match_logs["Booking"].count{ |log| log.player1_id == record.player_id && log.notes == "Red Card" },
+              injury:       (match_logs["Injury"].any?{ |log| log.player1_id == record.player_id } ? "injured" : nil)
+            )
+            current_record.create_event_if_injured if self.date_played == self.team.current_date
+            current_record = current_record.sub_record
+          end
         end
       end
 

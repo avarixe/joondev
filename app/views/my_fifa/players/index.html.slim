@@ -1,5 +1,6 @@
 css:
   table#analytics td:nth-child(5) { border-left: 1px solid rgba(34, 36, 38, 0.15) }
+  table#analytics tr.disabled td { pointer-events: auto }
 
 - content_for :page_links do
   = link_to 'Sign New Player', new_my_fifa_player_path, class: 'ui basic primary button'

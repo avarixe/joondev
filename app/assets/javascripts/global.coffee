@@ -47,7 +47,12 @@ $(document).on "turbolinks:load", ->
 
   $('[data-flatpickr]').flatpickr({
     altInput: true,
-    altFormat: "M j, Y"
+    altFormat: "M j, Y",
+    onOpen: (selectedDates, dateStr, instance) ->
+      console.log($(instance.element).data("default"))
+      if dateStr.length == 0 and $(instance.element).data("default")
+        instance.setDate($(instance.element).data("default"))
+      return
   });
 
   # Input Masks

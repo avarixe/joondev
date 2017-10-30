@@ -1,5 +1,5 @@
 .ui.raised.olive.segment
-  h2.ui.olive.header Team Statistics
+  .ui.olive.header Team Statistics
   
   = pie_chart({ \
       "Wins"   => @matches.select(&:win?).count,

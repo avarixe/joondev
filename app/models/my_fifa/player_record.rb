@@ -91,13 +91,16 @@ module MyFifa
 
       def create_event_if_injured
         if self.injury.present? && !self.player.injured?
-          self.player.toggle_injury(self.match.date_played, self.injury)
+          self.player.toggle_injury(self.match.date_played, "")
         end
       end
 
       def set_sub_match_data
         if self.sub_record.present? && !self.sub_record.destroyed?
-          self.sub_record.update_columns(team_id: self.team_id, cs: self.cs)
+          self.sub_record.update_columns(
+            team_id: self.team_id,
+            cs: self.cs
+          )
           self.sub_record.set_sub_match_data
         end
       end

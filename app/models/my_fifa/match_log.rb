@@ -25,8 +25,6 @@ module MyFifa
         errors.add(:notes, "Position can't be blank.") if self.notes.blank?
       when "Booking"
         errors.add(:notes, "Type of Booking is Invalid") unless ["Yellow Card", "Red Card"].include?(self.notes)
-      when "Injury"
-        errors.add(:notes, "Type of Injury can't be blank.") if self.notes.blank?
       end
     end
 
@@ -52,7 +50,7 @@ module MyFifa
       when "Goal"
         "#{self.player1.name} scores! #{ "(assisted by #{self.player2.name})" if self.player2_id.present?}"
       when "Injury"
-        "#{self.player1.name} injured with a #{self.notes}."        
+        "#{self.player1.name} has been injured."
       end
     end
   end

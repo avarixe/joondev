@@ -1,5 +1,6 @@
 - content_for :page_links do
   = link_to "Add Competition", new_my_fifa_competition_path(season: @season.id), class: 'ui basic primary button'
+  = link_to "View Season", @season, class: "ui basic button"
 
 .ui.vertical.text.menu[data-menu="tabs"]
   - @season.competitions.each_with_index do |competition, i|
