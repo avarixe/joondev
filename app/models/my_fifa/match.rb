@@ -94,11 +94,11 @@ module MyFifa
             current_record.update_columns(
               team_id:      self.team_id,
               cs:           self.score_ga == 0,
-              goals:        match_logs["Goal"].count{ |log| log.player1_id == record.player_id },
-              assists:      match_logs["Goal"].count{ |log| log.player2_id == record.player_id },
-              yellow_cards: match_logs["Booking"].count{ |log| log.player1_id == record.player_id && log.notes == "Yellow Card" },
-              red_cards:    match_logs["Booking"].count{ |log| log.player1_id == record.player_id && log.notes == "Red Card" },
-              injury:       (match_logs["Injury"].any?{ |log| log.player1_id == record.player_id } ? "injured" : nil)
+              goals:        match_logs["Goal"].count{ |log| log.player1_id == current_record.player_id },
+              assists:      match_logs["Goal"].count{ |log| log.player2_id == current_record.player_id },
+              yellow_cards: match_logs["Booking"].count{ |log| log.player1_id == current_record.player_id && log.notes == "Yellow Card" },
+              red_cards:    match_logs["Booking"].count{ |log| log.player1_id == current_record.player_id && log.notes == "Red Card" },
+              injury:       (match_logs["Injury"].any?{ |log| log.player1_id == current_record.player_id } ? "injured" : nil)
             )
             current_record.create_event_if_injured if self.date_played == self.team.current_date
             current_record = current_record.sub_record

@@ -1,8 +1,4 @@
 css:
-  .dt-table > .column {
-    max-height: 80em;
-    overflow-y: auto;
-  }
   .ui.selectable.table tbody tr.positive.warning:hover {
     background: #fff4e4 !important;
     color: #493107 !important;
@@ -20,9 +16,6 @@ css:
 .ui.stackable.grid
   .equal.width.columns.row
     .column
-      .ui.horizontal.divider Match View
-      #view-container.transition.visible
-    .column
       .ui.horizontal.divider Filter Matches
 
       .ui.form
@@ -39,7 +32,6 @@ css:
               options_for_select(@team.recorded_competitions, params[:competition]),
               include_blank: 'All Competitions',
               class: 'fluid dropdown'
-
       table#matches.ui.basic.sortable.definition.selectable.unstackable.very.compact.small.table[width="100%"]
         thead
           tr
@@ -47,6 +39,9 @@ css:
             th Competition
             th Score
             th Date Played
+    .column
+      .ui.horizontal.divider Match View
+      #view-container.transition.visible
 
 / Match Log modal
 .ui.tiny.modal#log-modal
@@ -115,9 +110,7 @@ javascript:
     switch(window.location.hash){
     case "#new":
       newMatchForm();
-      break;
     case "":
-      console.log("empty hash")
       break;
     default:
       $.getJSON("/my_fifa/matches/"+window.location.hash.replace(/#/g, ""), function(data){
@@ -136,8 +129,8 @@ javascript:
     *  MATCH TABLE FUNCTIONALITY  *
     *******************************/
       table = $('table#matches').DataTable({
-        bPaginate: false,
-        bFilter: false,
+        // bPaginate: false,
+        // bFilter: false,
         processing: true,
         ajax: {
           url: '/my_fifa/matches',
@@ -161,53 +154,6 @@ javascript:
             $(nRow).addClass("warning");
         }
       });    
-
-    /****************************
-    *  MATCH LOG FUNCTIONALITY  *
-    *****************************/
-      $("#view-container").on("click", "#new-log", function(){ matchLogForm() });
-      $("#view-container").on("click", "#edit-log", function(){ matchLogForm($(this).closest("tr")) });
-      $("#view-container").on("click", "#remove-log", function(){
-        var tr = $(this).closest("tr");
-        var playerId = tr.find(".player2_id").val();
-
-        // Remove Substitute Row in Players Table
-        if (tr.find("input[id$=\"event\"]").val() == "Substitution"){
-          subTr = $("table#players select.player_id option:selected[value="+playerId+"]").closest("tr");
-          removeRecord(subTr);
-        }
-
-        if (tr.data("id")){
-          tr.find("input[id$=\"_destroy\"]").val(1);
-          tr.transition("slide down");
-        } else
-          tr.remove();  
-      })
-
-      // Selecting Player sets Position
-      $("#log-modal select#player").change(function(){
-        var tr = $("table#players select.player_id option:selected[value="+$(this).val()+"]").closest("tr");
-        var pos = tr.find(".pos > span").text();
-        $("#log-modal select#position").val(pos);
-      });
-
-      // Loads Event specific fields
-      $("html").on("change", "#log-modal input[name=\"log_event\"]", function(){
-        var value = this.value;
-        if ($('#log-modal .transition.visible').length > 0)
-          $('#log-modal .transition.visible').transition({
-            animation: "slide down",
-            onStart: function(){
-              $('#log-modal .transition.visible :radio:checked').prop('checked', false);
-              $('#log-modal .transition.visible').find('input:not(:radio),select').val("");
-            },
-            onComplete: function(){
-              $('#log-modal [data-event="'+value+'"]').transition("slide down")
-            }
-          });
-        else
-          $('#log-modal [data-event="'+value+'"]').transition("slide down");
-      });
 
     /*********************************
     *  VIEW CONTAINER FUNCTIONALITY  *

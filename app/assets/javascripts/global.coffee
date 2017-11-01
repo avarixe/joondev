@@ -5,7 +5,6 @@ $(document).on "turbolinks:load", ->
 
   Mousetrap.bind 'alt+j', -> 
     $('div.sidebar').sidebar 'toggle'
-    # $('div.sidebar a:first').focus
     return
 
   $('.best_in_place').best_in_place()

@@ -52,6 +52,7 @@ function setMOTM(target){
 
 // Squad auto populates players and positions
 function loadSquadPlayers(target){
+  console.log("in loadSquadPlayers")
   if ($(target).val()){
     $.get("/my_fifa/squads/"+$(target).val()+"/info", function(data){
       $.each(data.player_ids, function(i, player_id){
@@ -292,3 +293,53 @@ function matchLogForm(target){
     },
   }).modal('show');
 }
+
+/****************************
+*  MATCH LOG FUNCTIONALITY  *
+*****************************/
+
+$(document).on("turbolinks:load", function(){
+  $("#view-container").on("click", "#new-log", function(){ matchLogForm() });
+  $("#view-container").on("click", "#edit-log", function(){ matchLogForm($(this).closest("tr")) });
+  $("#view-container").on("click", "#remove-log", function(){
+    var tr = $(this).closest("tr");
+    var playerId = tr.find(".player2_id").val();
+
+    // Remove Substitute Row in Players Table
+    if (tr.find("input[id$=\"event\"]").val() == "Substitution"){
+      subTr = $("table#players select.player_id option:selected[value="+playerId+"]").closest("tr");
+      removeRecord(subTr);
+    }
+
+    if (tr.data("id")){
+      tr.find("input[id$=\"_destroy\"]").val(1);
+      tr.transition("slide down");
+    } else
+      tr.remove();  
+  })
+
+  // Selecting Player sets Position
+  $("#log-modal select#player").change(function(){
+    var tr = $("table#players select.player_id option:selected[value="+$(this).val()+"]").closest("tr");
+    var pos = tr.find(".pos > span").text();
+    $("#log-modal select#position").val(pos);
+  });
+
+  // Loads Event specific fields
+  $("body").on("change", "#log-modal input[name=\"log_event\"]", function(){
+    var value = this.value;
+    if ($('#log-modal .transition.visible').length > 0)
+      $('#log-modal .transition.visible').transition({
+        animation: "slide down",
+        onStart: function(){
+          $('#log-modal .transition.visible :radio:checked').prop('checked', false);
+          $('#log-modal .transition.visible').find('input:not(:radio),select').val("");
+        },
+        onComplete: function(){
+          $('#log-modal [data-event="'+value+'"]').transition("slide down")
+        }
+      });
+    else
+      $('#log-modal [data-event="'+value+'"]').transition("slide down");
+  });
+});

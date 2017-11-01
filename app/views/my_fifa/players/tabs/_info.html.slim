@@ -45,37 +45,8 @@
     .five.columns.centered.row
       - @stats.each do |stat|
         .aligned.column
-          .ui.statistic[class=stat[:color]]
+          .ui.small.statistic[class=stat[:color]]
             .value
               = @player.public_send(stat[:type])
             .label
               = stat[:label]
-
-  - if @player.active? && (current_contract = @player.current_contract.terms.last rescue nil)
-    .ui.dividing.header Current Contract
-
-    .ui.stackable.grid
-      .equal.width.row
-        .column
-          .ui.header
-            = number_to_fee current_contract.wage
-            .sub.header Wage
-        .column
-          .ui.header
-            = number_to_fee current_contract.release_clause
-            .sub.header Release Clause
-      .equal.width.row
-        .column
-          .ui.header
-            = number_to_fee current_contract.signing_bonus
-            .sub.header Signing Bonus
-        .column
-          .ui.header
-            - if current_contract.stat_bonus.present?
-              = [ number_to_fee(current_contract.stat_bonus),
-                '/',
-                current_contract.num_stats,
-                current_contract.stat_type ].join(' ')
-            - else
-              | N/A
-            .sub.header Performance Bonus

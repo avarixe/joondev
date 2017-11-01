@@ -19,8 +19,8 @@ test:
 
 development:
   <<: *default
-  database: joonpro_db
+  database: joondev_db
 
 production:
   <<: *default
-  database: joondev_db
+  database: joonpro_db

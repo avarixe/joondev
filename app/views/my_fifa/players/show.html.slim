@@ -10,8 +10,8 @@ css:
   .equal.width.columns.row
     .column
       = render 'my_fifa/players/tabs/info'
-      = render "my_fifa/players/manage/#{@player.active ? 'active' : 'inactive'}"
       = render 'my_fifa/players/tabs/history'
+      = render "my_fifa/players/manage/#{@player.active ? 'active' : 'inactive'}"
     .column
       = render 'my_fifa/players/tabs/analytics'
 

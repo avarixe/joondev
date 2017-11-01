@@ -35,6 +35,13 @@ body > .ui.link.inverted.menu .item:hover {
 }
 
 /* Supplementary to DataTables */
+.ui.pagination.menu { width: 100%; }
+.ui.pagination.menu .item {
+  display: block;
+  padding: .92857143em 0 .92857143em 0;
+  flex-grow: 1;
+  min-width: auto;
+}
 
 /* Supplementary to Flatpickr */
 .flatpickr-wrapper { width: 100%; }

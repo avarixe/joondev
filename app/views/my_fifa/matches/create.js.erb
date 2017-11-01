@@ -1,4 +1,4 @@
-$("#new-match").prop("disabled", false);
+$("#new-match").removeClass("disabled");
 table.ajax.reload(function(){
   var id = "<%= @match.id %>";
   if (currentView != id){
