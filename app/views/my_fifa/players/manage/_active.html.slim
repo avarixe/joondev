@@ -75,7 +75,7 @@
                   = f.number_field :num_stats, placeholder: 'Requirement'
               .column
                 .field
-                  = f.select :stat_type, MyFifa::Player::BONUS_STAT_TYPES, {include_blank: 'Type of Req.'}, {class: 'fluid dropdown'}
+                  = f.select :stat_type, MyFifa::BONUS_STAT_TYPES, {include_blank: 'Type of Req.'}, {class: 'fluid dropdown'}
             .six.wide.column
               = submit_tag 'SIGN NEW CONTRACT', class: "ui blue submit tiny fluid button"
 

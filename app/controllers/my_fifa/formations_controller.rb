@@ -2,37 +2,42 @@ require_dependency "my_fifa/application_controller"
 
 module MyFifa
   class FormationsController < ApplicationController
-    before_action :set_formation, only: [:show, :update]
+    before_action :set_formation, only: [:show, :update, :destroy]
 
     # GET /players
     def index
-      @title = "Formations"
-      @formations = current_user.formations
+      respond_to do |format|
+        format.html {
+          @title = "Manage Formations"
+        }
+        format.json {
+          render json: {
+            data: current_user.formations
+          }.to_json
+        }
+      end
     end
 
     # GET /players/1
     def show
-      @title = "Formation: #{@formation.title}"
-      render :form
+      render_form_json
     end
 
     # GET /players/new
     def new
-      @title = "New Formation"
       @formation = Formation.new(layout: '4-2-3-1')
-      render :form
+      render_form_json
     end
 
     # POST /players
     def create
       @formation = Formation.new(formation_params)
-
       respond_to do |format|
-        if current_user.formations << @formation
-          format.js
-        else
-          format.js { render 'shared/errors', locals: { object: @formation } }
-        end
+        format.js {
+          unless current_user.formations << @formation
+            render 'shared/errors', locals: { object: @formation }
+          end
+        }
       end
     end
 
@@ -40,12 +45,27 @@ module MyFifa
     def update
       respond_to do |format|
         format.js {
-          if @formation.update(formation_params)
-            render
-          else
+          unless @formation.update(formation_params)
             render 'shared/errors', locals: { object: @formation }
           end
         }
+      end
+    end
+
+    def destroy
+      @error =
+        if @formation.squads.any?
+          "There is still a Squad using this Formation #{@formation.title}."
+        elsif @formation.id == current_user.formation_id
+          "Formation #{@formation.title} is currently set as Active and cannot be removed."
+        elsif !@formation.destroy
+          "Formation #{@formation.title} could not be removed."
+        end
+
+      puts @error
+
+      respond_to do |format|
+        format.js
       end
     end
 
@@ -58,6 +78,10 @@ module MyFifa
       # Use callbacks to share common setup or constraints between actions.
       def set_formation
         @formation = Formation.find(params[:id])
+      end
+
+      def render_form_json
+        render json: render_to_string(template: "my_fifa/formations/form.html", layout: false).to_json            
       end
 
       # Only allow a trusted parameter "white list" through.

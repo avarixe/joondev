@@ -22,22 +22,6 @@ module MyFifa
       where(id: ids)
     }
 
-    RATING_COLORS = {
-      4.0  => '#FF0000',
-      4.5  => '#FB2D00',
-      5.0  => '#F85A00',
-      5.5  => '#F58600',
-      6.0  => '#F2B000',
-      6.5  => '#EFD900',
-      7.0  => '#D6EC00',
-      7.5  => '#A9E900',
-      8.0  => '#7DE600',
-      8.5  => '#52E300',
-      9.0  => '#28E000',
-      9.5  => '#00DD00',
-      10.0 => '#00FF00',
-    }
-
     ###################
     #  CLASS METHODS  #
     ###################
@@ -52,8 +36,8 @@ module MyFifa
       def self.arr_num_assists(arr) arr.map(&:assists).compact.sum end
       def self.arr_rank(arr)
         arr.length + 
-        10*(arr.map(&:rating).sum / arr.length.to_f) + 
-        3*self.arr_num_goals(arr) +
+        (arr.map(&:rating).sum / arr.length.to_f) + 
+        2*self.arr_num_goals(arr) +
         self.arr_num_assists(arr)
       end
 
@@ -121,7 +105,7 @@ module MyFifa
       end
       
       def rating_color
-        RATING_COLORS[(self.rating * 2.0).round / 2.0]
+        RATING_COLORS[(self.rating / 5.0).round * 5]
       end
 
       # ANALYTICS HELPERS

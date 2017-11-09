@@ -1,0 +1,5 @@
+<% if @error.nil? %>
+  closeViewContainer();
+<% else %>
+  alert("<%= @error %>");
+<% end %>

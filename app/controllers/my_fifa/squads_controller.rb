@@ -2,29 +2,35 @@ require_dependency "my_fifa/application_controller"
 
 module MyFifa
   class SquadsController < ApplicationController
-    before_action :set_squad, only: [:show, :update, :info]
+    before_action :set_squad, only: [:show, :update, :info, :destroy]
     before_action :set_current_team
     before_action :team_is_playable?
 
     # GET /players
     def index
-      @title = "Squads"
-      @squads = @team.squads
+      respond_to do |format|
+        format.html {
+          @title = "Manage Squads"          
+        }
+        format.json {
+          render json: {
+            data: @team.squads
+          }.to_json
+        }
+      end
     end
 
     # GET /players/1
     def show
-      @formation = current_user.default_formation
-      @title = @squad.squad_name
-      set_squad_form
+      @formation = @squad.formation
+      render_form_json
     end
 
     # GET /players/new
     def new
-      @title = "New Squad"
       @formation = current_user.default_formation
       @squad = @formation.squads.new
-      set_squad_form
+      render_form_json
     end
 
     # POST /players
@@ -32,11 +38,11 @@ module MyFifa
       @squad = Squad.new(squad_params)
 
       respond_to do |format|
-        if @team.squads << @squad
-          format.js
-        else
-          format.js { render 'shared/errors', locals: { object: @squad } }
-        end
+        format.js {
+          unless @team.squads << @squad
+            render 'shared/errors', locals: { object: @squad }
+          end
+        }
       end
     end
 
@@ -55,6 +61,13 @@ module MyFifa
       end
     end
 
+    def destroy
+      @squad.destroy
+      respond_to do |format|
+        format.js
+      end
+    end
+
     def info
       render json: {
         player_ids: (1..11).map{ |no| @squad.send("player_id_#{no}") },
@@ -68,9 +81,9 @@ module MyFifa
         @squad = Squad.find(params[:id])
       end
 
-      def set_squad_form
-        @grouped_players = @team.grouped_players#(abbrev: true)
-        render :form
+      def render_form_json
+        @grouped_players = @team.grouped_players
+        render json: render_to_string(template: "my_fifa/squads/form.html", layout: false).to_json
       end
 
       # Only allow a trusted parameter "white list" through.

@@ -20,15 +20,17 @@ module MyFifa
       @competitions = @season.competitions.includes(:fixtures, :group_results)
 
       # compile Individual Accolades
-      season_players = Player.with_stats(@season.matches.map(&:id)).includes(:player_seasons, :contracts)
-      @accolades = {
-        top_rank:        season_players.sort_by(&:rank).last,
-        top_goalscorer:  season_players.sort_by(&:goals).last,
-        top_playmaker:   season_players.sort_by(&:assists).last,
-        top_goalkeeper:  season_players.select{ |player| player.pos == 'GK' }.sort_by(&:rank).last,
-        top_under_21:    season_players.select{ |player| player.age < 21 }.sort_by(&:rank).last,
-        top_new_arrival: season_players.select{ |player| (@season.start_date..@season.end_date).cover? player.date_joined }.sort_by(&:rank).last
-      }
+      if @matches.any?
+        season_players = Player.with_stats(@matches.map(&:id)).includes(:player_seasons, :contracts)
+        @accolades = {
+          top_rank:        season_players.sort_by(&:rank).last,
+          top_goalscorer:  season_players.sort_by(&:goals).last,
+          top_playmaker:   season_players.sort_by(&:assists).last,
+          top_goalkeeper:  season_players.select{ |player| player.pos == 'GK' }.sort_by(&:rank).last,
+          top_under_21:    season_players.select{ |player| player.age < 21 }.sort_by(&:rank).last,
+          top_new_arrival: season_players.select{ |player| (@season.start_date..@season.end_date).cover? player.date_joined }.sort_by(&:rank).last
+        }
+      end
     end
 
     def competitions
@@ -43,6 +45,7 @@ module MyFifa
 
     def create
       @season = @team.current_season.build_next_season
+      @team.update(current_date: @season.start_date)
       redirect_to @season
     end
 

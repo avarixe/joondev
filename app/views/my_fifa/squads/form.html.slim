@@ -1,22 +1,22 @@
-= form_for(@squad, as: :squad, remote: true, html: { class: 'ui fluid form' }) do |f|
+= form_for(@squad, as: :squad, remote: true, html: { class: "ui fluid form" }) do |f|
   = f.hidden_field :formation_id
 
   .fields
     .inline.required.field[no-empty]
-      = f.label :squad_name, 'Squad Name'
+      = f.label :squad_name, "Squad Name"
       = f.text_field :squad_name
 
   .ui.raised.green.segment
     .ui.mobile.reversed.stackable.grid
       / Generate format based on Formation
       - @formation.layout_to_a.each do |row|
-        .columns.centered.row[class="#{row.length % 2 == 0 ? 'four' : 'five'}"]
+        .columns.centered.row[class="#{row.length % 2 == 0 ? "four" : "five"}"]
           - row.each do |pos|
             .four.wide.column.field[no-empty]
               = f.select "player_id_#{pos}",
                 grouped_options_for_select(@grouped_players, @squad.public_send("player_id_#{pos}")),
                 {prompt: @formation.public_send("pos_#{pos}") },
-                {class: 'small fluid grouped search dropdown'}
+                {class: "small fluid grouped search dropdown"}
 
       / GK row
       .three.columns.centered.row
@@ -24,10 +24,7 @@
           = f.select "player_id_1",
             grouped_options_for_select(@grouped_players, @squad.player_id_1),
             {prompt: @formation.pos_1 },
-            {class: 'small fluid grouped search dropdown'}
+            {class: "small fluid grouped search dropdown"}
 
-  = f.submit 'Save Squad', class: 'ui primary button'
-  = link_to 'Back', my_fifa_squads_path, class: 'ui basic button'
-
-- content_for :modal_container do
-  = render 'responsive_modals'
+  = f.submit "Save Squad", class: "ui primary button"
+  = link_to "Remove Squad", @squad, method: :delete, remote: true, data: { confirm: "Remove #{@squad.squad_name}?" }, class: "ui negative button"

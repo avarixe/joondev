@@ -2,6 +2,8 @@
   = link_to 'Edit', edit_my_fifa_season_path(@season), class: 'ui orange button'
   - if @season.competitions.any?
     = link_to 'View Competitions', competitions_my_fifa_season_path(@season), class: 'ui blue button'
+  - else
+    = link_to 'Add Competition', new_my_fifa_competition_path(season: @season.id), class: 'ui blue basic button'
   = link_to 'View All Seasons', my_fifa_seasons_path, class: 'ui basic button'
 
 .ui.stackable.grid
@@ -9,7 +11,7 @@
     .column
       = render 'info'
     .column
-      = render 'analytics'
+      = render('analytics') if @matches.any?
   .equal.width.columns.row
     .column
       = render 'players'

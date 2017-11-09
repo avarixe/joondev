@@ -54,7 +54,7 @@ module MyFifa
     ######################
     #  ACCESSOR METHODS  #
     ######################
-      def current?() self.end_date > self.team.current_date end
+      def current?() (self.start_date..self.end_date).cover? self.team.current_date end
 
       def yearspan() "#{self.start_date.strftime('%Y')} - #{self.end_date.strftime('%Y')}" end
       def title() "#{self.yearspan} Season" end

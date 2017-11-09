@@ -1,6 +1,7 @@
 css:
   table#analytics td:nth-child(5) { border-left: 1px solid rgba(34, 36, 38, 0.15) }
   table#analytics tr.disabled td { pointer-events: auto }
+  i.flag + i.icon { float: right }
 
 - content_for :page_links do
   = link_to 'Sign New Player', new_my_fifa_player_path, class: 'ui basic primary button'
@@ -51,7 +52,7 @@ table#analytics.ui.basic.sortable.definition.selectable.unstackable.very.compact
       th CS
 
 javascript:
-  var playerPositions = #{raw MyFifa::Player::POSITIONS};
+  var playerPositions = #{raw MyFifa::PLAYER_POSITIONS};
 
   $(function(){
     $('.ui.checkbox').checkbox({
@@ -76,8 +77,8 @@ javascript:
         },
         dataSrc: function(json){
           $.each(json.data, function(i, data){
-            json.data[i].pos_idx = playerPositions.indexOf(json.data[i].pos);
-            json.data[i].rank = data.gp + 10 * data.rating + 3 * data.goals + data.assists;
+            json.data[i].pos_idx = playerPositions.indexOf(data.pos);
+            json.data[i].rank = parseInt(data.gp) + parseFloat(data.rating) + (2 * parseInt(data.goals)) + parseInt(data.assists);
           });
           return json.data;
         }
@@ -96,14 +97,17 @@ javascript:
       ],
       createdRow: function(nRow, aData){
         $(nRow).data('id', aData.id);
+        var nameCell = $("td:first-child", $(nRow));
+        if (aData.national_flag)
+          nameCell.prepend("<i class=\""+aData.national_flag+"\"></i>");
         if (!aData.active){
-          $('td:first-child', $(nRow)).prepend('<i class="red attention icon"></i>');
+          nameCell.append("<i class=\"red attention icon\"></i>");
           $(nRow).addClass('disabled')
         }
         if (aData.status == "injured")
-          $('td:first-child', $(nRow)).append('<i class="pink first aid icon"></i>');
+          nameCell.append("<i class=\"pink first aid icon\"></i>");
         if (aData.status == "loan")
-          $('td:first-child', $(nRow)).append('<i class="orange plane icon"></i>');
+          nameCell.append("<i class=\"orange plane icon\"></i>");
       }
     });
   });

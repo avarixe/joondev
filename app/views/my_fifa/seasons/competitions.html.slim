@@ -42,11 +42,4 @@ javascript:
       bPaginate: false,
       bInfo: false
     });
-
-    $('.menu[data-menu="tabs"] .item').tab({
-      onLoad: function(){
-        console.log("in onLoad")
-        $(this).find('#matches-container').append($('table').detach());
-      }
-    })
   })

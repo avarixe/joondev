@@ -49,6 +49,31 @@ css:
         .six.wide.column.field[no-empty]
           = f.text_field :score_a, data: { inputmask: "'mask': '9{+}[ (9{+})]', 'greedy': false" }
 
+  .ui.orange.raised.segment
+    .ui.orange.header Match Log
+
+    .ui.five.basic.icon.buttons
+      a.ui.button[data-action="new log" title="Substitution"]
+        i.retweet.icon
+      a.ui.button[data-action="new log" title="Goal"]
+        i.green.soccer.icon
+      a.ui.button[data-action="new log" title="Booking"]
+        i.orange.clone.icon
+      a.ui.button[data-action="new log" title="Injury"]
+        i.pink.first.aid.icon
+      / a.ui.button[data-action="new log" title="Opposition Goal"]
+        i.gray.soccer.icon
+
+    table#logs.ui.basic.small.definition.unstackable.very.compact.table[width="100%"]
+      thead
+        tr
+          th.four.wide Minute
+          th.eleven.wide Event
+          th.one.wide
+      tbody
+        = f.fields_for :logs, @match.logs.unshift(MyFifa::MatchLog.new) do |log_fields|
+          = render "log_fields", f: log_fields
+
   .ui.green.raised.segment
     .ui.green.header Player Performances
 
@@ -69,21 +94,6 @@ css:
         - @match.player_records.each do |record|
           = f.fields_for :player_records, record do |record_fields|
             = render 'record_fields', f: record_fields, num_sub: 0, player_is_sub: false
-
-  .ui.orange.raised.segment
-    .ui.orange.header Match Log
-
-    a.ui.orange.button#new-log New Event
-
-    table#logs.ui.basic.small.definition.unstackable.very.compact.table[width="100%"]
-      thead
-        tr
-          th.four.wide Minute
-          th.eleven.wide
-          th.one.wide
-      tbody
-        = f.fields_for :logs, @match.logs.unshift(MyFifa::MatchLog.new) do |log_fields|
-          = render "log_fields", f: log_fields
 
   .ui.horizontal.divider
 

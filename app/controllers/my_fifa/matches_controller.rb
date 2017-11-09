@@ -11,7 +11,7 @@ module MyFifa
     def index
       respond_to do |format|
         format.html {
-          @title = "Match Archives"
+          @title = "Matches"
         }
         format.json {
           @matches = @team.matches
@@ -57,7 +57,7 @@ module MyFifa
       @match = Match.new(date_played: @team.current_date)
 
       @match.build_records(current_user.default_formation)
-      @grouped_players = @team.grouped_players(no_injured: true)
+      @grouped_players = @team.grouped_players(only_available: true)
 
       respond_to do |format|
         format.json {

@@ -15,21 +15,6 @@ a.ui.orange.button#edit-match[data-id=@match.id] Edit Match
     .ui.center.aligned.sub.header
       = @score
 
-.ui.green.raised.segment.table-container
-  .ui.green.header Player Performances
-
-  table#records.ui.selectable.unstackable.small.very.compact.table[data-link="/my_fifa/players/"]
-    thead
-      tr
-        th.two.wide
-        th.six.wide Name
-        th.center.aligned Rating
-        th.center.aligned Goals
-        th.center.aligned Assists
-    tbody
-      - @records.each do |record|
-        = render 'record', record: record, num_sub: 0
-
 - if @match.logs.any?
   .ui.orange.raised.segment
     .ui.orange.header Match Log
@@ -46,3 +31,18 @@ a.ui.orange.button#edit-match[data-id=@match.id] Edit Match
             td
               i.icon[class=log.icon] 
               = log.message
+
+.ui.green.raised.segment.table-container
+  .ui.green.header Player Performances
+
+  table#records.ui.selectable.unstackable.small.very.compact.table[data-link="/my_fifa/players/"]
+    thead
+      tr
+        th.two.wide
+        th.six.wide Name
+        th.center.aligned Rating
+        th.center.aligned Goals
+        th.center.aligned Assists
+    tbody
+      - @records.each do |record|
+        = render 'record', record: record, num_sub: 0

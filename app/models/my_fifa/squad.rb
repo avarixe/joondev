@@ -5,20 +5,6 @@ module MyFifa
     belongs_to :team
     belongs_to :formation
 
-    DEFAULT_POSITIONS = [
-      'GK',
-      'LB',
-      'LCB',
-      'RCB',
-      'RB',
-      'LCM',
-      'CM',
-      'RCM',
-      'LW',
-      'ST',
-      'RW'
-    ]
-
     ############################
     #  INITIALIZATION METHODS  #
     ############################

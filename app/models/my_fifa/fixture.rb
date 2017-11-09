@@ -25,7 +25,19 @@ module MyFifa
         save_team_name(team, self.home_team)
         save_team_name(team, self.away_team)
       end
-      
+
+    ######################
+    #  ACCESSOR METHODS  #
+    ######################
+      def completed?
+        [ self.home_team,
+          self.away_team,
+          self.home_score,
+          self.away_score
+        ].all?(&:present?)
+      end
+
+
     private
     
       def save_team_name(my_team, team_name)

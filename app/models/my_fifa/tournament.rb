@@ -29,7 +29,7 @@ module MyFifa
         end
         
         # Create Fixtures
-        (self.num_advances_per_group * self.num_groups).times do
+        (self.num_advances_per_group * self.num_groups - 1).times do
           self.fixtures.create
         end
       end

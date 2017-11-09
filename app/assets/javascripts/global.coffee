@@ -1,3 +1,32 @@
+root = exports ? this
+
+root.updateLocationHash = (hash) ->
+  baseUrl = window.location.href.split('#')[0]
+  window.location.replace(baseUrl + "#" + hash)
+  return
+
+root.closeViewContainer = ->
+  table.ajax.reload ->
+    currentView = null
+    $("#view-container").empty()
+    return
+  return
+
+root.replaceViewContainer = (title, html, callback) ->
+  callback = callback || -> return
+  $('#view-container').transition
+    animation: "scale"
+    onComplete: ->
+      $("#new-form").toggleClass("disabled", window.location.hash == "#new")
+      $('#view-container')
+        .empty()
+        .append(html)
+        .prev().text(title)
+      $('#view-container').transition
+        animation: "scale",
+        onComplete: callback()
+  return
+
 $(document).on "turbolinks:load", ->
 
   # JoonDEV sidebar

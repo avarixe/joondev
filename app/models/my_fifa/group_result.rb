@@ -18,6 +18,15 @@ module MyFifa
     ######################
     #  ACCESSOR METHODS  #
     ######################
+      def completed?
+        [ self.team_name,
+          self.wins,
+          self.draws,
+          self.goals_for,
+          self.goals_against
+        ].all?(&:present?)
+      end
+
       def losses
         num_fixtures = self.group.present? ?
           self.competition.num_teams / self.competition.num_groups - 1 :

@@ -55,6 +55,10 @@ module MyFifa
     ######################
     #  ACCESSOR METHODS  #
     ######################
+      def completed?
+        results.all?(&:completed?) && fixtures.all?(&:completed?)
+      end
+
       def matches
         self.season.matches.where(competition: self.title)
       end

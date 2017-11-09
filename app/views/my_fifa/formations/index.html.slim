@@ -1,33 +1,70 @@
 - content_for :page_links do
-  = link_to 'New Formation', new_my_fifa_formation_path, class: 'ui basic primary button'
+  a.ui.primary.basic.button#new-form New Formation
 
-.table-container
-  table.ui.basic.definition.selectable.unstackable.compact.small.table[data-link="/my_fifa/formations/" width="100%"]
-    thead
-      th Active
-      th Title
-      th.ten.wide Positions
-    tbody
-      - @formations.each do |formation|
-        tr[data-id=formation.id]
-          td.center.aligned[no-link]
-            .ui.fitted.slider.checkbox
-              = radio_button_tag :set_formation, formation.id, current_user.formation_id == formation.id
-              label
-          td = formation.title
-          td = formation.positions.join(", ")
+- content_for :modal_container do
+  .ui.basic.tiny.success.modal
+    .ui.icon.header
+      i.green.checkmark.icon 
+      | Formation has been successfully saved.
+
+.ui.stackable.grid
+  .equal.width.columns.row
+    .column
+      .ui.horizontal.divider Formations
+
+      table#formations.ui.basic.definition.selectable.unstackable.very.compact.small.table[width="100%" data-id=current_user.formation_id]
+        thead
+          th Active
+          th Title
+        tbody
+    .column
+      .ui.horizontal.divider Formation View
+      #view-container.transition.visible
+
+= javascript_include_tag "formations"
 
 javascript:
+  currentView = null;
+
+  function selectFormation(data){
+    var checkbox =
+      "<div class=\"ui fitted slider checkbox\">" +
+        (data.id == $("table#formations").data("id") ?
+          "<input type=\"radio\" value="+data.id+" class=\"hidden\" checked=\"checked\">" :
+          "<input type=\"radio\" value="+data.id+" class=\"hidden\">") +
+      "</div>";
+    return checkbox;
+  }
+
   $(function(){
-    $('.ui.checkbox').checkbox({
-      uncheckable: false,
-      onChecked: function(){
-        var this_ = this;
-        $.ajax({
-          type: 'POST',
-          url: '/my_fifa/formations/'+this_.value+'/set_active',
-          beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', AUTH_TOKEN) },
-        });
+    table = $("table#formations").DataTable({
+      bPaginate: false,
+      bFilter: false,
+      bInfo: false,
+      ajax: "/my_fifa/formations",
+      columns: [
+        { render: function(data, type, row, meta){ return selectFormation(row) }, class: "center aligned" },
+        { data: "title" }
+      ],
+      rowCallback: function(nRow, aData){
+        $(nRow).attr("data-id", aData.id);
+        if (window.location.hash == "#"+aData.id)
+          $(nRow).addClass("warning");
+
+        $(nRow).find('.ui.checkbox').checkbox({
+          uncheckable: false,
+          onChecked: function(){
+            var this_ = this;
+            $.ajax({
+              type: 'POST',
+              url: '/my_fifa/formations/'+this_.value+'/set_active',
+              beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', AUTH_TOKEN) },
+            }).then(function(){
+              $("table#formations").data("id", this_.value);
+              table.ajax.reload(null, false);
+            });
+          }
+        })
       }
-    })
+    });
   })

@@ -26,7 +26,7 @@ module MyFifa
 
           render json: {
             data: @players
-          }.to_json(methods: [:ovr])
+          }.to_json(methods: [:ovr, :national_flag])
         }
       end
     end

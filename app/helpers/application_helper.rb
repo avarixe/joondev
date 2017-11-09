@@ -35,7 +35,6 @@ module ApplicationHelper
     end
 
     def multiple_of_two?(n)
-      puts "N: #{n}"
       valid_num = 1
       while valid_num < n
         valid_num = valid_num << 1

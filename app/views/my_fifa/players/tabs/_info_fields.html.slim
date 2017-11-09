@@ -7,18 +7,19 @@
           = f.text_field :name
       .column.required.field[no-empty]
           = f.label :nationality
-          = f.text_field :nationality
+          = f.text_field :nationality, list: "countries"
+          = datalist_tag :countries, MyFifa::COUNTRY_FLAGS.keys
     .equal.width.row
       .column.required.field[no-empty]
           = f.label :pos, 'Position'
           = f.select :pos,                                            \
-            options_for_select(MyFifa::Player::POSITIONS, @player.pos), \
+            options_for_select(MyFifa::PLAYER_POSITIONS, @player.pos), \
             { prompt: true },                                           \
             { class: 'fluid dropdown' }
       .column.field
           = f.label :sec_pos, 'Secondary Position(s)'
           = f.select :sec_pos,                                            \
-            options_for_select(MyFifa::Player::POSITIONS, @player.sec_pos), \
+            options_for_select(MyFifa::PLAYER_POSITIONS, @player.sec_pos), \
             {},                                                             \
             { multiple: true, class: 'fluid multiple dropdown' }
     .equal.width.row

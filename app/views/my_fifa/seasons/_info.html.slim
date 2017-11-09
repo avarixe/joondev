@@ -31,27 +31,27 @@
     .equal.width.row
       .column
         .ui.header
-          = @accolades[:top_rank].name
+          = @accolades[:top_rank].name rescue "N/A"
           .sub.header Player of the Year
       .column
         .ui.header
-          = @accolades[:top_goalscorer].name
+          = @accolades[:top_goalscorer].name rescue "N/A"
           .sub.header Top Goal Scorer
     .equal.width.row
       .column
         .ui.header
-          = @accolades[:top_playmaker].name
+          = @accolades[:top_playmaker].name rescue "N/A"
           .sub.header Top Playmaker
       .column
         .ui.header
-          = @accolades[:top_goalkeeper].name
+          = @accolades[:top_goalkeeper].name rescue "N/A"
           .sub.header Top Goalkeeper
     .equal.width.row
       .column
         .ui.header
-          = @accolades[:top_new_arrival].name
+          = @accolades[:top_new_arrival].name rescue "N/A"
           .sub.header Top New Arrival
       .column
         .ui.header
-          = @accolades[:top_under_21].name
+          = @accolades[:top_under_21].name rescue "N/A"
           .sub.header Top Under-21 Player

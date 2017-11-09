@@ -10,7 +10,8 @@ module MyFifa
       "Substitution",
       "Goal",
       "Booking",
-      "Injury"
+      "Injury",
+      # "Opposition Goal"
     ]
 
     validates :event, inclusion: { in: EVENTS }
@@ -19,12 +20,18 @@ module MyFifa
     validate :valid_specific_event?
 
     def valid_specific_event?
+      # if self.event != "Opposition Goal"
+        # errors.add(:player1_id, "Player can't be blank.") if self.player1_id.blank?
+      # end
+
       case self.event
       when "Substitution"
         errors.add(:player2_id, "Substitute Player can't be blank.") if self.player2_id.blank?
         errors.add(:notes, "Position can't be blank.") if self.notes.blank?
       when "Booking"
         errors.add(:notes, "Type of Booking is Invalid") unless ["Yellow Card", "Red Card"].include?(self.notes)
+      # when "Opposition Goal"
+        # errors.add(:notes, "Player can't be blank.") if self.notes.blank?
       end
     end
 

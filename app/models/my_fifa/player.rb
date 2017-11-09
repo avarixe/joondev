@@ -22,7 +22,7 @@ module MyFifa
 
     scope :with_stats, -> (match_ids) {
       relevant_records = " records.player_id = my_fifa_players.id"
-      relevant_records += " AND records.match_id IN (#{match_ids.join(', ')})" if match_ids.any?
+      relevant_records += " AND records.match_id IN (#{match_ids.any? ? match_ids.join(', ') : ""})" if match_ids.any?
       joins("LEFT JOIN my_fifa_player_records AS records ON #{relevant_records}")
       .group('my_fifa_players.id')
       .select([
@@ -38,37 +38,12 @@ module MyFifa
     scope :sorted, -> {
       order([
         'CASE',
-        *POSITIONS.map.with_index{ |pos, i| "WHEN my_fifa_players.pos = '#{pos}' THEN #{i+1}" },
+        *PLAYER_POSITIONS.map.with_index{ |pos, i| "WHEN my_fifa_players.pos = '#{pos}' THEN #{i+1}" },
         'ELSE 100 END ASC'
       ].join(' '))
     }
 
-    scope :uninjured, -> { where.not(status: 'injured') }
-
-    POSITIONS = [
-      'GK',
-      'CB',
-      'LB',
-      'LWB',
-      'RB',
-      'RWB',
-      'CDM',
-      'CM',
-      'LM',
-      'RM',
-      'LW',
-      'RW',
-      'CAM',
-      'CF',
-      'ST'
-    ]
-
-    BONUS_STAT_TYPES = [
-      'Appearances',
-      'Goals',
-      'Assists',
-      'Clean Sheets'
-    ]
+    scope :available, -> { where(status: "") }
 
     ############################
     #  INITIALIZATION METHODS  #
@@ -169,6 +144,10 @@ module MyFifa
         positions.blank? ? nil : positions
       end
 
+      def national_flag
+        "#{COUNTRY_FLAGS[self.nationality]} flag" if COUNTRY_FLAGS.has_key?(self.nationality)
+      end
+
       # CURRENT INFO
       def current_contract() self.contracts.last end
       def ovr()    self.player_seasons.last.ovr rescue self.start_ovr end
@@ -183,7 +162,7 @@ module MyFifa
       def loaned_out?() status == 'loan' end
 
       # STATISTICS
-      def rank()        self.gp + 10*self.rating + self.goals * 3 + self.assists rescue 0 end
+      def rank()        self.gp + self.rating + self.goals * 3 + self.assists rescue 0 end
       def num_games()   records.count end
       def num_motm()    records.select{ |r| r.motm? }.count end
       def num_goals()   records.map(&:goals).map(&:to_i).sum end

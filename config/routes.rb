@@ -45,12 +45,12 @@ Rails.application.routes.draw do
     resources :competitions
 
     resources :player_seasons, only: [:update]
-    resources :squads, except: [:edit, :destroy] do
+    resources :squads, except: [:edit] do
       member {
         get 'info'
       }
     end
-    resources :formations, except: [:destroy] do
+    resources :formations do
       member {
         post 'set_active'
       }

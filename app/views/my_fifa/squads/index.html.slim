@@ -1,18 +1,42 @@
 - content_for :page_links do
-  = link_to 'New Squad', new_my_fifa_squad_path, class: 'ui basic primary button'
+  a.ui.primary.basic.button#new-form New Squad
+  / = link_to 'New Squad', new_my_fifa_squad_path, class: 'ui basic primary button'
 
-table.ui.basic.definition.compact.small.unstackable.table[data-link="/my_fifa/squads/" width="100%"]
-  thead
-    th Name
-    th.ten.wide Players
-  tbody
-    - @squads.each do |squad|
-      tr[data-id=squad.id]
-        td.center.aligned.selectable = squad.squad_name
-        td[no-link]
-          table.ui.selectable.unstackable.table[data-link="/my_fifa/players/" width="100%"]
-            - squad.players.each_with_index do |player, i|
-              tr[data-id=player.id]
-                td
-                  b = squad.formation.public_send("pos_#{i+1}")
-                td = player.name
+- content_for :modal_container do
+  = render 'responsive_modals'
+
+.ui.stackable.grid
+  .equal.width.columns.row
+    .column
+      .ui.horizontal.divider Squads
+      table#squads.ui.selectable.very.compact.small.unstackable.table[width="100%"]
+        thead
+          th Name
+        tbody
+    .column
+      .ui.horizontal.divider Squad View
+      #view-container.transition.visible
+
+= javascript_include_tag "squads"
+
+javascript:
+  currentView = null;
+
+  $(function(){
+    table = $("table#squads").DataTable({
+      bSort: false,
+      bPaginate: false,
+      bFilter: false,
+      bInfo: false,
+      ajax: "/my_fifa/squads",
+      columns: [
+        { data: "squad_name", class: "center aligned" },
+
+      ],
+      rowCallback: function(nRow, aData){
+        $(nRow).attr("data-id", aData.id);
+        if (window.location.hash == "#"+aData.id)
+          $(nRow).addClass("warning");
+      }
+    })
+  })

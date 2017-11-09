@@ -1,9 +1,4 @@
-function updateLocationHash(hash){
-  baseUrl = window.location.href.split('#')[0];
-  window.location.replace(baseUrl + "#" + hash)
-}
-
-function initializeMatchForm(){
+function initMatchForm(){
   $('#view-container [data-flatpickr]').flatpickr({
     altInput: true,
     altFormat: "M j, Y"
@@ -52,7 +47,6 @@ function setMOTM(target){
 
 // Squad auto populates players and positions
 function loadSquadPlayers(target){
-  console.log("in loadSquadPlayers")
   if ($(target).val()){
     $.get("/my_fifa/squads/"+$(target).val()+"/info", function(data){
       $.each(data.player_ids, function(i, player_id){
@@ -75,7 +69,7 @@ function updateSquad(evt){
   evt.preventDefault();
 
   var squadId = $('select[id$="squad_id"]').val();
-  var rows = $('#view-container table tbody tr:not([data-sub])');
+  var rows = $('#view-container table#players tbody tr:not([data-sub])');
   var squadParams = {};
   for(var i=0; i < 11; i++)
     squadParams['player_id_'+(i+1)] = $('.player_id', $(rows[i])).val();
@@ -97,17 +91,13 @@ function addRecord(target){
   var record = $('<tr data-sub />');
   var id = moment().valueOf();
   if (target.is("[data-sub]"))
-    record.append(
-      target.html()
-        .replace(/(\[sub_record_attributes\])/g, '$1[sub_record_attributes]')
-        .replace(/(_sub_record_attributes)/g, '$1_sub_record_attributes')
-    );
+    record.append(target.html()
+      .replace(/(\[sub_record_attributes\])/g, '$1[sub_record_attributes]')
+      .replace(/(_sub_record_attributes)/g, '$1_sub_record_attributes'));
   else // Parent is not a Substitute
-    record.append(
-      target.html()
-        .replace(/(\[player_records_attributes\])\[(\d+)\]/g, '$1[$2][sub_record_attributes]')
-        .replace(/(_player_records_attributes)_(\d+)/g, '$1_$2_sub_record_attributes')
-    );
+    record.append(target.html()
+      .replace(/(\[player_records_attributes\])\[(\d+)\]/g, '$1[$2][sub_record_attributes]')
+      .replace(/(_player_records_attributes)_(\d+)/g, '$1_$2_sub_record_attributes'));
 
   // Set Substitute behavior
   $('.pos .level.icon', record).last().css('visibility', 'hidden');
@@ -151,39 +141,76 @@ function changePosition(target, position){
     .val(position);
 }
 
-function replaceViewContainer(title, html, callback){
-  callback = callback || function(){};
-  $('#view-container').transition({
-    animation: "scale",
-    onComplete: function(){
-      $("#new-match").toggleClass("disabled", window.location.hash == "#new");
+function addLog(target, logData){
+  $.ajax({
+    url: "/my_fifa/matches/check_log",
+    type: "POST",
+    beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', AUTH_TOKEN)},
+    data: { log: logData }
+  }).then(function(data){
+    if (data){
 
-      $('#view-container')
-        .empty()
-        .append(html)
-        .prev().text(title);
-      $('#view-container').transition({
-        animation: "scale",
-        onComplete: callback()
-      });
-    }
-  })
-}
+      if (target){ // Existing Event
+        var playerId = target.find(".player2_id").val();
 
-function newMatchForm(){
-  $.getJSON("/my_fifa/matches/new", function(data){
-    $("table tbody tr.warning").removeClass("warning");
-    updateLocationHash("new");
-    replaceViewContainer("New Match", data, function(){
-      initializeMatchForm();
-    });
+        target.find("td:first-child > span").text(data.minute+'"');
+        target.find("td:nth-child(2)").html("<i class=\"" + data.icon + " icon\"></i>" + data.message)
+        $.each(["player1_id", "player2_id", "minute", "notes", "event"], function(i, attr){
+          target.find("."+attr).val(data[attr]);
+        })
+
+        if (logData.event == "Substitution"){
+          var subbed = $("table#players select.player_id option:selected[value=\""+playerId+"\"]").closest("tr");
+          subbed.find("select.player_id").val(data.player2_id);
+          changePosition(subbed, data.notes);
+        }
+      } else { // New Event
+        var id = moment().valueOf();
+        var row = $("<tr/>").append(
+          $("#view-container table#logs tr.template").html()
+            .replace(/match_logs_attributes_0/g, "match_logs_attributes_"+id)
+            .replace(/match\[logs_attributes\]\[0\]/g, "match[logs_attributes]["+id+"]")
+        );
+
+        row.removeClass("template hidden transition");
+        row.find("td:first-child > span").text(data.minute+'"');
+        row.find("td:nth-child(2)").html("<i class=\"" + data.icon + " icon\"></i>" + data.message)
+        $.each(["player1_id", "player2_id", "minute", "notes", "event"], function(i, attr){
+          row.find("."+attr).val(data[attr]);
+        })
+        $("#view-container table#logs tbody").append(row);
+
+        if (logData.event == "Substitution"){
+          var subbed = $("table#players select.player_id option:selected[value="+data.player1_id+"]").closest("tr");
+          var subRow = addRecord(subbed);
+          changePosition(subRow, data.notes);
+          subRow.find(".player_id").val(data.player2_id);
+        }
+      }
+
+      $("#log-modal").modal("hide");
+    } else
+      alert("Invalid Match Event!")
   });
 }
 
-function matchLogForm(target){
+function matchLogForm(event, target){
+  console.log(event);
   $("#log-modal").modal({
     duration: 300,
     onShow: function(){
+      $("#log-modal #log_event").val(event).trigger("change");
+      $("#log-modal .sub.header").text(event);
+
+      $("#log-modal i.icon[data-event=\""+event+"\"]").css("display", "table-cell");
+      $("#log-modal i.icon[data-event!=\""+event+"\"]").css("display", "none");
+      $("#log-modal div[data-event]").each(function(){
+        if ($(this).data("event").indexOf(event) > -1)
+          $(this).css("display", "block");
+        else
+          $(this).css("display", "none");
+      })
+
       var playerOptions = "<option></option>";
       $("table#players .player_id").each(function(){
         var playerId = $(this).val() || 0;
@@ -201,10 +228,7 @@ function matchLogForm(target){
 
       // Populate form with existing attributes
       if (target){
-        var event = target.find(".event").val();
-
-        $("#log-modal #log_event_"+event).trigger("click");
-        $("#log-modal input[name=\"log_event\"]").prop("disabled", true);
+        // $("#log-modal input[name=\"log_event\"]").prop("disabled", true);
 
         $("#log-modal #player").val(target.find(".player1_id").val()).prop("disabled", true);
         $("#log-modal #log_minute").val(target.find(".minute").val());
@@ -215,7 +239,6 @@ function matchLogForm(target){
       }
     },
     onApprove: function(){ // validate Match Event. If valid, update Match Log
-      var event = $("#log-modal :radio:checked[name=\"log_event\"]").val() || "";
       var logData = {
         player1_id: $("#log-modal select.player_id").val(),
         event: event,
@@ -232,58 +255,13 @@ function matchLogForm(target){
         case "Booking":
           logData["notes"] = $("#log-modal :radio:checked[name=\"log_booking\"]").val() || "";
           break;
+        case "Opposition Goal":
+          logData["notes"] = $("#log-modal #opp_player").val();
+          break;
       }
 
-      $.ajax({
-        url: "/my_fifa/matches/check_log",
-        type: "POST",
-        beforeSend: function(xhr){ xhr.setRequestHeader('X-CSRF-Token', AUTH_TOKEN)},
-        data: { log: logData }
-      }).then(function(data){
-        if (data){
-
-          if (target){ // Existing Event
-            var playerId = target.find(".player2_id").val();
-
-            target.find("td:first-child > span").text(data.minute+'"');
-            target.find("td:nth-child(2)").html("<i class=\"" + data.icon + " icon\"></i>" + data.message)
-            $.each(["player1_id", "player2_id", "minute", "notes", "event"], function(i, attr){
-              target.find("."+attr).val(data[attr]);
-            })
-
-            if (event == "Substitution"){
-              var subbed = $("table#players select.player_id option:selected[value=\""+playerId+"\"]").closest("tr");
-              subbed.find("select.player_id").val(data.player2_id);
-              changePosition(subbed, data.notes);
-            }
-          } else { // New Event
-            var id = moment().valueOf();
-            var row = $("<tr/>").append(
-              $("#view-container table#logs tr.template").html()
-                .replace(/match_logs_attributes_0/g, "match_logs_attributes_"+id)
-                .replace(/match\[logs_attributes\]\[0\]/g, "match[logs_attributes]["+id+"]")
-            );
-
-            row.removeClass("template hidden transition");
-            row.find("td:first-child > span").text(data.minute+'"');
-            row.find("td:nth-child(2)").html("<i class=\"" + data.icon + " icon\"></i>" + data.message)
-            $.each(["player1_id", "player2_id", "minute", "notes", "event"], function(i, attr){
-              row.find("."+attr).val(data[attr]);
-            })
-            $("#view-container table#logs tbody").append(row);
-
-            if (event == "Substitution"){
-              var subbed = $("table#players select.player_id option:selected[value="+data.player1_id+"]").closest("tr");
-              var subRow = addRecord(subbed);
-              changePosition(subRow, data.notes);
-              subRow.find(".player_id").val(data.player2_id);
-            }
-          }
-          return true;
-        } else
-          alert("Invalid Match Event!")
-          return false;
-      });
+      addLog(target, logData);
+      return false;
     },
     onHide: function(){
       $('#log-modal .transition.visible').transition("slide down");
@@ -294,13 +272,22 @@ function matchLogForm(target){
   }).modal('show');
 }
 
-/****************************
-*  MATCH LOG FUNCTIONALITY  *
-*****************************/
+function newMatchForm(){
+  $.getJSON("/my_fifa/matches/new", function(data){
+    $("table tbody tr.warning").removeClass("warning");
+    updateLocationHash("new");
+    replaceViewContainer("New Match", data, function(){
+      initMatchForm()
+    });
+  });
+}
 
-$(document).on("turbolinks:load", function(){
-  $("#view-container").on("click", "#new-log", function(){ matchLogForm() });
-  $("#view-container").on("click", "#edit-log", function(){ matchLogForm($(this).closest("tr")) });
+$(function(){
+  /****************************
+  *  MATCH LOG FUNCTIONALITY  *
+  ****************************/
+  $("#view-container").on("click", "a[data-action=\"new log\"]", function(){ matchLogForm($(this).attr("title")) });
+  $("#view-container").on("click", "#edit-log", function(){ matchLogForm($(this).closest("tr").find(".event").val(), $(this).closest("tr")) });
   $("#view-container").on("click", "#remove-log", function(){
     var tr = $(this).closest("tr");
     var playerId = tr.find(".player2_id").val();
@@ -325,21 +312,59 @@ $(document).on("turbolinks:load", function(){
     $("#log-modal select#position").val(pos);
   });
 
-  // Loads Event specific fields
-  $("body").on("change", "#log-modal input[name=\"log_event\"]", function(){
-    var value = this.value;
-    if ($('#log-modal .transition.visible').length > 0)
-      $('#log-modal .transition.visible').transition({
-        animation: "slide down",
-        onStart: function(){
-          $('#log-modal .transition.visible :radio:checked').prop('checked', false);
-          $('#log-modal .transition.visible').find('input:not(:radio),select').val("");
-        },
-        onComplete: function(){
-          $('#log-modal [data-event="'+value+'"]').transition("slide down")
-        }
-      });
-    else
-      $('#log-modal [data-event="'+value+'"]').transition("slide down");
+  $('select#season, select#competition').change(function(){ table.ajax.reload() });
+  $('select#season').change(function(){
+    $.getJSON("/my_fifa/seasons/competitions_json?season="+$(this).dropdown('get value'), function(data){
+      $('select#competition').dropdown('change values', data)
+    })
+  });
+
+  /*********************************
+  *  VIEW CONTAINER FUNCTIONALITY  *
+  *********************************/
+  switch(window.location.hash){
+  case '#new':
+    newMatchForm();
+  case '':
+    break;
+  default:
+    currentView = parseInt(window.location.hash.replace(/#/g, ''));
+    $.getJSON('/my_fifa/matches/' + currentView, function(data){
+      replaceViewContainer('Match View', data)
+    });
+  }
+
+  $('#new-form').click(function(){ newMatchForm() });
+
+  $(".pusher").on("click", "#edit-match", function(){
+    id = $(this).data("id");
+    $.getJSON("/my_fifa/matches/"+id+"/edit", function(data){
+      replaceViewContainer("Edit Match", data, function(){ initMatchForm() });
+    });
+  });
+ 
+  $(".pusher").on("click", "#view-match", function(){
+    $.getJSON($("#view-container form").attr("action"), function(data){
+      replaceViewContainer("Match View", data)
+    });
+  })
+
+  $(".pusher").on("click", "table#matches tbody tr", function(evt){
+    id = $(this).data("id");
+    if (window.location.hash != "#"+id)
+      if (evt.ctrlKey || evt.metaKey)
+        window.open("/my_fifa/matches#"+id)
+      else {
+        if (window.location.hash == "#new" && !confirm("View Match #"+id+"? Unsaved Match will be lost."))
+          return;
+
+        $("table tbody tr.warning").removeClass("warning");
+        $(this).addClass("warning");
+        $.getJSON("/my_fifa/matches/"+id, function(data){
+          currentView = id;
+          updateLocationHash(id);
+          replaceViewContainer("Match View", data);
+        });
+      }
   });
 });

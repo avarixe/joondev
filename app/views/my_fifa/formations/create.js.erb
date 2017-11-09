@@ -1,8 +1,10 @@
 // Output success message
-$('.ui.success.modal')
-  .modal({
-    onHide: function(){
-      window.location = "<%= url_for(@formation) %>";
-    }
-  })
-  .modal('show');
+$("#new-form").removeClass("disabled");
+$(".ui.success.modal").modal({
+  onHidden: function(){
+    table.ajax.reload(function(){
+      var id = "<%= @formation.id %>";
+      viewFormation(id);
+    });
+  }
+}).modal("show");

@@ -66,13 +66,13 @@ module MyFifa
         self.competitions.map(&:title).uniq
       end
       
-      def sorted_players(no_injured = false)
+      def sorted_players(only_available = false)
         active_players = players.sorted.active
-        no_injured ? active_players.uninjured : active_players
+        only_available ? active_players.available : active_players
       end
 
       def grouped_players(options = {})
-        sorted_players(options[:no_injured])
+        sorted_players(options[:only_available])
           .group_by(&:pos)
           .map{ |pos, players|
             [ pos, players.map{ |player| [(options[:abbrev] ? player.shorthand_name : player.name), player.id] }]

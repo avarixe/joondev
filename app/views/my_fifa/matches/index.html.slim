@@ -5,18 +5,15 @@ css:
   }
 
 - content_for :page_links do
-  a.ui.primary.basic.button#new-match New Match
+  a.ui.primary.basic.button#new-form New Match
 
 - content_for :modal_container do
   = render 'my_fifa/squads/responsive_modals'
 
-- content_for :page_js do
-  = javascript_include_tag "matches"
-
 .ui.stackable.grid
   .equal.width.columns.row
     .column
-      .ui.horizontal.divider Filter Matches
+      .ui.horizontal.divider Matches Archives
 
       .ui.form
         .equal.width.unstackable.fields
@@ -43,154 +40,36 @@ css:
       .ui.horizontal.divider Match View
       #view-container.transition.visible
 
-/ Match Log modal
-.ui.tiny.modal#log-modal
-  .ui.orange.header Match Log
-  .content
-    .ui.form
-      .equal.width.inline.fields
-        - MyFifa::MatchLog::EVENTS.each do |evt|
-          .field
-            .ui.radio.checkbox
-              = radio_button_tag :log_event, evt
-              = label_tag :"log_event_#{evt}", evt
-      .equal.width.inline.fields
-        .field
-          label Player
-          .ui.fluid.input
-            select#player.player_id
-        .field
-          label Minute
-          .ui.fluid.input
-            = number_field_tag :log_minute, "", min: 1
-      hr
-      .hidden.transition[data-event="Substitution"]
-        .equal.width.inline.fields
-          .field
-            = label_tag :sub_player, "Substitute Player"
-            .ui.fluid.input
-              = select_tag :sub_player, grouped_options_for_select(@team.grouped_players), include_blank: true
-          .field
-            = label_tag :position, "Position"
-            .ui.fluid.input
-              select#position
-      .hidden.transition[data-event="Goal"]
-        .equal.width.inline.fields
-          .field
-            = label_tag :assisted_by, "Assisted By"
-            .ui.fluid.input
-              select#assisted_by.player_id
-          .field
-      .hidden.transition[data-event="Booking"]
-        .equal.width.fields
-          .field
-            label Type of Booking
-            .inline.fields
-              .field
-                .ui.radio.checkbox
-                  = radio_button_tag :log_booking, "Yellow Card"
-                  label[for="log_booking_Yellow_Card"]
-                    i.yellow.square.icon
-                    | Yellow Card
-              .field
-                .ui.radio.checkbox
-                  = radio_button_tag :log_booking, "Red Card"
-                  label[for="log_booking_Red_Card"]
-                    i.red.square.icon
-                    | Red Card
-      .hidden.transition[data-event="Injury"]
-  .actions
-    a.ui.ok.orange.button Save Match Event
-    a.ui.basic.cancel.button Back
+= render 'log_modal'
+
+= javascript_include_tag "matches"
 
 javascript:
-  var currentView = "";
+  currentView = null;
 
   $(function(){
-    switch(window.location.hash){
-    case "#new":
-      newMatchForm();
-    case "":
-      break;
-    default:
-      $.getJSON("/my_fifa/matches/"+window.location.hash.replace(/#/g, ""), function(data){
-        replaceViewContainer("Match View", data);
-      });      
-    }
-
-    $('select#season, select#competition').change(function(){ table.ajax.reload() });
-    $('select#season').change(function(){
-      $.getJSON("/my_fifa/seasons/competitions_json?season="+$(this).dropdown('get value'), function(data){
-        $('select#competition').dropdown('change values', data)
-      });
+    table = $('table#matches').DataTable({
+      processing: true,
+      ajax: {
+        url: '/my_fifa/matches',
+        data: function(d){
+          d.season = $('select#season').val();
+          d.competition = $('select#competition').val();
+        }
+      },
+      order: [[3, 'desc']],
+      columns: [
+        { data: 'opponent' },
+        { data: 'competition' },
+        { data: 'score', sortable: false },
+        { data: { _: 'date_played', sort: 'timestamp' } }
+      ],
+      createdRow: function(nRow, aData){
+        $(nRow)
+          .data('id', aData.id)
+          .addClass(aData.result)
+        if (window.location.hash == "#"+aData.id)
+          $(nRow).addClass("warning");
+      }
     });
-
-    /******************************
-    *  MATCH TABLE FUNCTIONALITY  *
-    *******************************/
-      table = $('table#matches').DataTable({
-        // bPaginate: false,
-        // bFilter: false,
-        processing: true,
-        ajax: {
-          url: '/my_fifa/matches',
-          data: function(d){
-            d.season = $('select#season').val();
-            d.competition = $('select#competition').val();
-          }
-        },
-        order: [[3, 'desc']],
-        columns: [
-          { data: 'opponent' },
-          { data: 'competition' },
-          { data: 'score', sortable: false },
-          { data: { _: 'date_played', sort: 'timestamp' } },
-        ],
-        createdRow: function(nRow, aData){
-          $(nRow)
-            .data('id', aData.id)
-            .addClass(aData.result);
-          if (window.location.hash == "#"+aData.id)
-            $(nRow).addClass("warning");
-        }
-      });    
-
-    /*********************************
-    *  VIEW CONTAINER FUNCTIONALITY  *
-    **********************************/
-      $('#new-match').click(function(){ newMatchForm(); });
-
-      $(".pusher").on("click", "#edit-match", function(){
-        var id = $(this).data("id");
-        $.getJSON("/my_fifa/matches/"+id+"/edit", function(data){
-          replaceViewContainer("Edit Match", data, function(){
-            initializeMatchForm();
-          })
-        });
-      });
-
-      $(".pusher").on("click", "#view-match", function(){
-        $.getJSON($("#view-container form").attr("action"), function(data){
-          replaceViewContainer("Match View", data);
-        });
-      })
-
-      $(".pusher").on("click", "table#matches tbody tr", function(evt){
-        var id = $(this).data("id");
-        if (window.location.hash != "#"+id){
-          if (evt.ctrlKey || evt.metaKey)
-            window.open("/my_fifa/matches#"+id);
-          else {
-            if (window.location.hash == "#new" && !confirm("View Match #"+id+"? Unsaved Match will be lost."))
-              return;
-
-            $("table tbody tr.warning").removeClass("warning");
-            $(this).addClass("warning");
-            $.getJSON("/my_fifa/matches/"+id, function(data){
-              updateLocationHash(id);
-              replaceViewContainer("Match View", data);
-            });
-          }
-        }
-      });
-  });
+  })
