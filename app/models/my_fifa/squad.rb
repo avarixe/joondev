@@ -1,64 +1,74 @@
+# == Schema Information
+#
+# Table name: my_fifa_squads
+#
+#  id           :integer          not null, primary key
+#  team_id      :integer
+#  squad_name   :string           not null
+#  player_id_1  :integer
+#  player_id_2  :integer
+#  player_id_3  :integer
+#  player_id_4  :integer
+#  player_id_5  :integer
+#  player_id_6  :integer
+#  player_id_7  :integer
+#  player_id_8  :integer
+#  player_id_9  :integer
+#  player_id_10 :integer
+#  player_id_11 :integer
+#  formation_id :integer
+#
+
 module MyFifa
+  # Presets of 11 Players
   class Squad < Base
-    default_scope { order(id: :asc)}
+    default_scope { order(id: :asc) }
 
     belongs_to :team
     belongs_to :formation
 
-    ############################
-    #  INITIALIZATION METHODS  #
-    ############################
-    
-
-    ########################
-    #  ASSIGNMENT METHODS  #
-    ########################
-
-
     ########################
     #  VALIDATION METHODS  #
     ########################
-      validates :squad_name, presence: { message: "Squad Name can't be blank." }
-      validate :unique_players?
+    validates :squad_name, presence: { message: 'Squad Name can\'t be blank.' }
+    validate :all_pos_filled?
+    validate :unique_players?
 
-      def unique_players?
-        all_pos_filled = true
-        (1..11).each do |n|
-          if self.send("player_id_#{n}").blank?
-            errors.add(:"player_id_#{n}", "#{formation.public_send("pos_#{n}")} is unselected.")
-            all_pos_filled = false
-          end
-        end
-        
-        if all_pos_filled && player_ids.any?{ |id| player_ids.count(id) > 1 }
-          errors.add(:base, "One Player has been assigned to at least two Positions.")
-        end
+    def all_pos_filled?
+      (1..11).each do |n|
+        next unless send("player_id_#{n}").blank?
+        errors.add(
+          "player_id_#{n}",
+          "#{formation.public_send("pos_#{n}")} is unselected."
+        )
       end
+    end
 
-    ######################
-    #  CALLBACK METHODS  #
-    ######################
-
-
-    #####################
-    #  MUTATOR METHODS  #
-    #####################
+    def unique_players?
+      return unless player_ids.any? { |id| player_ids.count(id) > 1 }
+      errors.add(
+        :base,
+        'One Player has been assigned to at least two Positions.'
+      )
+    end
 
     ######################
     #  ACCESSOR METHODS  #
     ######################
-      def player_ids
-        (1..11).map{ |n| self.send("player_id_#{n}") }
+    def player_ids
+      (1..11).map { |n| send("player_id_#{n}") }
+    end
+
+    def players
+      Player.unscoped do
+        Player.find(player_ids.compact).sort_by do |player|
+          player_ids.index(player.id)
+        end
       end
-      
-      def players
-        Player.unscoped { 
-          Player.find(player_ids.compact).sort_by{ |player| player_ids.index(player.id) }
-        }
-      end
-      
-      def player_names
-        players.map(&:name).join(', ')
-      end 
+    end
+
+    def player_names
+      players.map(&:name).join(', ')
+    end
   end
 end

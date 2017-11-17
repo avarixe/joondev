@@ -20,3 +20,4 @@ public/assets/*
 *.dump
 # Ignore application configuration
 /config/application.yml
+*.pdf

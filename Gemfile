@@ -37,12 +37,13 @@ gem 'slim'
 
 gem 'axlsx_rails'
 
-gem 'flatpickr_rails'
 gem 'tzinfo-data'
+
+# UI gems
+gem 'flatpickr_rails'
 gem 'chartkick'
-
+gem 'select2-rails'
 gem 'best_in_place'
-
 gem 'jquery-inputmask-rails', github: 'knapo/jquery-inputmask-rails'
 gem 'momentjs-rails'
 
@@ -57,6 +58,11 @@ group :development, :test do
   gem 'byebug'
 
   gem 'rspec-rails', '~> 3.6'
+
+  gem "annotate", require: false
+  gem "rails-erd"
+  gem "rubocop", require: false
+  gem "brakeman", require: false
 end
 
 group :development do

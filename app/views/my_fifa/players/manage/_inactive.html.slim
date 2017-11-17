@@ -37,7 +37,7 @@
                 .field
                   = cf.label :player_id, 'Traded Player'
                   = cf.select :player_id,
-                    grouped_options_for_select(@team.grouped_players, cf.object.player_id),
+                    grouped_options_for_select(@grouped_players, cf.object.player_id),
                     { include_blank: true },
                     { class: 'grouped search fluid dropdown'}
               .column

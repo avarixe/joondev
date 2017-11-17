@@ -10,13 +10,13 @@ tr[data-id=f.object.id data-sub=player_is_sub]
         i.green.level.up.icon[style="visibility:#{ i == num_sub-1 ? 'visible' : 'hidden'}"]
       - if f.object.sub_record.present?
         i.red.level.down.icon
-  td.ui.tiny.form[title="Player"]
+  td.ui.tiny.form
     .field[no-empty]
       = f.select :player_id,
         grouped_options_for_select(@grouped_players, f.object.player_id),
         {include_blank: true},
         {class: 'player_id', tabindex: 100 }
-  td.ui.tiny.form[title="Rating"]
+  td.ui.tiny.form
     .field[no-empty]
       = f.number_field :rating, class: 'rating', min: 0, max: 100, tabindex: 1000
 

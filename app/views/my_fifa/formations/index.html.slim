@@ -1,5 +1,5 @@
 - content_for :page_links do
-  a.ui.primary.basic.button#new-form New Formation
+  a.ui.primary.button#new-form New Formation
 
 - content_for :modal_container do
   .ui.basic.tiny.success.modal
@@ -12,7 +12,7 @@
     .column
       .ui.horizontal.divider Formations
 
-      table#formations.ui.basic.definition.selectable.unstackable.very.compact.small.table[width="100%" data-id=current_user.formation_id]
+      table#formations.ui.definition.selectable.unstackable.very.compact.small.table[width="100%" data-id=current_user.formation_id]
         thead
           th Active
           th Title

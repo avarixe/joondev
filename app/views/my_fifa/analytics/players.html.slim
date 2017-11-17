@@ -1,0 +1,41 @@
+- content_for :page_links do
+  = link_to 'Players List', my_fifa_players_path, class: 'ui basic button'
+
+.ui.stackable.grid
+  .three.centered.columns.row
+    .eight.wide.column
+      .ui.horizontal.divider Select Players
+      = select_tag :players,
+        grouped_options_for_select(@grouped_players),
+        multiple: true
+
+  .row
+    #players-table
+      / Same as Player Index but only show for selected Players
+
+    #matches-table
+      / Same as Seasons Matches table but only show matches for each Player, separated by Competition & Season
+
+.ui.stackable.grid#charts-container
+
+      / Bar Graph of Player Values, for each relevant Season
+
+
+javascript:
+  function getCharts(playerIds){
+    $.getJSON("charts?players="+playerIds, function(data){
+      $("#charts-container").empty().html(data);
+    });
+  }
+
+  $(function(){
+    $("#players").select2({
+      width: '100%'
+    });
+
+    getCharts(null);
+    $("#players").change(function(){
+      var playerIds = $(this).val();
+      getCharts(playerIds);
+    })
+  })

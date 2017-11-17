@@ -1,5 +1,6 @@
 css:
   table#records i.icon { margin: 0 0.25em 0 0.25em !important }
+  table#records tr > td:first-child { white-space: nowrap; }
   .booking.label { margin: 0 .14285714em 0 .14285714em !important; padding: 0.6em; }
 
 a.ui.orange.button#edit-match[data-id=@match.id] Edit Match
@@ -35,10 +36,10 @@ a.ui.orange.button#edit-match[data-id=@match.id] Edit Match
 .ui.green.raised.segment.table-container
   .ui.green.header Player Performances
 
-  table#records.ui.selectable.unstackable.small.very.compact.table[data-link="/my_fifa/players/"]
+  table#records.ui.definition.selectable.unstackable.small.very.compact.table[data-link="/my_fifa/players/"]
     thead
       tr
-        th.two.wide
+        th.two.wide POS
         th.six.wide Name
         th.center.aligned Rating
         th.center.aligned Goals

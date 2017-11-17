@@ -1,13 +1,12 @@
 - sub_record = record.sub_record
 
-tr[data-id=record.player_id]
+tr[data-id=record.player_id class="#{'warning' if record.player_id == @match.motm_id}"]
   td
-    .ui.pos.ribbon.label[class="#{'yellow' if record.player_id == @match.motm_id}"]
-      = record.pos
-      - num_sub.times do |i|
-        i.green.level.up.icon[style="visibility:#{i == num_sub-1 ? 'visible' : 'hidden'}"]
-      - if sub_record.present?
-        i.red.level.down.icon
+    = record.pos
+    - num_sub.times do |i|
+      i.green.level.up.icon[style="visibility:#{i == num_sub-1 ? 'visible' : 'hidden'}"]
+    - if sub_record.present?
+      i.red.level.down.icon
   td
     = record.player.name
     - if record.player_id == @match.motm_id

@@ -1,10 +1,13 @@
 css:
-  table#analytics td:nth-child(5) { border-left: 1px solid rgba(34, 36, 38, 0.15) }
+  table#analytics td:nth-child(5),
+  table#analytics td:nth-child(2),
+  table#analytics th:first-child { border-left: 1px solid rgba(34, 36, 38, 0.15) }
   table#analytics tr.disabled td { pointer-events: auto }
   i.flag + i.icon { float: right }
 
 - content_for :page_links do
-  = link_to 'Sign New Player', new_my_fifa_player_path, class: 'ui basic primary button'
+  = link_to 'Sign New Player', new_my_fifa_player_path, class: 'ui primary button'
+  = link_to 'Analyze Players', players_my_fifa_analytics_path, class: 'ui positive button'
 
 - unless @team.playable?
   .ui.error.mini.message
@@ -34,14 +37,13 @@ css:
         = check_box_tag :active_only, 1, true
         label
 
-table#analytics.ui.basic.sortable.definition.selectable.unstackable.very.compact.small.table[data-link="/my_fifa/players/" width="100%"]
+table#analytics.ui.sortable.selectable.unstackable.very.compact.small.table[data-link="/my_fifa/players/" width="100%"]
   thead
     tr
-      th
+      th[rowspan=2] Name
       th.center.aligned[colspan=3] Information
       th.center.aligned[colspan=5] Statistics
     tr
-      th Name
       th Position
       th 2nd POS
       th OVR

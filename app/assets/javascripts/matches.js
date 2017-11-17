@@ -16,6 +16,11 @@ function initMatchForm(){
     hideAdditions: false,
   });
 
+  $("select.player_id, select#sub_player").select2({
+    width: '100%',
+    placeholder: "Player"
+  });
+
   // By default, highest rating gets MOTM
   highest_rating = $('input.rating').map(function(){
     return this.value;
@@ -51,7 +56,7 @@ function loadSquadPlayers(target){
     $.get("/my_fifa/squads/"+$(target).val()+"/info", function(data){
       $.each(data.player_ids, function(i, player_id){
         var tr = $('#match_player_records_attributes_'+i+'_pos').closest('tr');
-        $('select[id$="player_id"]', tr).val(player_id);
+        $('select[id$="player_id"]', tr).val(player_id).trigger("change");
 
         // Update Position labels
         $('td:first-child input', tr)
@@ -115,6 +120,13 @@ function addRecord(target){
   target.find(".pos").append('<i class="level down red icon"></i>');
   $('.pos', record).append('<i class="level up green icon"></i>');
 
+  $(record).find("select.player_id").next(".select2").remove();
+  $(record).find("select.player_id")
+    .select2({
+      width: '100%',
+      placeholder: "Player"
+    });
+
   return $(record);
 }
 
@@ -161,7 +173,7 @@ function addLog(target, logData){
 
         if (logData.event == "Substitution"){
           var subbed = $("table#players select.player_id option:selected[value=\""+playerId+"\"]").closest("tr");
-          subbed.find("select.player_id").val(data.player2_id);
+          subbed.find("select.player_id").val(data.player2_id).trigger("change");
           changePosition(subbed, data.notes);
         }
       } else { // New Event
@@ -184,7 +196,7 @@ function addLog(target, logData){
           var subbed = $("table#players select.player_id option:selected[value="+data.player1_id+"]").closest("tr");
           var subRow = addRecord(subbed);
           changePosition(subRow, data.notes);
-          subRow.find(".player_id").val(data.player2_id);
+          subRow.find(".player_id").val(data.player2_id).trigger("change");
         }
       }
 
@@ -195,7 +207,6 @@ function addLog(target, logData){
 }
 
 function matchLogForm(event, target){
-  console.log(event);
   $("#log-modal").modal({
     duration: 300,
     onShow: function(){
@@ -232,7 +243,7 @@ function matchLogForm(event, target){
 
         $("#log-modal #player").val(target.find(".player1_id").val()).prop("disabled", true);
         $("#log-modal #log_minute").val(target.find(".minute").val());
-        $("#log-modal").find("#sub_player, #assisted_by").val(target.find(".player2_id").val());
+        $("#log-modal").find("#sub_player, #assisted_by").val(target.find(".player2_id").val()).trigger("change");
         $("#log-modal #position").val(target.find(".notes").val());
         if (event == "Booking")
           $("#log-modal #log_booking_"+target.find(".notes").val().replace(/\s/g, "_")).trigger("click");
@@ -265,7 +276,7 @@ function matchLogForm(event, target){
     },
     onHide: function(){
       $('#log-modal .transition.visible').transition("slide down");
-      $('#log-modal').find('input:not(:radio),select').prop("disabled", false).val("");
+      $('#log-modal').find('input:not(:radio),select').prop("disabled", false).val("").trigger("change.select2");
       $('#log-modal :radio').prop("disabled", false).prop("checked", false);
       $("#log-modal").modal("destroy");
     },
@@ -286,7 +297,7 @@ $(function(){
   /****************************
   *  MATCH LOG FUNCTIONALITY  *
   ****************************/
-  $("#view-container").on("click", "a[data-action=\"new log\"]", function(){ matchLogForm($(this).attr("title")) });
+  $("#view-container").on("click", "a[data-action=\"new log\"]", function(){ matchLogForm($(this).data("tooltip")) });
   $("#view-container").on("click", "#edit-log", function(){ matchLogForm($(this).closest("tr").find(".event").val(), $(this).closest("tr")) });
   $("#view-container").on("click", "#remove-log", function(){
     var tr = $(this).closest("tr");

@@ -1,30 +1,32 @@
 = form_for(@squad, as: :squad, remote: true, html: { class: "ui fluid form" }) do |f|
-  = f.hidden_field :formation_id
-
   .fields
     .inline.required.field[no-empty]
       = f.label :squad_name, "Squad Name"
       = f.text_field :squad_name
+  .fields
+    .inline.required.field[no-empty]
+      = f.label :formation_id, "Formation"
+      = f.select :formation_id, options_for_select( \
+        MyFifa::Formation.all.map{ |formation| [formation.title, formation.id]},
+        @squad.formation_id || current_user.formation_id)
 
   .ui.raised.green.segment
-    .ui.mobile.reversed.stackable.grid
-      / Generate format based on Formation
-      - @formation.layout_to_a.each do |row|
-        .columns.centered.row[class="#{row.length % 2 == 0 ? "four" : "five"}"]
-          - row.each do |pos|
-            .four.wide.column.field[no-empty]
-              = f.select "player_id_#{pos}",
-                grouped_options_for_select(@grouped_players, @squad.public_send("player_id_#{pos}")),
-                {prompt: @formation.public_send("pos_#{pos}") },
-                {class: "small fluid grouped search dropdown"}
+    #positions-container[style="display:none!important"]
 
+    #positions-grid.ui.mobile.reversed.stackable.grid
+      - @formation.layout_to_a.each do |row|
+        .columns.centered.row[class="#{ row.length.even? ? 'four' : 'five' }"]
+          - row.each do |no|
+            .four.wide.column.field.pos[data-no=no data-tooltip=@formation.public_send("pos_#{no}") data-inverted no-empty]
+              = f.select "player_id_#{no}",
+                grouped_options_for_select(@grouped_players, @squad.public_send("player_id_#{no}")),
+                { prompt: "" }
       / GK row
       .three.columns.centered.row
-        .four.wide.column.field[no-empty]
+        .four.wide.column.field.pos[data-no=1 data-tooltip='GK' data-inverted no-empty]
           = f.select "player_id_1",
             grouped_options_for_select(@grouped_players, @squad.player_id_1),
-            {prompt: @formation.pos_1 },
-            {class: "small fluid grouped search dropdown"}
+            { prompt: "" }
 
   = f.submit "Save Squad", class: "ui primary button"
   = link_to "Remove Squad", @squad, method: :delete, remote: true, data: { confirm: "Remove #{@squad.squad_name}?" }, class: "ui negative button"

@@ -19,9 +19,6 @@
             div[data-event=["Substitution","Goal","Booking","Injury"]]
               .ui.fluid.input
                 select#player.player_id
-            / div[data-event=["Opposition Goal"]]
-              .ui.fluid.input
-                = text_field_tag :opp_player
           .field
             label Minute
             .ui.fluid.input
@@ -31,9 +28,11 @@
           .field
             = label_tag :sub_player, "Substitute Player"
             .ui.fluid.input
-              = select_tag :sub_player, grouped_options_for_select(@team.grouped_players), include_blank: true
+              = select_tag :sub_player,
+                           grouped_options_for_select(MyFifa::Player.grouped_by_pos(@team.players.available)),
+                           include_blank: true
           .field
-            = label_tag :position, "Position"
+            = label_tag :position
             .ui.fluid.input
               select#position
       div[data-event=["Goal"]]

@@ -1,3 +1,27 @@
+css:
+  .pusher > .background {
+    background: url(/images/stadium.jpeg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+  }
+  .main.container {
+    padding: 1em;
+    border-radius: 0.5em;
+    border: 2px rgba(47, 79, 79, 0.5) outset;
+    background: rgba(255,255,255, 0.8);
+  }
+  table.ui.definition.table thead th:first-child { box-shadow: none !important; }
+  .ui.segment { background: rgba(47, 79, 79, 0.1) !important; }
+  .highcharts-background { fill: rgba(47, 79, 79, 0.1) !important; }
+
 - content_for :system_header do
   h1.ui.teal.header
     i.soccer.icon

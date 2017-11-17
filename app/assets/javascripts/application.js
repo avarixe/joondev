@@ -35,5 +35,6 @@
 //= require inputmask.regex.extensions
 
 //= require best_in_place
+//= require select2
 
 //= require global

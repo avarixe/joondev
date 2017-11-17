@@ -140,7 +140,7 @@
               .column
                 .field[class="#{'disabled' if f.object.loan?}"]
                   = cf.select :player_id,
-                    grouped_options_for_select(@team.grouped_players, cf.object.player_id),
+                    grouped_options_for_select(@grouped_players, cf.object.player_id),
                     { include_blank: 'Traded Player' },
                     { class: 'grouped search fluid dropdown'}
               .column

@@ -5,8 +5,7 @@
         = f.label :layout
         = f.select :layout,
           options_for_select(MyFifa::FORMATION_LAYOUTS, @formation.layout),
-          { include_blank: false },
-          { class: 'fluid dropdown' }
+          {}, { class: 'fluid dropdown' }
       .column
 
   .ui.raised.green.segment

@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: my_fifa_teams
+#
+#  id           :integer          not null, primary key
+#  user_id      :integer
+#  team_name    :string
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  current_date :date
+#  teams_played :text
+#
+
 require 'rails_helper'
 
 RSpec.describe MyFifa::Team, type: :model do

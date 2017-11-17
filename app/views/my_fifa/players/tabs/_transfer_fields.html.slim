@@ -47,7 +47,7 @@
               .field
                 = cost.label :player_id, 'Traded Player'
                 = cost.select :player_id,
-                  grouped_options_for_select(@team.grouped_players, cost.object.player_id),
+                  grouped_options_for_select(@grouped_players, cost.object.player_id),
                   { include_blank: true },
                   { class: 'grouped search fluid dropdown'}
             .column

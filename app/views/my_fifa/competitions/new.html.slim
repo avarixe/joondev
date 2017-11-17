@@ -45,8 +45,8 @@
           = f.label :num_groups, 'Number of Groups'
           = f.number_field :num_groups
         .column.disabled.required.field[no-empty field-trigger="competition[type]" data-trigger-value='["Tournament"]']
-          = f.label :num_advances_per_group, 'Teams Advancing from Group'
-          = f.number_field :num_advances_per_group
+          = f.label :num_advances, 'Teams Advancing from Group Stage'
+          = f.number_field :num_advances
 
   = f.submit 'Add Competition', class: 'ui primary button'
   = link_to 'Back', :back, class: 'ui basic button'

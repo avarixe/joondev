@@ -1,9 +1,10 @@
-require_dependency "my_fifa/application_controller"
+require_dependency 'my_fifa/application_controller'
 
 module MyFifa
+  # :nodoc:
   class TeamsController < ApplicationController
-    before_action :set_team, only: [:show, :edit, :update, :destroy]
-    before_action :restrict_to_user, only: [:show, :edit, :update, :destroy]
+    before_action :set_team, only: %i[show edit update destroy]
+    before_action :restrict_to_user, only: %i[show edit update destroy]
 
     # GET /teams
     def index
@@ -62,18 +63,19 @@ module MyFifa
     end
 
     private
-      # Use callbacks to share common setup or constraints between actions.
-      def set_team
-        @team = Team.find(params[:id])
-      end
 
-      def restrict_to_user
-        redirect_to action: 'index' unless current_user.teams.include? @team
-      end
+    # Use callbacks to share common setup or constraints between actions.
+    def set_team
+      @team = Team.find(params[:id])
+    end
 
-      # Only allow a trusted parameter "white list" through.
-      def team_params
-        params[:team].permit!
-      end
+    def restrict_to_user
+      redirect_to action: 'index' unless current_user.teams.include? @team
+    end
+
+    # Only allow a trusted parameter "white list" through.
+    def team_params
+      params[:team].permit!
+    end
   end
 end

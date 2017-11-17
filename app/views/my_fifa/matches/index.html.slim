@@ -5,7 +5,7 @@ css:
   }
 
 - content_for :page_links do
-  a.ui.primary.basic.button#new-form New Match
+  a.ui.primary.button#new-form New Match
 
 - content_for :modal_container do
   = render 'my_fifa/squads/responsive_modals'
@@ -29,7 +29,7 @@ css:
               options_for_select(@team.recorded_competitions, params[:competition]),
               include_blank: 'All Competitions',
               class: 'fluid dropdown'
-      table#matches.ui.basic.sortable.definition.selectable.unstackable.very.compact.small.table[width="100%"]
+      table#matches.ui.sortable.definition.selectable.unstackable.very.compact.small.table[width="100%"]
         thead
           tr
             th Opponent Team
@@ -62,7 +62,7 @@ javascript:
         { data: 'opponent' },
         { data: 'competition' },
         { data: 'score', sortable: false },
-        { data: { _: 'date_played', sort: 'timestamp' } }
+        { data: { _: 'timestamp', sort: 'epoch' } }
       ],
       createdRow: function(nRow, aData){
         $(nRow)

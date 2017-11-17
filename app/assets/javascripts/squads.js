@@ -1,21 +1,57 @@
+function organizePositions(){
+  $.getJSON("/my_fifa/formations/"+$("#squad_formation_id").val()+"/info", function(data){
+    var layout = data.layout.split("-");
+    var rows = [[]];
+    var nRow = 0;     // current row index
+    var posInRow = 0; // counter of pos in currow row
+    
+    for (var pos=2; pos <= 11; pos++){
+      // If reached threshold of row, create next row
+      if (rows[nRow].length == layout[nRow]){      
+        nRow++;
+        rows.push([]);
+      }
+      rows[nRow].push(pos);
+    }
+
+    // Clear the grid of the previous layout
+    $('.field.pos[data-no != 1]').appendTo('#positions-container');
+    $('#positions-grid > .row:not(:last-child)').remove();
+
+    // Repopular the grid with row data
+    for (var i=0; i < rows.length; i++){
+      rowClass = (rows[i].length % 2 == 0 ? 'four' : 'five') + " columns centered row"
+      // Collect rows in container
+      rowElem = $('<div class="'+rowClass+'"></div>')
+      for (var j=0; j < rows[i].length; j++){
+        var positionField = $('#positions-container .field[data-no='+rows[i][j]+']')
+        positionField.attr("data-tooltip", data["pos_"+rows[i][j]]);
+        positionField.appendTo(rowElem);
+      }
+      // Add row to stackable grid
+      $('#positions-grid').prepend(rowElem);
+    }
+    
+    $('#positions-grid').transition({
+      animation: 'pulse',
+      queue: false
+    });
+
+  });
+}
+
 function initSquadForm(){
-  $("#view-container select").dropdown({
+  $("#view-container #squad_formation_id").dropdown({
     placeholder: false
   });
 
-  // Dropdown menu support for grouped selects
-  $('.ui.dropdown').has('optgroup').each(function(){
-    var $menu = $('<div/>').addClass('menu');
-    $(this).find('select > option').each(function(){
-      $menu.append('<div class="item" data-value="">' + this.innerHTML + '</div>');
-    })
-    $(this).find('optgroup').each(function(){
-      $menu.append('<div class="ui horizontal divider">' + this.label + '</div>');
-      $(this).children().each(function(){
-        $menu.append('<div class="item" data-value="' + this.value + '">' + this.innerHTML + '</div>');        
-      })
-    })
-    $(this).find('.menu').html($menu.html());
+  $("#view-container .pos.field > select").select2({
+    width: "100%",
+    placeholder: "Player"
+  });
+
+  $("#view-container #squad_formation_id").change(function(){
+    organizePositions();
   });
 }
 

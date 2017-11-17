@@ -1,6 +1,20 @@
+# == Schema Information
+#
+# Table name: my_fifa_teams
+#
+#  id           :integer          not null, primary key
+#  user_id      :integer
+#  team_name    :string
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  current_date :date
+#  teams_played :text
+#
+
 module MyFifa
+  # CareerMode Team
   class Team < Base
-    default_scope { order(id: :asc)}
+    default_scope { order(id: :asc) }
 
     belongs_to :user
     has_many :seasons, dependent: :destroy
@@ -9,74 +23,54 @@ module MyFifa
     has_many :squads,  dependent: :delete_all
     has_many :matches, dependent: :delete_all
     has_many :player_records, dependent: :delete_all
-    
+
     serialize :teams_played, Array
 
-    ############################
-    #  INITIALIZATION METHODS  #
-    ############################
-    
     ########################
     #  ASSIGNMENT METHODS  #
     ########################
-      def teams_played=(val)
-        write_attribute :teams_played, (val.is_a?(Array) ? val : val.split("\n").map(&:strip))
-      end
+    def teams_played=(val)
+      write_attribute :teams_played,
+                      (val.is_a?(Array) ? val : val.split("\n").map(&:strip))
+    end
 
     ########################
     #  VALIDATION METHODS  #
     ########################
-      validates :team_name, presence: { message: "Team Name can't be blank." }
-      validates :current_date, presence: { message: "Start Date can't be blank." }
+    validates :team_name, presence: { message: 'Team Name is blank.' }
+    validates :current_date, presence: { message: 'Start Date is blank.' }
 
     ######################
     #  CALLBACK METHODS  #
     ######################
-      after_create :create_first_season
+    after_create :create_first_season
 
-      def create_first_season
-        new_player_seasons = []
-        
-        new_player_seasons << self.seasons.build(
-          start_date: self.current_date,
-          end_date:   self.current_date + 1.year
-        )
-        
-        PlayerSeason.transaction do
-          new_player_seasons.map(&:save)
-        end
+    def create_first_season
+      new_player_seasons = []
+
+      new_player_seasons << seasons.build(
+        start_date: current_date,
+        end_date:   current_date + 1.year
+      )
+
+      PlayerSeason.transaction do
+        new_player_seasons.map(&:save)
       end
-
-    #####################
-    #  MUTATOR METHODS  #
-    #####################
+    end
 
     ######################
     #  ACCESSOR METHODS  #
     ######################
-      def playable?
-        self.players.count >= 11
-      end
+    def playable?
+      players.count >= 11
+    end
 
-      def current_season
-        self.seasons.last
-      end
-      
-      def recorded_competitions
-        self.competitions.map(&:title).uniq
-      end
-      
-      def sorted_players(only_available = false)
-        active_players = players.sorted.active
-        only_available ? active_players.available : active_players
-      end
+    def current_season
+      seasons.last
+    end
 
-      def grouped_players(options = {})
-        sorted_players(options[:only_available])
-          .group_by(&:pos)
-          .map{ |pos, players|
-            [ pos, players.map{ |player| [(options[:abbrev] ? player.shorthand_name : player.name), player.id] }]
-          }
-      end
+    def recorded_competitions
+      competitions.map(&:title).uniq
+    end
   end
 end

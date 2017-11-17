@@ -48,7 +48,7 @@
             .ui.left.icon.input
               i.money.icon
               = f.select :captain_id,                                                   \
-                grouped_options_for_select(@team.grouped_players, f.object.captain_id), \
+                grouped_options_for_select(@grouped_players, f.object.captain_id), \
                 { include_blank: true },                                                \
                 { class: 'grouped search fluid dropdown' }
   = f.submit 'Save Season', class: 'ui primary button'

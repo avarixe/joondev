@@ -77,7 +77,6 @@ $(document).on "turbolinks:load", ->
     altInput: true,
     altFormat: "M j, Y",
     onOpen: (selectedDates, dateStr, instance) ->
-      console.log($(instance.element).data("default"))
       if dateStr.length == 0 and $(instance.element).data("default")
         instance.setDate($(instance.element).data("default"))
       return

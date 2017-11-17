@@ -1,0 +1,30 @@
+.two.columns.row
+  .column
+    .ui.horizontal.divider Player Value
+    = column_chart @values.map { |v| { name: v[:name], data: v[:values] }},
+      id: '1',
+      library: { \
+        tooltip: { pointFormat: '<b>{series.name}</b><br>Value: <b>${point.y}</b>' } }
+  .column
+    .ui.horizontal.divider Player OVR
+    = column_chart @values.map { |v| { name: v[:name], data: v[:ovr] }},
+      id: '2',
+      library: { \
+        tooltip: { pointFormat: '<b>{series.name}</b><br>OVR: <b>{point.y}</b>' } }    
+
+.two.columns.row
+  .column
+    .ui.horizontal.divider Match Performance
+    = line_chart @values.map { |v| { name: v[:name], data: v[:ratings] }},
+      id: '3',
+      min: 40, max: 100,
+      library: { \
+        chart: { zoomType: 'x' },
+        tooltip: { pointFormat: '<b>{series.name}</b><br>Rating: <b>{point.y}</b>' } }  
+  .column
+    .ui.horizontal.divider Recent Form
+    = column_chart @values.map { |v| { name: v[:name], data: v[:recent_form] }},
+      id: '4',
+      min: 40, max: 100,
+      library: { \
+        tooltip: { pointFormat: '<b>{series.name}</b><br>Rating: <b>{point.y}</b>' } }

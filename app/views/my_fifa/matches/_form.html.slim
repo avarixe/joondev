@@ -8,7 +8,6 @@ css:
   .player_id { min-width: 12em !important; }
 
 = form_for(@match, as: :match, remote: true, html: { class: 'ui small fluid form' }) do |f|
-  = f.hidden_field :team_id
   = f.hidden_field :motm_id
 
   - if @match.id.present?
@@ -20,7 +19,7 @@ css:
         .column.required.field[no-empty]
           = f.label :competition, 'Competition'
           = f.select :competition, 
-            options_for_select(@team.current_season.competition_options, @match.competition),
+            options_for_select(@season.competition_options, @match.competition),
             { include_blank: true }, { class: 'ui fluid dropdown'}
         .column.required.field[no-empty]
           = f.label :opponent, 'Opponent Team'
@@ -53,18 +52,18 @@ css:
     .ui.orange.header Match Log
 
     .ui.five.basic.icon.buttons
-      a.ui.button[data-action="new log" title="Substitution"]
+      a.ui.button[data-action="new log" data-tooltip="Substitution" data-inverted]
         i.retweet.icon
-      a.ui.button[data-action="new log" title="Goal"]
+      a.ui.button[data-action="new log" data-tooltip="Goal" data-inverted]
         i.green.soccer.icon
-      a.ui.button[data-action="new log" title="Booking"]
+      a.ui.button[data-action="new log" data-tooltip="Booking" data-inverted]
         i.orange.clone.icon
-      a.ui.button[data-action="new log" title="Injury"]
+      a.ui.button[data-action="new log" data-tooltip="Injury" data-inverted]
         i.pink.first.aid.icon
       / a.ui.button[data-action="new log" title="Opposition Goal"]
         i.gray.soccer.icon
 
-    table#logs.ui.basic.small.definition.unstackable.very.compact.table[width="100%"]
+    table#logs.ui.small.definition.unstackable.very.compact.table[width="100%"]
       thead
         tr
           th.four.wide Minute
@@ -84,11 +83,11 @@ css:
           { include_blank: 'Squad' },
           { class: 'fluid dropdown' }
 
-    table#players.ui.basic.small.unstackable.very.compact.table[width="100%"]
+    table#players.ui.small.unstackable.very.compact.table[width="100%"]
       thead
         tr
-          th
-          th Player
+          th.five.wide
+          th.six.wide Player
           th.center.aligned Rating
       tbody
         - @match.player_records.each do |record|
