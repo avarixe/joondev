@@ -1,7 +1,13 @@
 module MyFifa
   # :nodoc:
   class ApplicationController < ::ApplicationController
+    before_filter :set_system
+
     private
+
+      def set_system
+        @system = 'MyFifa'
+      end
 
       def set_current_team
         @team = current_user.default_team

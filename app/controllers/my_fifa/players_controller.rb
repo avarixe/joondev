@@ -78,11 +78,11 @@ module MyFifa
     end
 
     def set_status
-      if params[:type] != 'recover' && params[:date].blank?
-        status 500
-      else
+      if params[:date].present?
         @date = Date.strptime(params[:date])
         @player.set_current_date(@team, @date)
+      elsif params[:type] != 'recover'
+        status 500
       end
       toggle_player_status
       respond_to { |format| format.js }

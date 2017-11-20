@@ -28,7 +28,7 @@
           td[data-order=time_to_s(record.match.date_played, '%s')]
             = time_to_s record.match.date_played
           td = record.match.opponent
-          td
+          td[style="white-space:nowrap"]
             = record.pos
             - if record.record_id.present?
               i.green.level.up.icon

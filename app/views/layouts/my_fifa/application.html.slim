@@ -1,5 +1,5 @@
 css:
-  .pusher > .background {
+  body.MyFifa .pusher > .background {
     background: url(/images/stadium.jpeg) no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -12,15 +12,15 @@ css:
     bottom: 0;
     z-index: -1;
   }
-  .main.container {
+  body.MyFifa .main.container {
     padding: 1em;
     border-radius: 0.5em;
     border: 2px rgba(47, 79, 79, 0.5) outset;
     background: rgba(255,255,255, 0.8);
   }
-  table.ui.definition.table thead th:first-child { box-shadow: none !important; }
-  .ui.segment { background: rgba(47, 79, 79, 0.1) !important; }
-  .highcharts-background { fill: rgba(47, 79, 79, 0.1) !important; }
+  body.MyFifa table.ui.definition.table thead th:first-child { box-shadow: none !important; }
+  body.MyFifa .ui.segment { background: rgba(47, 79, 79, 0.1) !important; }
+  body.MyFifa .highcharts-background { fill: rgba(47, 79, 79, 0.1) !important; }
 
 - content_for :system_header do
   h1.ui.teal.header

@@ -1,3 +1,5 @@
+require_dependency 'my_fifa/application_controller'
+
 module MyFifa
   # :nodoc:
   class AnalyticsController < ApplicationController
