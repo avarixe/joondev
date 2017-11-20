@@ -1,6 +1,6 @@
 module MyFifa
   # Base Class for MyFifa Manager models
-  class Base < ActiveRecord::Base
+  class Base < ApplicationRecord
     self.abstract_class = true
 
     def self.table_name_prefix

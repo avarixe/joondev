@@ -70,7 +70,7 @@ css:
           th.eleven.wide Event
           th.one.wide
       tbody
-        = f.fields_for :logs, @match.logs.unshift(MyFifa::MatchLog.new) do |log_fields|
+        = f.fields_for :logs, @match.logs.to_a.unshift(MyFifa::MatchLog.new) do |log_fields|
           = render "log_fields", f: log_fields
 
   .ui.green.raised.segment
