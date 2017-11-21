@@ -135,6 +135,8 @@ GEM
     pg (0.21.0-x86-mingw32)
     powerpack (0.1.1)
     rack (2.0.3)
+    rack-attack (5.0.1)
+      rack
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (5.0.6)
@@ -282,6 +284,7 @@ DEPENDENCIES
   jquery-ui-rails
   momentjs-rails
   pg
+  rack-attack
   rails
   rails-assets-tether (>= 1.1.0)!
   rails-erd
@@ -299,4 +302,4 @@ DEPENDENCIES
   web-console (~> 2.0)
 
 BUNDLED WITH
-   1.15.4
+   1.16.0
