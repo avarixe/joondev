@@ -1,33 +1,49 @@
-css:
-  body.MyFifa .pusher > .background {
-    background: url(/images/stadium.jpeg) no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-  }
-  body.MyFifa .main.container {
-    padding: 1em;
-    border-radius: 0.5em;
-    border: 2px rgba(47, 79, 79, 0.5) outset;
-    background: rgba(255,255,255, 0.8);
-  }
-  body.MyFifa table.ui.definition.table thead th:first-child { box-shadow: none !important; }
-  body.MyFifa .ui.segment { background: rgba(47, 79, 79, 0.1) !important; }
-  body.MyFifa .highcharts-background { fill: rgba(47, 79, 79, 0.1) !important; }
+doctype html
+html
+  head
+    title
+      = @title || 'JoonDEV | MyFIFA Manager'
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = stylesheet_link_tag 'https://fonts.googleapis.com/css?family=Oxygen:300&amp;subset=latin-ext'
+    = yield :page_js
+    = csrf_meta_tags
+    meta[name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"]
+    meta[name="turbolinks-cache-control" content="no-cache"]
+    = javascript_tag "var AUTH_TOKEN = '#{form_authenticity_token}';" if protect_against_forgery?
+    = favicon_link_tag 'favicon.ico'
+  body[class="#{@system} #{controller_name} #{action_name}"]
+    - unless current_user # Login/Registration Pages
+      .myfifa.background
+    - if current_user
+      .ui.fixed.huge.inverted.fluid.menu
+        a.header.image.item.toggle.button
+          i.sidebar.icon
+          |  JoonDEV | MyFIFA Manager
+        .right.menu
+          = link_to edit_my_fifa_user_registration_path, class: 'icon item', title: 'Manage Account' do
+            i.edit.icon
+          = link_to destroy_my_fifa_user_session_path, method: :delete, class: 'icon item', title: 'Sign Out' do
+            i.sign.out.icon
+      = render 'shared/menu'
+    .pusher
+      .myfifa.background
+      .ui.main.container
+        - if current_user
+          h1.ui.teal.header
+            i.soccer.icon
+            .content
+              |  MyFIFA Manager 
+              .sub.header = @team.team_name rescue nil
+          h2.ui.violet.dividing.header = @title
 
-- content_for :system_header do
-  h1.ui.teal.header
-    i.soccer.icon
-    .content
-      |  MyFIFA Manager 
-      .sub.header = @team.team_name rescue nil
-  h2.ui.violet.dividing.header = @title
-
-= render file: 'layouts/application'
+          - if content_for? :page_links
+            .ui.text.fluid.menu
+              = yield :page_links
+          = yield
+        - else
+          .ui.middle.aligned.center.aligned.grid
+            .column
+              = yield
+              = render "my_fifa/users/shared/links"          
+    = yield :modal_container

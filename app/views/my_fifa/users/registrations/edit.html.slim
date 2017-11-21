@@ -4,8 +4,8 @@
       | Edit 
       = current_user.full_name
   = form_for(resource, as: resource_name, remote: true, url: registration_path(resource_name), html: { method: :put, class: 'ui large form fluid raised violet segment' }) do |f|
-    h4.ui.top.attached.olive.header Account Information
-    .ui.bottom.attached.olive.segment
+    .ui.bottom.attached.segment
+      h4.ui.dividing.header Account Information
       .field[no-empty]
         .ui.left.icon.input
           i.address.book.icon
@@ -18,8 +18,9 @@
         .ui.left.icon.input
           i.mail.icon
           = f.email_field :email, required: true, readonly: true, placeholder: 'Email Address'
-    h4.ui.top.attached.red.header Change Password
+
     .ui.bottom.attached.red.segment
+      h4.ui.red.dividing.header Change Password
       .field
         em NOTE: Leave Blank if No Password Change
       .field

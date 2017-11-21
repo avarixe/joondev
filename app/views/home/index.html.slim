@@ -1,7 +1,14 @@
-css:
-  .pusher, .ui.main.container, .ui.grid   height: 100%;
-
 .ui.center.aligned.grid
-  .column
-    h1.ui.header Welcome to JoonDEV
-    h4 Click a Project to get Started.
+  .row
+    .column
+      h1.ui.header Welcome to JoonDEV
+      h4 Click a Project to get Started.
+  .row
+    .column
+      = link_to my_fifa_teams_path, class: 'ui raised card' do
+        .image
+          = image_tag '/images/stadium.jpeg'
+        .content
+          .ui.teal.header
+            i.soccer.icon
+            | MyFIFA Manager

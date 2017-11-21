@@ -10,29 +10,11 @@ html
     = csrf_meta_tags
     meta[name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"]
     meta[name="turbolinks-cache-control" content="no-cache"]
-    = javascript_tag "var AUTH_TOKEN = '#{form_authenticity_token}';" if protect_against_forgery?
     = favicon_link_tag 'favicon.ico'
   body[class="#{@system} #{controller_name} #{action_name}"]
-    - unless current_user # Login/Registration Pages
-      .ui.middle.aligned.center.aligned.grid
-        .column
-          = yield
-          = render "users/shared/links"
-    - else
       .ui.fixed.huge.inverted.fluid.menu
-        a.header.image.item.toggle.button
-          i.sidebar.icon
-          |  JoonDEV 
-        .right.menu
-          = link_to content_tag(:i, nil, class: 'edit icon'), edit_user_registration_path, class: 'item', title: 'Manage Account'
-          = link_to content_tag(:i, nil, class: 'sign out icon'), destroy_user_session_path, method: :delete, class: 'item', title: 'Sign Out'
-      = render 'shared/menu'
+        .header.image.item.toggle.button JoonDEV 
       .pusher
         .background
         .ui.main.container
-          = yield :system_header
-          - if content_for? :page_links
-            .ui.text.fluid.menu
-              = yield :page_links
           = yield
-      = yield :modal_container
