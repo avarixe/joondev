@@ -16,7 +16,7 @@ function initMatchForm(){
     hideAdditions: false,
   });
 
-  $("select.player_id, select#sub_player").select2({
+  $("select.available.players").select2({
     width: '100%',
     placeholder: "Player"
   });
@@ -42,7 +42,7 @@ function initMatchForm(){
 }
 
 function setMOTM(target){
-  var playerId = $(target).closest('tr').find("select.player_id").val();
+  var playerId = $(target).closest('tr').find("select.players").val();
   if (playerId){
     $('#match_motm_id').val(playerId);
     $('.ui.ribbon.pos').removeClass('yellow');
@@ -56,7 +56,7 @@ function loadSquadPlayers(target){
     $.get("/my_fifa/squads/"+$(target).val()+"/info", function(data){
       $.each(data.player_ids, function(i, player_id){
         var tr = $('#match_player_records_attributes_'+i+'_pos').closest('tr');
-        $('select[id$="player_id"]', tr).val(player_id).trigger("change");
+        $('select.players', tr).val(player_id).trigger("change");
 
         // Update Position labels
         $('td:first-child input', tr)
@@ -77,7 +77,7 @@ function updateSquad(evt){
   var rows = $('#view-container table#players tbody tr:not([data-sub])');
   var squadParams = {};
   for(var i=0; i < 11; i++)
-    squadParams['player_id_'+(i+1)] = $('.player_id', $(rows[i])).val();
+    squadParams['player_id_'+(i+1)] = $('select.players', $(rows[i])).val();
 
   $.ajax({
     url: '/my_fifa/squads/'+squadId,
@@ -120,8 +120,8 @@ function addRecord(target){
   target.find(".pos").append('<i class="level down red icon"></i>');
   $('.pos', record).append('<i class="level up green icon"></i>');
 
-  $(record).find("select.player_id").next(".select2").remove();
-  $(record).find("select.player_id")
+  $(record).find("select.players").next(".select2").remove();
+  $(record).find("select.players")
     .select2({
       width: '100%',
       placeholder: "Player"
@@ -172,8 +172,8 @@ function addLog(target, logData){
         })
 
         if (logData.event == "Substitution"){
-          var subbed = $("table#players select.player_id option:selected[value=\""+playerId+"\"]").closest("tr");
-          subbed.find("select.player_id").val(data.player2_id).trigger("change");
+          var subbed = $("table#players select.players option:selected[value=\""+playerId+"\"]").closest("tr");
+          subbed.find("select.players").val(data.player2_id).trigger("change");
           changePosition(subbed, data.notes);
         }
       } else { // New Event
@@ -193,10 +193,10 @@ function addLog(target, logData){
         $("#view-container table#logs tbody").append(row);
 
         if (logData.event == "Substitution"){
-          var subbed = $("table#players select.player_id option:selected[value="+data.player1_id+"]").closest("tr");
+          var subbed = $("table#players select.players option:selected[value="+data.player1_id+"]").closest("tr");
           var subRow = addRecord(subbed);
           changePosition(subRow, data.notes);
-          subRow.find(".player_id").val(data.player2_id).trigger("change");
+          subRow.find(".players").val(data.player2_id).trigger("change");
         }
       }
 
@@ -223,7 +223,7 @@ function matchLogForm(event, target){
       })
 
       var playerOptions = "<option></option>";
-      $("table#players .player_id").each(function(){
+      $("table#players .players").each(function(){
         var playerId = $(this).val() || 0;
         if (playerId.length > 0)
           playerOptions += "<option value=\"" + playerId + "\">" + $(this).find("option:selected").text() + "</option>";
@@ -251,7 +251,7 @@ function matchLogForm(event, target){
     },
     onApprove: function(){ // validate Match Event. If valid, update Match Log
       var logData = {
-        player1_id: $("#log-modal select.player_id").val(),
+        player1_id: $("#log-modal select#player").val(),
         event: event,
         minute: $("#log_minute").val(),
       };
@@ -276,7 +276,7 @@ function matchLogForm(event, target){
     },
     onHide: function(){
       $('#log-modal .transition.visible').transition("slide down");
-      $('#log-modal').find('input:not(:radio),select').prop("disabled", false).val("").trigger("change.select2");
+      $('#log-modal .clearable').prop("disabled", false).val("").trigger("change.select2");
       $('#log-modal :radio').prop("disabled", false).prop("checked", false);
       $("#log-modal").modal("destroy");
     },
@@ -305,7 +305,7 @@ $(function(){
 
     // Remove Substitute Row in Players Table
     if (tr.find("input[id$=\"event\"]").val() == "Substitution"){
-      subTr = $("table#players select.player_id option:selected[value="+playerId+"]").closest("tr");
+      subTr = $("table#players select.players option:selected[value="+playerId+"]").closest("tr");
       removeRecord(subTr);
     }
 
@@ -318,7 +318,7 @@ $(function(){
 
   // Selecting Player sets Position
   $("#log-modal select#player").change(function(){
-    var tr = $("table#players select.player_id option:selected[value="+$(this).val()+"]").closest("tr");
+    var tr = $("table#players select.players option:selected[value="+$(this).val()+"]").closest("tr");
     var pos = tr.find(".pos > span").text();
     $("#log-modal select#position").val(pos);
   });

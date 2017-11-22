@@ -18,7 +18,7 @@
             label Player
             div[data-event=["Substitution","Goal","Booking","Injury"]]
               .ui.fluid.input
-                select#player.player_id
+                select#player.player_id.clearable
           .field
             label Minute
             .ui.fluid.input
@@ -30,17 +30,18 @@
             .ui.fluid.input
               = select_tag :sub_player,
                            grouped_options_for_select(MyFifa::Player.grouped_by_pos(@team.players.available)),
+                           class: 'clearable available players',
                            include_blank: true
           .field
             = label_tag :position
             .ui.fluid.input
-              select#position
+              select#position.clearable
       div[data-event=["Goal"]]
         .equal.width.inline.fields
           .field
             = label_tag :assisted_by, "Assisted By"
             .ui.fluid.input
-              select#assisted_by.player_id
+              select#assisted_by.player_id.clearable
           .field
       div[data-event=["Booking"]]
         .equal.width.fields

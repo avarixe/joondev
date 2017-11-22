@@ -92,6 +92,8 @@ Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
+  mount ActionCable.server => '/cable'
+
   root 'home#index'
 
   namespace :my_fifa do
@@ -99,6 +101,8 @@ Rails.application.routes.draw do
       sessions: 'my_fifa/users/sessions',
       registrations: 'my_fifa/users/registrations'
     }
+
+    get '/' => 'application#index'
 
     resources :players, except: [:destroy] do
       collection {

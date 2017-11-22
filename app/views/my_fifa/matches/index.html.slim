@@ -47,6 +47,23 @@ css:
 javascript:
   currentView = null;
 
+  App.cable.subscriptions.create({ channel: 'MyFifa::PlayersChannel', room: "#{@team.id}" }, {
+    received: function(data){
+      var playerSelects = $("select.available.players");
+
+      if (data.active && data.status == ""){
+        // TODO: Get PlayerId selects, check if option is present, and if not add id
+        playerSelects
+          .not("has(option[value="=data.id+"]")
+          .find("optgroup[label=\""+data.pos"\"]")
+          .append("<option value="+data.id+">"+data.name+"</option>")
+      } else{
+        playerSelects.find("option[value="+data.id+"]").remove();
+      }
+      playerSelects.trigger("change.select2");
+    }
+  });
+
   $(function(){
     table = $('table#matches').DataTable({
       processing: true,

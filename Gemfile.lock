@@ -134,6 +134,7 @@ GEM
     pg (0.21.0)
     pg (0.21.0-x86-mingw32)
     powerpack (0.1.1)
+    puma (3.11.0)
     rack (2.0.3)
     rack-attack (5.0.1)
       rack
@@ -284,6 +285,7 @@ DEPENDENCIES
   jquery-ui-rails
   momentjs-rails
   pg
+  puma
   rack-attack
   rails
   rails-assets-tether (>= 1.1.0)!

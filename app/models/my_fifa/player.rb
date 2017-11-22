@@ -74,7 +74,7 @@ module MyFifa
 
     scope :available, -> { active.where(status: '') }
 
-    scope :find_by_name, lambda { |term|
+    scope :find_name, lambda { |term|
       find_by('LOWER(name) LIKE ?', "%#{term.downcase}%")
     }
 
@@ -109,7 +109,7 @@ module MyFifa
     validates :start_age,   presence: { message: 'Age is blank.' }
     validates :start_ovr,   presence: { message: 'Start OVR Rating is blank.' }
     validates :start_value, presence: { message: 'Initial Value is blank.' }
-    validate :no_transfer_if_youth?, if: proc { |player| player.youth? }
+    validate :no_transfer_if_youth?, on: :create, if: proc { |player| player.youth? }
 
     def no_transfer_if_youth?
       contract = contracts.first
@@ -128,6 +128,7 @@ module MyFifa
     #  CALLBACK METHODS  #
     ######################
     after_create :create_player_season
+    after_commit :broadcast_change
 
     def create_player_season
       team.current_season.player_seasons.create(
@@ -137,6 +138,10 @@ module MyFifa
         value:     start_value,
         age:       start_age
       )
+    end
+
+    def broadcast_change
+      PlayerStatusBroadcastJob.perform_now self
     end
 
     #####################

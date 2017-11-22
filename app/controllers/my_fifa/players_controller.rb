@@ -159,7 +159,7 @@ module MyFifa
       Player.unscoped do
         @team.players
              .where(team_id: @team.id)
-             .find_by_name(params[:player])
+             .find_name(params[:player])
       end
     end
   end

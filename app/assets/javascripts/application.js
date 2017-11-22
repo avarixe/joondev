@@ -38,3 +38,5 @@
 //= require select2
 
 //= require global
+
+//= require cable
