@@ -1,15 +1,14 @@
 .ui.horizontal.divider League Table
 table.ui.unstackable.very.compact.small.table[data-league width="100%"]
-  thead
-    tr.center.aligned
-      th Team
-      th W
-      th D
-      th L
-      th GF
-      th GA
-      th GD
-      th PT
+  thead: tr.center.aligned
+    th Team
+    th W
+    th D
+    th L
+    th GF
+    th GA
+    th GD
+    th PT
   tbody
     - competition.results.each do |result|
       tr.center.aligned

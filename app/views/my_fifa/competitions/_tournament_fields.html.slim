@@ -3,14 +3,13 @@
   .table-container
     .ui.horizontal.divider = "Group #{group}"
     table.ui.unstackable.very.compact.small.table[width="100%"]
-      thead
-        tr.center.aligned
-          th
-          th Team
-          th W
-          th D
-          th GF
-          th GA
+      thead: tr.center.aligned
+        th
+        th Team
+        th W
+        th D
+        th GF
+        th GA
       tbody
         - results.each_with_index do |result, j|
           = f.fields_for :results, result do |result_fields|
@@ -26,21 +25,16 @@
   .ui.dividing.header = round[:name]
 
   table.ui.very.compact.small.table
-    thead.center.aligned
-      tr
-        th Home Team
-        th[colspan=2] Score
-        th Away Team
-        th 
+    thead.center.aligned: tr
+      th Home Team
+      th[colspan=2] Score
+      th Away Team
+      th 
     tbody
       - round[:fixtures].each do |fixture|
         = f.fields_for :fixtures, fixture do |ff|
           tr
-            td.five.wide.input 
-              = ff.text_field :home_team, list: 'teams'
-            td.three.wide.input
-              = ff.text_field :home_score, value: ff.object.home_score.join(", ")
-            td.three.wide.input
-              = ff.text_field :away_score, value: ff.object.away_score.join(", ")
-            td.five.wide.input 
-              = ff.text_field :away_team, list: 'teams'
+            td.five.wide.input  = ff.text_field :home_team, list: 'teams'
+            td.three.wide.input = ff.text_field :home_score, value: ff.object.home_score.join(", ")
+            td.three.wide.input = ff.text_field :away_score, value: ff.object.away_score.join(", ")
+            td.five.wide.input  = ff.text_field :away_team, list: 'teams'

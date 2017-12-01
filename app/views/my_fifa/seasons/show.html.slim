@@ -8,13 +8,10 @@
 
 .ui.stackable.grid
   .equal.width.columns.row
-    .column
-      = render 'info'
-    .column
-      = render('analytics') if @matches.any?
+    .column = render 'info'
+    .column = render('analytics') if @matches.any?
   .equal.width.columns.row
-    .column
-      = render 'players'
+    .column = render 'players'
 
 javascript:
   $(function(){

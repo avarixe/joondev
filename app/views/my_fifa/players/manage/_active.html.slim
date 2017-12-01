@@ -14,14 +14,12 @@
       = hidden_field_tag :type, @player.injured? ? 'recover' : 'injury'
       .ui.stackable.grid
         .equal.width.row
-          .column
-            .ui.left.icon.fluid.input
-              i.calendar.icon
-              = text_field_tag :date, (@player.injured? ? nil : @team.current_date),
-                placeholder: "Date Recovered",
-                data: { flatpickr: true, default: @team.current_date }
-          .column
-            .field
+          .column: .ui.left.icon.fluid.input
+            i.calendar.icon
+            = text_field_tag :date, (@player.injured? ? nil : @team.current_date),
+              placeholder: "Date Recovered",
+              data: { flatpickr: true, default: @team.current_date }
+          .column: .field
               = text_field_tag :notes, (@player.injured? ? @player.injury : nil), placeholder: 'Type of Injury'
           .column
             = submit_tag( (@player.injured? ? "UPDATE STATUS" : "LOG INJURY"),
@@ -39,43 +37,35 @@
         .ui.stackable.grid
           = fields_for :term, @player.current_contract.build_new_term do |f|
             .equal.width.row
-              .column
-                .ui.left.icon.fluid.input
-                  i.calendar.icon
-                  = f.text_field :start_date, value: @team.current_date, data: { flatpickr: true }
-              .column
-                .ui.left.icon.fluid.input
-                  i.calendar.icon
-                  = f.text_field :end_date, value: @player.current_contract.end_date, placeholder: 'Contract Expires', data: { flatpickr: true }
+              .column: .ui.left.icon.fluid.input
+                i.calendar.icon
+                = f.text_field :start_date, value: @team.current_date, data: { flatpickr: true }
+              .column: .ui.left.icon.fluid.input
+                i.calendar.icon
+                = f.text_field :end_date, value: @player.current_contract.end_date, placeholder: 'Contract Expires', data: { flatpickr: true }
               .column
             .equal.width.row
-              .column
-                .field
-                  .ui.left.icon.input
-                    i.money.icon
-                    = f.number_field :wage, placeholder: 'Wage'
-              .column
-                .field
-                  .ui.left.icon.input
-                    i.money.icon
-                    = f.number_field :signing_bonus, placeholder: 'Signing Bonus'
-              .column
-                .field
-                  .ui.left.icon.input
-                    i.money.icon
-                    = f.number_field :release_clause, placeholder: 'Release Clause'
+              .column: .field
+                .ui.left.icon.input
+                  i.money.icon
+                  = f.number_field :wage, placeholder: 'Wage'
+              .column: .field
+                .ui.left.icon.input
+                  i.money.icon
+                  = f.number_field :signing_bonus, placeholder: 'Signing Bonus'
+              .column: .field
+                .ui.left.icon.input
+                  i.money.icon
+                  = f.number_field :release_clause, placeholder: 'Release Clause'
             .equal.width.row
-              .column
-                .field
-                  .ui.left.icon.input
-                    i.money.icon
-                    = f.number_field :stat_bonus, placeholder: 'Perf. Bonus'
-              .column
-                .field
-                  = f.number_field :num_stats, placeholder: 'Requirement'
-              .column
-                .field
-                  = f.select :stat_type, MyFifa::BONUS_STAT_TYPES, {include_blank: 'Type of Req.'}, {class: 'fluid dropdown'}
+              .column: .field
+                .ui.left.icon.input
+                  i.money.icon
+                  = f.number_field :stat_bonus, placeholder: 'Perf. Bonus'
+              .column: .field
+                = f.number_field :num_stats, placeholder: 'Requirement'
+              .column: .field
+                = f.select :stat_type, MyFifa::BONUS_STAT_TYPES, {include_blank: 'Type of Req.'}, {class: 'fluid dropdown'}
             .six.wide.column
               = submit_tag 'SIGN NEW CONTRACT', class: "ui blue submit tiny fluid button"
 
@@ -96,14 +86,12 @@
         = hidden_field_tag :type, @player.loaned_out? ? 'return' : 'loan'
         .ui.stackable.grid
           .equal.width.row
-            .column
-              .ui.left.icon.fluid.input
-                i.calendar.icon
-                = text_field_tag :date, @team.current_date, data: { flatpickr: true }
-            .column
-              .ui.left.icon.fluid.input[class="#{'disabled' if @player.loaned_out?}"]
-                i.handshake.icon
-                = text_field_tag :notes, '', placeholder: 'Destination'
+            .column: .ui.left.icon.fluid.input
+              i.calendar.icon
+              = text_field_tag :date, @team.current_date, data: { flatpickr: true }
+            .column: .ui.left.icon.fluid.input[class="#{'disabled' if @player.loaned_out?}"]
+              i.handshake.icon
+              = text_field_tag :notes, '', placeholder: 'Destination'
             .column
               = submit_tag (@player.loaned_out? ? 'RETURN TO CLUB' : 'LOAN OUT' ), class: "ui #{@player.loaned_out? ? 'green' : 'orange'} submit tiny fluid button"
 
@@ -117,36 +105,31 @@
       .ui.stackable.grid
         = fields_for :contract, @player.current_contract do |f|
           .equal.width.row
-            .column
-              .field[no-empty]
-                .ui.left.icon.input
-                  i.calendar.icon
-                  = f.text_field :end_date, value: @team.current_date, placeholder: 'Exit Date', data: { flatpickr: true}
-            .column
-              .field[class="#{'disabled' if @player.current_contract.loan?}"]
-                .ui.left.icon.input
-                  i.handshake.icon
-                  = f.object.loan? ? \
-                    f.text_field(:destination, value: f.object.origin) : \
-                    f.text_field(:destination, placeholder: 'Destination')
+            .column: .field[no-empty]
+              .ui.left.icon.input
+                i.calendar.icon
+                = f.text_field :end_date, value: @team.current_date, placeholder: 'Exit Date', data: { flatpickr: true}
+            .column: .field[class="#{'disabled' if @player.current_contract.loan?}"]
+              .ui.left.icon.input
+                i.handshake.icon
+                = f.object.loan? ? \
+                  f.text_field(:destination, value: f.object.origin) : \
+                  f.text_field(:destination, placeholder: 'Destination')
             .column
           = f.fields_for :exit_cost, f.object.build_exit_cost do |cf|
             .equal.width.row
-              .column
-                .field[class="#{'disabled' if f.object.loan?}"]
-                  .ui.left.icon.input
-                    i.money.icon
-                    = cf.number_field :fee, placeholder: 'Transfer Fee'
-              .column
-                .field[class="#{'disabled' if f.object.loan?}"]
-                  = cf.select :player_id,
-                    grouped_options_for_select(@grouped_players, cf.object.player_id),
-                    { include_blank: 'Traded Player' },
-                    { class: 'grouped search fluid dropdown'}
-              .column
-                .field[class="#{'disabled' if f.object.loan?}"]
-                  .ui.icon.input
-                    i.percent.icon
-                    = cf.number_field :add_on_clause, value: nil, placeholder: 'Add-On Clause'
+              .column: .field[class="#{'disabled' if f.object.loan?}"]
+                .ui.left.icon.input
+                  i.money.icon
+                  = cf.number_field :fee, placeholder: 'Transfer Fee'
+              .column: .field[class="#{'disabled' if f.object.loan?}"]
+                = cf.select :player_id,
+                  grouped_options_for_select(@grouped_players, cf.object.player_id),
+                  { include_blank: 'Traded Player' },
+                  { class: 'grouped search fluid dropdown'}
+              .column: .field[class="#{'disabled' if f.object.loan?}"]
+                .ui.icon.input
+                  i.percent.icon
+                  = cf.number_field :add_on_clause, value: nil, placeholder: 'Add-On Clause'
         .six.wide.column
           = submit_tag 'LEAVE CLUB', class: "ui red fluid tiny submit button"

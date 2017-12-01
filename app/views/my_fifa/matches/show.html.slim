@@ -21,10 +21,9 @@ a.ui.orange.button#edit-match[data-id=@match.id] Edit Match
     .ui.orange.header Match Log
 
     table#records.ui.definition.unstackable.small.very.compact.table
-      thead
-        tr
-          th.four.wide Minute
-          th.twelve.wide
+      thead: tr
+        th.four.wide Minute
+        th.twelve.wide
       tbody
         - @match.logs.each do |log|
           tr
@@ -37,13 +36,12 @@ a.ui.orange.button#edit-match[data-id=@match.id] Edit Match
   .ui.green.header Player Performances
 
   table#records.ui.definition.selectable.unstackable.small.very.compact.table[data-link="/my_fifa/players/"]
-    thead
-      tr
-        th.two.wide POS
-        th.six.wide Name
-        th.center.aligned Rating
-        th.center.aligned Goals
-        th.center.aligned Assists
+    thead: tr
+      th.two.wide POS
+      th.six.wide Name
+      th.center.aligned Rating
+      th.center.aligned Goals
+      th.center.aligned Assists
     tbody
       - @records.each do |record|
         = render 'record', record: record, num_sub: 0

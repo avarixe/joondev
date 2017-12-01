@@ -3,35 +3,34 @@
   .ui.stackable.grid
     .equal.width.row
       .column.required.field[no-empty]
-          = f.label :name
-          = f.text_field :name
+        = f.label :name
+        = f.text_field :name
       .column.required.field[no-empty]
-          = f.label :nationality
-          = f.text_field :nationality, list: "countries"
-          = datalist_tag :countries, MyFifa::COUNTRY_FLAGS.keys
+        = f.label :nationality
+        = f.text_field :nationality, list: "countries"
+        = datalist_tag :countries, MyFifa::COUNTRY_FLAGS.keys
     .equal.width.row
       .column.required.field[no-empty]
-          = f.label :pos, 'Position'
-          = f.select :pos,
-            options_for_select(MyFifa::PLAYER_POSITIONS, @player.pos),
-            { prompt: true },
-            class: 'fluid dropdown'
+        = f.label :pos, 'Position'
+        = f.select :pos,
+                   options_for_select(MyFifa::PLAYER_POSITIONS, @player.pos),
+                   { prompt: true },
+                   class: 'fluid dropdown'
       .column.field
-          = f.label :sec_pos, 'Secondary Position(s)'
-          = f.select :sec_pos,
-            options_for_select(MyFifa::PLAYER_POSITIONS, @player.sec_pos),
-            {}, multiple: true, class: 'fluid multiple dropdown'
+        = f.label :sec_pos, 'Secondary Position(s)'
+        = f.select :sec_pos,
+                   options_for_select(MyFifa::PLAYER_POSITIONS, @player.sec_pos),
+                   {}, multiple: true, class: 'fluid multiple dropdown'
     .equal.width.row
       .column.required.field[no-empty]
-          = f.label :start_ovr, 'Start OVR Rating'
-          = f.number_field :start_ovr
-            .column
+        = f.label :start_ovr, 'Start OVR Rating'
+        = f.number_field :start_ovr
       .column.required.field[no-empty]
-          = f.label :start_value, 'Initial Value'
-          .ui.left.icon.input
-            i.money.icon
-            = f.number_field :start_value
+        = f.label :start_value, 'Initial Value'
+        .ui.left.icon.input
+          i.money.icon
+          = f.number_field :start_value
       - if @player.id.nil?
         .column.required.field[no-empty]
-            = f.label :start_age, 'Age'
-            = f.number_field :start_age
+          = f.label :start_age, 'Age'
+          = f.number_field :start_age

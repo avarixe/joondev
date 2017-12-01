@@ -24,6 +24,6 @@ module MyFifa
     #  CALLBACK METHODS  #
     ######################
     after_save -> { set_current_date(player.team, start_date) }
-    after_commit -> { player.broadcast_change }
+    # after_commit -> { player.broadcast_change }
   end
 end

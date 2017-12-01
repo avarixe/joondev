@@ -14,14 +14,13 @@
 .ui.raised.yellow.segment
   .ui.dividing.header Match Performances
   table.ui.basic.small.very.compact.unstackable.selectable.table#records[width="100%" data-link="/my_fifa/matches#" target-blank]
-    thead
-      tr
-        th Date Played
-        th Opponent Team
-        th Position
-        th.center.aligned Rating
-        th.center.aligned Goals
-        th.center.aligned Assists
+    thead: tr
+      th Date Played
+      th Opponent Team
+      th Position
+      th.center.aligned Rating
+      th.center.aligned Goals
+      th.center.aligned Assists
     tbody
       - @player.records.each do |record|
         tr[data-id=record.match_id]

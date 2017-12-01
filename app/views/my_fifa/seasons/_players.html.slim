@@ -1,13 +1,12 @@
 .table-container
   table#players.ui.definition.unstackable.selectable.very.compact.small.table[data-link="/my_fifa/players/"]
-    thead
-      tr.center.aligned
-        th.six.wide Player
-        th.two.wide Position
-        th.two.wide Kit No.
-        th.two.wide OVR
-        th.two.wide Value
-        th.two.wide Age
+    thead: tr.center.aligned
+      th.six.wide Player
+      th.two.wide Position
+      th.two.wide Kit No.
+      th.two.wide OVR
+      th.two.wide Value
+      th.two.wide Age
     tbody
       - @season.player_seasons.each do |player_season|
         tr.center.aligned[data-id=player_season.player_id bip-id=player_season.id]

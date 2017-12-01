@@ -16,7 +16,7 @@ function initMatchForm(){
     hideAdditions: false,
   });
 
-  $("select.available.players").select2({
+  $("select.players").select2({
     width: '100%',
     placeholder: "Player"
   });
@@ -234,7 +234,7 @@ function matchLogForm(event, target){
         positionOptions += "<option value=\"" + this.innerHTML + "\">" + this.innerHTML + "</option>";
       })
 
-      $("#log-modal select.player_id").each(function(){ $(this).html(playerOptions) });
+      $("#log-modal").find("select#player, select#assisted_by").each(function(){ $(this).html(playerOptions) });
       $("#log-modal select#position").each(function(){  $(this).html(positionOptions) });
 
       // Populate form with existing attributes

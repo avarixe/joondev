@@ -2,52 +2,40 @@
   .ui.dividing.header Player Information 
   .ui.stackable.grid
     .equal.width.row
-      .column
-        .ui.header
-          = @player.pos
-          .sub.header Position
-      .column
-        .ui.header
-          i.flag[class=@player.national_flag]
-          = @player.nationality
-          .sub.header Nationality
-      .column
-        .ui.header
-          = @player.age
-          .sub.header Current Age
+      .column: .ui.header
+        = @player.pos
+        .sub.header Position
+      .column: .ui.header
+        i.flag[class=@player.national_flag]
+        = @player.nationality
+        .sub.header Nationality
+      .column: .ui.header
+        = @player.age
+        .sub.header Current Age
     - if @player.youth?
-      .six.wide.column
-        .ui.header
-          | Class of 
-          = @player.date_joined.strftime('%Y')
-          .sub.header Youth Academy Graduate
-    .ten.wide.column
-      .ui.header
-        = @player.secondary_positions || 'N/A'
-        .sub.header Secondary Position(s)
+      .six.wide.column: .ui.header
+        | Class of 
+        = @player.date_joined.strftime('%Y')
+        .sub.header Youth Academy Graduate
+    .ten.wide.column: .ui.header
+      = @player.secondary_positions || 'N/A'
+      .sub.header Secondary Position(s)
 
   .ui.dividing.header Statistics 
   .ui.stackable.grid
     .two.columns.centered.row
-      .aligned.column
-        .ui.green.statistic
-          .label
-            = @player.active ? 'Current' : 'Last'
-            |  OVR
-          .value
-            = @player.ovr
-      .aligned.column
-        .ui.grey.statistic
+      .aligned.column: .ui.green.statistic
+        .label
+          = @player.active ? 'Current' : 'Last'
+          |  OVR
+        .value = @player.ovr
+      .aligned.column: .ui.grey.statistic
           .label
             = @player.active ? 'Current' : 'Last'
             |  Value
-          .value
-            = number_to_fee @player.value
+          .value = number_to_fee @player.value
     .five.columns.centered.row
       - @stats.each do |stat|
-        .aligned.column
-          .ui.small.statistic[class=stat[:color]]
-            .value
-              = @player.public_send(stat[:type])
-            .label
-              = stat[:label]
+        .aligned.column: .ui.small.statistic[class=stat[:color]]
+            .value = @player.public_send(stat[:type])
+            .label = stat[:label]

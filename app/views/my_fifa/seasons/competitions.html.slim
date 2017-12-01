@@ -18,12 +18,11 @@
           .column
             .ui.horizontal.divider Matches
             table#matches.ui.definition.selectable.unstackable.compact.small.table[data-link="/my_fifa/matches#" width="100%" target-blank]
-              thead
-                tr
-                  th Opponent Team
-                  th Score
-                  th MOTM
-                  th Date Played
+              thead: tr
+                th Opponent Team
+                th Score
+                th MOTM
+                th Date Played
               tbody
                 - competition.matches.includes(:motm).each do |match|
                   tr[class=match.result data-id=match.id]

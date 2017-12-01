@@ -11,16 +11,15 @@
   
   .table-container
     table#stats.ui.definition.unstackable.center.aligned.small.table
-      thead
-        tr
-          th Competition
-          th GP
-          th W
-          th D
-          th L
-          th GF
-          th GA
-          th CS
+      thead: tr
+        th Competition
+        th GP
+        th W
+        th D
+        th L
+        th GF
+        th GA
+        th CS
       tbody
         - @matches.sort_by(&:competition).group_by(&:competition).each do |competition, matches|
           tr

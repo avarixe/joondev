@@ -2,12 +2,11 @@
   .ui.dividing.header = round[:name]
 
   table.ui.very.compact.small.table
-    thead.center.aligned
-      tr
-        th Home Team
-        th[colspan=2] Score
-        th Away Team
-        th 
+    thead.center.aligned: tr
+      th Home Team
+      th[colspan=2] Score
+      th Away Team
+      th 
     tbody
       - round[:fixtures].each do |fixture|
         = f.fields_for :fixtures, fixture do |ff|

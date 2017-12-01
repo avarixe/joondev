@@ -8,93 +8,78 @@
       .ui.compact.stackable.grid
         = fields_for :contracts, @player.contracts.new.init do |f|
           .equal.width.row
-            .column
-              .field
-                = f.label :origin
-                = f.text_field :origin
-            .column
-              .field
-                label Loaned Player?
-                .inline.fields
-                  .field
-                    .ui.radio.checkbox
-                      = f.radio_button :loan, false
-                      = f.label :loan_false, 'No'
-                  .field
-                    .ui.radio.checkbox
-                      = f.radio_button :loan, true
-                      = f.label :loan_true, 'Yes'
+            .column: .field
+              = f.label :origin
+              = f.text_field :origin
+            .column: .field
+              label Loaned Player?
+              .inline.fields
+                .field: .ui.radio.checkbox
+                  = f.radio_button :loan, false
+                  = f.label :loan_false, 'No'
+                .field: .ui.radio.checkbox
+                  = f.radio_button :loan, true
+                  = f.label :loan_true, 'Yes'
             .column
           = f.fields_for :transfer_cost do |cf|
             .equal.width.row
-              .column
-                .field
-                  = cf.label :fee, 'Transfer Fee'
-                  .ui.left.icon.input
-                    i.money.icon
-                    = cf.number_field :fee
-              .column
-                .field
-                  = cf.label :player_id, 'Traded Player'
-                  = cf.select :player_id,
-                    grouped_options_for_select(@grouped_players, cf.object.player_id),
-                    { include_blank: true },
-                    { class: 'grouped search fluid dropdown'}
-              .column
-                .field
-                  = cf.label :notes
-                  = cf.text_field :notes
+              .column: .field
+                = cf.label :fee, 'Transfer Fee'
+                .ui.left.icon.input
+                  i.money.icon
+                  = cf.number_field :fee
+              .column: .field
+                = cf.label :player_id, 'Traded Player'
+                = cf.select :player_id,
+                  grouped_options_for_select(@grouped_players, cf.object.player_id),
+                  { include_blank: true },
+                  { class: 'grouped search fluid dropdown'}
+              .column: .field
+                = cf.label :notes
+                = cf.text_field :notes
 
           .ui.horizontal.divider Terms of Contract
 
           = f.fields_for :terms, f.object.terms.first do |term|
             .equal.width.row
-              .column
-                .required.field[no-empty]
-                  = f.label :start_date, 'Contract Starts'
-                  .ui.left.icon.input
-                    i.calendar.icon
-                    = f.text_field :start_date, value: @team.current_date, data: { flatpickr: true}
-              .column
-                .required.field[no-empty]
-                  = term.label :end_date, 'Contract Ends'
-                  .ui.left.icon.input
-                    i.calendar.icon
-                    = term.text_field :end_date, value: @team.current_date + 1.year, data: { flatpickr: true}
+              .column: .required.field[no-empty]
+                = f.label :start_date, 'Contract Starts'
+                .ui.left.icon.input
+                  i.calendar.icon
+                  = f.text_field :start_date, value: @team.current_date, data: { flatpickr: true}
+              .column: .required.field[no-empty]
+                = term.label :end_date, 'Contract Ends'
+                .ui.left.icon.input
+                  i.calendar.icon
+                  = term.text_field :end_date, value: @team.current_date + 1.year, data: { flatpickr: true}
               .column
             .equal.width.row
-              .column
-                .required.field[no-empty]
-                  = term.label :wage
-                  .ui.left.icon.input
-                    i.money.icon
-                    = term.number_field :wage
-              .column
-                .field
-                  = term.label :signing_bonus, 'Signing Bonus'
-                  .ui.left.icon.input
-                    i.money.icon
-                    = term.number_field :signing_bonus
-              .column
-                .field
-                  = term.label :release_clause, 'Release Clause'
-                  .ui.left.icon.input
-                    i.money.icon
-                    = term.number_field :release_clause
+              .column: .required.field[no-empty]
+                = term.label :wage
+                .ui.left.icon.input
+                  i.money.icon
+                  = term.number_field :wage
+              .column: .field
+                = term.label :signing_bonus, 'Signing Bonus'
+                .ui.left.icon.input
+                  i.money.icon
+                  = term.number_field :signing_bonus
+              .column: .field
+                = term.label :release_clause, 'Release Clause'
+                .ui.left.icon.input
+                  i.money.icon
+                  = term.number_field :release_clause
             .equal.width.row
-              .column
-                .field
-                  = term.label :stat_bonus, 'Perf. Bonus'
-                  .ui.left.icon.input
-                    i.money.icon
-                    = term.number_field :stat_bonus
-              .column
-                .field
-                  = term.label :num_stats, 'Requirements for Bonus'
-                  = term.number_field :num_stats
-              .column
-                .field
-                  = term.label :stat_type, 'Type of Requirement', style: 'visibility:hidden'
-                  = term.select :stat_type, MyFifa::BONUS_STAT_TYPES, {include_blank: true}, {class: 'fluid dropdown'}
+              .column: .field
+                = term.label :stat_bonus, 'Perf. Bonus'
+                .ui.left.icon.input
+                  i.money.icon
+                  = term.number_field :stat_bonus
+              .column: .field
+                = term.label :num_stats, 'Requirements for Bonus'
+                = term.number_field :num_stats
+              .column: .field
+                = term.label :stat_type, 'Type of Requirement', style: 'visibility:hidden'
+                = term.select :stat_type, MyFifa::BONUS_STAT_TYPES, {include_blank: true}, {class: 'fluid dropdown'}
         .six.wide.column
           = submit_tag 'SIGN NEW CONTRACT', class: "ui green tiny submit button"

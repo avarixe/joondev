@@ -2,56 +2,45 @@
   .ui.teal.header Logistics
   .ui.stackable.grid
     .equal.width.row
-      .column
-        .ui.header
-          = number_to_fee @season.start_club_worth
-          .sub.header Club Worth (Start of Season)
-      .column
-        .ui.header
-          = number_to_fee @season.end_club_worth
-          .sub.header Club Worth (End of Season)
+      .column: .ui.header
+        = number_to_fee @season.start_club_worth
+        .sub.header Club Worth (Start of Season)
+      .column: .ui.header
+        = number_to_fee @season.end_club_worth
+        .sub.header Club Worth (End of Season)
     .equal.width.row
-      .column
-        .ui.header
-          = number_to_fee @season.transfer_budget
-          .sub.header Transfer Budget
-      .column
-        .ui.header
-          = number_to_fee @season.wage_budget
-          .sub.header Wage Budget
+      .column: .ui.header
+        = number_to_fee @season.transfer_budget
+        .sub.header Transfer Budget
+      .column: .ui.header
+        = number_to_fee @season.wage_budget
+        .sub.header Wage Budget
     .equal.width.row
-      .column
-        .ui.header
-          = @season.captain.name rescue 'N/A'
-          .sub.header Captain
+      .column: .ui.header
+        = @season.captain.name rescue 'N/A'
+        .sub.header Captain
 
 .ui.raised.orange.segment
   .ui.orange.header Individual Club Accolades
   .ui.stackable.grid
     .equal.width.row
-      .column
-        .ui.header
-          = @accolades[:top_rank].name rescue "N/A"
-          .sub.header Player of the Year
-      .column
-        .ui.header
-          = @accolades[:top_goalscorer].name rescue "N/A"
-          .sub.header Top Goal Scorer
+      .column: .ui.header
+        = @accolades[:top_rank].name rescue "N/A"
+        .sub.header Player of the Year
+      .column: .ui.header
+        = @accolades[:top_goalscorer].name rescue "N/A"
+        .sub.header Top Goal Scorer
     .equal.width.row
-      .column
-        .ui.header
-          = @accolades[:top_playmaker].name rescue "N/A"
-          .sub.header Top Playmaker
-      .column
-        .ui.header
-          = @accolades[:top_goalkeeper].name rescue "N/A"
-          .sub.header Top Goalkeeper
+      .column: .ui.header
+        = @accolades[:top_playmaker].name rescue "N/A"
+        .sub.header Top Playmaker
+      .column: .ui.header
+        = @accolades[:top_goalkeeper].name rescue "N/A"
+        .sub.header Top Goalkeeper
     .equal.width.row
-      .column
-        .ui.header
-          = @accolades[:top_new_arrival].name rescue "N/A"
-          .sub.header Top New Arrival
-      .column
-        .ui.header
-          = @accolades[:top_under_21].name rescue "N/A"
-          .sub.header Top Under-21 Player
+      .column: .ui.header
+        = @accolades[:top_new_arrival].name rescue "N/A"
+        .sub.header Top New Arrival
+      .column: .ui.header
+        = @accolades[:top_under_21].name rescue "N/A"
+        .sub.header Top Under-21 Player

@@ -18,11 +18,11 @@
             label Player
             div[data-event=["Substitution","Goal","Booking","Injury"]]
               .ui.fluid.input
-                select#player.player_id.clearable
+                select#player.players.clearable
           .field
             label Minute
             .ui.fluid.input
-              = number_field_tag :log_minute, "", min: 1
+              = number_field_tag :log_minute, "", min: 1, class: 'clearable'
       div[data-event=["Substitution"]]
         .equal.width.inline.fields
           .field
@@ -41,7 +41,7 @@
           .field
             = label_tag :assisted_by, "Assisted By"
             .ui.fluid.input
-              select#assisted_by.player_id.clearable
+              select#assisted_by.players.clearable
           .field
       div[data-event=["Booking"]]
         .equal.width.fields

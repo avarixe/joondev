@@ -1,13 +1,12 @@
 .table-container
   table.ui.unstackable.very.compact.small.table[width="100%"]
-    thead
-      tr.center.aligned
-        th
-        th Team
-        th W
-        th D
-        th GF
-        th GA
+    thead: tr.center.aligned
+      th
+      th Team
+      th W
+      th D
+      th GF
+      th GA
     tbody
       - @competition.results.each_with_index do |result, i|
         = f.fields_for :results, result do |result_fields|

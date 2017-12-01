@@ -6,11 +6,10 @@
       = round[:name]
     .content.transition.visible
       table.ui.very.compact.small.table
-        thead.center.aligned
-          tr
-            th Home Team
-            th Score
-            th Away Team
+        thead.center.aligned: tr
+          th Home Team
+          th Score
+          th Away Team
         tbody
           - round[:fixtures].each do |fixture|
             tr.center.aligned

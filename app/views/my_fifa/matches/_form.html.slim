@@ -64,11 +64,10 @@ css:
         i.gray.soccer.icon
 
     table#logs.ui.small.definition.unstackable.very.compact.table[width="100%"]
-      thead
-        tr
-          th.four.wide Minute
-          th.eleven.wide Event
-          th.one.wide
+      thead: tr
+        th.four.wide Minute
+        th.eleven.wide Event
+        th.one.wide
       tbody
         = f.fields_for :logs, @match.logs.to_a.unshift(MyFifa::MatchLog.new) do |log_fields|
           = render "log_fields", f: log_fields
@@ -84,11 +83,10 @@ css:
           { class: 'fluid dropdown' }
 
     table#players.ui.small.unstackable.very.compact.table[width="100%"]
-      thead
-        tr
-          th.five.wide
-          th.six.wide Player
-          th.center.aligned Rating
+      thead: tr
+        th.five.wide
+        th.six.wide Player
+        th.center.aligned Rating
       tbody
         - @match.player_records.each do |record|
           = f.fields_for :player_records, record do |record_fields|

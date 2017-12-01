@@ -6,8 +6,7 @@ tr[data-id=f.object.id class="#{"template hidden transition" if f.object.event.b
     = f.hidden_field :minute,     class: "minute"
     = f.hidden_field :event,      class: "event"
     = f.hidden_field :notes,      class: "notes"
-    span
-      = f.object.minute.to_s + '"'
+    span = f.object.minute.to_s + '"'
   td
     - if f.object.event.present?
       i.icon[class=f.object.icon]

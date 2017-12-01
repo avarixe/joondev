@@ -7,8 +7,8 @@
     .inline.required.field[no-empty]
       = f.label :formation_id, "Formation"
       = f.select :formation_id, options_for_select( \
-        MyFifa::Formation.all.map{ |formation| [formation.title, formation.id]},
-        @squad.formation_id || current_user.formation_id)
+                 MyFifa::Formation.all.map{ |formation| [formation.title, formation.id]},
+                 @squad.formation_id || current_user.formation_id)
 
   .ui.raised.green.segment
     #positions-container[style="display:none!important"]

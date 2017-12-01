@@ -128,7 +128,7 @@ module MyFifa
     #  CALLBACK METHODS  #
     ######################
     after_create :create_player_season
-    after_commit :broadcast_change
+    # after_commit :broadcast_change
 
     def create_player_season
       team.current_season.player_seasons.create(

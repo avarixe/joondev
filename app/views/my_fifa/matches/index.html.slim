@@ -30,12 +30,11 @@ css:
               include_blank: 'All Competitions',
               class: 'fluid dropdown'
       table#matches.ui.sortable.definition.selectable.unstackable.very.compact.small.table[width="100%"]
-        thead
-          tr
-            th Opponent Team
-            th Competition
-            th Score
-            th Date Played
+        thead: tr
+          th Opponent Team
+          th Competition
+          th Score
+          th Date Played
     .column
       .ui.horizontal.divider Match View
       #view-container.transition.visible
@@ -54,8 +53,8 @@ javascript:
       if (data.active && data.status == ""){
         // TODO: Get PlayerId selects, check if option is present, and if not add id
         playerSelects
-          .not("has(option[value="=data.id+"]")
-          .find("optgroup[label=\""+data.pos"\"]")
+          .not("has(option[value="+data.id+"]")
+          .find("optgroup[label=\""+data.pos+"\"]")
           .append("<option value="+data.id+">"+data.name+"</option>")
       } else{
         playerSelects.find("option[value="+data.id+"]").remove();

@@ -2,11 +2,10 @@
   - if @player.injuries.any?
     .ui.pink.dividing.header Injuries
     table.ui.basic.small.very.compact.unstackable.table
-      thead
-        tr
-          th Type of Injury
-          th Date Injured
-          th Date Recovered
+      thead: tr
+        th Type of Injury
+        th Date Injured
+        th Date Recovered
       tbody
         - @player.injuries.each do |injury|
           tr
@@ -16,12 +15,11 @@
 
   .ui.blue.dividing.header Contracts
   table.ui.basic.small.very.compact.unstackable.table[width="100%"]
-    thead
-      tr
-        th Date Signed
-        th Wage
-        th Bonus
-        th Release Clause
+    thead: tr
+      th Date Signed
+      th Wage
+      th Bonus
+      th Release Clause
     tbody
       - @player.contracts.each do |contract|
         - contract.terms.each do |term|
@@ -35,11 +33,10 @@
   - if @player.loans.any?
     .ui.orange.dividing.header Loans
     table.ui.basic.small.very.compact.unstackable.table[width="100%"]
-      thead
-        tr
-          th Destination
-          th Loan Date
-          th Return Date
+      thead: tr
+        th Destination
+        th Loan Date
+        th Return Date
       tbody
         - @player.loans.each do |loan|
           tr
@@ -49,12 +46,11 @@
 
   .ui.red.dividing.header Transfers
   table.ui.basic.small.very.compact.unstackable.table[width="100%"]
-    thead
-      tr
-        th
-        th Origin
-        th Date
-        th Transfer Fee
+    thead: tr
+      th
+      th Origin
+      th Date
+      th Transfer Fee
     tbody
       - @player.contracts.each_with_index do |contract, i|
         - if contract.transfer_cost.id.present?
@@ -71,8 +67,7 @@
             td = time_to_s(contract.start_date)
             td = contract.transfer_cost.total_fee
           - if contract.transfer_cost.notes.present?
-            tr
-              td[colspan=3] = contract.transfer_cost.notes
+            tr: td[colspan=3] = contract.transfer_cost.notes
 
         - if contract.exit_cost.present? && contract.exit_cost.id.present?
           tr
@@ -83,5 +78,4 @@
             td = contract.exit_cost.total_fee
 
           - if (contract.exit_cost.notes.present? rescue false)
-            tr
-              td[colspan=3] = contract.exit_cost.notes
+            tr: td[colspan=3] = contract.exit_cost.notes
