@@ -50,6 +50,9 @@ gem 'momentjs-rails'
 
 gem 'figaro'
 
+gem 'awesome_print'
+gem 'rails_semantic_logger'
+
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.1.0'
 end
@@ -77,5 +80,6 @@ group :development do
 end
 
 group :production do
-  gem 'rails_12factor'
+  gem 'redis'
+  # gem 'rails_12factor'
 end

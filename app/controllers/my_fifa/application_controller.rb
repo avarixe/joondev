@@ -1,7 +1,7 @@
 module MyFifa
   # :nodoc:
   class ApplicationController < ::ApplicationController
-    before_filter :set_system
+    before_action :set_system
     before_action :authenticate_my_fifa_user!
 
     def index
