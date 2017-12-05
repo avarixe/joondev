@@ -49,10 +49,6 @@ module ApplicationHelper
   ##################
   #  MISC HELPERS  #
   ##################
-  def current_user
-    current_my_fifa_user
-  end
-
   def str_to_bool(string)
     string == 'true'
   end

@@ -96,14 +96,12 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
+  devise_for :users, controllers: {
+    sessions: 'users/sessions',
+    registrations: 'users/registrations'
+  }
+
   namespace :my_fifa do
-    devise_for :users, class_name: "MyFifa::User", controllers: {
-      sessions: 'my_fifa/users/sessions',
-      registrations: 'my_fifa/users/registrations'
-    }
-
-    get '/' => 'application#index'
-
     resources :players, except: [:destroy] do
       collection {
         post 'search'

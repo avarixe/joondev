@@ -2,7 +2,7 @@ module MyFifa
   # :nodoc:
   class ApplicationController < ::ApplicationController
     before_action :set_system
-    before_action :authenticate_my_fifa_user!
+    before_action :authenticate_user!
 
     def index
       redirect_to current_user.default_team

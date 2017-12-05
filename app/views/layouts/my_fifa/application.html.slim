@@ -21,9 +21,9 @@ html
           i.sidebar.icon
           |  JoonDEV | MyFIFA Manager
         .right.menu
-          = link_to edit_my_fifa_user_registration_path, class: 'icon item', title: 'Manage Account' do
+          = link_to edit_user_registration_path, class: 'icon item', title: 'Manage Account' do
             i.edit.icon
-          = link_to destroy_my_fifa_user_session_path, method: :delete, class: 'icon item', title: 'Sign Out' do
+          = link_to destroy_user_session_path, method: :delete, class: 'icon item', title: 'Sign Out' do
             i.sign.out.icon
       = render 'shared/menu'
     .pusher
