@@ -115,23 +115,18 @@ Rails.application.routes.draw do
         post 'rejoin'
       }
     end
+
     resources :teams do
-      member {
-        post 'set_active'
-      }
+      post 'set_active', on: :member
     end
+
     resources :matches do
-      collection {
-        post 'check_log'
-      }
+      post 'check_log', on: :collection
     end
+
     resources :seasons, except: [:new] do
-      collection {
-        get 'competitions_json'
-      }
-      member {
-        get 'competitions'
-      }
+      get 'competitions_json', on: :collection
+      get 'competitions', on: :member
     end
 
     resources :competitions
@@ -139,9 +134,7 @@ Rails.application.routes.draw do
     resources :player_seasons, only: [:update]
 
     resources :squads, except: [:edit] do
-      member {
-        get 'info'
-      }
+      get 'info', on: :member
     end
     
     resources :formations do
@@ -157,6 +150,12 @@ Rails.application.routes.draw do
 
         get 'charts'
         get 'stats'
+      }
+    end
+
+    resources :export, only: [:index] do
+      collection {
+        get 'players'
       }
     end
   end

@@ -1,38 +1,42 @@
-.ui.text.container
-  h2.ui.violet.header
-    .content
-      | Edit 
-      = current_user.full_name
-  = form_for(resource, as: resource_name, remote: true, url: registration_path(resource_name), html: { method: :put, class: 'ui large form fluid raised violet segment' }) do |f|
-    .ui.bottom.attached.segment
-      h4.ui.dividing.header Account Information
-      .field[no-empty]
-        .ui.left.icon.input
-          i.address.book.icon
-          = f.text_field :full_name, required: true, placeholder: 'Name'
-      .disabled.field
-        .ui.left.icon.input
-          i.user.icon
-          = f.text_field :username, required: true, readonly: true, placeholder: 'Username'
-      .disabled.field
-        .ui.left.icon.input
-          i.mail.icon
-          = f.email_field :email, required: true, readonly: true, placeholder: 'Email Address'
+css:
+  body.MyFifa.registrations .container { border: 0 }
+  .column { max-width: 450px; margin: auto }
 
-    .ui.bottom.attached.red.segment
-      h4.ui.red.dividing.header Change Password
-      .field
-        em NOTE: Leave Blank if No Password Change
-      .field
-        .ui.left.icon.input
-          i.lock.icon
-          = f.password_field :password, autocomplete: "off", placeholder: "Password (#{ @minimum_password_length} characters minimum)"
-      .field
-        .ui.left.icon.input
-          i.lock.icon
-          = f.password_field :password_confirmation, autocomplete: "off", placeholder: 'Confirm Password'
+/ .ui.text.container
+h2.ui.violet.header
+  .content
+    | Edit 
+    = current_user.full_name
+= form_for(resource, as: resource_name, remote: true, url: registration_path(resource_name), html: { method: :put, class: 'ui large form fluid raised violet segment' }) do |f|
+  .ui.bottom.attached.segment
+    h4.ui.dividing.header Account Information
     .field[no-empty]
       .ui.left.icon.input
+        i.address.book.icon
+        = f.text_field :full_name, required: true, placeholder: 'Name'
+    .disabled.field
+      .ui.left.icon.input
+        i.user.icon
+        = f.text_field :username, required: true, readonly: true, placeholder: 'Username'
+    .disabled.field
+      .ui.left.icon.input
+        i.mail.icon
+        = f.email_field :email, required: true, readonly: true, placeholder: 'Email Address'
+
+  .ui.bottom.attached.red.segment
+    h4.ui.red.dividing.header Change Password
+    .field
+      em NOTE: Leave Blank if No Password Change
+    .field
+      .ui.left.icon.input
         i.lock.icon
-        = f.password_field :current_password, autocomplete: "off", placeholder: 'Confirm Changes with Current Password'
-    = f.submit "Update Account", class: 'ui fluid violet submit button'
+        = f.password_field :password, autocomplete: "off", placeholder: "Password (#{ @minimum_password_length} characters minimum)"
+    .field
+      .ui.left.icon.input
+        i.lock.icon
+        = f.password_field :password_confirmation, autocomplete: "off", placeholder: 'Confirm Password'
+  .field[no-empty]
+    .ui.left.icon.input
+      i.lock.icon
+      = f.password_field :current_password, autocomplete: "off", placeholder: 'Confirm Changes with Current Password'
+  = f.submit "Update Account", class: 'ui fluid violet submit button'

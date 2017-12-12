@@ -13,37 +13,28 @@ html
     = javascript_tag "var AUTH_TOKEN = '#{form_authenticity_token}';" if protect_against_forgery?
     = favicon_link_tag 'favicon.ico'
   body[class="#{@system} #{controller_name} #{action_name}"]
-    - unless current_user # Login/Registration Pages
-      .myfifa.background
-    - if current_user
-      .ui.fixed.huge.inverted.fluid.menu
-        a.header.image.item.toggle.button
-          i.sidebar.icon
-          |  JoonDEV | MyFIFA Manager
-        .right.menu
-          = link_to edit_user_registration_path, class: 'icon item', title: 'Manage Account' do
-            i.edit.icon
-          = link_to destroy_user_session_path, method: :delete, class: 'icon item', title: 'Sign Out' do
-            i.sign.out.icon
-      = render 'shared/menu'
+    .ui.fixed.huge.inverted.fluid.menu
+      a.header.image.item.toggle.button
+        i.sidebar.icon
+        |  JoonDEV | MyFIFA Manager
+      .right.menu
+        = link_to edit_user_registration_path, class: 'icon item', title: 'Manage Account' do
+          i.edit.icon
+        = link_to destroy_user_session_path, method: :delete, class: 'icon item', title: 'Sign Out' do
+          i.sign.out.icon
+    = render 'shared/menu'
     .pusher
       .myfifa.background
       .ui.main.container
-        - if current_user
-          h1.ui.teal.header
-            i.soccer.icon
-            .content
-              |  MyFIFA Manager 
-              .sub.header = @team.team_name rescue nil
-          h2.ui.violet.dividing.header = @title
+        h1.ui.teal.header
+          i.soccer.icon
+          .content
+            |  MyFIFA Manager 
+            .sub.header = @team.team_name rescue nil
+        h2.ui.violet.dividing.header = @title
 
-          - if content_for? :page_links
-            .ui.text.fluid.menu
-              = yield :page_links
-          = yield
-        - else
-          .ui.middle.aligned.center.aligned.grid
-            .column
-              = yield
-              = render "my_fifa/users/shared/links"          
+        - if content_for? :page_links
+          .ui.text.fluid.menu
+            = yield :page_links
+        = yield
     = yield :modal_container

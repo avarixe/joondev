@@ -1,0 +1,20 @@
+wb = xlsx_package.workbook
+players = @team.players.sorted
+
+wb.add_worksheet(name: 'Players') do |sheet|
+  sheet.add_row [
+    'Name',
+    'POS',
+    'Secondary POS',
+    'Nationality',
+  ]
+
+  players.each do |player|
+    sheet.add_row [
+      player.name,
+      player.pos,
+      player.sec_pos.join(", "),
+      player.nationality
+    ]
+  end
+end

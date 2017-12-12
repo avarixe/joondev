@@ -1,6 +1,7 @@
 css:
   body > .grid { height: 100%; }
-  .column { max-width: 450px; }
+  .column { max-width: 450px; margin:auto }
+  body.MyFifa.sessions .container { border: 0 }
 
 .column
   h2.ui.teal.header
@@ -9,16 +10,16 @@ css:
     .field no-empty="" 
       .ui.left.icon.input
         i.user.icon
-        = f.text_field :login,    \
-          autofocus: true,        \
-          autocapitalize: "none", \
-          autocomplete: "off",    \
+        = f.text_field :login,
+          autofocus: true,
+          autocapitalize: "none",
+          autocomplete: "off",
           placeholder: 'Username'
     .field no-empty=""
       .ui.left.icon.input
         i.lock.icon
-        = f.password_field :password, \
-          autocomplete: "off",        \
+        = f.password_field :password,
+          autocomplete: "off",
           placeholder: 'Password'
     - if devise_mapping.rememberable?
       .field
