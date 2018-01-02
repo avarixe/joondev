@@ -53,6 +53,8 @@ gem 'figaro'
 gem 'awesome_print'
 # gem 'rails_semantic_logger'
 
+gem 'redis'
+
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.1.0'
 end
@@ -77,9 +79,4 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
-end
-
-group :production do
-  gem 'redis'
-  # gem 'rails_12factor'
 end

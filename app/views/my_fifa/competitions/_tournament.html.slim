@@ -29,7 +29,7 @@
 
   .ui.horizontal.divider Elimination Rounds
   .ui.fluid.accordion
-    - competition.rounds.reverse_each do |round|
+    - competition.rounds.each do |round|
       .active.title
         i.dropdown.icon
         = round[:name]

@@ -39,9 +39,9 @@ module MyFifa
     accepts_nested_attributes_for :fixtures
 
     ROUND_NAMES = {
-      2 => 'Final',
-      4 => 'Semi Finals',
-      8 => 'Quarter Finals'
+      1 => 'Final',
+      2 => 'Semi Finals',
+      4 => 'Quarter Finals'
     }.freeze
 
     ########################
@@ -87,10 +87,10 @@ module MyFifa
       cup_fixtures = fixtures.to_a
       fixture_rounds = []
       until cup_fixtures.empty?
-        num_fixtures = fixtures.length / 2
+        num_fixtures = cup_fixtures.length / 2 + 1
         fixture_rounds << {
-          name: ROUND_NAMES[num_fixtures] || "Round of #{num_fixtures}",
-          fixtures: cup_fixtures.pop(1 << fixture_rounds.length)
+          name: ROUND_NAMES[num_fixtures] || "Round of #{num_fixtures * 2}",
+          fixtures: cup_fixtures.shift(num_fixtures)
         }
       end
       fixture_rounds

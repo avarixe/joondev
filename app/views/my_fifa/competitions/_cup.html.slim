@@ -1,6 +1,6 @@
 .ui.horizontal.divider Elimination Rounds
 .ui.accordion
-  - competition.rounds.reverse_each do |round|
+  - competition.rounds.each do |round|
     .title
       i.dropdown.icon
       = round[:name]

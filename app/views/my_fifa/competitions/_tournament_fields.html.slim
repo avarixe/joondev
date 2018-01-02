@@ -21,7 +21,7 @@
               td.input = result_fields.number_field :goals_for,     tabindex: (i+1)*10 + 4
               td.input = result_fields.number_field :goals_against, tabindex: (i+1)*10 + 5
 
-- @competition.rounds.reverse_each do |round|
+- @competition.rounds.each do |round|
   .ui.dividing.header = round[:name]
 
   table.ui.very.compact.small.table
