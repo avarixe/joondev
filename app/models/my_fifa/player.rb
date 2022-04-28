@@ -113,14 +113,8 @@ module MyFifa
 
     def no_transfer_if_youth?
       contract = contracts.first
-
       if contract.loan.present?
         errors.add(:base, 'A Youth Academy Players can\'t be a Loaned Player.')
-      elsif contract.origin.present?
-        errors.add(:base, 'Youth Academy Players should not have an Origin.')
-      elsif dig(:contract, :transfer_cost, :fee) ||
-            dig(:contract, :transfer_cost, :player_id)
-        errors.add(:base, 'Youth Academy Players can\'t have a Transfer Cost.')
       end
     end
 

@@ -4,7 +4,7 @@ module MyFifa
     def filter_matches
       @query = { strings: [], args: [] }
       generate_query
-      @matches = Match.all
+      @matches = @team.matches
       return unless @query[:strings].any?
       @matches = @matches.where(@query[:strings].join(' AND '), *@query[:args])
     end
@@ -12,10 +12,10 @@ module MyFifa
     def filter_records
       filter_matches
       @records = @records.where(match_id: @matches.map(&:id))
-      @players = Player
+      @players = @team.players
                  .includes(:records, :player_seasons)
                  .with_stats(@matches.map(&:id))
-                 .where(id: @records.map(&:player_id).uniq)
+                 # .where(id: @records.map(&:player_id).uniq)
       return unless str_to_bool(params[:active_only])
       @players = @players.where(active: true)
     end

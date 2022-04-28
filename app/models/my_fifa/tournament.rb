@@ -31,7 +31,7 @@ module MyFifa
                 message: 'Teams in Knockout Stage must be greater than 0.'
               }
     validate :evenly_grouped?, if: proc { |t| t.num_teams && t.num_groups }
-    validate :even_knockout_teams?, if: proc { t.num_advances }
+    validate :even_knockout_teams?, if: proc { |t| t.num_advances }
 
     def evenly_grouped?
       return unless num_teams % num_groups != 0

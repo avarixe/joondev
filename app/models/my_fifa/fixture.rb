@@ -15,6 +15,8 @@
 module MyFifa
   # Match Fixture in a Cup or Tournament
   class Fixture < Base
+    default_scope { order(id: :asc) }
+
     belongs_to :competition
 
     serialize :home_score, Array

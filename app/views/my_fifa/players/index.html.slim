@@ -80,6 +80,9 @@ javascript:
         dataSrc: function(json){
           $.each(json.data, function(i, data){
             json.data[i].pos_idx = playerPositions.indexOf(data.pos);
+            json.data[i].rating = json.data[i].rating || 0;
+            json.data[i].goals = json.data[i].goals || 0;
+            json.data[i].assists = json.data[i].assists || 0;
             json.data[i].rank = parseInt(data.gp) + parseFloat(data.rating) + (2 * parseInt(data.goals)) + parseInt(data.assists);
           });
           return json.data;
